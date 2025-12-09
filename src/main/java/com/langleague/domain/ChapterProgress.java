@@ -32,6 +32,10 @@ public class ChapterProgress implements Serializable {
     @Column(name = "completed")
     private Boolean completed;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {

@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.langleague.domain.LearningStreak.createNewStreak;
+
 /**
  * Service Implementation for managing {@link com.langleague.domain.LearningStreak}.
  */
@@ -217,28 +219,34 @@ public class LearningStreakService {
     }
 
     /**
-     * Check if user needs to study today to maintain streak
+     * Check if user needs to study today to maintain streak.
+     * Uses entity's business logic.
      */
     @Transactional(readOnly = true)
-    public boolean needsStudyToday(String userLogin) {
+    public boolean needsStudyToday(String userLogin, ZoneId timezone) {
         return learningStreakRepository
             .findTopByAppUser_InternalUser_LoginOrderByLastStudyDateDesc(userLogin)
-            .map(streak -> {
-                if (streak.getLastStudyDate() == null) return true;
-
-                LocalDate lastStudy = LocalDate.ofInstant(streak.getLastStudyDate(), ZoneId.systemDefault());
-                LocalDate today = LocalDate.now();
-
-                return !lastStudy.equals(today);
-            })
-            .orElse(true);
+            .map(streak -> !streak.hasStudiedToday(timezone)) // Business logic in entity!
+            .orElse(true); // No streak yet = needs to study
     }
 
-    private LearningStreak createNewStreak(AppUser appUser) {
-        LearningStreak streak = new LearningStreak();
-        streak.setAppUser(appUser);
-        streak.setCurrentStreak(0);
-        streak.setLongestStreak(0);
-        return streak;
+    /**
+     * Backward compatibility - defaults to UTC
+     */
+    public boolean needsStudyToday(String userLogin) {
+        return needsStudyToday(userLogin, ZoneId.of("UTC"));
     }
+
+    /**
+     * Check if user's streak is still active.
+     */
+    @Transactional(readOnly = true)
+    public boolean isStreakActive(String userLogin, ZoneId timezone) {
+        return learningStreakRepository
+            .findTopByAppUser_InternalUser_LoginOrderByLastStudyDateDesc(userLogin)
+            .map(streak -> streak.isStreakActive(timezone)) // Business logic in entity!
+            .orElse(false);
+    }
+
+    // Removed createNewStreak() - now it's a static factory method in entity
 }

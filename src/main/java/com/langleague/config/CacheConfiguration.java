@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.*;
@@ -38,7 +39,7 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheManager cacheManager) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
     }
 
@@ -120,8 +121,34 @@ public class CacheConfiguration {
             createCache(cm, com.langleague.domain.Chapter.class.getName() + ".readingExercises");
             createCache(cm, com.langleague.domain.WritingExercise.class.getName() + ".exerciseResults");
             createCache(cm, com.langleague.domain.AppUser.class.getName() + ".userGrammars");
+
+            // Business Analytics cache - 1 hour TTL for expensive aggregation queries
+            createLongLivedCache(cm, "businessAnalytics");
+
             // jhipster-needle-ehcache-add-entry
         };
+    }
+
+    /**
+     * Create cache with custom TTL for business analytics (1 hour).
+     * Prevents expensive DB scans on every admin dashboard refresh.
+     */
+    private void createLongLivedCache(javax.cache.CacheManager cm, String cacheName) {
+        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+        if (cache != null) {
+            cache.clear();
+        } else {
+            javax.cache.configuration.Configuration<Object, Object> config = Eh107Configuration.fromEhcacheCacheConfiguration(
+                CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                    Object.class,
+                    Object.class,
+                    ResourcePoolsBuilder.heap(100) // Max 100 entries
+                )
+                    .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofHours(1))) // 1 hour TTL
+                    .build()
+            );
+            cm.createCache(cacheName, config);
+        }
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {

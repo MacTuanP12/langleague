@@ -80,6 +80,45 @@ public class Achievement implements Serializable {
         this.description = description;
     }
 
+    public String getCriteriaType() {
+        return this.criteriaType;
+    }
+
+    public Achievement criteriaType(String criteriaType) {
+        this.setCriteriaType(criteriaType);
+        return this;
+    }
+
+    public void setCriteriaType(String criteriaType) {
+        this.criteriaType = criteriaType;
+    }
+
+    public Long getTargetValue() {
+        return this.targetValue;
+    }
+
+    public Achievement targetValue(Long targetValue) {
+        this.setTargetValue(targetValue);
+        return this;
+    }
+
+    public void setTargetValue(Long targetValue) {
+        this.targetValue = targetValue;
+    }
+
+    public String getIconUrl() {
+        return this.iconUrl;
+    }
+
+    public Achievement iconUrl(String iconUrl) {
+        this.setIconUrl(iconUrl);
+        return this;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
     public Set<UserAchievement> getUserAchievements() {
         return this.userAchievements;
     }

@@ -23,8 +23,6 @@
     <!-- 1. USER & AUTHENTICATION DOMAIN          -->
     <!-- ========================================= -->
     <include file="config/liquibase/changelog/20251125000001_entity_app_user.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20251208000001_add_login_attempt_tracking.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20251210000001_add_notification_settings_to_app_user.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
     <!-- 2. BOOK SYSTEM DOMAIN                    -->
@@ -59,6 +57,7 @@
     <include file="config/liquibase/changelog/20251125000015_entity_user_vocabulary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251125000016_entity_user_grammar.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251125000018_entity_chapter_progress.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251210000001_add_version_columns.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
     <!-- 6. GAMIFICATION DOMAIN                   -->
@@ -83,7 +82,14 @@
     <include file="config/liquibase/changelog/20251205000003_entity_user_chapter.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
-    <!-- 9. SAMPLE DATA (DEV ONLY)                -->
+    <!-- 9. SCHEMA MODIFICATIONS                  -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251210000001_add_version_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251210000002_add_performance_indexes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251210000003_add_achievement_rich_domain_fields.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 10. SAMPLE DATA (DEV ONLY)               -->
     <!-- ========================================= -->
 
     <include file="config/liquibase/changelog/20251125000099_load_fake_data.xml" relativeToChangelogFile="false"/>

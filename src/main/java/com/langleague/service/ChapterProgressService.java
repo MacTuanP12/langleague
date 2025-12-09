@@ -52,6 +52,8 @@ public class ChapterProgressService {
      * @param chapterProgressDTO the entity to save.
      * @return the persisted entity.
      */
+    @Retryable(retryFor = { ObjectOptimisticLockingFailureException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100))
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ChapterProgressDTO update(ChapterProgressDTO chapterProgressDTO) {
         LOG.debug("Request to update ChapterProgress : {}", chapterProgressDTO);
         ChapterProgress chapterProgress = chapterProgressMapper.toEntity(chapterProgressDTO);
@@ -65,6 +67,8 @@ public class ChapterProgressService {
      * @param chapterProgressDTO the entity to update partially.
      * @return the persisted entity.
      */
+    @Retryable(retryFor = { ObjectOptimisticLockingFailureException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100))
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Optional<ChapterProgressDTO> partialUpdate(ChapterProgressDTO chapterProgressDTO) {
         LOG.debug("Request to partially update ChapterProgress : {}", chapterProgressDTO);
 

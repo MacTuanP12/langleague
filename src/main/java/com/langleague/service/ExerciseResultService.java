@@ -21,7 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -75,6 +78,8 @@ public class ExerciseResultService {
      * @param exerciseResultDTO the entity to save.
      * @return the persisted entity.
      */
+    @Retryable(retryFor = { ObjectOptimisticLockingFailureException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100))
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ExerciseResultDTO save(ExerciseResultDTO exerciseResultDTO) {
         LOG.debug("Request to save ExerciseResult : {}", exerciseResultDTO);
         ExerciseResult exerciseResult = exerciseResultMapper.toEntity(exerciseResultDTO);

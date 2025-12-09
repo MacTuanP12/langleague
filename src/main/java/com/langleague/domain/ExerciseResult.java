@@ -38,6 +38,10 @@ public class ExerciseResult implements Serializable {
     @Column(name = "submitted_at")
     private Instant submittedAt;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {

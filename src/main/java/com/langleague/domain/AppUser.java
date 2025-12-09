@@ -44,6 +44,10 @@ public class AppUser implements Serializable {
     @Column(name = "daily_reminder_enabled")
     private Boolean dailyReminderEnabled = true;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private User internalUser;

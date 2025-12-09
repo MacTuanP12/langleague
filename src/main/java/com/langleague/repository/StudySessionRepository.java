@@ -47,6 +47,39 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
     Long countActiveUsersInPeriod(Instant startDate, Instant endDate);
 
     /**
+     * Business Analytics Queries
+     */
+
+    @Query("SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s WHERE s.startAt > :afterDate")
+    Integer countDistinctUsersBySessionDateAfter(@Param("afterDate") Instant afterDate);
+
+    @Query("SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s WHERE s.startAt BETWEEN :startDate AND :endDate")
+    Integer countDistinctUsersBySessionDateBetween(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
+
+    @Query("SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s " +
+           "WHERE s.appUser.internalUser.createdDate BETWEEN :regStart AND :regEnd " +
+           "AND s.startAt > :activeAfter")
+    Long countDistinctUsersRegisteredBetweenAndActiveAfter(
+        @Param("regStart") Instant regStart,
+        @Param("regEnd") Instant regEnd,
+        @Param("activeAfter") Instant activeAfter
+    );
+
+    /**
+     * PERFORMANCE OPTIMIZED: Calculate average session duration using database aggregation.
+     * Returns average duration in seconds. This query runs entirely in DB, not in Java.
+     */
+    @Query(value = "SELECT AVG(TIMESTAMPDIFF(SECOND, start_at, end_at)) as avg_duration " +
+           "FROM study_session " +
+           "WHERE start_at BETWEEN :startDate AND :endDate AND end_at IS NOT NULL",
+           nativeQuery = true)
+    Double findAvgDurationByDateRangeNative(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
+
+    @Query("SELECT AVG(TIMESTAMPDIFF(SECOND, s.startAt, s.endAt)) FROM StudySession s " +
+           "WHERE s.startAt BETWEEN :startDate AND :endDate AND s.endAt IS NOT NULL")
+    List<Object[]> findAvgDurationByDateRange(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
+
+    /**
      * Check if user has studied today (for smart reminder)
      */
     boolean existsByAppUserInternalUserIdAndStartAtGreaterThanEqual(Long userId, Instant startTime);

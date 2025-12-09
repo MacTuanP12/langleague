@@ -142,4 +142,13 @@ public interface ExerciseResultRepository extends JpaRepository<ExerciseResult, 
             ")"
     )
     Double getAverageScoreByAppUserIdAndBookId(@Param("appUserId") Long appUserId, @Param("bookId") Long bookId);
+
+    /**
+     * DATA ARCHIVING: Count old records for archival.
+     * Used by DataArchivingService to prevent table bloat.
+     *
+     * @param cutoffDate records older than this date
+     * @return count of old records
+     */
+    long countBySubmittedAtBefore(java.time.Instant cutoffDate);
 }

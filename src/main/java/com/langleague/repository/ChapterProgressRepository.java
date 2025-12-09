@@ -59,4 +59,39 @@ public interface ChapterProgressRepository extends JpaRepository<ChapterProgress
      */
     @Query("SELECT AVG(COALESCE(cp.percent, 0.0)) FROM ChapterProgress cp WHERE cp.appUser.internalUser.id = :userId")
     Double getAverageProgressByUserId(@Param("userId") Long userId);
+
+    /**
+     * Business Analytics Queries
+     */
+
+    @Query("SELECT COUNT(DISTINCT cp.appUser.id) FROM ChapterProgress cp WHERE cp.completed = true")
+    Long countDistinctUsersWithCompletedChapters();
+
+    /**
+     * PERFORMANCE OPTIMIZED: Native query with aggregations to calculate chapter performance metrics.
+     * This query runs entirely in database, preventing RAM overflow with large datasets.
+     * Returns: [chapter_id, chapter_title, completion_count, avg_score, dropoff_rate]
+     */
+    @Query(value = "SELECT " +
+           "c.id, " +
+           "c.title, " +
+           "COUNT(DISTINCT CASE WHEN cp.completed = true THEN cp.app_user_id END) as completions, " +
+           "COALESCE(AVG(CASE WHEN cp.completed = true THEN cp.percent END), 0) as avg_score, " +
+           "ROUND(COUNT(DISTINCT CASE WHEN cp.completed = false THEN cp.app_user_id END) * 100.0 / " +
+           "NULLIF(COUNT(DISTINCT cp.app_user_id), 0), 2) as dropoff_rate " +
+           "FROM chapter c " +
+           "LEFT JOIN chapter_progress cp ON c.id = cp.chapter_id " +
+           "GROUP BY c.id, c.title " +
+           "ORDER BY completions DESC " +
+           "LIMIT 10",
+           nativeQuery = true)
+    List<Object[]> findChapterPerformanceStats();
+
+    // Fallback JPQL version (less performant but more portable)
+    @Query("SELECT c.id, c.title, COUNT(cp), AVG(COALESCE(cp.percent, 0)), " +
+           "(SELECT COUNT(cp2) * 100.0 / COUNT(cp) FROM ChapterProgress cp2 WHERE cp2.chapter.id = c.id AND cp2.completed = false) " +
+           "FROM Chapter c LEFT JOIN c.chapterProgresses cp " +
+           "GROUP BY c.id, c.title " +
+           "ORDER BY COUNT(cp) DESC")
+    List<Object[]> findChapterPerformanceStatsJPQL();
 }
