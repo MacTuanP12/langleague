@@ -27,6 +27,7 @@
             <column name="created_date" type="timestamp"/>
             <column name="last_modified_date" type="timestamp"/>
             <column name="account_locked" type="boolean"/>
+            <column name="failed_login_attempts" type="numeric"/>
         </loadData>
     </changeSet>
 

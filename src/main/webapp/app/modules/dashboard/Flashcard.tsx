@@ -31,10 +31,12 @@ import {
   unsaveGrammar,
 } from 'app/shared/services/flashcard.service';
 import './flashcard.scss';
+import { useAppDispatch } from 'app/config/store';
 
 const Flashcard: React.FC = () => {
   const { t } = useTranslation(['flashcards', 'common']);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<'vocabulary' | 'grammar'>('vocabulary');
   const [vocabularyCards, setVocabularyCards] = useState<UserVocabularyDTO[]>([]);
   const [grammarCards, setGrammarCards] = useState<UserGrammarDTO[]>([]);
@@ -65,9 +67,12 @@ const Flashcard: React.FC = () => {
   // Load vocabulary flashcards
   const loadVocabularyCards = async () => {
     try {
-      const cards = reviewMode ? await getVocabularyToReview() : await getMyVocabulary();
+      const action = reviewMode ? getVocabularyToReview() : getMyVocabulary();
+      const cards = await dispatch(action).unwrap();
       console.log('📚 Loaded vocabulary cards:', cards);
-      console.log('📊 First card:', cards[0]);
+      if (cards.length > 0) {
+        console.log('📊 First card:', cards[0]);
+      }
       setVocabularyCards(cards);
       if (activeTab === 'vocabulary') {
         setCurrentIndex(0);
@@ -75,16 +80,19 @@ const Flashcard: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ Error loading vocabulary:', error);
-      message.error('Không thể tải từ vựng');
+      message.error(t('common.error') || 'Không thể tải từ vựng');
     }
   };
 
   // Load grammar flashcards
   const loadGrammarCards = async () => {
     try {
-      const cards = reviewMode ? await getGrammarToReview() : await getMyGrammar();
+      const action = reviewMode ? getGrammarToReview() : getMyGrammar();
+      const cards = await dispatch(action).unwrap();
       console.log('📚 Loaded grammar cards:', cards);
-      console.log('📊 First card:', cards[0]);
+      if (cards.length > 0) {
+        console.log('📊 First card:', cards[0]);
+      }
       setGrammarCards(cards);
       if (activeTab === 'grammar') {
         setCurrentIndex(0);
@@ -92,18 +100,22 @@ const Flashcard: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ Error loading grammar cards:', error);
-      message.error('Không thể tải ngữ pháp');
+      message.error(t('common.error') || 'Không thể tải ngữ pháp');
     }
   };
 
   // Load statistics
   const loadStatistics = async () => {
     try {
-      const [vocabStats, grammarStats] = await Promise.all([getVocabularyStatistics(), getGrammarStatistics()]);
+      const [vocabStats, grammarStats] = await Promise.all([
+        dispatch(getVocabularyStatistics()).unwrap(),
+        dispatch(getGrammarStatistics()).unwrap(),
+      ]);
       setVocabStatistics(vocabStats);
       setGrammarStatistics(grammarStats);
     } catch (error) {
       console.error('Error loading statistics:', error);
+      message.error(t('common.error') || 'Không thể tải thống kê');
     }
   };
 
@@ -128,7 +140,7 @@ const Flashcard: React.FC = () => {
     if (!currentCard) return;
 
     try {
-      await reviewVocabulary(currentCard.word.id, quality);
+      await dispatch(reviewVocabulary({ wordId: currentCard.word.id, quality })).unwrap();
       message.success('Đã ghi nhận kết quả ôn tập!');
       handleNext();
       await loadStatistics();
@@ -137,7 +149,7 @@ const Flashcard: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating vocabulary review:', error);
-      message.error('Không thể ghi nhận kết quả ôn tập');
+      message.error(t('common.error') || 'Không thể ghi nhận kết quả ôn tập');
     }
   };
 
@@ -146,7 +158,7 @@ const Flashcard: React.FC = () => {
     if (!currentCard) return;
 
     try {
-      await reviewGrammar(currentCard.grammar.id, isMemorized);
+      await dispatch(reviewGrammar({ grammarId: currentCard.grammar.id, isMemorized })).unwrap();
       message.success('Đã ghi nhận kết quả ôn tập!');
       handleNext();
       await loadStatistics();
@@ -155,7 +167,7 @@ const Flashcard: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating grammar review:', error);
-      message.error('Không thể ghi nhận kết quả ôn tập');
+      message.error(t('common.error') || 'Không thể ghi nhận kết quả ôn tập');
     }
   };
 
@@ -166,11 +178,11 @@ const Flashcard: React.FC = () => {
 
     try {
       if (activeTab === 'vocabulary') {
-        await unsaveVocabulary((currentCard as UserVocabularyDTO).word.id);
+        await dispatch(unsaveVocabulary((currentCard as UserVocabularyDTO).word.id)).unwrap();
         message.success('Đã xóa từ vựng khỏi flashcard');
         await loadVocabularyCards();
       } else {
-        await unsaveGrammar((currentCard as UserGrammarDTO).grammar.id);
+        await dispatch(unsaveGrammar((currentCard as UserGrammarDTO).grammar.id)).unwrap();
         message.success('Đã xóa ngữ pháp khỏi flashcard');
         await loadGrammarCards();
       }

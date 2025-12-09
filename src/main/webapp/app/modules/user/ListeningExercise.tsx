@@ -17,6 +17,7 @@ import { Howl } from 'howler';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
 import { IListeningExercise } from 'app/shared/model/models';
+import FocusLayout from 'app/shared/layout/FocusLayout';
 
 const { Title, Text, Paragraph } = Typography;
 

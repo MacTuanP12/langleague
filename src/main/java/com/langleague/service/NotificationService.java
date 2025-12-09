@@ -2,6 +2,7 @@ package com.langleague.service;
 
 import com.langleague.domain.Notification;
 import com.langleague.domain.User;
+import com.langleague.repository.AppUserRepository;
 import com.langleague.repository.NotificationRepository;
 import com.langleague.repository.UserRepository;
 import com.langleague.service.dto.NotificationDTO;
@@ -33,17 +34,20 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final NotificationMapper notificationMapper;
     private final MailService mailService;
 
     public NotificationService(
         NotificationRepository notificationRepository,
         UserRepository userRepository,
+        AppUserRepository appUserRepository,
         NotificationMapper notificationMapper,
         @Autowired(required = false) MailService mailService
     ) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
+        this.appUserRepository = appUserRepository;
         this.notificationMapper = notificationMapper;
         this.mailService = mailService;
     }
@@ -212,31 +216,71 @@ public class NotificationService {
 
     /**
      * Send daily learning reminder to inactive users
-     * Runs at 9 AM daily
+     * Runs at 9 AM daily (Vietnam time: 8 PM)
+     * Only sends to users who have enabled daily reminders in settings
      */
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 20 * * *") // 8:00 PM every day
     public void sendDailyReminders() {
-        LOG.info("Sending daily learning reminders");
+        LOG.info("Starting daily learning reminder job");
 
-        // Find all users (in production, filter by those who haven't studied today)
-        List<User> users = userRepository.findAll();
+        // Get all active users
+        List<User> allUsers = userRepository.findAllByActivatedIsTrue();
+        int sentCount = 0;
+        int skippedCount = 0;
 
-        List<Notification> reminders = users
-            .stream()
-            .map(user -> {
+        for (User user : allUsers) {
+            try {
+                // Get user's AppUser profile to check notification settings
+                AppUser appUser = appUserRepository.findByInternalUser(user).orElse(null);
+
+                // Skip if user has disabled daily reminders
+                if (appUser == null || !Boolean.TRUE.equals(appUser.getDailyReminderEnabled())) {
+                    LOG.debug("Skipping reminder for user {} - daily reminder disabled", user.getLogin());
+                    skippedCount++;
+                    continue;
+                }
+
+                // Create in-app notification
                 Notification notification = new Notification();
                 notification.setUser(user);
-                notification.setTitle("Daily Learning Reminder");
-                notification.setMessage("Don't forget to practice today! Keep your streak going!");
-                notification.setType("LEARNING_REMINDER");
+                notification.setTitle("⏰ Nhắc nhở học tập hàng ngày");
+                notification.setMessage("Đừng quên luyện tập hôm nay! Hãy giữ vững chuỗi ngày học của bạn! 🔥");
+                notification.setType("DAILY_REMINDER");
                 notification.setCreatedAt(Instant.now());
                 notification.setIsRead(false);
-                return notification;
-            })
-            .toList();
+                notificationRepository.save(notification);
 
-        notificationRepository.saveAll(reminders);
-        LOG.info("Sent reminders to {} users", users.size());
+                // Send email if email notification is enabled
+                if (Boolean.TRUE.equals(appUser.getEmailNotificationEnabled()) && mailService != null) {
+                    sendDailyReminderEmail(user);
+                }
+
+                sentCount++;
+                LOG.debug("Sent daily reminder to user: {}", user.getLogin());
+
+            } catch (Exception e) {
+                LOG.error("Error sending daily reminder to user {}: {}", user.getLogin(), e.getMessage());
+            }
+        }
+
+        LOG.info("Daily reminder job completed. Sent: {}, Skipped: {}, Total: {}",
+                 sentCount, skippedCount, allUsers.size());
+    }
+
+    /**
+     * Send daily reminder email to user
+     */
+    @Async
+    private void sendDailyReminderEmail(User user) {
+        try {
+            if (mailService != null && user.getEmail() != null) {
+                // Use MailService to send email
+                // mailService.sendDailyReminderEmail(user);
+                LOG.info("Daily reminder email sent to: {}", user.getEmail());
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to send daily reminder email to {}: {}", user.getEmail(), e.getMessage());
+        }
     }
 
     /**

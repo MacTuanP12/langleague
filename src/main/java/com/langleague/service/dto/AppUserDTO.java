@@ -23,6 +23,11 @@ public class AppUserDTO implements Serializable {
     @Size(max = 2000, message = "Bio must not exceed 2000 characters")
     private String bio;
 
+    // Notification Settings
+    private Boolean emailNotificationEnabled = true;
+
+    private Boolean dailyReminderEnabled = true;
+
     private UserDTO internalUser;
 
     public Long getId() {
@@ -47,6 +52,22 @@ public class AppUserDTO implements Serializable {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public Boolean getEmailNotificationEnabled() {
+        return emailNotificationEnabled;
+    }
+
+    public void setEmailNotificationEnabled(Boolean emailNotificationEnabled) {
+        this.emailNotificationEnabled = emailNotificationEnabled;
+    }
+
+    public Boolean getDailyReminderEnabled() {
+        return dailyReminderEnabled;
+    }
+
+    public void setDailyReminderEnabled(Boolean dailyReminderEnabled) {
+        this.dailyReminderEnabled = dailyReminderEnabled;
     }
 
     public UserDTO getInternalUser() {
@@ -85,6 +106,8 @@ public class AppUserDTO implements Serializable {
             "id=" + getId() +
             ", displayName='" + getDisplayName() + "'" +
             ", bio='" + getBio() + "'" +
+            ", emailNotificationEnabled='" + getEmailNotificationEnabled() + "'" +
+            ", dailyReminderEnabled='" + getDailyReminderEnabled() + "'" +
             ", internalUser=" + getInternalUser() +
             "}";
     }

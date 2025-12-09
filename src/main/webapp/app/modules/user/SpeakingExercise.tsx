@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
 import { ISpeakingExercise } from 'app/shared/model/models';
+import FocusLayout from 'app/shared/layout/FocusLayout';
 
 const { Title, Text, Paragraph } = Typography;
 

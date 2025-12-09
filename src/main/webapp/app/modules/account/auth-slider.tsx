@@ -86,8 +86,17 @@ const AuthSlider = () => {
    * Ưu tiên: ROLE_ADMIN > ROLE_STAFF > ROLE_USER
    */
   const redirectUserByRole = (authorities: string) => {
+    console.log('=== redirectUserByRole called ===');
+    console.log('Input authorities:', authorities);
+
     const targetRoute = getRouteByAuthorities(authorities);
-    navigate(targetRoute);
+
+    console.log('Target route:', targetRoute);
+    console.log('Navigating to:', targetRoute);
+
+    navigate(targetRoute, { replace: true });
+
+    console.log('Navigate called successfully');
   };
 
   const handleLoginSubmit = async (values: any) => {
@@ -97,6 +106,9 @@ const AuthSlider = () => {
       localStorage.removeItem('authToken');
       localStorage.removeItem(TOKEN_KEY);
       sessionStorage.removeItem(TOKEN_KEY);
+
+      console.log('=== Starting Login Process ===');
+      console.log('Username:', values.email);
 
       // Gọi API đăng nhập
       const result = await dispatch(
@@ -111,25 +123,44 @@ const AuthSlider = () => {
 
       const token = result.id_token;
 
+      if (!token) {
+        throw new Error('No token received from server');
+      }
+
+      console.log('=== Login Success ===');
+      console.log('Token received:', token.substring(0, 50) + '...');
+
       // Lưu token vào localStorage
       localStorage.setItem(TOKEN_KEY, token);
 
-      // Fetch user session to set isAuthenticated = true
-      await dispatch(getSession()).unwrap();
-
-      message.success(t('login:login.success'));
-
       // Giải mã JWT token để lấy thông tin user và roles
       const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        throw new Error('Invalid token format');
+      }
+
       const payload = JSON.parse(atob(tokenParts[1]));
       const authorities = payload.auth || '';
 
+      console.log('Token payload:', payload);
+      console.log('Authorities:', authorities);
+
+      // Fetch user session để set isAuthenticated = true
+      console.log('Fetching user session...');
+      const sessionResult = await dispatch(getSession()).unwrap();
+      console.log('Session fetched successfully:', sessionResult);
+
+      // Hiển thị thông báo thành công
+      message.success(t('login:login.success'));
+
+      // Đợi một chút để đảm bảo state được cập nhật
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Redirect user dựa trên role
-      setTimeout(() => {
-        redirectUserByRole(authorities);
-      }, 500);
+      console.log('Redirecting user by role...');
+      redirectUserByRole(authorities);
     } catch (err: any) {
-      console.error('Login error', err);
+      console.error('=== Login Error ===', err);
 
       // Better error handling for different error types
       let errorMessage = t('login:login.error.generic');

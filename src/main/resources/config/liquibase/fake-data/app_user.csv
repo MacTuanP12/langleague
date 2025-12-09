@@ -1,5 +1,5 @@
-id;display_name;bio;timezone;internal_user_id
-1;Admin User;Platform Administrator;Asia/Seoul;1
-2;Regular User;Korean Language Learner;America/New_York;2
-3;Tuan Mac;Passionate about learning Korean culture;Asia/Ho_Chi_Minh;3
+id;display_name;bio;timezone;email_notification_enabled;daily_reminder_enabled;internal_user_id
+1;Admin User;Platform Administrator;Asia/Seoul;true;true;1
+2;Regular User;Korean Language Learner;America/New_York;true;true;2
+3;Tuan Mac;Passionate about learning Korean culture;Asia/Ho_Chi_Minh;true;false;3
 

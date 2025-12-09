@@ -37,6 +37,13 @@ public class AppUser implements Serializable {
     @Column(name = "timezone", length = 50)
     private String timezone;
 
+    // Notification Settings
+    @Column(name = "email_notification_enabled")
+    private Boolean emailNotificationEnabled = true;
+
+    @Column(name = "daily_reminder_enabled")
+    private Boolean dailyReminderEnabled = true;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private User internalUser;
@@ -141,6 +148,32 @@ public class AppUser implements Serializable {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    public Boolean getEmailNotificationEnabled() {
+        return this.emailNotificationEnabled;
+    }
+
+    public AppUser emailNotificationEnabled(Boolean emailNotificationEnabled) {
+        this.setEmailNotificationEnabled(emailNotificationEnabled);
+        return this;
+    }
+
+    public void setEmailNotificationEnabled(Boolean emailNotificationEnabled) {
+        this.emailNotificationEnabled = emailNotificationEnabled;
+    }
+
+    public Boolean getDailyReminderEnabled() {
+        return this.dailyReminderEnabled;
+    }
+
+    public AppUser dailyReminderEnabled(Boolean dailyReminderEnabled) {
+        this.setDailyReminderEnabled(dailyReminderEnabled);
+        return this;
+    }
+
+    public void setDailyReminderEnabled(Boolean dailyReminderEnabled) {
+        this.dailyReminderEnabled = dailyReminderEnabled;
     }
 
     public User getInternalUser() {

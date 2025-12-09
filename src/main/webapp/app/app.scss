@@ -18,23 +18,67 @@ html.dark {
   --shadow: rgba(0, 0, 0, 0.5);
 }
 
-/* Apply theme variables to body */
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Dark mode for common elements */
+body {
+  font-family: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-secondary); /* Soft gray-blue background */
+  color: var(--text-primary);           /* #3C3C3C instead of pure black */
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-disabled);
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary-light);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   ANT DESIGN DARK MODE OVERRIDES
+   ============================================ */
 html.dark {
   .app-container {
     background-color: var(--bg-primary);
     color: var(--text-primary);
   }
 
-  /* Layout components */
+  /* Layout */
   .ant-layout {
     background-color: var(--bg-primary);
   }
@@ -54,32 +98,37 @@ html.dark {
   }
 
   .ant-layout-sider {
-    background: linear-gradient(180deg, #0f1419 0%, #1a1f26 100%) !important;
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
   }
 
-  /* Cards and panels */
+  /* Cards */
   .ant-card {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     border-color: var(--border-color);
+    color: var(--text-primary);
   }
 
   /* Inputs */
   .ant-input,
   .ant-input-number,
-  .ant-select-selector {
+  .ant-select-selector,
+  .ant-picker {
     background-color: var(--bg-secondary);
     border-color: var(--border-color);
     color: var(--text-primary);
   }
 
   .ant-input:focus,
-  .ant-input-focused {
+  .ant-input-focused,
+  .ant-input-number:focus,
+  .ant-select-focused .ant-select-selector {
     background-color: var(--bg-secondary);
+    border-color: var(--color-primary);
   }
 
   /* Tables */
   .ant-table {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
   }
 
@@ -91,20 +140,27 @@ html.dark {
 
   .ant-table-tbody > tr > td {
     border-color: var(--border-color);
+    color: var(--text-primary);
   }
 
   .ant-table-tbody > tr:hover > td {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--bg-secondary);
   }
 
   /* Modals */
   .ant-modal-content {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
   .ant-modal-header {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .ant-modal-title {
+    color: var(--text-primary);
   }
 
   /* Dropdowns */
@@ -116,8 +172,12 @@ html.dark {
     color: var(--text-primary);
   }
 
+  .ant-select-item:hover {
+    background-color: var(--bg-tertiary);
+  }
+
   .ant-select-item-option-selected {
-    background-color: rgba(102, 126, 234, 0.2);
+    background-color: rgba(88, 204, 2, 0.2);
   }
 
   /* Buttons */
@@ -126,9 +186,9 @@ html.dark {
     border-color: var(--border-color);
     color: var(--text-primary);
 
-    &:hover {
-      border-color: #667eea;
-      color: #667eea;
+    &:hover:not(:disabled) {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
     }
   }
 
@@ -139,11 +199,16 @@ html.dark {
   }
 
   .ant-menu-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--text-secondary);
+  }
+
+  .ant-menu-item:hover {
+    color: var(--text-primary);
   }
 
   .ant-menu-item-selected {
-    background-color: rgba(102, 126, 234, 0.2);
+    background-color: rgba(88, 204, 2, 0.15);
+    color: var(--color-primary);
   }
 
   /* Typography */
@@ -151,33 +216,14 @@ html.dark {
     color: var(--text-primary);
   }
 
-  /* Space and dividers */
+  /* Dividers */
   .ant-divider {
     border-color: var(--border-color);
   }
 
   /* Badges */
   .ant-badge-count {
-    background-color: #667eea;
-  }
-
-  /* Segmented (Language toggle) */
-  .ant-segmented {
-    background-color: var(--bg-secondary) !important;
-  }
-
-  .ant-segmented-item {
-    color: var(--text-secondary);
-  }
-
-  .ant-segmented-item-selected {
-    background-color: rgba(102, 126, 234, 0.3) !important;
-    color: var(--text-primary) !important;
-  }
-
-  /* List */
-  .ant-list {
-    color: var(--text-primary);
+    background-color: var(--color-primary);
   }
 
   /* Empty state */
@@ -190,46 +236,8 @@ html.dark {
     color: var(--text-primary);
   }
 
-  /* Toastify */
-  .Toastify__toast {
-    background-color: var(--bg-secondary);
+  /* Progress */
+  .ant-progress-text {
     color: var(--text-primary);
   }
-
-  /* Custom scrollbar for dark mode */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
-
-    &:hover {
-      background: #666;
-    }
-  }
-}
-
-/* Loading spinner */
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 18px;
-  color: var(--text-primary);
-}
-
-/* Smooth transitions for all theme changes */
-* {
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease;
 }

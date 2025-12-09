@@ -38,6 +38,9 @@
             <column name="retry_count" type="integer" defaultValueNumeric="0">
                 <constraints nullable="true" />
             </column>
+            <column name="use_ai" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="true" />
+            </column>
             <column name="uploaded_by_id" type="bigint">
                 <constraints nullable="true" />
             </column>

@@ -24,6 +24,7 @@
     <!-- ========================================= -->
     <include file="config/liquibase/changelog/20251125000001_entity_app_user.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251208000001_add_login_attempt_tracking.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251210000001_add_notification_settings_to_app_user.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
     <!-- 2. BOOK SYSTEM DOMAIN                    -->
@@ -82,9 +83,8 @@
     <include file="config/liquibase/changelog/20251205000003_entity_user_chapter.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
-    <!-- 10. SAMPLE DATA (DEV ONLY)               -->
+    <!-- 9. SAMPLE DATA (DEV ONLY)                -->
     <!-- ========================================= -->
-
 
     <include file="config/liquibase/changelog/20251125000099_load_fake_data.xml" relativeToChangelogFile="false"/>
 

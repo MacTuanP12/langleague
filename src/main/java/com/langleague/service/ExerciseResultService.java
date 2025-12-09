@@ -8,6 +8,7 @@ import com.langleague.service.dto.ChapterStatisticsDTO;
 import com.langleague.service.dto.ExerciseResultDTO;
 import com.langleague.service.dto.ExerciseStatisticsDTO;
 import com.langleague.service.dto.SubmitExerciseDTO;
+import com.langleague.service.event.ExerciseCompletedEvent;
 import com.langleague.service.mapper.ExerciseResultMapper;
 import java.time.Instant;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,6 @@ public class ExerciseResultService {
 
     private final ExerciseResultMapper exerciseResultMapper;
 
-    private final AchievementService achievementService;
-
     private final AppUserRepository appUserRepository;
 
     private final ListeningExerciseRepository listeningExerciseRepository;
@@ -47,28 +47,26 @@ public class ExerciseResultService {
 
     private final WritingExerciseRepository writingExerciseRepository;
 
-    private final UserBookService userBookService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ExerciseResultService(
         ExerciseResultRepository exerciseResultRepository,
         ExerciseResultMapper exerciseResultMapper,
-        AchievementService achievementService,
         AppUserRepository appUserRepository,
         ListeningExerciseRepository listeningExerciseRepository,
         SpeakingExerciseRepository speakingExerciseRepository,
         ReadingExerciseRepository readingExerciseRepository,
         WritingExerciseRepository writingExerciseRepository,
-        UserBookService userBookService
+        ApplicationEventPublisher eventPublisher
     ) {
         this.exerciseResultRepository = exerciseResultRepository;
         this.exerciseResultMapper = exerciseResultMapper;
-        this.achievementService = achievementService;
         this.appUserRepository = appUserRepository;
         this.listeningExerciseRepository = listeningExerciseRepository;
         this.speakingExerciseRepository = speakingExerciseRepository;
         this.readingExerciseRepository = readingExerciseRepository;
         this.writingExerciseRepository = writingExerciseRepository;
-        this.userBookService = userBookService;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -82,16 +80,23 @@ public class ExerciseResultService {
         ExerciseResult exerciseResult = exerciseResultMapper.toEntity(exerciseResultDTO);
         exerciseResult = exerciseResultRepository.save(exerciseResult);
 
-        // Check and award achievements after saving exercise result
+        // Publish event for async processing of achievements and book progress
         if (exerciseResult.getAppUser() != null && exerciseResult.getAppUser().getId() != null) {
             try {
-                achievementService.checkAndAwardAchievements(
+                Long bookId = getBookIdFromExerciseResult(exerciseResult);
+                ExerciseCompletedEvent event = new ExerciseCompletedEvent(
+                    this,
                     exerciseResult.getAppUser().getId(),
+                    exerciseResult.getId(),
                     exerciseResult.getExerciseType(),
-                    exerciseResult.getScore()
+                    exerciseResult.getScore(),
+                    bookId
                 );
+                eventPublisher.publishEvent(event);
+                LOG.debug("Published ExerciseCompletedEvent for user {}", exerciseResult.getAppUser().getId());
             } catch (Exception e) {
-                LOG.error("Error checking achievements for user {}: {}", exerciseResult.getAppUser().getId(), e.getMessage());
+                LOG.error("Error publishing ExerciseCompletedEvent for user {}: {}",
+                    exerciseResult.getAppUser().getId(), e.getMessage());
             }
         }
 
@@ -216,32 +221,26 @@ public class ExerciseResultService {
 
         exerciseResult = exerciseResultRepository.save(exerciseResult);
 
-        // Check and award achievements
+        // Publish event for async processing of achievements, streaks, and book progress
         try {
-            achievementService.checkAndAwardAchievements(appUser.getId(), exerciseResult.getExerciseType(), exerciseResult.getScore());
+            Long bookId = getBookIdFromExerciseResult(exerciseResult);
+            ExerciseCompletedEvent event = new ExerciseCompletedEvent(
+                this,
+                appUser.getId(),
+                exerciseResult.getId(),
+                exerciseResult.getExerciseType(),
+                exerciseResult.getScore(),
+                bookId
+            );
+            eventPublisher.publishEvent(event);
+            LOG.debug("Published ExerciseCompletedEvent for user {}", appUser.getId());
         } catch (Exception e) {
-            LOG.error("Error checking achievements for user {}: {}", appUser.getId(), e.getMessage());
+            LOG.error("Error publishing ExerciseCompletedEvent for user {}: {}", appUser.getId(), e.getMessage());
         }
-
-        // Auto-update book progress
-        updateBookProgressFromExerciseResult(exerciseResult);
 
         return exerciseResultMapper.toDto(exerciseResult);
     }
 
-    /**
-     * Helper method to update book progress after completing an exercise
-     */
-    private void updateBookProgressFromExerciseResult(ExerciseResult exerciseResult) {
-        try {
-            Long bookId = getBookIdFromExerciseResult(exerciseResult);
-            if (bookId != null && exerciseResult.getAppUser() != null) {
-                userBookService.autoUpdateBookProgress(bookId, exerciseResult.getAppUser().getId());
-            }
-        } catch (Exception e) {
-            LOG.error("Error updating book progress: {}", e.getMessage());
-        }
-    }
 
     /**
      * Get book ID from exercise result based on exercise type

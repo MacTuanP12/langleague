@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import DashboardLayout from './shared/layout/dashboard-layout';
 import PrivateRoute from './shared/auth/PrivateRoute';
 import BookUploadManager from 'app/modules/staff/BookUploadManager';
+import ChapterStepperEditor from 'app/modules/staff/ChapterStepperEditor';
 
 // ==================== PUBLIC PAGES ====================
 const Home = React.lazy(() => import('./modules/home/home'));
@@ -139,6 +140,7 @@ const AppRoutes = () => {
         <Route path="books/:bookId/chapters" element={<StaffChapterManagement />} />
         <Route path="chapters/:chapterId/content" element={<StaffContentEditor />} />
         <Route path="chapters/:chapterId/edit" element={<ChapterContentEditor />} />
+        <Route path="chapters/:chapterId/stepper" element={<ChapterStepperEditor />} />
         <Route path="books/:bookId/editor" element={<ChapterContentEditor />} />
         <Route path="editor/:chapterId" element={<ChapterContentEditor />} />
         <Route path="upload" element={<UploadBooks />} />

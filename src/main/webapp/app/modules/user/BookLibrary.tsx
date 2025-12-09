@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography, Input, Select, Spin, Tag, Space, Empty } from 'antd';
+import { Card, Row, Col, Typography, Input, Select, Tag, Space, Empty, Skeleton, message } from 'antd';
 import { BookOutlined, SearchOutlined, ClockCircleOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
@@ -72,6 +72,7 @@ const BookLibrary: React.FC = () => {
       setFilteredBooks(booksArray);
     } catch (error) {
       console.error('Error filtering books:', error);
+      message.error(t('common.error') || 'Không thể lọc sách');
       // Fallback to client-side filtering if API fails
       let filtered = books;
 
@@ -160,81 +161,116 @@ const BookLibrary: React.FC = () => {
         </Row>
       </Card>
 
-      {/* Book Grid */}
-      <Spin spinning={loading}>
-        {filteredBooks.length === 0 ? (
-          <Empty description={t('common.noData')} style={{ marginTop: 60 }} />
-        ) : (
-          <Row gutter={[24, 24]}>
-            {filteredBooks.map(book => (
-              <Col xs={24} sm={12} md={8} lg={6} key={book.id}>
-                <Card
-                  hoverable
-                  cover={
-                    <div
-                      style={{
-                        height: 280,
-                        backgroundColor: '#f5f5f5',
-                        backgroundImage: book.thumbnail ? `url(${book.thumbnail})` : 'none',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '12px 12px 0 0',
-                      }}
-                    >
-                      {!book.thumbnail && <BookOutlined style={{ fontSize: 80, color: '#d9d9d9' }} />}
+      {/* Book Grid với Skeleton Loading */}
+      {loading ? (
+        <Row gutter={[24, 24]}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+            <Col xs={24} sm={12} md={8} lg={6} key={i}>
+              <Card style={{ borderRadius: 12 }}>
+                <Skeleton.Image
+                  active
+                  style={{
+                    width: '100%',
+                    height: 280,
+                    marginBottom: 16,
+                  }}
+                />
+                <Skeleton active paragraph={{ rows: 3 }} />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      ) : filteredBooks.length === 0 ? (
+        <Empty description={t('common.noData')} style={{ marginTop: 60 }} />
+      ) : (
+        <Row gutter={[24, 24]}>
+          {filteredBooks.map(book => (
+            <Col xs={24} sm={12} md={8} lg={6} key={book.id}>
+              <Card
+                hoverable
+                cover={
+                  <div
+                    style={{
+                      height: 280,
+                      backgroundColor: '#f5f5f5',
+                      backgroundImage: book.thumbnail ? `url(${book.thumbnail})` : 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '12px 12px 0 0',
+                      position: 'relative',
+                    }}
+                  >
+                    {!book.thumbnail && <BookOutlined style={{ fontSize: 80, color: '#d9d9d9' }} />}
+                    {/* Level Tag trên ảnh bìa */}
+                    {book.level && (
+                      <Tag
+                        color={getLevelColor(book.level)}
+                        style={{
+                          position: 'absolute',
+                          top: 12,
+                          right: 12,
+                          borderRadius: 8,
+                          padding: '4px 12px',
+                          fontWeight: 600,
+                          fontSize: 12,
+                          border: 'none',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        }}
+                      >
+                        {getLevelText(book.level)}
+                      </Tag>
+                    )}
+                  </div>
+                }
+                className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                style={{
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  border: '1px solid #f0f0f0',
+                }}
+                onClick={() => navigate(`/dashboard/books/${book.id}`)}
+              >
+                <Card.Meta
+                  title={
+                    <div style={{ marginBottom: 8 }}>
+                      <Text strong style={{ fontSize: 16, display: 'block' }} ellipsis={{ tooltip: book.title }}>
+                        {book.title}
+                      </Text>
                     </div>
                   }
-                  style={{ borderRadius: 12, overflow: 'hidden' }}
-                  onClick={() => navigate(`/dashboard/books/${book.id}`)}
-                >
-                  <Card.Meta
-                    title={
-                      <div style={{ marginBottom: 8 }}>
-                        <Text strong ellipsis style={{ fontSize: 16 }}>
-                          {book.title}
-                        </Text>
-                      </div>
-                    }
-                    description={
-                      <Space direction="vertical" size={8} style={{ width: '100%' }}>
-                        <Text type="secondary" ellipsis style={{ fontSize: 13 }}>
-                          {book.author || t('books.author')}
-                        </Text>
+                  description={
+                    <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                      <Text type="secondary" ellipsis style={{ fontSize: 13 }}>
+                        {book.author || t('books.author')}
+                      </Text>
 
-                        {book.level && (
-                          <Tag color={getLevelColor(book.level)} style={{ marginTop: 4 }}>
-                            {getLevelText(book.level)}
-                          </Tag>
+                      <Space split="|" size={8} style={{ fontSize: 12, color: '#999' }}>
+                        {book.totalChapters && (
+                          <span>
+                            <FileTextOutlined /> {book.totalChapters} chương
+                          </span>
                         )}
-
-                        <Space split="|" size={4} style={{ fontSize: 12, color: '#999' }}>
-                          {book.totalChapters && (
-                            <span>
-                              <FileTextOutlined /> {book.totalChapters} {t('books.chapters').toLowerCase()}
-                            </span>
-                          )}
-                          {book.totalPages && (
-                            <span>
-                              <ClockCircleOutlined /> {book.totalPages} {t('common.pages') || 'trang'}
-                            </span>
-                          )}
-                        </Space>
-
-                        <Paragraph ellipsis={{ rows: 2 }} type="secondary" style={{ fontSize: 12, marginTop: 8, marginBottom: 0 }}>
-                          {book.description || t('books.description')}
-                        </Paragraph>
+                        {book.totalPages && (
+                          <span>
+                            <ClockCircleOutlined /> {book.totalPages} trang
+                          </span>
+                        )}
                       </Space>
-                    }
-                  />
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Spin>
+
+                      <Paragraph ellipsis={{ rows: 2 }} type="secondary" style={{ fontSize: 12, marginTop: 8, marginBottom: 0 }}>
+                        {book.description || t('books.description')}
+                      </Paragraph>
+                    </Space>
+                  }
+                />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </div>
   );
 };

@@ -20,6 +20,9 @@ export interface IAppUser {
   totalStudyTime?: number;
   createdDate?: string;
   lastModifiedDate?: string;
+  // Notification Settings
+  emailNotificationEnabled?: boolean;
+  dailyReminderEnabled?: boolean;
 }
 
 // Get current user's app user profile

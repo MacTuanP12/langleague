@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAppSelector } from 'app/config/store';
+import { TOKEN_KEY } from 'app/config/constants';
 
 interface PrivateRouteProps {
   children: React.ReactElement;
@@ -13,16 +13,22 @@ interface PrivateRouteProps {
  * @param hasAnyAuthorities - Mảng các authorities cần thiết (VD: ['ROLE_ADMIN', 'ROLE_STAFF'])
  */
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, hasAnyAuthorities = [] }) => {
-  // Lấy token từ storage
-  const token = localStorage.getItem('authToken') || sessionStorage.getItem('jhi-authenticationToken');
+  // Lấy token từ storage - check localStorage trước, sau đó sessionStorage
+  const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+
+  console.log('=== PrivateRoute Check ===');
+  console.log('Token exists:', !!token);
+  console.log('Required authorities:', hasAnyAuthorities);
 
   // Nếu không có token, redirect về login
   if (!token) {
+    console.log('No token found, redirecting to login');
     return <Navigate to="/login" replace />;
   }
 
   // Nếu không yêu cầu authorities cụ thể, cho phép truy cập
   if (hasAnyAuthorities.length === 0) {
+    console.log('No specific authorities required, allowing access');
     return children;
   }
 
@@ -48,10 +54,15 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, hasAnyAuth
         userAuthorities = Array.isArray(payload.authorities) ? payload.authorities : [payload.authorities];
       }
 
+      console.log('User authorities:', userAuthorities);
+
       // Kiểm tra xem user có bất kỳ authority nào trong danh sách yêu cầu không
       const hasAuthority = hasAnyAuthorities.some(authority => userAuthorities.includes(authority));
 
+      console.log('Has required authority:', hasAuthority);
+
       if (hasAuthority) {
+        console.log('Access granted');
         return children;
       }
 
@@ -63,10 +74,13 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, hasAnyAuth
 
       // Redirect dựa trên role hiện tại
       if (userAuthorities.includes('ROLE_ADMIN')) {
+        console.log('Redirecting to /admin');
         return <Navigate to="/admin" replace />;
       } else if (userAuthorities.includes('ROLE_STAFF')) {
+        console.log('Redirecting to /staff');
         return <Navigate to="/staff" replace />;
       }
+      console.log('Redirecting to /dashboard');
       return <Navigate to="/dashboard" replace />;
     }
   } catch (error) {
@@ -74,6 +88,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, hasAnyAuth
     return <Navigate to="/login" replace />;
   }
 
+  console.log('Fallback: Redirecting to login');
   return <Navigate to="/login" replace />;
 };
 

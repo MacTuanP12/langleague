@@ -24,6 +24,13 @@
             <column name="timezone" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
+            <!-- Notification Settings -->
+            <column name="email_notification_enabled" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="true" />
+            </column>
+            <column name="daily_reminder_enabled" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="true" />
+            </column>
             <column name="internal_user_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_app_user_internal_user_id"/>
             </column>

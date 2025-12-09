@@ -77,4 +77,3 @@ export const getHighestRole = (authorities: string): string | null => {
   }
   return null;
 };
-

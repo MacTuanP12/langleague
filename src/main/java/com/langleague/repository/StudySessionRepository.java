@@ -47,6 +47,22 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
     Long countActiveUsersInPeriod(Instant startDate, Instant endDate);
 
     /**
+     * Check if user has studied today (for smart reminder)
+     */
+    boolean existsByAppUserInternalUserIdAndStartAtGreaterThanEqual(Long userId, Instant startTime);
+
+    /**
+     * Count study sessions today (for analytics)
+     */
+    @Query("SELECT COUNT(s) FROM StudySession s " +
+           "WHERE s.appUser.internalUser.id = :userId " +
+           "AND s.startAt >= :todayStart")
+    long countTodayStudySessions(
+        @Param("userId") Long userId,
+        @Param("todayStart") Instant todayStart
+    );
+
+    /**
      * Count total study sessions for user - optimized query
      */
     @Query("SELECT COUNT(s) FROM StudySession s WHERE s.appUser.internalUser.id = :userId")

@@ -43,6 +43,16 @@
             <column name="account_locked" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
+            <!-- Login Attempt Tracking -->
+            <column name="failed_login_attempts" type="int" defaultValueNumeric="0">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_failed_login" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="locked_until" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
 
         <createTable tableName="jhi_authority">

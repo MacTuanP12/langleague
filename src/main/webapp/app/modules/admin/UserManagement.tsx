@@ -17,8 +17,21 @@ import {
   message,
   Popconfirm,
   Badge,
+  Dropdown,
+  MenuProps,
 } from 'antd';
-import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, ReloadOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UserOutlined,
+  ReloadOutlined,
+  MoreOutlined,
+  LockOutlined,
+  UnlockOutlined,
+  KeyOutlined,
+} from '@ant-design/icons';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useAppDispatch } from 'app/config/store';
 import { getUsers, createUser, updateUser, deleteUser } from 'app/shared/services/user.service';
@@ -320,32 +333,58 @@ const UserManagement: React.FC = () => {
         </Text>
       ),
       key: 'actions',
-      render: (_, record) => (
-        <Space>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
-            onClick={() => showModal(record)}
-            size="small"
-            style={{ color: '#2c5282', fontFamily: 'Inter, system-ui, sans-serif' }}
-          >
-            {t('common.edit') || 'Edit'}
-          </Button>
-          <Popconfirm
-            title={t('admin.userManagement.confirmDelete') || 'Confirm Delete?'}
-            description={t('admin.userManagement.deleteConfirmMessage') || 'Are you sure you want to delete this user?'}
-            onConfirm={() => handleDelete(record)}
-            okText={t('common.delete') || 'Delete'}
-            cancelText={t('common.cancel') || 'Cancel'}
-            okButtonProps={{ danger: true }}
-          >
-            <Button type="link" danger icon={<DeleteOutlined />} size="small" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-              {t('common.delete') || 'Delete'}
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
-      width: 150,
+      render(_, record) {
+        const menuItems: MenuProps['items'] = [
+          {
+            key: 'edit',
+            icon: <EditOutlined />,
+            label: t('common.edit') || 'Edit',
+            onClick: () => showModal(record),
+          },
+          {
+            key: 'lock',
+            icon: record.activated ? <LockOutlined /> : <UnlockOutlined />,
+            label: record.activated ? 'Lock Account' : 'Unlock Account',
+            onClick() {
+              message.info(`${record.activated ? 'Locking' : 'Unlocking'} account: ${record.login}`);
+            },
+          },
+          {
+            key: 'reset',
+            icon: <KeyOutlined />,
+            label: 'Reset Password',
+            onClick() {
+              message.info(`Reset password for: ${record.login}`);
+            },
+          },
+          {
+            type: 'divider',
+          },
+          {
+            key: 'delete',
+            icon: <DeleteOutlined />,
+            label: t('common.delete') || 'Delete',
+            danger: true,
+            onClick() {
+              Modal.confirm({
+                title: t('admin.userManagement.confirmDelete') || 'Confirm Delete?',
+                content: t('admin.userManagement.deleteConfirmMessage') || 'Are you sure you want to delete this user?',
+                okText: t('common.delete') || 'Delete',
+                cancelText: t('common.cancel') || 'Cancel',
+                okButtonProps: { danger: true },
+                onOk: () => handleDelete(record),
+              });
+            },
+          },
+        ];
+
+        return (
+          <Dropdown menu={{ items: menuItems }} trigger={['click']}>
+            <Button type="text" icon={<MoreOutlined />} size="small" />
+          </Dropdown>
+        );
+      },
+      width: 80,
       fixed: 'right',
     },
   ];
