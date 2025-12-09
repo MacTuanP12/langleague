@@ -1,0 +1,29 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.account.locked.title}">Account Locked</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../../content/images/logo-jhipster.png" th:href="@{|${baseUrl}/content/images/logo-jhipster.png|}" />
+  </head>
+  <body>
+    <p th:text="#{email.account.locked.greeting(${user.login})}">Dear User</p>
+    <p th:text="#{email.account.locked.text1}">Your account has been temporarily locked due to multiple failed login attempts.</p>
+    <p>
+      <strong th:text="#{email.account.locked.lockDuration(${lockDurationMinutes})}"> Lock duration: 15 minutes </strong>
+    </p>
+    <p th:text="#{email.account.locked.text2}">
+      If this wasn't you, please secure your account immediately by changing your password after the lock expires.
+    </p>
+    <p th:text="#{email.account.locked.text3}">You can try logging in again after the lock period expires.</p>
+    <p>
+      <strong th:text="#{email.account.locked.warning}">
+        If you did not attempt to log in, your account may be under attack. Please contact support.
+      </strong>
+    </p>
+    <p>
+      <span th:text="#{email.account.locked.regards}">Regards,</span>
+      <br />
+      <em th:text="#{email.signature}">LangLeague Team.</em>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+id;rating;title;content;created_at;updated_at;app_user_id;book_id
+1;5;Excellent for beginners!;This book helped me learn Hangul in just 2 weeks.;2025-11-20 10:30:00;2025-11-20 10:30:00;2;1
+2;4;Great conversation practice;The dialogues are very practical.;2025-11-22 14:15:00;2025-11-22 14:15:00;3;2
+3;5;Deep dive into grammar;Finally understand the difference between particles.;2025-11-23 09:45:00;2025-11-23 09:45:00;2;3
+4;4;Fascinating cultural insights;Learning Korean through culture is memorable.;2025-11-24 16:20:00;2025-11-24 16:20:00;3;4
+

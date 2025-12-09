@@ -1,0 +1,74 @@
+{
+  "comments": {
+    "title": "Comments & Discussions",
+    "addComment": "Add Comment",
+    "editComment": "Edit Comment",
+    "deleteComment": "Delete Comment",
+    "reply": "Reply",
+    "replies": "Replies",
+    "showReplies": "Show {{count}} replies",
+    "hideReplies": "Hide replies",
+    "noComments": "No comments yet. Be the first to start the discussion!",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "mostLiked": "Most Liked"
+    },
+    "form": {
+      "placeholder": "Share your thoughts, ask a question, or start a discussion...",
+      "replyPlaceholder": "Write a reply...",
+      "editPlaceholder": "Edit your comment...",
+      "submit": "Post Comment",
+      "postReply": "Post Reply",
+      "update": "Update Comment",
+      "cancel": "Cancel"
+    },
+    "actions": {
+      "like": "Like",
+      "unlike": "Unlike",
+      "edit": "Edit",
+      "delete": "Delete",
+      "report": "Report"
+    },
+    "stats": {
+      "likes": "{{count}} likes",
+      "replies": "{{count}} replies",
+      "comments": "{{count}} comments",
+      "edited": "Edited"
+    },
+    "messages": {
+      "postSuccess": "Comment posted successfully!",
+      "postFailed": "Failed to post comment",
+      "replySuccess": "Reply posted successfully!",
+      "replyFailed": "Failed to post reply",
+      "updateSuccess": "Comment updated successfully!",
+      "updateFailed": "Failed to update comment",
+      "deleteSuccess": "Comment deleted successfully!",
+      "deleteFailed": "Failed to delete comment",
+      "likeSuccess": "Comment liked!",
+      "unlikeSuccess": "Comment unliked!",
+      "deleteConfirm": "Are you sure you want to delete this comment?"
+    },
+    "validation": {
+      "contentRequired": "Please enter your comment",
+      "contentMinLength": "Comment must be at least 3 characters",
+      "contentMaxLength": "Comment must not exceed 500 characters"
+    },
+    "discussions": {
+      "title": "Discussion Board",
+      "createTopic": "Create Topic",
+      "myTopics": "My Topics",
+      "popularTopics": "Popular Topics",
+      "recentTopics": "Recent Topics",
+      "noTopics": "No discussion topics yet",
+      "topic": {
+        "title": "Title",
+        "content": "Content",
+        "category": "Category",
+        "views": "{{count}} views",
+        "comments": "{{count}} comments",
+        "lastActivity": "Last activity"
+      }
+    }
+  }
+}

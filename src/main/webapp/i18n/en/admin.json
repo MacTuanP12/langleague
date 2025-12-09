@@ -1,0 +1,35 @@
+{
+  "bookApproval": {
+    "title": "Book Approval",
+    "errorLoadBooks": "Failed to load pending books",
+    "approveSuccess": "Book approved successfully!",
+    "errorApprove": "Failed to approve book",
+    "rejectSuccess": "Book rejected",
+    "errorReject": "Failed to reject book",
+    "deleteSuccess": "Book permanently deleted",
+    "errorDelete": "Failed to delete book",
+    "thumbnail": "Thumbnail",
+    "bookTitle": "Book Title",
+    "author": "Author",
+    "level": "Level",
+    "uploadedBy": "Uploaded By",
+    "uploadDate": "Upload Date",
+    "status": "Status",
+    "actions": "Actions",
+    "approve": "Approve",
+    "reject": "Reject",
+    "viewDetails": "View Details",
+    "delete": "Delete",
+    "refresh": "Refresh",
+    "noImage": "No Image",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "confirmDelete": "Are you sure you want to permanently delete this book?",
+    "bookDetails": "Book Details",
+    "description": "Description",
+    "category": "Category",
+    "close": "Close"
+  }
+}
+

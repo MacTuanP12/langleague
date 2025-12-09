@@ -1,0 +1,56 @@
+{
+  "studySessions": {
+    "title": "Phiên học tập",
+    "mySessions": "Phiên của tôi",
+    "currentSession": "Phiên hiện tại",
+    "sessionHistory": "Lịch sử phiên học",
+    "startSession": "Bắt đầu phiên",
+    "endSession": "Kết thúc phiên",
+    "pauseSession": "Tạm dừng",
+    "resumeSession": "Tiếp tục",
+    "timer": {
+      "title": "Đồng hồ phiên học",
+      "elapsed": "Thời gian đã học",
+      "target": "Thời gian mục tiêu",
+      "remaining": "Còn lại"
+    },
+    "stats": {
+      "totalSessions": "Tổng số phiên",
+      "totalTime": "Tổng thời gian",
+      "averageSession": "Trung bình mỗi phiên",
+      "todayTime": "Thời gian hôm nay",
+      "thisWeekTime": "Thời gian tuần này",
+      "longestSession": "Phiên dài nhất"
+    },
+    "settings": {
+      "title": "Cài đặt phiên học",
+      "targetDuration": "Thời lượng mục tiêu",
+      "autoBreak": "Nghỉ tự động",
+      "breakDuration": "Thời gian nghỉ",
+      "reminder": "Nhắc nhở",
+      "reminderInterval": "Khoảng thời gian nhắc"
+    },
+    "goals": {
+      "title": "Mục tiêu hàng ngày",
+      "dailyTarget": "Mục tiêu hàng ngày",
+      "minutesPerDay": "{{minutes}} phút mỗi ngày",
+      "progress": "Tiến độ hôm nay",
+      "goalReached": "Đã đạt mục tiêu hàng ngày! Tuyệt vời!",
+      "almostThere": "Sắp xong rồi! Còn {{remaining}} phút nữa"
+    },
+    "history": {
+      "title": "Lịch sử phiên học",
+      "date": "Ngày",
+      "duration": "Thời lượng",
+      "activities": "Hoạt động",
+      "noHistory": "Chưa có lịch sử phiên học"
+    },
+    "messages": {
+      "sessionStarted": "Đã bắt đầu phiên học! Chúc may mắn!",
+      "sessionEnded": "Đã kết thúc phiên học. Làm tốt lắm!",
+      "goalReached": "Bạn đã đạt mục tiêu hàng ngày!",
+      "breakTime": "Đã đến giờ nghỉ!",
+      "breakOver": "Hết giờ nghỉ. Hãy tiếp tục!"
+    }
+  }
+}

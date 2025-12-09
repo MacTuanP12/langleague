@@ -1,0 +1,79 @@
+{
+  "achievements": {
+    "title": "Achievements",
+    "myAchievements": "My Achievements",
+    "allAchievements": "All Achievements",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "progress": "Progress",
+    "unlockedDate": "Unlocked on {{date}}",
+    "categories": {
+      "all": "All",
+      "streak": "Streak",
+      "completion": "Completion",
+      "vocabulary": "Vocabulary",
+      "grammar": "Grammar",
+      "exercise": "Exercise",
+      "social": "Social",
+      "special": "Special",
+      "learning": "Learning",
+      "reading": "Reading"
+    },
+    "stats": {
+      "total": "Total Achievements",
+      "unlocked": "Unlocked",
+      "remaining": "Remaining",
+      "completionRate": "Completion Rate"
+    },
+    "badges": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "master": "Master",
+      "legend": "Legend"
+    },
+    "types": {
+      "firstBook": {
+        "name": "First Book",
+        "description": "Complete your first book"
+      },
+      "bookworm": {
+        "name": "Bookworm",
+        "description": "Complete 10 books"
+      },
+      "wordCollector": {
+        "name": "Word Collector",
+        "description": "Learn 100 words"
+      },
+      "vocabularyMaster": {
+        "name": "Vocabulary Master",
+        "description": "Learn 1000 words"
+      },
+      "streakStarter": {
+        "name": "Streak Starter",
+        "description": "Maintain a 7-day streak"
+      },
+      "consistent": {
+        "name": "Consistent Learner",
+        "description": "Maintain a 30-day streak"
+      },
+      "socialButterfly": {
+        "name": "Social Butterfly",
+        "description": "Write 50 comments"
+      },
+      "reviewer": {
+        "name": "Book Reviewer",
+        "description": "Write 10 book reviews"
+      }
+    },
+    "notifications": {
+      "unlocked": "Achievement Unlocked!",
+      "newBadge": "You earned a new badge: {{badge}}",
+      "congratulations": "Congratulations!"
+    },
+    "messages": {
+      "noAchievements": "No achievements unlocked yet. Start learning to earn achievements!",
+      "keepGoing": "Keep going! You're doing great!"
+    }
+  }
+}

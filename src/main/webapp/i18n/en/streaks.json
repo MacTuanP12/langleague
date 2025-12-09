@@ -1,0 +1,93 @@
+{
+  "streaks": {
+    "title": "Streak Milestones",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "milestones": "Milestones",
+    "achievements": "Streak Achievements",
+    "stats": {
+      "days": "{{count}} days",
+      "today": "Today",
+      "keepGoing": "Keep it up!",
+      "dontBreak": "Don't break your streak!"
+    },
+    "icons": {
+      "title": "Milestone Icons",
+      "collection": "Icon Collection",
+      "unlocked": "Unlocked Icons",
+      "locked": "Locked Icons",
+      "viewGallery": "View Gallery"
+    },
+    "milestoneList": {
+      "3days": {
+        "name": "3-Day Streak",
+        "description": "Learn for 3 days in a row",
+        "icon": "🔥"
+      },
+      "7days": {
+        "name": "Week Warrior",
+        "description": "Complete a full week of learning",
+        "icon": "⭐"
+      },
+      "14days": {
+        "name": "Two Weeks Strong",
+        "description": "Maintain a 2-week streak",
+        "icon": "💪"
+      },
+      "30days": {
+        "name": "Monthly Master",
+        "description": "Learn every day for a month",
+        "icon": "🏆"
+      },
+      "60days": {
+        "name": "Dedicated Learner",
+        "description": "60 days of continuous learning",
+        "icon": "💎"
+      },
+      "90days": {
+        "name": "Quarter Champion",
+        "description": "3 months of dedication",
+        "icon": "👑"
+      },
+      "180days": {
+        "name": "Half-Year Hero",
+        "description": "6 months without missing a day",
+        "icon": "🌟"
+      },
+      "365days": {
+        "name": "Annual Legend",
+        "description": "A full year of learning",
+        "icon": "🎯"
+      }
+    },
+    "calendar": {
+      "title": "Activity Calendar",
+      "viewCalendar": "View Calendar",
+      "heatmap": "Heatmap",
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "celebration": {
+      "title": "Celebration!",
+      "newMilestone": "New milestone reached!",
+      "congratulations": "Congratulations on your {{days}}-day streak!",
+      "share": "Share your achievement",
+      "keepGoing": "Keep the momentum going!"
+    },
+    "tips": {
+      "title": "Tips to Maintain Your Streak",
+      "tip1": "Set a daily reminder",
+      "tip2": "Study at the same time each day",
+      "tip3": "Start with small goals",
+      "tip4": "Track your progress",
+      "tip5": "Celebrate small wins"
+    },
+    "messages": {
+      "streakLost": "Your streak was broken. Start a new one today!",
+      "almostLost": "Don't forget to study today!",
+      "milestoneReached": "Milestone reached! {{name}} unlocked!"
+    }
+  }
+}

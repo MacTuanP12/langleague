@@ -1,0 +1,14 @@
+{
+  "error": {
+    "title": "Trang lỗi!",
+    "http": {
+      "400": "Yêu cầu không hợp lệ.",
+      "403": "Bạn không có quyền truy cập trang này.",
+      "404": "Trang không tồn tại.",
+      "405": "Phương thức HTTP bạn sử dụng không được hỗ trợ cho URL này.",
+      "500": "Lỗi máy chủ nội bộ."
+    },
+    "concurrencyFailure": "Người dùng khác đã sửa đổi dữ liệu này cùng lúc với bạn. Các thay đổi của bạn đã bị từ chối.",
+    "validation": "Lỗi xác thực trên máy chủ."
+  }
+}

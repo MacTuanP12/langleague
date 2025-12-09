@@ -1,0 +1,51 @@
+{
+  "register": {
+    "title": "Đăng ký",
+    "subtitle": "Bắt đầu hành trình học tập của bạn ngay hôm nay",
+    "welcomeMessage": "Bắt đầu hành trình học tập của bạn",
+    "helloFriend": "Xin chào, Bạn mới!",
+    "helloFriendMessage": "Nhập thông tin cá nhân của bạn và bắt đầu hành trình cùng chúng tôi",
+    "haveAccount": "Đã có tài khoản?",
+    "logIn": "Đăng nhập",
+    "login": "Đăng nhập",
+    "name": "Họ và tên",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "terms": "Tôi đồng ý với Điều khoản và Điều kiện",
+    "registerButton": "Đăng ký",
+    "registering": "Đang đăng ký...",
+    "orUseEmail": "hoặc sử dụng email của bạn để đăng ký",
+    "success": "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.",
+    "error": "Đăng ký thất bại. Vui lòng thử lại.",
+    "orContinueWith": "Hoặc tiếp tục với",
+    "form": {
+      "button": "Đăng ký"
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": "Tên đăng nhập là bắt buộc.",
+          "minlength": "Tên đăng nhập phải có ít nhất 1 ký tự.",
+          "maxlength": "Tên đăng nhập không được quá 50 ký tự.",
+          "pattern": "Tên đăng nhập không hợp lệ."
+        }
+      },
+      "success": "<strong>Đăng ký thành công!</strong> Vui lòng kiểm tra email để xác nhận.",
+      "error": {
+        "fail": "<strong>Đăng ký thất bại!</strong> Vui lòng thử lại sau.",
+        "userexists": "<strong>Tên đăng nhập đã tồn tại!</strong> Vui lòng chọn tên khác.",
+        "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng chọn email khác."
+      }
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập họ tên",
+      "emailRequired": "Vui lòng nhập email",
+      "emailInvalid": "Vui lòng nhập email hợp lệ",
+      "passwordRequired": "Vui lòng nhập mật khẩu",
+      "passwordMin": "Mật khẩu phải có ít nhất 8 ký tự",
+      "confirmRequired": "Vui lòng xác nhận mật khẩu",
+      "passwordMatch": "Mật khẩu không khớp"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "dashboard": {
+    "welcome": "Xin chào {{name}}, {{greeting}}!",
+    "subtitle": "Sẵn sàng bắt đầu học hôm nay?",
+    "streak": "🔥 {{count}} ngày liên tiếp! Tiếp tục phát huy!",
+    "book": "Sách #{{id}}",
+    "greeting": {
+      "morning": "Chào buổi sáng",
+      "afternoon": "Chào buổi chiều",
+      "evening": "Chào buổi tối"
+    },
+    "stats": {
+      "wordsLearned": "Từ đã học",
+      "chaptersCompleted": "Chương đã hoàn thành",
+      "studyTime": "Thời gian học",
+      "booksInProgress": "Sách đang học"
+    },
+    "sections": {
+      "booksProgress": "Tiến độ sách",
+      "noBooks": "Chưa có sách nào đang học. Bắt đầu học ngay!",
+      "weeklyActivity": "Hoạt động tuần này",
+      "learningCalendar": "Lịch học tập"
+    }
+  }
+}

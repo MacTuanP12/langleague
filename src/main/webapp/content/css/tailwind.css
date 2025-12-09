@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* small helpers to integrate with ant design */
+.ant-card-title {
+  @apply text-gray-800 font-semibold;
+}

@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20251122061534"
+  },
+  "applications": "*",
+  "documentation": "Options for Multiple Choice",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "label",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isCorrect",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "ListeningOption",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

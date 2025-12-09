@@ -1,0 +1,27 @@
+{
+  "global": {
+    "title": "Langleague",
+    "browsehappy": "Bạn đang sử dụng một trình duyệt <strong>cũ</strong>. Vui lòng <a href=\"http://browsehappy.com/?locale=vi\">nâng cấp trình duyệt</a> để cải thiện trải nghiệm của bạn.",
+    "menu": {
+      "home": "Trang chủ",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "entities": {
+        "main": "Thực thể",
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+      },
+      "account": {
+        "main": "Tài khoản",
+        "settings": "Cài đặt",
+        "password": "Mật khẩu",
+        "sessions": "Phiên đăng nhập",
+        "login": "Đăng nhập",
+        "logout": "Đăng xuất",
+        "register": "Đăng ký"
+      },
+      "admin": {
+        "main": "Quản trị"
+      },
+      "language": "Ngôn ngữ"
+    }
+  }
+}

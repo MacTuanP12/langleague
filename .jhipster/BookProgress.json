@@ -1,0 +1,26 @@
+{
+  "annotations": {
+    "changelogDate": "20251122061539"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "percent",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lastAccessed",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "completed",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "BookProgress",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

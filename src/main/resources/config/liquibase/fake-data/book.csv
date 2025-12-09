@@ -1,0 +1,7 @@
+id;title;level;description;thumbnail;is_active;average_rating;total_reviews
+1;Korean for Beginners;BEGINNER;Start your Korean language journey with basic greetings and hangul.;https://via.placeholder.com/300x400/4A90E2/ffffff?text=Korean+Basics;true;4.5;10
+2;Intermediate Korean Conversation;INTERMEDIATE;Build your conversational skills with real-life dialogues.;https://via.placeholder.com/300x400/50C878/ffffff?text=Conversation;true;4.7;8
+3;Advanced Korean Grammar;ADVANCED;Master complex Korean grammar structures and honorifics.;https://via.placeholder.com/300x400/FF6B6B/ffffff?text=Grammar;true;4.8;6
+4;Korean Culture and Idioms;INTERMEDIATE;Explore Korean culture through idiomatic expressions.;https://via.placeholder.com/300x400/F39C12/ffffff?text=Culture;true;4.6;7
+5;Business Korean;ADVANCED;Professional Korean for business settings.;https://via.placeholder.com/300x400/9B59B6/ffffff?text=Business;true;4.9;5
+

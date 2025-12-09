@@ -1,0 +1,84 @@
+{
+  "flashcards": {
+    "title": "Flashcards",
+    "myFlashcards": "My Flashcards",
+    "practice": "Practice",
+    "review": "Review",
+    "manage": "Manage",
+    "create": "Create Flashcard",
+    "edit": "Edit Flashcard",
+    "delete": "Delete Flashcard",
+    "deck": {
+      "title": "Decks",
+      "create": "Create Deck",
+      "edit": "Edit Deck",
+      "delete": "Delete Deck",
+      "name": "Deck Name",
+      "description": "Description",
+      "cardCount": "{{count}} cards"
+    },
+    "card": {
+      "front": "Front",
+      "back": "Back",
+      "example": "Example",
+      "note": "Note",
+      "tags": "Tags"
+    },
+    "practice": {
+      "title": "Practice Session",
+      "start": "Start Practice",
+      "flip": "Flip Card",
+      "next": "Next Card",
+      "previous": "Previous Card",
+      "shuffle": "Shuffle",
+      "again": "Again",
+      "hard": "Hard",
+      "good": "Good",
+      "easy": "Easy",
+      "progress": "{{current}} / {{total}}"
+    },
+    "srs": {
+      "title": "Spaced Repetition",
+      "dueToday": "Due Today",
+      "newCards": "New Cards",
+      "reviewing": "Reviewing",
+      "mastered": "Mastered",
+      "nextReview": "Next review in {{time}}",
+      "algorithm": "SRS Algorithm",
+      "settings": "SRS Settings"
+    },
+    "stats": {
+      "totalCards": "Total Cards",
+      "learned": "Learned",
+      "learning": "Learning",
+      "review": "Review",
+      "accuracy": "Accuracy",
+      "streak": "Review Streak"
+    },
+    "filters": {
+      "all": "All Cards",
+      "new": "New",
+      "learning": "Learning",
+      "review": "Review",
+      "mastered": "Mastered",
+      "byTag": "By Tag",
+      "byDeck": "By Deck"
+    },
+    "messages": {
+      "cardCreated": "Flashcard created successfully!",
+      "cardUpdated": "Flashcard updated successfully!",
+      "cardDeleted": "Flashcard deleted successfully!",
+      "deckCreated": "Deck created successfully!",
+      "deckUpdated": "Deck updated successfully!",
+      "deckDeleted": "Deck deleted successfully!",
+      "sessionComplete": "Practice session complete!",
+      "noCards": "No flashcards yet. Create your first card!",
+      "noDueCards": "No cards due for review. Great job!",
+      "loadFailed": "Failed to load flashcards",
+      "reviewSuccess": "Review recorded successfully!",
+      "reviewFailed": "Failed to record review",
+      "removeSuccess": "Card removed from flashcards",
+      "removeFailed": "Failed to remove card"
+    }
+  }
+}

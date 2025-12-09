@@ -1,0 +1,74 @@
+{
+  "comments": {
+    "title": "Bình luận & Thảo luận",
+    "addComment": "Thêm bình luận",
+    "editComment": "Sửa bình luận",
+    "deleteComment": "Xóa bình luận",
+    "reply": "Trả lời",
+    "replies": "Câu trả lời",
+    "showReplies": "Hiện {{count}} câu trả lời",
+    "hideReplies": "Ẩn câu trả lời",
+    "noComments": "Chưa có bình luận nào. Hãy bắt đầu thảo luận!",
+    "sort": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất",
+      "mostLiked": "Được thích nhiều nhất"
+    },
+    "form": {
+      "placeholder": "Chia sẻ suy nghĩ, đặt câu hỏi, hoặc bắt đầu thảo luận...",
+      "replyPlaceholder": "Viết câu trả lời...",
+      "editPlaceholder": "Chỉnh sửa bình luận...",
+      "submit": "Đăng bình luận",
+      "postReply": "Đăng câu trả lời",
+      "update": "Cập nhật bình luận",
+      "cancel": "Hủy"
+    },
+    "actions": {
+      "like": "Thích",
+      "unlike": "Bỏ thích",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "report": "Báo cáo"
+    },
+    "stats": {
+      "likes": "{{count}} lượt thích",
+      "replies": "{{count}} câu trả lời",
+      "comments": "{{count}} bình luận",
+      "edited": "Đã chỉnh sửa"
+    },
+    "messages": {
+      "postSuccess": "Đăng bình luận thành công!",
+      "postFailed": "Đăng bình luận thất bại",
+      "replySuccess": "Đăng câu trả lời thành công!",
+      "replyFailed": "Đăng câu trả lời thất bại",
+      "updateSuccess": "Cập nhật bình luận thành công!",
+      "updateFailed": "Cập nhật bình luận thất bại",
+      "deleteSuccess": "Xóa bình luận thành công!",
+      "deleteFailed": "Xóa bình luận thất bại",
+      "likeSuccess": "Đã thích bình luận!",
+      "unlikeSuccess": "Đã bỏ thích bình luận!",
+      "deleteConfirm": "Bạn có chắc chắn muốn xóa bình luận này?"
+    },
+    "validation": {
+      "contentRequired": "Vui lòng nhập nội dung bình luận",
+      "contentMinLength": "Bình luận phải có ít nhất 3 ký tự",
+      "contentMaxLength": "Bình luận không được vượt quá 500 ký tự"
+    },
+    "discussions": {
+      "title": "Diễn đàn thảo luận",
+      "createTopic": "Tạo chủ đề",
+      "myTopics": "Chủ đề của tôi",
+      "popularTopics": "Chủ đề phổ biến",
+      "recentTopics": "Chủ đề gần đây",
+      "noTopics": "Chưa có chủ đề thảo luận nào",
+      "topic": {
+        "title": "Tiêu đề",
+        "content": "Nội dung",
+        "category": "Danh mục",
+        "views": "{{count}} lượt xem",
+        "comments": "{{count}} bình luận",
+        "lastActivity": "Hoạt động gần nhất"
+      }
+    }
+  }
+}

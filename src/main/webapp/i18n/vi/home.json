@@ -1,0 +1,95 @@
+{
+  "home": {
+    "nav": {
+      "features": "Tính năng",
+      "courses": "Khóa học",
+      "testimonials": "Đánh giá",
+      "login": "Đăng nhập",
+      "signup": "Đăng ký"
+    },
+    "hero": {
+      "title": "Học Tiếng Hàn",
+      "subtitle": "Qua Đọc Sách",
+      "description": "Đọc tiểu thuyết và truyện Hàn Quốc yêu thích, học từ vựng và ngữ pháp tiếng Hàn trong ngữ cảnh tự nhiên. AI tự động phân tích sách và tạo bài tập 4 kỹ năng.",
+      "startButton": "Bắt Đầu Miễn Phí",
+      "libraryButton": "Xem Thư Viện",
+      "stats": {
+        "students": "Học viên",
+        "books": "Sách Hàn",
+        "satisfaction": "Hài lòng"
+      }
+    },
+    "features": {
+      "title": "Tại Sao Chọn Langleague?",
+      "subtitle": "Phương pháp học tiếng Hàn hiệu quả qua đọc sách Hàn Quốc thực tế",
+      "learnThroughBooks": {
+        "title": "Học Qua Sách",
+        "description": "Đọc tiểu thuyết và truyện Hàn Quốc thực tế, học từ vựng và ngữ pháp tiếng Hàn trong ngữ cảnh tự nhiên"
+      },
+      "aiAnalysis": {
+        "title": "AI Phân Tích",
+        "description": "Hệ thống AI tự động phân tích sách Hàn, tạo bài tập và từ vựng phù hợp với trình độ của bạn"
+      },
+      "fourSkills": {
+        "title": "Luyện 4 Kỹ Năng",
+        "description": "Nghe - Nói - Đọc - Viết: Rèn luyện toàn diện tiếng Hàn với bài tập đa dạng"
+      },
+      "trackProgress": {
+        "title": "Theo Dõi Tiến Độ",
+        "description": "Thống kê chi tiết tiến độ học, từ vựng tiếng Hàn đã học, bài tập đã hoàn thành"
+      }
+    },
+    "books": {
+      "title": "Sách Hàn Phổ Biến",
+      "subtitle": "Khám phá các tiểu thuyết Hàn Quốc được yêu thích nhất",
+      "startLearning": "Bắt Đầu Học",
+      "chapters": "{{count}} chương",
+      "levels": {
+        "beginner": "Sơ cấp",
+        "intermediate": "Trung cấp",
+        "advanced": "Cao cấp"
+      }
+    },
+    "testimonials": {
+      "title": "Học Viên Nói Gì?",
+      "subtitle": "Những đánh giá thực tế từ học viên Việt Nam",
+      "student1": {
+        "name": "Nguyễn Minh Anh",
+        "role": "Học viên",
+        "content": "Đọc sách Hàn giúp tôi học từ vựng rất nhanh. AI phân tích từ vựng và ngữ pháp tiếng Hàn rất chi tiết, giúp tôi hiểu sâu hơn!"
+      },
+      "student2": {
+        "name": "Trần Đức Anh",
+        "role": "Học viên",
+        "content": "Nền tảng tuyệt vời! Vừa đọc truyện Hàn yêu thích vừa học tiếng Hàn. Bài tập 4 kỹ năng rất đa dạng và thực tế."
+      },
+      "student3": {
+        "name": "Lê Thị Hương",
+        "role": "Học viên",
+        "content": "Hệ thống theo dõi tiến độ rất hay! Mỗi ngày đều có động lực để đọc và học thêm tiếng Hàn."
+      }
+    },
+    "cta": {
+      "title": "Sẵn Sàng Học Tiếng Hàn?",
+      "description": "Tham gia cùng 5,000+ học viên và nâng cao tiếng Hàn qua đọc sách Hàn Quốc hôm nay",
+      "button": "Đăng Ký Miễn Phí Ngay"
+    },
+    "footer": {
+      "description": "Học tiếng Hàn hiệu quả qua đọc sách Hàn Quốc thực tế với AI hỗ trợ",
+      "courses": "Khóa học",
+      "learnKorean": "Học Tiếng Hàn",
+      "learnEnglish": "Học Tiếng Anh",
+      "learnJapanese": "Học Tiếng Nhật",
+      "learnChinese": "Học Tiếng Trung",
+      "company": "Công ty",
+      "aboutUs": "Về chúng tôi",
+      "contact": "Liên hệ",
+      "careers": "Tuyển dụng",
+      "blog": "Blog",
+      "contactTitle": "Liên hệ",
+      "copyright": "© 2025 Langleague. Bản quyền thuộc về chúng tôi.",
+      "terms": "Điều khoản & Điều kiện",
+      "privacy": "Chính sách bảo mật"
+    }
+  }
+}

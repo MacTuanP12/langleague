@@ -1,0 +1,63 @@
+{
+  "reports": {
+    "title": "Báo cáo học tập",
+    "myProgress": "Tiến độ của tôi",
+    "overview": "Tổng quan",
+    "detailed": "Báo cáo chi tiết",
+    "export": "Xuất báo cáo",
+    "exportPDF": "Xuất PDF",
+    "exportExcel": "Xuất Excel",
+    "period": {
+      "today": "Hôm nay",
+      "thisWeek": "Tuần này",
+      "thisMonth": "Tháng này",
+      "lastMonth": "Tháng trước",
+      "thisYear": "Năm nay",
+      "custom": "Tùy chỉnh",
+      "from": "Từ",
+      "to": "Đến"
+    },
+    "stats": {
+      "totalTime": "Tổng thời gian học",
+      "wordsLearned": "Từ đã học",
+      "booksCompleted": "Sách đã hoàn thành",
+      "chaptersRead": "Chương đã đọc",
+      "exercisesCompleted": "Bài tập đã hoàn thành",
+      "averageScore": "Điểm trung bình",
+      "streak": "Chuỗi hiện tại",
+      "longestStreak": "Chuỗi dài nhất"
+    },
+    "charts": {
+      "learningTime": "Thời gian học tập",
+      "vocabulary": "Tăng trưởng từ vựng",
+      "performance": "Hiệu suất",
+      "activity": "Hoạt động hàng ngày",
+      "progress": "Tiến độ học tập"
+    },
+    "history": {
+      "title": "Lịch sử học tập",
+      "timeline": "Dòng thời gian",
+      "activities": "Hoạt động",
+      "noHistory": "Chưa có lịch sử học tập",
+      "types": {
+        "reading": "Đọc sách",
+        "exercise": "Bài tập",
+        "vocabulary": "Từ vựng",
+        "review": "Ôn tập"
+      }
+    },
+    "summary": {
+      "title": "Tóm tắt",
+      "thisWeek": "Tuần này bạn đã:",
+      "studiedHours": "Học {{hours}} giờ",
+      "learned": "Học {{count}} từ mới",
+      "completed": "Hoàn thành {{count}} bài tập",
+      "achieved": "Đạt {{count}} mốc quan trọng"
+    },
+    "messages": {
+      "exportSuccess": "Xuất báo cáo thành công!",
+      "exportFailed": "Xuất báo cáo thất bại",
+      "noData": "Không có dữ liệu cho khoảng thời gian đã chọn"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20251122061526"
+  },
+  "applications": "*",
+  "documentation": "User grammar progress",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "remembered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isMemorized",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "lastReviewed",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "reviewCount",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "UserGrammar",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

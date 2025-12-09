@@ -1,0 +1,72 @@
+{
+  "analytics": {
+    "title": "Exercise Analytics",
+    "performance": "Performance",
+    "statistics": "Statistics",
+    "myResults": "My Results",
+    "overview": {
+      "title": "Overview",
+      "totalExercises": "Total Exercises",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "averageScore": "Average Score",
+      "accuracy": "Accuracy Rate",
+      "timeSpent": "Total Time Spent"
+    },
+    "charts": {
+      "scoreOverTime": "Score Over Time",
+      "accuracyTrend": "Accuracy Trend",
+      "exercisesByType": "Exercises by Type",
+      "performanceByCategory": "Performance by Category",
+      "dailyProgress": "Daily Progress"
+    },
+    "filters": {
+      "all": "All Exercises",
+      "byType": "By Type",
+      "byCategory": "By Category",
+      "byDifficulty": "By Difficulty",
+      "period": "Period"
+    },
+    "types": {
+      "multipleChoice": "Multiple Choice",
+      "fillInBlank": "Fill in the Blank",
+      "matching": "Matching",
+      "trueFalse": "True/False",
+      "essay": "Essay"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "details": {
+      "title": "Detailed Results",
+      "exercise": "Exercise",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "timeSpent": "Time Spent",
+      "completedDate": "Completed Date",
+      "attempts": "Attempts",
+      "bestScore": "Best Score",
+      "lastAttempt": "Last Attempt"
+    },
+    "insights": {
+      "title": "Insights",
+      "strengths": "Your Strengths",
+      "weaknesses": "Areas to Improve",
+      "recommendations": "Recommendations",
+      "noData": "Complete more exercises to see insights"
+    },
+    "comparison": {
+      "title": "Comparison",
+      "vsAverage": "vs. Average",
+      "vsTopScorers": "vs. Top Scorers",
+      "yourRank": "Your Rank",
+      "percentile": "Percentile"
+    },
+    "messages": {
+      "noResults": "No exercise results yet. Start practicing!",
+      "loadingAnalytics": "Loading analytics..."
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "notes": {
+    "title": "Notes",
+    "myNotes": "My Notes",
+    "createNote": "Create Note",
+    "editNote": "Edit Note",
+    "deleteNote": "Delete Note",
+    "noNotes": "No notes yet. Start taking notes while reading!",
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "Note title...",
+      "content": "Content",
+      "contentPlaceholder": "Write your notes here...",
+      "tags": "Tags",
+      "color": "Color",
+      "save": "Save Note",
+      "cancel": "Cancel"
+    },
+    "editor": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "strikethrough": "Strikethrough",
+      "heading": "Heading",
+      "bulletList": "Bullet List",
+      "orderedList": "Numbered List",
+      "quote": "Quote",
+      "code": "Code",
+      "link": "Link",
+      "image": "Image",
+      "table": "Table",
+      "highlight": "Highlight"
+    },
+    "filters": {
+      "all": "All Notes",
+      "byChapter": "By Chapter",
+      "byBook": "By Book",
+      "byTag": "By Tag",
+      "byDate": "By Date",
+      "favorites": "Favorites"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "alphabetical": "A-Z",
+      "updated": "Recently Updated"
+    },
+    "actions": {
+      "favorite": "Add to Favorites",
+      "unfavorite": "Remove from Favorites",
+      "share": "Share",
+      "export": "Export",
+      "print": "Print",
+      "duplicate": "Duplicate"
+    },
+    "stats": {
+      "totalNotes": "Total Notes",
+      "thisWeek": "This Week",
+      "thisMonth": "This Month"
+    },
+    "search": {
+      "placeholder": "Search notes...",
+      "noResults": "No notes found"
+    },
+    "messages": {
+      "created": "Note created successfully!",
+      "updated": "Note updated successfully!",
+      "deleted": "Note deleted successfully!",
+      "deleteConfirm": "Delete this note?",
+      "exportSuccess": "Note exported successfully!"
+    },
+    "chapter": {
+      "title": "Chapter Notes",
+      "chapterName": "Chapter: {{name}}",
+      "viewAll": "View all notes for this chapter"
+    }
+  }
+}

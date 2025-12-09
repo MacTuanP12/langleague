@@ -1,0 +1,553 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,800');
+
+/* --- 1. CẤU HÌNH THEME: GREEN LEARNING (HỌC TẬP) --- */
+:root {
+  /* Màu chủ đạo: Xanh Teal (Giáo dục & Tin cậy) */
+  --primary-color: #0d9488; /* Teal đậm */
+  --secondary-color: #5eead4; /* Teal sáng */
+  --primary-rgb: 13, 148, 136; /* Dùng cho bóng mờ */
+
+  --text-color: #1e293b; /* Màu chữ đen xám hiện đại */
+  --bg-color: #f0fdfa; /* Nền trang rất nhạt */
+  --input-bg: #f8fafc; /* Nền input trắng xám sạch sẽ */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* --- 2. BACKGROUND: KHÔNG GIAN HỌC TẬP (ĐÃ CHỈNH SỬA) --- */
+.auth-body {
+  /* Màu nền dự phòng khi ảnh chưa load */
+  background-color: #111827; /* Màu tối */
+
+  /* Ảnh nền: Sách vở, bàn học, không gian thư viện sáng sủa */
+  background-image: url('https://i.pinimg.com/736x/b6/9a/ed/b69aed03ccc04f63c7439f0e8929b4b0.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* --- LỚP PHỦ TỐI NHẸ (THAY CHO LỚP MỜ CŨ) --- */
+.auth-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Phủ một lớp màu đen trong suốt 40% lên ảnh */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Hoặc dùng gradient tối nếu muốn: background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)); */
+  z-index: 0;
+  /* Đã BỎ thuộc tính backdrop-filter: blur() đi */
+}
+
+/* --- 3. CONTAINER FORM --- */
+.auth-container {
+  background-color: #fff;
+  border-radius: 20px; /* Bo góc mềm mại */
+  /* Đổ bóng sâu để form nổi bật trên nền tối */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 850px;
+  max-width: 95%;
+  min-height: 600px;
+  z-index: 1; /* Nổi lên trên lớp phủ tối */
+}
+
+/* --- 4. NÚT NGÔN NGỮ (SANG TRỌNG & NHỎ GỌN) --- */
+.language-switch-wrapper {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+
+/* Style đặc biệt cho nút ngôn ngữ bên trong wrapper */
+.language-switch-wrapper .ant-dropdown-trigger,
+.language-switch-wrapper button {
+  background: rgba(255, 255, 255, 0.95); /* Nền trắng đục hơn */
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: 30px;
+  padding: 6px 14px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Text bên trong */
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25);
+    border-color: var(--primary-color);
+  }
+
+  img {
+    border-radius: 2px;
+    width: 16px;
+  }
+}
+
+/* --- 5. TYPOGRAPHY --- */
+h1 {
+  font-weight: 800;
+  margin: 0 0 10px;
+  font-size: 28px;
+  color: var(--text-color);
+}
+
+span {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+a {
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+}
+
+/* --- 6. BUTTON STYLES --- */
+button {
+  border-radius: 50px;
+  border: 1px solid var(--primary-color);
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition:
+    transform 80ms ease-in,
+    background 0.3s,
+    box-shadow 0.3s;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    background-color: #cbd5e1;
+    border-color: #cbd5e1;
+    cursor: not-allowed;
+  }
+
+  /* Nút Ghost trên nền Overlay */
+  &.ghost {
+    background-color: transparent;
+    border-color: #ffffff;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Nút Submit chính */
+  &.submit-btn {
+    margin-top: 15px;
+    width: 100%;
+    max-width: 220px;
+    box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3); /* Bóng màu xanh */
+
+    &:hover {
+      background-color: #0f766e; /* Đậm hơn khi hover */
+      box-shadow: 0 6px 20px rgba(13, 148, 136, 0.5);
+    }
+  }
+}
+
+/* --- 7. FORM & INPUT FIXES --- */
+.auth-form {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
+  text-align: center;
+
+  /* Reset Style Input */
+  .ant-input,
+  .ant-input-password .ant-input {
+    font-size: 14px;
+    color: #333;
+  }
+
+  /* Style cho Input thường */
+  .ant-input:not(.ant-input-password .ant-input) {
+    background-color: var(--input-bg);
+    border: 1px solid #e2e8f0; /* Viền xám rất nhạt */
+    padding: 10px 15px;
+    border-radius: 10px;
+    width: 100%;
+    transition: all 0.3s;
+
+    &:focus {
+      background-color: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); /* Glow xanh */
+    }
+  }
+
+  /* === FIX CĂN GIỮA ICON MẮT (Password) === */
+  .ant-input-affix-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: var(--input-bg);
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    width: 100%;
+    transition: all 0.3s;
+
+    &:hover,
+    &:focus-within {
+      background-color: #fff;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+
+    .ant-input {
+      background-color: transparent !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      height: auto;
+      box-shadow: none !important;
+    }
+
+    /* Icon mắt */
+    .ant-input-suffix {
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+      .anticon {
+        color: #94a3b8;
+        font-size: 16px;
+        transition: color 0.3s;
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  /* Khoảng cách form item */
+  .ant-form-item {
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: left;
+  }
+
+  .ant-form-item-explain-error {
+    font-size: 11px;
+    margin-top: 4px;
+    margin-left: 4px;
+    color: #ef4444; /* Màu đỏ lỗi chuẩn */
+  }
+}
+
+/* --- 8. CAPTCHA & FOOTER FIXES --- */
+.captcha-container {
+  width: 100%;
+  margin-bottom: 10px;
+
+  .captcha-image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+
+    img {
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    button {
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      min-width: auto;
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--primary-color);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: #ccfbf1;
+        border-color: var(--primary-color);
+      }
+    }
+  }
+}
+
+/* === FIX QUÊN MẬT KHẨU 1 DÒNG === */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+
+  .ant-form-item {
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  .ant-checkbox-wrapper {
+    font-size: 13px;
+    &:hover .ant-checkbox-inner {
+      border-color: var(--primary-color);
+    }
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  .forgot-pass {
+    white-space: nowrap;
+    margin-left: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--primary-color);
+
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+  }
+}
+
+/* --- 9. SOCIAL ICONS --- */
+.social-container {
+  margin: 15px 0 20px;
+
+  a {
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 8px;
+    height: 40px;
+    width: 40px;
+    color: #333;
+    background: #fff;
+    font-size: 16px;
+    transition: 0.3s;
+
+    &:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background: #ccfbf1; /* Xanh rất nhạt khi hover */
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* --- 10. ANIMATION LOGIC (SLIDING) --- */
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.auth-container.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+}
+
+.sign-up-container {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+
+.auth-container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+
+@keyframes show {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.auth-container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.overlay {
+  background: var(--primary-color);
+  /* Gradient overlay sang trọng */
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.auth-container.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+.auth-container.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+.auth-container.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}
+
+/* --- 11. RESPONSIVE --- */
+@media (max-width: 768px) {
+  .auth-body {
+    height: auto;
+    min-height: 100vh;
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .auth-container {
+    width: 90%;
+    min-height: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+
+  .overlay-container {
+    display: none;
+  }
+
+  .form-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .sign-in-container,
+  .sign-up-container {
+    width: 100%;
+    position: relative;
+  }
+
+  .sign-up-container {
+    display: none;
+  }
+
+  .auth-container.right-panel-active {
+    .sign-in-container {
+      display: none;
+    }
+    .sign-up-container {
+      display: block;
+      opacity: 1;
+      animation: fadeIn 0.5s;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

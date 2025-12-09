@@ -1,0 +1,35 @@
+{
+  "bookApproval": {
+    "title": "Duyệt Sách",
+    "errorLoadBooks": "Không thể tải danh sách sách chờ duyệt",
+    "approveSuccess": "Đã duyệt sách thành công!",
+    "errorApprove": "Không thể duyệt sách",
+    "rejectSuccess": "Đã từ chối sách",
+    "errorReject": "Không thể từ chối sách",
+    "deleteSuccess": "Đã xóa vĩnh viễn sách",
+    "errorDelete": "Không thể xóa sách",
+    "thumbnail": "Ảnh Bìa",
+    "bookTitle": "Tên Sách",
+    "author": "Tác Giả",
+    "level": "Cấp Độ",
+    "uploadedBy": "Người Tải Lên",
+    "uploadDate": "Ngày Tải Lên",
+    "status": "Trạng Thái",
+    "actions": "Hành Động",
+    "approve": "Duyệt",
+    "reject": "Từ Chối",
+    "viewDetails": "Xem Chi Tiết",
+    "delete": "Xóa",
+    "refresh": "Làm Mới",
+    "noImage": "Không Có Ảnh",
+    "pending": "Chờ Duyệt",
+    "approved": "Đã Duyệt",
+    "rejected": "Đã Từ Chối",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa vĩnh viễn sách này?",
+    "bookDetails": "Chi Tiết Sách",
+    "description": "Mô Tả",
+    "category": "Danh Mục",
+    "close": "Đóng"
+  }
+}
+

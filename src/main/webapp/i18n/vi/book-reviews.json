@@ -1,0 +1,62 @@
+{
+  "bookReviews": {
+    "title": "Đánh giá sách",
+    "myReviews": "Đánh giá của tôi",
+    "writeReview": "Viết đánh giá",
+    "editReview": "Sửa đánh giá",
+    "deleteReview": "Xóa đánh giá",
+    "rating": "Đánh giá",
+    "comment": "Bình luận",
+    "helpful": "Hữu ích",
+    "notHelpful": "Không hữu ích",
+    "reply": "Trả lời",
+    "replies": "Câu trả lời",
+    "showReplies": "Hiện {{count}} câu trả lời",
+    "hideReplies": "Ẩn câu trả lời",
+    "noReviews": "Chưa có đánh giá nào. Hãy là người đầu tiên viết đánh giá!",
+    "form": {
+      "title": "Viết đánh giá của bạn",
+      "ratingLabel": "Điểm đánh giá",
+      "titleLabel": "Tiêu đề đánh giá",
+      "titlePlaceholder": "Tóm tắt đánh giá của bạn",
+      "contentLabel": "Nội dung đánh giá",
+      "commentLabel": "Nội dung đánh giá",
+      "commentPlaceholder": "Chia sẻ suy nghĩ của bạn về cuốn sách này. Bạn thích hay không thích điều gì? Bạn đã học được gì?",
+      "submit": "Gửi đánh giá",
+      "update": "Cập nhật đánh giá",
+      "cancel": "Hủy"
+    },
+    "filters": {
+      "all": "Tất cả đánh giá",
+      "positive": "Tích cực",
+      "negative": "Tiêu cực",
+      "mostHelpful": "Hữu ích nhất",
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    },
+    "stats": {
+      "totalReviews": "Dựa trên {{count}} đánh giá",
+      "averageRating": "Đánh giá trung bình",
+      "ratingDistribution": "Phân bố đánh giá"
+    },
+    "messages": {
+      "submitSuccess": "Gửi đánh giá thành công!",
+      "submitFailed": "Gửi đánh giá thất bại",
+      "updateSuccess": "Cập nhật đánh giá thành công!",
+      "deleteSuccess": "Xóa đánh giá thành công!",
+      "deleteFailed": "Xóa đánh giá thất bại",
+      "likeSuccess": "Đã đánh dấu hữu ích!",
+      "likeFailed": "Không thể đánh dấu hữu ích",
+      "unlikeSuccess": "Đã bỏ đánh dấu hữu ích!",
+      "deleteConfirm": "Bạn có chắc chắn muốn xóa đánh giá này?"
+    },
+    "validation": {
+      "ratingRequired": "Vui lòng chọn điểm đánh giá",
+      "commentRequired": "Vui lòng nhập nội dung đánh giá",
+      "commentMinLength": "Nội dung đánh giá phải có ít nhất 20 ký tự",
+      "commentMaxLength": "Nội dung đánh giá không được vượt quá 2000 ký tự",
+      "titleRequired": "Vui lòng nhập tiêu đề",
+      "titleMaxLength": "Tiêu đề không được vượt quá 100 ký tự"
+    }
+  }
+}

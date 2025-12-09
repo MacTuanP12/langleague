@@ -1,0 +1,78 @@
+{
+  "notes": {
+    "title": "Ghi chú",
+    "myNotes": "Ghi chú của tôi",
+    "createNote": "Tạo ghi chú",
+    "editNote": "Sửa ghi chú",
+    "deleteNote": "Xóa ghi chú",
+    "noNotes": "Chưa có ghi chú nào. Bắt đầu ghi chú khi đọc sách!",
+    "form": {
+      "title": "Tiêu đề",
+      "titlePlaceholder": "Tiêu đề ghi chú...",
+      "content": "Nội dung",
+      "contentPlaceholder": "Viết ghi chú của bạn ở đây...",
+      "tags": "Nhãn",
+      "color": "Màu",
+      "save": "Lưu ghi chú",
+      "cancel": "Hủy"
+    },
+    "editor": {
+      "bold": "Đậm",
+      "italic": "Nghiêng",
+      "underline": "Gạch dưới",
+      "strikethrough": "Gạch ngang",
+      "heading": "Tiêu đề",
+      "bulletList": "Danh sách dấu đầu dòng",
+      "orderedList": "Danh sách đánh số",
+      "quote": "Trích dẫn",
+      "code": "Mã",
+      "link": "Liên kết",
+      "image": "Hình ảnh",
+      "table": "Bảng",
+      "highlight": "Làm nổi bật"
+    },
+    "filters": {
+      "all": "Tất cả ghi chú",
+      "byChapter": "Theo chương",
+      "byBook": "Theo sách",
+      "byTag": "Theo nhãn",
+      "byDate": "Theo ngày",
+      "favorites": "Yêu thích"
+    },
+    "sort": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất",
+      "alphabetical": "A-Z",
+      "updated": "Cập nhật gần đây"
+    },
+    "actions": {
+      "favorite": "Thêm vào yêu thích",
+      "unfavorite": "Bỏ yêu thích",
+      "share": "Chia sẻ",
+      "export": "Xuất",
+      "print": "In",
+      "duplicate": "Sao chép"
+    },
+    "stats": {
+      "totalNotes": "Tổng ghi chú",
+      "thisWeek": "Tuần này",
+      "thisMonth": "Tháng này"
+    },
+    "search": {
+      "placeholder": "Tìm kiếm ghi chú...",
+      "noResults": "Không tìm thấy ghi chú"
+    },
+    "messages": {
+      "created": "Tạo ghi chú thành công!",
+      "updated": "Cập nhật ghi chú thành công!",
+      "deleted": "Xóa ghi chú thành công!",
+      "deleteConfirm": "Xóa ghi chú này?",
+      "exportSuccess": "Xuất ghi chú thành công!"
+    },
+    "chapter": {
+      "title": "Ghi chú chương",
+      "chapterName": "Chương: {{name}}",
+      "viewAll": "Xem tất cả ghi chú của chương này"
+    }
+  }
+}

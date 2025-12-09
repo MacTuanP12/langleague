@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ========================================= -->
+    <!-- PROPERTIES                                -->
+    <!-- ========================================= -->
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="floatType" value="float" dbms="mysql"/>
+    <property name="clobType" value="longtext" dbms="mysql"/>
+    <property name="blobType" value="longblob" dbms="mysql"/>
+    <property name="uuidType" value="varchar(36)" dbms="mysql"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
+
+    <!-- ========================================= -->
+    <!-- 0. CORE SCHEMA (JHipster)                -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 1. USER & AUTHENTICATION DOMAIN          -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000001_entity_app_user.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251208000001_add_login_attempt_tracking.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 2. BOOK SYSTEM DOMAIN                    -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000002_entity_book.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000003_entity_chapter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000019_entity_book_review.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000020_entity_comment.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 3. LEARNING CONTENT DOMAIN               -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000004_entity_word.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000005_entity_word_example.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000006_entity_grammar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000007_entity_grammar_example.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 4. EXERCISE DOMAIN                       -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000008_entity_listening_exercise.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000009_entity_listening_option.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000010_entity_reading_exercise.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000011_entity_reading_option.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000012_entity_speaking_exercise.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000013_entity_writing_exercise.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000014_entity_exercise_result.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 5. USER PROGRESS DOMAIN                  -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000015_entity_user_vocabulary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000016_entity_user_grammar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000018_entity_chapter_progress.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 6. GAMIFICATION DOMAIN                   -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000021_entity_achievement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000022_entity_user_achievement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000023_entity_learning_streak.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000024_entity_study_session.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000025_entity_streak_icon.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251125000026_entity_streak_milestone.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 7. NOTIFICATION DOMAIN                   -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251125000027_entity_notification.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 8. BOOK UPLOAD & USER LIBRARY            -->
+    <!-- ========================================= -->
+    <include file="config/liquibase/changelog/20251205000001_entity_book_upload.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251205000002_entity_user_book.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251205000003_entity_user_chapter.xml" relativeToChangelogFile="false"/>
+
+    <!-- ========================================= -->
+    <!-- 10. SAMPLE DATA (DEV ONLY)               -->
+    <!-- ========================================= -->
+
+
+    <include file="config/liquibase/changelog/20251125000099_load_fake_data.xml" relativeToChangelogFile="false"/>
+
+</databaseChangeLog>
+

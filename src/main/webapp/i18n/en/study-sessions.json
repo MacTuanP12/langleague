@@ -1,0 +1,56 @@
+{
+  "studySessions": {
+    "title": "Study Sessions",
+    "mySessions": "My Sessions",
+    "currentSession": "Current Session",
+    "sessionHistory": "Session History",
+    "startSession": "Start Session",
+    "endSession": "End Session",
+    "pauseSession": "Pause",
+    "resumeSession": "Resume",
+    "timer": {
+      "title": "Session Timer",
+      "elapsed": "Time Elapsed",
+      "target": "Target Time",
+      "remaining": "Remaining"
+    },
+    "stats": {
+      "totalSessions": "Total Sessions",
+      "totalTime": "Total Time",
+      "averageSession": "Average Session",
+      "todayTime": "Today's Time",
+      "thisWeekTime": "This Week's Time",
+      "longestSession": "Longest Session"
+    },
+    "settings": {
+      "title": "Session Settings",
+      "targetDuration": "Target Duration",
+      "autoBreak": "Auto Break",
+      "breakDuration": "Break Duration",
+      "reminder": "Reminder",
+      "reminderInterval": "Reminder Interval"
+    },
+    "goals": {
+      "title": "Daily Goals",
+      "dailyTarget": "Daily Target",
+      "minutesPerDay": "{{minutes}} minutes per day",
+      "progress": "Today's Progress",
+      "goalReached": "Daily goal reached! Great job!",
+      "almostThere": "Almost there! {{remaining}} minutes to go"
+    },
+    "history": {
+      "title": "Session History",
+      "date": "Date",
+      "duration": "Duration",
+      "activities": "Activities",
+      "noHistory": "No session history yet"
+    },
+    "messages": {
+      "sessionStarted": "Session started! Good luck!",
+      "sessionEnded": "Session ended. Great work!",
+      "goalReached": "You've reached your daily goal!",
+      "breakTime": "Time for a break!",
+      "breakOver": "Break is over. Let's continue!"
+    }
+  }
+}

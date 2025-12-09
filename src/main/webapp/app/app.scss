@@ -1,0 +1,235 @@
+/* Global App Styles with Dark Mode Support */
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --border-color: #d9d9d9;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+html.dark {
+  --bg-primary: #141414;
+  --bg-secondary: #1f1f1f;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --border-color: #434343;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Apply theme variables to body */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Dark mode for common elements */
+html.dark {
+  .app-container {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  /* Layout components */
+  .ant-layout {
+    background-color: var(--bg-primary);
+  }
+
+  .ant-layout-header {
+    background-color: var(--bg-secondary) !important;
+    border-bottom-color: var(--border-color) !important;
+  }
+
+  .ant-layout-content {
+    background-color: var(--bg-primary) !important;
+  }
+
+  .ant-layout-footer {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ant-layout-sider {
+    background: linear-gradient(180deg, #0f1419 0%, #1a1f26 100%) !important;
+  }
+
+  /* Cards and panels */
+  .ant-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+
+  /* Inputs */
+  .ant-input,
+  .ant-input-number,
+  .ant-select-selector {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .ant-input:focus,
+  .ant-input-focused {
+    background-color: var(--bg-secondary);
+  }
+
+  /* Tables */
+  .ant-table {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .ant-table-thead > tr > th {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+  }
+
+  .ant-table-tbody > tr > td {
+    border-color: var(--border-color);
+  }
+
+  .ant-table-tbody > tr:hover > td {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Modals */
+  .ant-modal-content {
+    background-color: var(--bg-secondary);
+  }
+
+  .ant-modal-header {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+
+  /* Dropdowns */
+  .ant-select-dropdown {
+    background-color: var(--bg-secondary);
+  }
+
+  .ant-select-item {
+    color: var(--text-primary);
+  }
+
+  .ant-select-item-option-selected {
+    background-color: rgba(102, 126, 234, 0.2);
+  }
+
+  /* Buttons */
+  .ant-btn-default {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+
+    &:hover {
+      border-color: #667eea;
+      color: #667eea;
+    }
+  }
+
+  /* Menu */
+  .ant-menu {
+    background-color: transparent;
+    color: var(--text-primary);
+  }
+
+  .ant-menu-item {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ant-menu-item-selected {
+    background-color: rgba(102, 126, 234, 0.2);
+  }
+
+  /* Typography */
+  .ant-typography {
+    color: var(--text-primary);
+  }
+
+  /* Space and dividers */
+  .ant-divider {
+    border-color: var(--border-color);
+  }
+
+  /* Badges */
+  .ant-badge-count {
+    background-color: #667eea;
+  }
+
+  /* Segmented (Language toggle) */
+  .ant-segmented {
+    background-color: var(--bg-secondary) !important;
+  }
+
+  .ant-segmented-item {
+    color: var(--text-secondary);
+  }
+
+  .ant-segmented-item-selected {
+    background-color: rgba(102, 126, 234, 0.3) !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* List */
+  .ant-list {
+    color: var(--text-primary);
+  }
+
+  /* Empty state */
+  .ant-empty-description {
+    color: var(--text-secondary);
+  }
+
+  /* Spin */
+  .ant-spin-text {
+    color: var(--text-primary);
+  }
+
+  /* Toastify */
+  .Toastify__toast {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  /* Custom scrollbar for dark mode */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+/* Smooth transitions for all theme changes */
+* {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}

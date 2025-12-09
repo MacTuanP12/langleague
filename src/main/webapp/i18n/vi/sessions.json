@@ -1,0 +1,15 @@
+{
+  "sessions": {
+    "title": "Phiên hoạt động cho [<strong>{{username}}</strong>]",
+    "table": {
+      "ipaddress": "Địa chỉ IP",
+      "useragent": "Trình duyệt",
+      "date": "Ngày",
+      "button": "Vô hiệu hóa"
+    },
+    "messages": {
+      "success": "<strong>Đã vô hiệu hóa phiên!</strong>",
+      "error": "<strong>Đã xảy ra lỗi!</strong> Không thể vô hiệu hóa phiên."
+    }
+  }
+}

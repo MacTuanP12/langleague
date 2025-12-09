@@ -1,0 +1,93 @@
+{
+  "streaks": {
+    "title": "Cột mốc chuỗi ngày",
+    "currentStreak": "Chuỗi hiện tại",
+    "longestStreak": "Chuỗi dài nhất",
+    "milestones": "Cột mốc",
+    "achievements": "Thành tích chuỗi",
+    "stats": {
+      "days": "{{count}} ngày",
+      "today": "Hôm nay",
+      "keepGoing": "Tiếp tục phát huy!",
+      "dontBreak": "Đừng phá vỡ chuỗi của bạn!"
+    },
+    "icons": {
+      "title": "Biểu tượng cột mốc",
+      "collection": "Bộ sưu tập biểu tượng",
+      "unlocked": "Đã mở khóa",
+      "locked": "Chưa mở khóa",
+      "viewGallery": "Xem bộ sưu tập"
+    },
+    "milestoneList": {
+      "3days": {
+        "name": "Chuỗi 3 ngày",
+        "description": "Học 3 ngày liên tiếp",
+        "icon": "🔥"
+      },
+      "7days": {
+        "name": "Chiến binh tuần",
+        "description": "Hoàn thành một tuần học tập",
+        "icon": "⭐"
+      },
+      "14days": {
+        "name": "Vững vàng 2 tuần",
+        "description": "Duy trì chuỗi 2 tuần",
+        "icon": "💪"
+      },
+      "30days": {
+        "name": "Bậc thầy tháng",
+        "description": "Học mỗi ngày trong một tháng",
+        "icon": "🏆"
+      },
+      "60days": {
+        "name": "Người học tận tâm",
+        "description": "60 ngày học liên tục",
+        "icon": "💎"
+      },
+      "90days": {
+        "name": "Nhà vô địch quý",
+        "description": "3 tháng cống hiến",
+        "icon": "👑"
+      },
+      "180days": {
+        "name": "Anh hùng nửa năm",
+        "description": "6 tháng không bỏ lỡ một ngày",
+        "icon": "🌟"
+      },
+      "365days": {
+        "name": "Huyền thoại năm",
+        "description": "Một năm học tập đầy đủ",
+        "icon": "🎯"
+      }
+    },
+    "calendar": {
+      "title": "Lịch hoạt động",
+      "viewCalendar": "Xem lịch",
+      "heatmap": "Bản đồ nhiệt",
+      "thisMonth": "Tháng này",
+      "lastMonth": "Tháng trước",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động"
+    },
+    "celebration": {
+      "title": "Chúc mừng!",
+      "newMilestone": "Đạt cột mốc mới!",
+      "congratulations": "Chúc mừng chuỗi {{days}} ngày của bạn!",
+      "share": "Chia sẻ thành tích",
+      "keepGoing": "Tiếp tục duy trì đà!"
+    },
+    "tips": {
+      "title": "Mẹo duy trì chuỗi",
+      "tip1": "Đặt lời nhắc hàng ngày",
+      "tip2": "Học vào cùng một giờ mỗi ngày",
+      "tip3": "Bắt đầu với mục tiêu nhỏ",
+      "tip4": "Theo dõi tiến độ",
+      "tip5": "Ăn mừng những chiến thắng nhỏ"
+    },
+    "messages": {
+      "streakLost": "Chuỗi của bạn đã bị phá vỡ. Bắt đầu chuỗi mới hôm nay!",
+      "almostLost": "Đừng quên học hôm nay!",
+      "milestoneReached": "Đạt cột mốc! Đã mở khóa {{name}}!"
+    }
+  }
+}

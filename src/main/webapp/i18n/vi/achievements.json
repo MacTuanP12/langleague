@@ -1,0 +1,79 @@
+{
+  "achievements": {
+    "title": "Thành tích",
+    "myAchievements": "Thành tích của tôi",
+    "allAchievements": "Tất cả thành tích",
+    "unlocked": "Đã mở khóa",
+    "locked": "Chưa mở khóa",
+    "progress": "Tiến độ",
+    "unlockedDate": "Mở khóa vào {{date}}",
+    "categories": {
+      "all": "Tất cả",
+      "streak": "Chuỗi ngày",
+      "completion": "Hoàn thành",
+      "vocabulary": "Từ vựng",
+      "grammar": "Ngữ pháp",
+      "exercise": "Bài tập",
+      "social": "Xã hội",
+      "special": "Đặc biệt",
+      "learning": "Học tập",
+      "reading": "Đọc sách"
+    },
+    "stats": {
+      "total": "Tổng thành tích",
+      "unlocked": "Đã mở khóa",
+      "remaining": "Còn lại",
+      "completionRate": "Tỷ lệ hoàn thành"
+    },
+    "badges": {
+      "beginner": "Người mới",
+      "intermediate": "Trung cấp",
+      "advanced": "Nâng cao",
+      "master": "Bậc thầy",
+      "legend": "Huyền thoại"
+    },
+    "types": {
+      "firstBook": {
+        "name": "Cuốn sách đầu tiên",
+        "description": "Hoàn thành cuốn sách đầu tiên"
+      },
+      "bookworm": {
+        "name": "Mọt sách",
+        "description": "Hoàn thành 10 cuốn sách"
+      },
+      "wordCollector": {
+        "name": "Người sưu tầm từ",
+        "description": "Học 100 từ vựng"
+      },
+      "vocabularyMaster": {
+        "name": "Bậc thầy từ vựng",
+        "description": "Học 1000 từ vựng"
+      },
+      "streakStarter": {
+        "name": "Bắt đầu chuỗi",
+        "description": "Duy trì chuỗi 7 ngày"
+      },
+      "consistent": {
+        "name": "Người học kiên trì",
+        "description": "Duy trì chuỗi 30 ngày"
+      },
+      "socialButterfly": {
+        "name": "Người hoà đồng",
+        "description": "Viết 50 bình luận"
+      },
+      "reviewer": {
+        "name": "Người đánh giá sách",
+        "description": "Viết 10 đánh giá sách"
+      }
+    },
+    "notifications": {
+      "unlocked": "Mở khóa thành tích!",
+      "newBadge": "Bạn đã nhận được huy hiệu mới: {{badge}}",
+      "congratulations": "Chúc mừng!"
+    },
+    "messages": {
+      "noAchievements": "Chưa mở khóa thành tích nào. Bắt đầu học để nhận thành tích!",
+      "keepGoing": "Tiếp tục phát huy! Bạn đang làm rất tốt!"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "flashcards": {
+    "title": "Thẻ ghi nhớ",
+    "myFlashcards": "Thẻ của tôi",
+    "practice": "Luyện tập",
+    "review": "Ôn tập",
+    "manage": "Quản lý",
+    "create": "Tạo thẻ",
+    "edit": "Sửa thẻ",
+    "delete": "Xóa thẻ",
+    "deck": {
+      "title": "Bộ thẻ",
+      "create": "Tạo bộ thẻ",
+      "edit": "Sửa bộ thẻ",
+      "delete": "Xóa bộ thẻ",
+      "name": "Tên bộ thẻ",
+      "description": "Mô tả",
+      "cardCount": "{{count}} thẻ"
+    },
+    "card": {
+      "front": "Mặt trước",
+      "back": "Mặt sau",
+      "example": "Ví dụ",
+      "note": "Ghi chú",
+      "tags": "Nhãn"
+    },
+    "practice": {
+      "title": "Phiên luyện tập",
+      "start": "Bắt đầu luyện tập",
+      "flip": "Lật thẻ",
+      "next": "Thẻ tiếp theo",
+      "previous": "Thẻ trước",
+      "shuffle": "Xáo trộn",
+      "again": "Lại",
+      "hard": "Khó",
+      "good": "Tốt",
+      "easy": "Dễ",
+      "progress": "{{current}} / {{total}}"
+    },
+    "srs": {
+      "title": "Lặp lại ngắt quãng",
+      "dueToday": "Đến hạn hôm nay",
+      "newCards": "Thẻ mới",
+      "reviewing": "Đang ôn tập",
+      "mastered": "Đã thành thạo",
+      "nextReview": "Ôn tập tiếp theo sau {{time}}",
+      "algorithm": "Thuật toán SRS",
+      "settings": "Cài đặt SRS"
+    },
+    "stats": {
+      "totalCards": "Tổng số thẻ",
+      "learned": "Đã học",
+      "learning": "Đang học",
+      "review": "Ôn tập",
+      "accuracy": "Độ chính xác",
+      "streak": "Chuỗi ôn tập"
+    },
+    "filters": {
+      "all": "Tất cả thẻ",
+      "new": "Mới",
+      "learning": "Đang học",
+      "review": "Ôn tập",
+      "mastered": "Đã thành thạo",
+      "byTag": "Theo nhãn",
+      "byDeck": "Theo bộ thẻ"
+    },
+    "messages": {
+      "cardCreated": "Tạo thẻ thành công!",
+      "cardUpdated": "Cập nhật thẻ thành công!",
+      "cardDeleted": "Xóa thẻ thành công!",
+      "deckCreated": "Tạo bộ thẻ thành công!",
+      "deckUpdated": "Cập nhật bộ thẻ thành công!",
+      "deckDeleted": "Xóa bộ thẻ thành công!",
+      "sessionComplete": "Hoàn thành phiên luyện tập!",
+      "noCards": "Chưa có thẻ nào. Tạo thẻ đầu tiên của bạn!",
+      "noDueCards": "Không có thẻ nào cần ôn tập. Tuyệt vời!",
+      "loadFailed": "Không thể tải thẻ ghi nhớ",
+      "reviewSuccess": "Ghi nhận ôn tập thành công!",
+      "reviewFailed": "Ghi nhận ôn tập thất bại",
+      "removeSuccess": "Đã xóa thẻ khỏi bộ sưu tập",
+      "removeFailed": "Không thể xóa thẻ"
+    }
+  }
+}

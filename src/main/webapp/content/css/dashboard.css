@@ -1,0 +1,89 @@
+/* Dashboard custom styles to match the modern rounded cards look */
+/* Cards */
+.ant-card {
+  border-radius: 12px !important;
+  overflow: visible !important;
+  box-shadow: 0 6px 20px rgba(16, 24, 40, 0.06) !important;
+}
+
+/* Make inner card headers lighter and rounded */
+.ant-card-head {
+  border-bottom: none !important;
+  background: transparent !important;
+}
+
+/* Progress bars - increase height and round */
+.ant-progress-inner {
+  height: 12px !important;
+  border-radius: 8px !important;
+}
+.ant-progress-bg {
+  border-radius: 8px !important;
+}
+
+/* Calendar card rounded */
+.ant-picker-calendar {
+  border-radius: 12px !important;
+}
+
+/* Sidebar user avatar border */
+.ant-layout-sider .ant-avatar {
+  border: 2px solid rgba(102, 126, 234, 0.9) !important;
+}
+
+/* Sidebar selected menu highlight */
+.ant-layout-sider .ant-menu-item-selected {
+  background: rgba(102, 126, 234, 0.06) !important;
+  border-radius: 8px !important;
+}
+
+/* Tweak list items spacing in language progress area */
+.ant-list-item {
+  border-bottom: none !important;
+  padding: 14px 0 !important;
+}
+
+/* Small responsive tweak for dashboard layout */
+@media (max-width: 768px) {
+  .ant-card {
+    box-shadow: none !important;
+  }
+}
+
+/* Fallback hero gradient class to ensure banner looks correct if Tailwind utilities aren't applied */
+.hero-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+  border-radius: 12px;
+  color: white;
+}
+
+/* Utility-like helpers used by dashboard components when Tailwind isn't available */
+.rounded-xl {
+  border-radius: 16px !important;
+}
+.p-6 {
+  padding: 24px !important;
+}
+.p-8 {
+  padding: 32px !important;
+}
+.mb-8 {
+  margin-bottom: 32px !important;
+}
+.max-w-\[1400px\] {
+  max-width: 1400px !important;
+}
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.flex {
+  display: flex !important;
+}
+.items-center {
+  align-items: center !important;
+}
+.justify-between {
+  justify-content: space-between !important;
+}

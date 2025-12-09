@@ -1,0 +1,45 @@
+{
+  "favorites": {
+    "title": "Yêu thích",
+    "myFavorites": "Yêu thích của tôi",
+    "addToFavorites": "Thêm vào yêu thích",
+    "removeFromFavorites": "Bỏ yêu thích",
+    "noFavorites": "Chưa có mục yêu thích nào. Thêm sách và chương yêu thích của bạn!",
+    "tabs": {
+      "all": "Tất cả",
+      "books": "Sách",
+      "chapters": "Chương",
+      "vocabulary": "Từ vựng"
+    },
+    "sort": {
+      "newest": "Mới thêm",
+      "oldest": "Cũ nhất",
+      "alphabetical": "A-Z",
+      "reverse": "Z-A"
+    },
+    "actions": {
+      "read": "Đọc ngay",
+      "continue": "Tiếp tục đọc",
+      "remove": "Xóa",
+      "removeAll": "Xóa tất cả"
+    },
+    "stats": {
+      "total": "Tổng yêu thích",
+      "books": "{{count}} sách",
+      "chapters": "{{count}} chương",
+      "words": "{{count}} từ"
+    },
+    "messages": {
+      "added": "Đã thêm vào yêu thích!",
+      "removed": "Đã bỏ yêu thích!",
+      "removeConfirm": "Xóa mục này khỏi yêu thích?",
+      "removeAllConfirm": "Xóa tất cả yêu thích? Hành động này không thể hoàn tác."
+    },
+    "filters": {
+      "all": "Tất cả danh mục",
+      "completed": "Đã hoàn thành",
+      "inProgress": "Đang thực hiện",
+      "notStarted": "Chưa bắt đầu"
+    }
+  }
+}
