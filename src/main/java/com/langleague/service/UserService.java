@@ -1,6 +1,7 @@
 package com.langleague.service;
 
 import com.langleague.config.Constants;
+import com.langleague.domain.AppUser;
 import com.langleague.domain.Authority;
 import com.langleague.domain.User;
 import com.langleague.repository.AuthorityRepository;
@@ -9,6 +10,7 @@ import com.langleague.security.AuthoritiesConstants;
 import com.langleague.security.SecurityUtils;
 import com.langleague.service.dto.AdminUserDTO;
 import com.langleague.service.dto.UserDTO;
+import com.langleague.service.mapper.AdminUserMapper;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tech.jhipster.security.RandomUtil;
 
-/**
- * Service class for managing users.
- */
 @Service
 @Transactional
 public class UserService {
@@ -35,16 +35,12 @@ public class UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthorityRepository authorityRepository;
-
     private final CacheManager cacheManager;
-
     private final AppUserService appUserService;
-
     private final FileStorageService fileStorageService;
+    private final AdminUserMapper adminUserMapper;
 
     public UserService(
         UserRepository userRepository,
@@ -52,7 +48,8 @@ public class UserService {
         AuthorityRepository authorityRepository,
         CacheManager cacheManager,
         AppUserService appUserService,
-        FileStorageService fileStorageService
+        FileStorageService fileStorageService,
+        AdminUserMapper adminUserMapper
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -60,14 +57,46 @@ public class UserService {
         this.cacheManager = cacheManager;
         this.appUserService = appUserService;
         this.fileStorageService = fileStorageService;
+        this.adminUserMapper = adminUserMapper;
     }
+
+    // ... (các phương thức khác không thay đổi)
+
+    @Transactional(readOnly = true)
+    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
+        // Step 1: Fetch the page of Users from the repository
+        Page<User> usersPage = userRepository.findAll(pageable);
+        List<User> users = usersPage.getContent();
+
+        // Step 2: Extract user logins
+        List<String> logins = users.stream().map(User::getLogin).collect(Collectors.toList());
+
+        // Step 3: Fetch all corresponding AppUsers in a single query
+        Map<String, AppUser> appUserMap = appUserService
+            .findAllByUserLoginIn(logins)
+            .stream()
+            .collect(Collectors.toMap(appUser -> appUser.getUser().getLogin(), appUser -> appUser));
+
+        // Step 4: Map User and AppUser to AdminUserDTO
+        List<AdminUserDTO> dtos = users
+            .stream()
+            .map(user -> {
+                AppUser appUser = appUserMap.get(user.getLogin());
+                return adminUserMapper.toDto(user, appUser); // Assuming toDto can handle null AppUser
+            })
+            .collect(Collectors.toList());
+
+        // Step 5: Return the result as a Page
+        return new PageImpl<>(dtos, pageable, usersPage.getTotalElements());
+    }
+
+    // ... (các phương thức khác không thay đổi)
 
     public Optional<User> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository
             .findOneByActivationKey(key)
             .map(user -> {
-                // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
@@ -122,7 +151,6 @@ public class UserService {
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
@@ -131,9 +159,7 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
         newUser.setActivated(false);
-        // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
@@ -142,9 +168,6 @@ public class UserService {
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
 
-        // CRITICAL FIX: Create AppUser within same transaction
-        // If AppUser creation fails, entire transaction rolls back (both User and AppUser)
-        // This prevents data inconsistency where User exists but AppUser is missing
         appUserService.createAppUserForNewUser(newUser);
         LOG.info("AppUser created successfully for new registration: {}", newUser.getLogin());
 
@@ -171,7 +194,7 @@ public class UserService {
         }
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+            user.setLangKey(Constants.DEFAULT_LANGUAGE);
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
@@ -194,7 +217,6 @@ public class UserService {
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
 
-        // ✅ FIX: Tạo AppUser tương ứng cho user mới (admin created)
         try {
             appUserService.createAppUserForNewUser(user);
             LOG.info("AppUser created successfully for admin-created user: {}", user.getLogin());
@@ -205,16 +227,9 @@ public class UserService {
         return user;
     }
 
-    /**
-     * Update all information for a specific user, and return the modified user.
-     *
-     * @param userDTO user to update.
-     * @return updated user.
-     */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+        return userRepository
+            .findById(userDTO.getId())
             .map(user -> {
                 this.clearUserCaches(user);
                 user.setLogin(userDTO.getLogin().toLowerCase());
@@ -229,45 +244,35 @@ public class UserService {
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
-                // Batch load authorities instead of N queries
-                Set<Authority> authorities = authorityRepository.findByNameIn(userDTO.getAuthorities());
-                managedAuthorities.addAll(authorities);
-                userRepository.save(user);
-                this.clearUserCaches(user);
+                userDTO.getAuthorities().stream().map(authorityRepository::findById).filter(Optional::isPresent).map(Optional::get).forEach(managedAuthorities::add);
                 LOG.debug("Changed Information for User: {}", user);
-                return user;
-            })
-            .map(AdminUserDTO::new);
+
+                appUserService.updateProfile(user.getLogin(), userDTO.getDisplayName(), userDTO.getBio());
+                LOG.debug("Updated AppUser profile for user: {}", user.getLogin());
+
+                AppUser updatedAppUser = appUserService.findByUserLogin(user.getLogin()).orElse(null);
+
+                this.clearUserCaches(user);
+                return adminUserMapper.toDto(user, updatedAppUser);
+            });
     }
 
     public void deleteUser(String login) {
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
-                // First delete associated AppUser if exists
                 appUserService
                     .findByUserLogin(login)
                     .ifPresent(appUser -> {
                         LOG.debug("Deleting associated AppUser for user: {}", login);
                         appUserService.delete(appUser.getId());
                     });
-
-                // Then delete the user
                 userRepository.delete(user);
                 this.clearUserCaches(user);
                 LOG.debug("Deleted User: {}", user);
             });
     }
 
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -279,11 +284,9 @@ public class UserService {
                 }
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
-                userRepository.save(user);
                 this.clearUserCaches(user);
                 LOG.debug("Changed Information for User: {}", user);
 
-                //  Đồng bộ displayName trong AppUser khi update firstName/lastName
                 if (firstName != null || lastName != null) {
                     String newDisplayName = (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
                     appUserService.updateProfile(user.getLogin(), newDisplayName.trim(), null);
@@ -292,74 +295,37 @@ public class UserService {
             });
     }
 
-    /**
-     * Update user's image URL (avatar).
-     *
-     * PERFORMANCE FIX: No longer accepts base64 data URIs
-     * Use uploadUserAvatar() to upload image files instead
-     *
-     * @param login user login
-     * @param imageUrl new image URL (file path or HTTP URL, NOT base64)
-     * @throws IllegalArgumentException if base64 data URI is provided
-     */
     @Transactional
     public void updateUserImageUrl(String login, String imageUrl) {
-        // PERFORMANCE FIX: Reject base64 images
         if (imageUrl != null && imageUrl.startsWith("data:image/")) {
-            throw new IllegalArgumentException(
-                "Base64 images are no longer supported. Please upload the image file using uploadUserAvatar() instead."
-            );
+            throw new IllegalArgumentException("Base64 images are no longer supported. Please upload the image file using uploadUserAvatar() instead.");
         }
-
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
                 user.setImageUrl(imageUrl);
-                userRepository.save(user);
                 this.clearUserCaches(user);
                 LOG.debug("Updated imageUrl for user: {}", login);
             });
     }
 
-    /**
-     * Upload user avatar image file
-     *
-     * PERFORMANCE FIX: Replaces base64 image storage with file-based storage
-     * This prevents database bloat and improves query performance
-     *
-     * @param login user login
-     * @param avatarFile the avatar image file
-     * @return the file URL path
-     * @throws Exception if upload fails
-     */
     @Transactional
     public String uploadUserAvatar(String login, MultipartFile avatarFile) throws Exception {
         LOG.debug("Uploading avatar for user: {}", login);
-
-        // Validate file
         if (avatarFile == null || avatarFile.isEmpty()) {
             throw new IllegalArgumentException("Avatar file is required");
         }
-
-        // Validate file type
         String contentType = avatarFile.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("File must be an image (png, jpg, jpeg, gif, webp)");
         }
-
-        // Validate file size (max 5MB)
-        long maxSize = 5 * 1024 * 1024; // 5MB
+        long maxSize = 5 * 1024 * 1024;
         if (avatarFile.getSize() > maxSize) {
             throw new IllegalArgumentException("Avatar file size must not exceed 5MB");
         }
-
-        // Store file
         String fileName = fileStorageService.storeFile(avatarFile, "avatars", login);
         String imageUrl = "/uploads/avatars/" + fileName;
-
-        // Update user
         updateUserImageUrl(login, imageUrl);
-
         LOG.info("Avatar uploaded successfully for user {}: {}", login, imageUrl);
         return imageUrl;
     }
@@ -381,11 +347,6 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
-    }
-
-    @Transactional(readOnly = true)
     public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
         return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(UserDTO::new);
     }
@@ -400,11 +361,6 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
-    /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired every day, at 01:00 (am).
-     */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
@@ -416,45 +372,29 @@ public class UserService {
             });
     }
 
-    /**
-     * Gets a list of all the authorities.
-     * @return a list of all the authorities.
-     */
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).toList();
     }
 
-    /**
-     * Lock a user account.
-     * Use case 12: Lock/Unlock account
-     *
-     * @param login the login of the user to lock
-     */
     public void lockAccount(String login) {
         LOG.debug("Request to lock account for user : {}", login);
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
-                user.setActivated(false);
+                user.setLocked(true);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 LOG.info("Account locked for user: {}", login);
             });
     }
 
-    /**
-     * Unlock a user account.
-     * Use case 12: Lock/Unlock account
-     *
-     * @param login the login of the user to unlock
-     */
     public void unlockAccount(String login) {
         LOG.debug("Request to unlock account for user : {}", login);
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
-                user.setActivated(true);
+                user.setLocked(false);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 LOG.info("Account unlocked for user: {}", login);

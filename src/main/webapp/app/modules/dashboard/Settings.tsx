@@ -18,7 +18,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
-    reader.onerror = error => reject(error);
+    reader.onerror = error => reject(new Error('Failed to convert file to base64'));
   });
 
 const Settings: React.FC = () => {

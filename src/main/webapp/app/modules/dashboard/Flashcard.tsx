@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Progress, Row, Col, Statistic, message, Spin } from 'antd';
+import { Card, Button, Progress, Row, Col, Statistic, message, Spin, Space } from 'antd';
 import { BookOutlined, FileTextOutlined, TrophyOutlined, ClockCircleOutlined, RocketOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';

@@ -3,6 +3,7 @@ package com.langleague.repository;
 import com.langleague.domain.AppUser;
 import com.langleague.domain.User;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -22,6 +23,14 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     // Alias for compatibility
     default Optional<AppUser> findByUser_Login(String login) {
         return findByInternalUser_Login(login);
+    }
+
+    @EntityGraph(attributePaths = "internalUser")
+    List<AppUser> findAllByInternalUser_LoginIn(List<String> logins);
+
+    // Alias for compatibility
+    default List<AppUser> findAllByUser_LoginIn(List<String> logins) {
+        return findAllByInternalUser_LoginIn(logins);
     }
 
     Optional<AppUser> findByInternalUserId(Long userId);
