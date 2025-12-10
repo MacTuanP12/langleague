@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'app/shared/utils/useTranslation';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   Button,
@@ -15,7 +15,6 @@ import {
   Modal,
   Form,
   message,
-  Popconfirm,
   Badge,
   Dropdown,
   MenuProps,
@@ -38,6 +37,7 @@ import { getUsers, createUser, updateUser, deleteUser } from 'app/shared/service
 import { IUser, UserRole } from 'app/shared/model/models';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import * as ds from 'app/shared/styles/design-system';
 
 dayjs.extend(relativeTime);
 
@@ -61,12 +61,10 @@ const UserManagement: React.FC = () => {
   });
   const [form] = Form.useForm();
 
-  // Load users
   const fetchUsers = async (page = 0, size = 20) => {
     setLoading(true);
     try {
       const result = await dispatch(getUsers({ page, size })).unwrap();
-      // Handle the pageable response structure
       const usersData = result.content || result;
       setUsers(Array.isArray(usersData) ? usersData : []);
       setPagination({
@@ -75,23 +73,7 @@ const UserManagement: React.FC = () => {
         total: result.totalElements || (Array.isArray(usersData) ? usersData.length : 0),
       });
     } catch (error: any) {
-      console.error('Error fetching users:', error);
-      let errorMessage = t('admin.userManagement.loadError') || 'Failed to load users';
-
-      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
-        errorMessage = t('error.network') || 'Cannot connect to server. Please check if backend is running (http://localhost:8080)';
-      } else if (error.response?.status === 401) {
-        errorMessage = t('error.sessionExpired') || 'Session expired. Please login again';
-      } else if (error.response?.status === 403) {
-        errorMessage = t('error.permission') || 'You do not have permission to access this function';
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      message.error(errorMessage);
-      // Set empty array to avoid undefined errors
+      message.error(t('admin.userManagement.loadError') || 'Failed to load users');
       setUsers([]);
     } finally {
       setLoading(false);
@@ -102,12 +84,10 @@ const UserManagement: React.FC = () => {
     fetchUsers();
   }, []);
 
-  // Handle table pagination
   const handleTableChange = (newPagination: TablePaginationConfig) => {
     fetchUsers((newPagination.current || 1) - 1, newPagination.pageSize || 20);
   };
 
-  // Show modal for create/edit
   const showModal = (user?: IUser) => {
     if (user) {
       setIsEditMode(true);
@@ -128,14 +108,12 @@ const UserManagement: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  // Handle form submit
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
 
       if (isEditMode && selectedUser) {
-        // For update, include the id and login
         await dispatch(
           updateUser({
             id: selectedUser.id,
@@ -145,7 +123,6 @@ const UserManagement: React.FC = () => {
         ).unwrap();
         message.success(t('admin.userManagement.updateSuccess') || 'User updated successfully');
       } else {
-        // For create, ensure authorities is an array
         const createData = {
           ...values,
           authorities: Array.isArray(values.authorities) ? values.authorities : [values.authorities],
@@ -158,30 +135,12 @@ const UserManagement: React.FC = () => {
       form.resetFields();
       fetchUsers(pagination.current - 1, pagination.pageSize);
     } catch (error: any) {
-      console.error('Error submitting user:', error);
-      let errorMessage = t('common.error') || 'An error occurred';
-
-      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
-        errorMessage = t('error.network') || 'Cannot connect to server. Please check backend';
-      } else if (error.response?.status === 401) {
-        errorMessage = t('error.sessionExpired') || 'Session expired';
-      } else if (error.response?.status === 403) {
-        errorMessage = t('error.permission') || 'You do not have permission to perform this action';
-      } else if (error.response?.status === 400) {
-        errorMessage = error.response?.data?.message || t('common.error') || 'Invalid data';
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      message.error(errorMessage);
+      message.error(t('common.error') || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle delete
   const handleDelete = async (user: IUser) => {
     try {
       if (!user.login) {
@@ -193,37 +152,20 @@ const UserManagement: React.FC = () => {
       message.success(t('admin.userManagement.deleteSuccess') || 'User deleted successfully');
       fetchUsers(pagination.current - 1, pagination.pageSize);
     } catch (error: any) {
-      console.error('Error deleting user:', error);
-      let errorMessage = t('admin.userManagement.deleteError') || 'Failed to delete user';
-
-      if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
-        errorMessage = t('error.network') || 'Cannot connect to server';
-      } else if (error.response?.status === 401) {
-        errorMessage = t('error.sessionExpired') || 'Session expired';
-      } else if (error.response?.status === 403) {
-        errorMessage = t('error.deletePermission') || 'You do not have permission to delete users';
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      message.error(errorMessage);
+      message.error(t('admin.userManagement.deleteError') || 'Failed to delete user');
     } finally {
       setLoading(false);
     }
   };
 
-  // Get role tag color
   const getRoleColor = (authorities?: string[]) => {
-    if (!authorities || authorities.length === 0) return 'default';
+    if (!authorities || authorities.length === 0) return ds.colors.info;
     const role = authorities[0];
-    if (role === 'ROLE_ADMIN') return 'red';
-    if (role === 'ROLE_STAFF') return 'blue';
-    return 'green';
+    if (role === 'ROLE_ADMIN') return ds.colors.error;
+    if (role === 'ROLE_STAFF') return ds.colors.secondary.DEFAULT;
+    return ds.colors.success;
   };
 
-  // Get role display name
   const getRoleDisplay = (authorities?: string[]) => {
     if (!authorities || authorities.length === 0) return 'User';
     const role = authorities[0];
@@ -232,50 +174,33 @@ const UserManagement: React.FC = () => {
     return 'User';
   };
 
-  // Table columns - Academic Style
   const columns: ColumnsType<IUser> = [
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.user') || 'User'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.user') || 'User'}</Text>,
       key: 'user',
       render: (_, record) => (
         <Space>
-          <Avatar size={40} src={record.avatarUrl || record.imageUrl} icon={<UserOutlined />} style={{ backgroundColor: '#2c5282' }} />
+          <Avatar size={40} src={record.avatarUrl || record.imageUrl} icon={<UserOutlined />} style={{ backgroundColor: ds.colors.info }} />
           <div>
-            <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-              {record.firstName} {record.lastName}
-            </Text>
+            <Text strong>{record.firstName} {record.lastName}</Text>
             <br />
-            <Text type="secondary" style={{ fontSize: 12, fontFamily: 'Inter, system-ui, sans-serif' }}>
-              @{record.login}
-            </Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>@{record.login}</Text>
           </div>
         </Space>
       ),
       width: 250,
     },
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.email') || 'Email'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.email') || 'Email'}</Text>,
       dataIndex: 'email',
       key: 'email',
       ellipsis: true,
     },
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.role') || 'Role'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.role') || 'Role'}</Text>,
       key: 'role',
       render: (_, record) => (
-        <Tag color={getRoleColor(record.authorities)} style={{ borderRadius: '6px', fontFamily: 'Inter, system-ui, sans-serif' }}>
+        <Tag color={getRoleColor(record.authorities)} style={{ borderRadius: ds.borderRadius.sm }}>
           {getRoleDisplay(record.authorities)}
         </Tag>
       ),
@@ -288,19 +213,13 @@ const UserManagement: React.FC = () => {
       width: 120,
     },
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.status') || 'Status'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.status') || 'Status'}</Text>,
       key: 'status',
       render: (_, record) => (
         <Badge
           status={record.activated ? 'success' : 'default'}
           text={
-            <Text style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-              {record.activated ? t('admin.userManagement.active') || 'Active' : t('admin.userManagement.inactive') || 'Inactive'}
-            </Text>
+            <Text>{record.activated ? t('admin.userManagement.active') || 'Active' : t('admin.userManagement.inactive') || 'Inactive'}</Text>
           }
         />
       ),
@@ -312,14 +231,10 @@ const UserManagement: React.FC = () => {
       width: 150,
     },
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.createdDate') || 'Created Date'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.createdDate') || 'Created Date'}</Text>,
       dataIndex: 'createdDate',
       key: 'createdDate',
-      render: date => <Text style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>{date ? dayjs(date).format('DD/MM/YYYY') : '-'}</Text>,
+      render: date => <Text>{date ? dayjs(date).format('DD/MM/YYYY') : '-'}</Text>,
       sorter(a, b) {
         if (!a.createdDate || !b.createdDate) return 0;
         return dayjs(a.createdDate).unix() - dayjs(b.createdDate).unix();
@@ -327,11 +242,7 @@ const UserManagement: React.FC = () => {
       width: 120,
     },
     {
-      title: (
-        <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-          {t('admin.userManagement.actions') || 'Actions'}
-        </Text>
-      ),
+      title: <Text strong>{t('admin.userManagement.actions') || 'Actions'}</Text>,
       key: 'actions',
       render(_, record) {
         const menuItems: MenuProps['items'] = [
@@ -389,7 +300,6 @@ const UserManagement: React.FC = () => {
     },
   ];
 
-  // Filter users by search
   const filteredUsers = users.filter(user => {
     const matchesSearch =
       !searchText ||
@@ -404,16 +314,15 @@ const UserManagement: React.FC = () => {
   });
 
   return (
-    <div style={{ padding: '24px', background: '#f8f9fa', minHeight: '100vh' }}>
-      <Card variant="borderless" style={{ borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.08)', border: '1px solid #e8eaed' }}>
-        {/* Header - Academic Style */}
-        <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
+    <div style={ds.pageContainerStyle}>
+      <Card style={ds.cardBaseStyle}>
+        <Row justify="space-between" align="middle" style={{ marginBottom: ds.spacing.lg }}>
           <Col>
-            <Title level={3} style={{ margin: 0, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600, color: '#1e3a5f' }}>
-              <UserOutlined style={{ marginRight: 8 }} />
+            <Title level={3} style={{ margin: 0, color: ds.colors.text.primary }}>
+              <UserOutlined style={{ marginRight: ds.spacing.sm, color: ds.colors.admin.solid }} />
               {t('admin.userManagement.title') || 'Account Management'}
             </Title>
-            <Text type="secondary" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <Text type="secondary">
               {t('admin.userManagement.subtitle') || 'Manage user accounts and permissions'}
             </Text>
           </Col>
@@ -423,21 +332,14 @@ const UserManagement: React.FC = () => {
               icon={<PlusOutlined />}
               size="large"
               onClick={() => showModal()}
-              style={{
-                borderRadius: 8,
-                background: '#2c5282',
-                borderColor: '#2c5282',
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontWeight: 500,
-              }}
+              style={{ borderRadius: ds.borderRadius.md }}
             >
               {t('admin.userManagement.addUser') || 'Add User'}
             </Button>
           </Col>
         </Row>
 
-        {/* Filters - Academic Style */}
-        <Row gutter={16} style={{ marginBottom: 16 }}>
+        <Row gutter={16} style={{ marginBottom: ds.spacing.md }}>
           <Col flex="auto">
             <Input
               placeholder={t('admin.userManagement.searchPlaceholder') || 'Search by name, email, username...'}
@@ -445,14 +347,14 @@ const UserManagement: React.FC = () => {
               value={searchText}
               onChange={e => setSearchText(e.target.value)}
               size="large"
-              style={{ borderRadius: 8, fontFamily: 'Inter, system-ui, sans-serif' }}
+              style={ds.inputStyle}
               allowClear
             />
           </Col>
           <Col>
             <Select
               placeholder={t('admin.userManagement.role') || 'Role'}
-              style={{ width: 150, fontFamily: 'Inter, system-ui, sans-serif' }}
+              style={{ ...ds.inputStyle, width: 150 }}
               size="large"
               value={selectedRole}
               onChange={setSelectedRole}
@@ -468,14 +370,13 @@ const UserManagement: React.FC = () => {
               icon={<ReloadOutlined />}
               size="large"
               onClick={() => fetchUsers(0, pagination.pageSize)}
-              style={{ borderRadius: 8, fontFamily: 'Inter, system-ui, sans-serif' }}
+              style={{ borderRadius: ds.borderRadius.md }}
             >
               {t('admin:userManagement.refresh')}
             </Button>
           </Col>
         </Row>
 
-        {/* Table - Academic Style */}
         <Table
           columns={columns}
           dataSource={filteredUsers}
@@ -484,19 +385,16 @@ const UserManagement: React.FC = () => {
           pagination={{
             ...pagination,
             showSizeChanger: true,
-            showTotal: total => (
-              <Text style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>{t('admin:userManagement.totalUsers', { count: total })}</Text>
-            ),
+            showTotal: total => <Text>{t('admin:userManagement.totalUsers', { count: total })}</Text>,
           }}
           onChange={handleTableChange}
           scroll={{ x: 1200 }}
         />
       </Card>
 
-      {/* Create/Edit Modal - Academic Style */}
       <Modal
         title={
-          <Text strong style={{ fontSize: '18px', fontFamily: 'Inter, system-ui, sans-serif', color: '#1e3a5f' }}>
+          <Text strong style={{ fontSize: '18px', color: ds.colors.text.primary }}>
             {isEditMode ? t('admin.userManagement.editUser') || 'Edit User' : t('admin.userManagement.addNewUser') || 'Add New User'}
           </Text>
         }
@@ -510,16 +408,10 @@ const UserManagement: React.FC = () => {
         cancelText={t('common.cancel') || 'Cancel'}
         width={600}
         confirmLoading={loading}
-        okButtonProps={{ style: { background: '#2c5282', borderColor: '#2c5282', fontFamily: 'Inter, system-ui, sans-serif' } }}
-        cancelButtonProps={{ style: { fontFamily: 'Inter, system-ui, sans-serif' } }}
       >
         <Form form={form} layout="vertical" style={{ marginTop: 24 }}>
           <Form.Item
-            label={
-              <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                {t('admin.userManagement.username') || 'Username'}
-              </Text>
-            }
+            label={<Text strong>{t('admin.userManagement.username') || 'Username'}</Text>}
             name="login"
             rules={[
               { required: true, message: t('admin.userManagement.validation.usernameRequired') || 'Please enter username' },
@@ -532,20 +424,12 @@ const UserManagement: React.FC = () => {
               },
             ]}
           >
-            <Input
-              placeholder={t('admin.userManagement.username') || 'Username'}
-              disabled={isEditMode}
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-            />
+            <Input placeholder={t('admin.userManagement.username') || 'Username'} disabled={isEditMode} style={ds.inputStyle} />
           </Form.Item>
 
           {!isEditMode && (
             <Form.Item
-              label={
-                <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                  {t('admin.userManagement.password') || 'Password'}
-                </Text>
-              }
+              label={<Text strong>{t('admin.userManagement.password') || 'Password'}</Text>}
               name="password"
               rules={[
                 { required: true, message: t('admin.userManagement.validation.passwordRequired') || 'Please enter password' },
@@ -553,64 +437,48 @@ const UserManagement: React.FC = () => {
                 { max: 100, message: t('admin.userManagement.validation.passwordTooLong') || 'Password cannot exceed 100 characters' },
               ]}
             >
-              <Input.Password placeholder="Password" style={{ fontFamily: 'Inter, system-ui, sans-serif' }} />
+              <Input.Password placeholder="Password" style={ds.inputStyle} />
             </Form.Item>
           )}
 
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label={
-                  <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                    First Name
-                  </Text>
-                }
+                label={<Text strong>First Name</Text>}
                 name="firstName"
                 rules={[{ required: true, message: 'Please enter first name' }]}
               >
-                <Input placeholder="First Name" style={{ fontFamily: 'Inter, system-ui, sans-serif' }} />
+                <Input placeholder="First Name" style={ds.inputStyle} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label={
-                  <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                    Last Name
-                  </Text>
-                }
+                label={<Text strong>Last Name</Text>}
                 name="lastName"
                 rules={[{ required: true, message: 'Please enter last name' }]}
               >
-                <Input placeholder="Last Name" style={{ fontFamily: 'Inter, system-ui, sans-serif' }} />
+                <Input placeholder="Last Name" style={ds.inputStyle} />
               </Form.Item>
             </Col>
           </Row>
 
           <Form.Item
-            label={
-              <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                Email
-              </Text>
-            }
+            label={<Text strong>Email</Text>}
             name="email"
             rules={[
               { required: true, message: 'Please enter email' },
               { type: 'email', message: 'Invalid email format' },
             ]}
           >
-            <Input placeholder="email@example.com" style={{ fontFamily: 'Inter, system-ui, sans-serif' }} />
+            <Input placeholder="email@example.com" style={ds.inputStyle} />
           </Form.Item>
 
           <Form.Item
-            label={
-              <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                Role
-              </Text>
-            }
+            label={<Text strong>Role</Text>}
             name="authorities"
             rules={[{ required: true, message: 'Please select role' }]}
           >
-            <Select placeholder="Select role" mode="multiple" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <Select placeholder="Select role" mode="multiple" style={ds.inputStyle}>
               <Option value={UserRole.ADMIN}>Admin</Option>
               <Option value={UserRole.STAFF}>Staff</Option>
               <Option value={UserRole.USER}>User</Option>
@@ -618,16 +486,12 @@ const UserManagement: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            label={
-              <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                Status
-              </Text>
-            }
+            label={<Text strong>Status</Text>}
             name="activated"
             valuePropName="checked"
             initialValue={true}
           >
-            <Select style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <Select style={ds.inputStyle}>
               <Option value={true}>Active</Option>
               <Option value={false}>Inactive</Option>
             </Select>

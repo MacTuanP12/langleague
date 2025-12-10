@@ -4,7 +4,9 @@ import com.langleague.domain.Word;
 import com.langleague.repository.WordRepository;
 import com.langleague.service.dto.WordDTO;
 import com.langleague.service.mapper.WordMapper;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -41,6 +43,19 @@ public class WordService {
         Word word = wordMapper.toEntity(wordDTO);
         word = wordRepository.save(word);
         return wordMapper.toDto(word);
+    }
+
+    /**
+     * Save a list of words.
+     *
+     * @param wordDTOs the list of entities to save.
+     * @return the list of persisted entities.
+     */
+    public List<WordDTO> saveAll(List<WordDTO> wordDTOs) {
+        LOG.debug("Request to save {} Words", wordDTOs.size());
+        List<Word> words = wordMapper.toEntity(wordDTOs);
+        words = wordRepository.saveAll(words);
+        return wordMapper.toDto(words);
     }
 
     /**

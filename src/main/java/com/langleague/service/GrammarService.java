@@ -4,6 +4,7 @@ import com.langleague.domain.Grammar;
 import com.langleague.repository.GrammarRepository;
 import com.langleague.service.dto.GrammarDTO;
 import com.langleague.service.mapper.GrammarMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,19 @@ public class GrammarService {
         Grammar grammar = grammarMapper.toEntity(grammarDTO);
         grammar = grammarRepository.save(grammar);
         return grammarMapper.toDto(grammar);
+    }
+
+    /**
+     * Save a list of grammars.
+     *
+     * @param grammarDTOs the list of entities to save.
+     * @return the list of persisted entities.
+     */
+    public List<GrammarDTO> saveAll(List<GrammarDTO> grammarDTOs) {
+        LOG.debug("Request to save {} Grammars", grammarDTOs.size());
+        List<Grammar> grammars = grammarMapper.toEntity(grammarDTOs);
+        grammars = grammarRepository.saveAll(grammars);
+        return grammarMapper.toDto(grammars);
     }
 
     /**

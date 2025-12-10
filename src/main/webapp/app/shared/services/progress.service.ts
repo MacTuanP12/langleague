@@ -186,7 +186,12 @@ export const getChapterProgressesByBook = createAsyncThunk('progress/fetch_chapt
 
 // Create or update chapter progress (UPSERT) - Matches POST /api/chapter-progresses
 export const upsertChapterProgress = createAsyncThunk('progress/upsert_chapter', async (progress: ChapterProgressDTO) => {
-  const response = await axios.post<ChapterProgressDTO>('/api/chapter-progresses', progress);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const response = await axios.post<ChapterProgressDTO>('/api/chapter-progresses', progress, {
+    headers: {
+        'X-Timezone': timezone,
+    }
+  });
   return response.data;
 });
 
@@ -287,6 +292,11 @@ export const upsertBookProgressApi = async (progress: BookProgressDTO): Promise<
 };
 
 export const upsertChapterProgressApi = async (progress: ChapterProgressDTO): Promise<ChapterProgressDTO> => {
-  const response = await axios.post<ChapterProgressDTO>('/api/chapter-progresses', progress);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const response = await axios.post<ChapterProgressDTO>('/api/chapter-progresses', progress, {
+    headers: {
+        'X-Timezone': timezone,
+    }
+  });
   return response.data;
 };

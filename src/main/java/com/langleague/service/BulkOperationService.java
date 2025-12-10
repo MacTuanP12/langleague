@@ -321,93 +321,83 @@ public class BulkOperationService {
         return createResultMap(successCount, failCount, errors);
     }
 
-    /**
-     * Import entities from CSV data
-     * Basic CSV parsing - for production, use Apache Commons CSV or OpenCSV library
-     *
-     * Supported entity types: "word", "grammar", "listening-exercise", "reading-exercise"
+     /**
+     * Imports entities from CSV data in a single transaction to ensure data integrity.
+     * Supported entity types: "word", "grammar"
      *
      * @param entityType type of entity to import
-     * @param csvData CSV content with header row
-     * @return result map with success/fail counts
+     * @param csvData    CSV content with a header row
+     * @return a result map with counts of success, failure, and any errors.
+     * @throws IllegalArgumentException if the CSV data is invalid or an error occurs during processing.
      */
+    @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> importFromCsv(String entityType, String csvData) {
-        LOG.info("Starting CSV import for entity type: {}", entityType);
-        int successCount = 0;
-        int failCount = 0;
-        List<String> errors = new ArrayList<>();
+        LOG.info("Starting transactional CSV import for entity type: {}", entityType);
 
         if (csvData == null || csvData.trim().isEmpty()) {
-            errors.add("CSV data is empty");
-            return createResultMap(successCount, failCount, errors);
+            throw new IllegalArgumentException("CSV data cannot be empty.");
         }
 
+        String[] lines = csvData.split("\\r?\\n");
+        if (lines.length < 2) {
+            throw new IllegalArgumentException("CSV must contain at least a header and one data row.");
+        }
+
+        // Process based on entity type
         try {
-            String[] lines = csvData.split("\n");
+            switch (entityType.toLowerCase()) {
+                case "word":
+                    List<WordDTO> wordsToSave = new ArrayList<>();
+                    for (int i = 1; i < lines.length; i++) {
+                        String line = lines[i].trim();
+                        if (line.isEmpty()) continue;
+                        String[] fields = line.split(",");
 
-            if (lines.length < 2) {
-                errors.add("CSV must contain at least header and one data row");
-                return createResultMap(successCount, failCount, errors);
-            }
+                        if (fields.length < 3) {
+                            throw new IllegalArgumentException(
+                                String.format("Line %d: Insufficient fields. Expected format: text,pronunciation,meaning,partOfSpeech", i + 1)
+                            );
+                        }
 
-            // Skip header row (index 0)
-            for (int i = 1; i < lines.length; i++) {
-                String line = lines[i].trim();
-                if (line.isEmpty()) {
-                    continue; // Skip empty lines
-                }
-
-                try {
-                    String[] fields = line.split(",");
-
-                    // Parse and create entity based on type
-                    switch (entityType.toLowerCase()) {
-                        case "word":
-                            // Expected CSV format: text,pronunciation,meaning,partOfSpeech
-                            if (fields.length >= 3) {
-                                WordDTO wordDTO = new WordDTO();
-                                wordDTO.setText(fields[0].trim());
-                                wordDTO.setPronunciation(fields.length > 1 ? fields[1].trim() : null);
-                                wordDTO.setMeaning(fields.length > 2 ? fields[2].trim() : null);
-                                wordDTO.setPartOfSpeech(fields.length > 3 ? fields[3].trim() : null);
-                                wordService.save(wordDTO);
-                                successCount++;
-                            } else {
-                                failCount++;
-                                errors.add("Line " + (i + 1) + ": Insufficient fields (expected at least 3: text,pronunciation,meaning)");
-                            }
-                            break;
-                        case "grammar":
-                            // Expected CSV format: title,description
-                            if (fields.length >= 2) {
-                                GrammarDTO grammarDTO = new GrammarDTO();
-                                grammarDTO.setTitle(fields[0].trim());
-                                grammarDTO.setDescription(fields.length > 1 ? fields[1].trim() : null);
-                                grammarService.save(grammarDTO);
-                                successCount++;
-                            } else {
-                                failCount++;
-                                errors.add("Line " + (i + 1) + ": Insufficient fields (expected at least 2: title,description)");
-                            }
-                            break;
-                        default:
-                            errors.add("Unsupported entity type: " + entityType);
-                            return createResultMap(successCount, failCount, errors);
+                        WordDTO wordDTO = new WordDTO();
+                        wordDTO.setText(fields[0].trim());
+                        wordDTO.setPronunciation(fields.length > 1 ? fields[1].trim() : null);
+                        wordDTO.setMeaning(fields.length > 2 ? fields[2].trim() : null);
+                        wordDTO.setPartOfSpeech(fields.length > 3 ? fields[3].trim() : null);
+                        wordsToSave.add(wordDTO);
                     }
-                } catch (Exception e) {
-                    failCount++;
-                    errors.add("Line " + (i + 1) + ": " + e.getMessage());
-                    LOG.warn("Failed to import line {}: {}", i + 1, e.getMessage());
-                }
+                    wordService.saveAll(wordsToSave); // Assumes WordService has a `saveAll` method
+                    return createResultMap(wordsToSave.size(), 0, List.of());
+
+                case "grammar":
+                    List<GrammarDTO> grammarsToSave = new ArrayList<>();
+                    for (int i = 1; i < lines.length; i++) {
+                        String line = lines[i].trim();
+                        if (line.isEmpty()) continue;
+                        String[] fields = line.split(",");
+
+                        if (fields.length < 2) {
+                            throw new IllegalArgumentException(
+                                String.format("Line %d: Insufficient fields. Expected format: title,description", i + 1)
+                            );
+                        }
+
+                        GrammarDTO grammarDTO = new GrammarDTO();
+                        grammarDTO.setTitle(fields[0].trim());
+                        grammarDTO.setDescription(fields.length > 1 ? fields[1].trim() : null);
+                        grammarsToSave.add(grammarDTO);
+                    }
+                    grammarService.saveAll(grammarsToSave); // Assumes GrammarService has a `saveAll` method
+                    return createResultMap(grammarsToSave.size(), 0, List.of());
+
+                default:
+                    throw new IllegalArgumentException("Unsupported entity type: " + entityType);
             }
-
-            LOG.info("CSV import completed: {} success, {} failed", successCount, failCount);
         } catch (Exception e) {
-            LOG.error("CSV import failed: {}", e.getMessage(), e);
-            errors.add("CSV parsing error: " + e.getMessage());
+            LOG.error("Transactional CSV import failed: {}", e.getMessage(), e);
+            // The transaction will be rolled back automatically by Spring
+            throw new RuntimeException("Failed to process CSV file. No data was imported. Reason: " + e.getMessage(), e);
         }
-
-        return createResultMap(successCount, failCount, errors);
     }
 
     /**

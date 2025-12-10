@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+
+    <changeSet id="20230325120000-1" author="jhipster">
+        <loadData
+            file="config/liquibase/fake-data/app_user_new.csv"
+            separator=";"
+            tableName="app_user"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="display_name" type="string"/>
+            <column name="bio" type="string"/>
+            <column name="timezone" type="string"/>
+            <column name="email_notification_enabled" type="boolean"/>
+            <column name="daily_reminder_enabled" type="boolean"/>
+            <column name="version" type="numeric"/>
+            <column name="internal_user_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/book_new.csv"
+            separator=";"
+            tableName="book"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="title" type="string"/>
+            <column name="level" type="string"/>
+            <column name="description" type="string"/>
+            <column name="thumbnail" type="string"/>
+            <column name="is_active" type="boolean"/>
+            <column name="average_rating" type="numeric"/>
+            <column name="total_reviews" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/chapter_new.csv"
+            separator=";"
+            tableName="chapter"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="title" type="string"/>
+            <column name="order_index" type="numeric"/>
+            <column name="book_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/word_new.csv"
+            separator=";"
+            tableName="word"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="text" type="string"/>
+            <column name="meaning" type="string"/>
+            <column name="pronunciation" type="string"/>
+            <column name="part_of_speech" type="string"/>
+            <column name="image_url" type="string"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+         <loadData
+            file="config/liquibase/fake-data/word_example_new.csv"
+            separator=";"
+            tableName="word_example"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="example_text" type="string"/>
+            <column name="translation" type="string"/>
+            <column name="word_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/grammar_new.csv"
+            separator=";"
+            tableName="grammar"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="title" type="string"/>
+            <column name="level" type="string"/>
+            <column name="description" type="string"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/grammar_example_new.csv"
+            separator=";"
+            tableName="grammar_example"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="example_text" type="string"/>
+            <column name="translation" type="string"/>
+            <column name="explanation" type="string"/>
+            <column name="grammar_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/listening_exercise_new.csv"
+            separator=";"
+            tableName="listening_exercise"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="audio_path" type="string"/>
+            <column name="image_url" type="string"/>
+            <column name="transcript" type="string"/>
+            <column name="question" type="string"/>
+            <column name="correct_answer" type="string"/>
+            <column name="max_score" type="numeric"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/reading_exercise_new.csv"
+            separator=";"
+            tableName="reading_exercise"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="passage" type="string"/>
+            <column name="question" type="string"/>
+            <column name="correct_answer" type="string"/>
+            <column name="max_score" type="numeric"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/speaking_exercise_new.csv"
+            separator=";"
+            tableName="speaking_exercise"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="prompt" type="string"/>
+            <column name="sample_audio" type="string"/>
+            <column name="max_score" type="numeric"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/writing_exercise_new.csv"
+            separator=";"
+            tableName="writing_exercise"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="prompt" type="string"/>
+            <column name="sample_answer" type="string"/>
+            <column name="max_score" type="numeric"/>
+            <column name="chapter_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/book_user_new.csv"
+            separator=";"
+            tableName="book_user"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="app_user_id" type="numeric"/>
+            <column name="book_id" type="numeric"/>
+            <column name="enrolled_at" type="timestamp"/>
+            <column name="progress_percentage" type="numeric"/>
+            <column name="completed_at" type="timestamp"/>
+            <column name="last_accessed_at" type="timestamp"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/answer_new.csv"
+            separator=";"
+            tableName="answer"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="submitted_at" type="timestamp"/>
+            <column name="answer" type="string"/>
+            <column name="score" type="numeric"/>
+            <column name="is_correct" type="boolean"/>
+            <column name="app_user_id" type="numeric"/>
+            <column name="listening_exercise_id" type="numeric"/>
+            <column name="reading_exercise_id" type="numeric"/>
+            <column name="speaking_exercise_id" type="numeric"/>
+            <column name="writing_exercise_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/review_new.csv"
+            separator=";"
+            tableName="review"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="rating" type="numeric"/>
+            <column name="comment" type="string"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="app_user_id" type="numeric"/>
+            <column name="book_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20230325120000-2" author="jhipster">
+        <addForeignKeyConstraint baseColumnNames="internal_user_id"
+                                 baseTableName="app_user"
+                                 constraintName="fk_app_user_internal_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="book_id"
+                                 baseTableName="chapter"
+                                 constraintName="fk_chapter_book_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="book"/>
+
+        <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                 baseTableName="word"
+                                 constraintName="fk_word_chapter_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="chapter"/>
+
+        <addForeignKeyConstraint baseColumnNames="word_id"
+                                 baseTableName="word_example"
+                                 constraintName="fk_word_example_word_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="word"/>
+
+        <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                 baseTableName="grammar"
+                                 constraintName="fk_grammar_chapter_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="chapter"/>
+
+        <addForeignKeyConstraint baseColumnNames="grammar_id"
+                                 baseTableName="grammar_example"
+                                 constraintName="fk_grammar_example_grammar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="grammar"/>
+
+        <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                 baseTableName="listening_exercise"
+                                 constraintName="fk_listening_exercise_chapter_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="chapter"/>
+
+        <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                 baseTableName="reading_exercise"
+                                 constraintName="fk_reading_exercise_chapter_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="chapter"/>
+
+        <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                 baseTableName="speaking_exercise"
+                                 constraintName="fk_speaking_exercise_chapter_id"
+                                 referencedColumnNames="id"
+-                                 referencedTableName="chapter"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="chapter_id"
+                                  baseTableName="writing_exercise"
+                                  constraintName="fk_writing_exercise_chapter_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="chapter"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="app_user_id"
+                                  baseTableName="book_user"
+                                  constraintName="fk_book_user_app_user_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="app_user"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="book_id"
+                                  baseTableName="book_user"
+                                  constraintName="fk_book_user_book_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="book"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="app_user_id"
+                                  baseTableName="answer"
+                                  constraintName="fk_answer_app_user_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="app_user"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="listening_exercise_id"
+                                  baseTableName="answer"
+                                  constraintName="fk_answer_listening_exercise_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="listening_exercise"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="reading_exercise_id"
+                                  baseTableName="answer"
+                                  constraintName="fk_answer_reading_exercise_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="reading_exercise"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="speaking_exercise_id"
+                                  baseTableName="answer"
+                                  constraintName="fk_answer_speaking_exercise_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="speaking_exercise"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="writing_exercise_id"
+                                  baseTableName="answer"
+                                  constraintName="fk_answer_writing_exercise_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="writing_exercise"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="app_user_id"
+                                  baseTableName="review"
+                                  constraintName="fk_review_app_user_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="app_user"/>
+ 
+         <addForeignKeyConstraint baseColumnNames="book_id"
+                                  baseTableName="review"
+                                  constraintName="fk_review_book_id"
+                                  referencedColumnNames="id"
+                                  referencedTableName="book"/>
+     </changeSet>
+ </databaseChangeLog>

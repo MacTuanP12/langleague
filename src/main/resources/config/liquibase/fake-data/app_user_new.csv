@@ -1,0 +1,18 @@
+id;display_name;bio;timezone;email_notification_enabled;daily_reminder_enabled;version;internal_user_id
+4;Seo Min-jun;K-Pop fan and aspiring Korean speaker.;Asia/Seoul;true;true;0;4
+5;Kim Ji-woo;Loves watching K-Dramas and learning new phrases.;Asia/Seoul;true;false;0;5
+6;Park Do-yoon;Enjoys reading Korean webtoons.;Asia/Tokyo;false;true;0;6
+7;Lee Seo-yeon;Student preparing to study abroad in Korea.;Europe/London;true;true;0;7
+8;Choi Si-woo;Interested in Korean history and cuisine.;America/Los_Angeles;true;true;0;8
+9;Eun-ji;English teacher living in Seoul.;Asia/Seoul;true;false;0;9
+10;Li Wei;Beginner learning Korean for travel.;Asia/Shanghai;true;true;0;10
+11;Yuki T.;Japanese speaker learning Korean.;Asia/Tokyo;false;false;0;11
+12;John S.;Learning Korean to connect with friends.;America/New_York;true;true;0;12
+13;Maria G.;Loves the sound of the Korean language.;Europe/Madrid;true;true;0;13
+14;Muhammad K.;Learning for business purposes.;Asia/Dubai;false;true;0;14
+15;Thao;Vietnamese student passionate about Korean culture.;Asia/Ho_Chi_Minh;true;true;0;15
+16;Staff;Langleague Staff Member;Etc/UTC;true;false;0;16
+17;Creator;Langleague Content Creator;Etc/UTC;true;false;0;17
+18;Test User 1;Active test user.;Etc/UTC;false;false;0;18
+19;Test User 2;Inactive test user.;Etc/UTC;false;false;0;19
+20;Test User 3;Vietnamese test user.;Asia/Ho_Chi_Minh;true;true;0;20

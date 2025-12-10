@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -29,6 +30,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/book-reviews")
+@PreAuthorize("isAuthenticated()")
 public class BookReviewResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(BookReviewResource.class);
@@ -142,6 +144,7 @@ public class BookReviewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bookReviews in body.
      */
     @GetMapping("")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<BookReviewDTO>> getAllBookReviews(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of BookReviews");
         Page<BookReviewDTO> page = bookReviewService.findAll(pageable);
@@ -214,6 +217,7 @@ public class BookReviewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and average rating in body.
      */
     @GetMapping("/book/{bookId}/average")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Double> getAverageRating(@PathVariable("bookId") Long bookId) {
         LOG.debug("REST request to get average rating for book : {}", bookId);
         Double averageRating = bookReviewService.getAverageRating(bookId);
@@ -229,6 +233,7 @@ public class BookReviewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reviews in body.
      */
     @GetMapping("/book/{bookId}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<BookReviewDTO>> getReviewsByBook(
         @PathVariable("bookId") Long bookId,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable

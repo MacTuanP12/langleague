@@ -2,6 +2,7 @@ package com.langleague.web.rest;
 
 import com.langleague.service.LearningStreakService;
 import com.langleague.web.rest.errors.BadRequestAlertException;
+import java.time.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -63,27 +64,30 @@ public class LearningStreakResource {
     /**
      * {@code POST  /learning-streaks/record} : Record a study activity for the logged-in user.
      * Use case 39: Track learning streak
-     * OPTIMIZED: Accepts timezone from client via header X-Timezone
+     * CRITICAL: Always requires a valid timezone from the client via X-Timezone header.
      *
-     * @param timezone Optional timezone (e.g., "Asia/Ho_Chi_Minh"). Defaults to UTC if not provided.
+     * @param timezone The user's valid timezone (e.g., "Asia/Ho_Chi_Minh").
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     * @throws BadRequestAlertException if timezone header is missing or invalid.
      */
     @PostMapping("/record")
     public ResponseEntity<Void> recordStudyActivity(
-        @RequestHeader(value = "X-Timezone", required = false, defaultValue = "UTC") String timezone
+        @RequestHeader(value = "X-Timezone", required = true) String timezone
     ) {
         LOG.debug("REST request to record study activity with timezone: {}", timezone);
         String userLogin = com.langleague.security.SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new BadRequestAlertException("User not authenticated", ENTITY_NAME, "notauthenticated")
         );
 
+        ZoneId zoneId;
         try {
-            java.time.ZoneId zoneId = java.time.ZoneId.of(timezone);
-            learningStreakService.recordStudyActivity(userLogin, zoneId);
+            zoneId = ZoneId.of(timezone);
         } catch (java.time.DateTimeException e) {
-            LOG.warn("Invalid timezone provided: {}, falling back to UTC", timezone);
-            learningStreakService.recordStudyActivity(userLogin, java.time.ZoneId.of("UTC"));
+            // Throw a client-friendly error instead of using a default
+            throw new BadRequestAlertException("Invalid or unrecognized timezone provided in X-Timezone header", ENTITY_NAME, "invalidtimezone");
         }
+
+        learningStreakService.recordStudyActivity(userLogin, zoneId);
 
         return ResponseEntity.ok().build();
     }

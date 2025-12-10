@@ -85,7 +85,12 @@ export const getWeeklyStudySessions = createAsyncThunk('studySession/fetch_weekl
 
 // Create study session
 export const createStudySession = createAsyncThunk('studySession/create', async (session: StudySessionDTO) => {
-  const response = await axios.post<StudySessionDTO>(API_URL, session);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const response = await axios.post<StudySessionDTO>(API_URL, session, {
+    headers: {
+      'X-Timezone': timezone,
+    },
+  });
   return response.data;
 });
 

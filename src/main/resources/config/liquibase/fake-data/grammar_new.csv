@@ -1,0 +1,11 @@
+id;title;level;description;chapter_id
+1;Subject Particle (이/가);BEGINNER;Marks the subject of the sentence, the one performing the action.;4
+2;Topic Particle (은/는);BEGINNER;Marks the topic of the sentence, what the sentence is about.;4
+3;Present Tense (아요/어요);BEGINNER;Used to conjugate verbs and adjectives in the present tense.;5
+4;Past Tense (았/었);INTERMEDIATE;Used to conjugate verbs and adjectives in the past tense.;5
+5;Object Particle (을/를);BEGINNER;Marks the object of the verb in a sentence.;6
+6;Polite Requests (주세요);BEGINNER;Used to politely ask for something or for someone to do something.;9
+7;Future Tense (ㄹ/을 거예요);INTERMEDIATE;Expresses a future plan or intention.;11
+8;Quoting (다고/라고 하다);ADVANCED;Used to report what someone else has said.;14
+9;Giving Reasons (아서/어서);INTERMEDIATE;Connects two clauses to show a cause-and-effect relationship.;20
+10;Expressing Desire (고 싶다);BEGINNER;Used to express the speaker's desire to do something.;16

@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -114,6 +115,7 @@ public class AccountResource {
      * @throws UserNotAuthenticatedException {@code 401 (Unauthorized)} if user is not authenticated.
      */
     @GetMapping("/account")
+    @PreAuthorize("isAuthenticated()")
     public AdminUserDTO getAccount() {
         return userService
             .getUserWithAuthorities()
@@ -139,6 +141,7 @@ public class AccountResource {
      * @throws UserNotAuthenticatedException {@code 401 (Unauthorized)} if user is not authenticated.
      */
     @RequestMapping(value = "/account", method = { RequestMethod.POST, RequestMethod.PUT })
+    @PreAuthorize("isAuthenticated()")
     // Accept partial AdminUserDTO for current user updates; don't trigger @Valid validation
     public void saveAccount(@RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
@@ -183,6 +186,7 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
+    @PreAuthorize("isAuthenticated()")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
@@ -239,6 +243,7 @@ public class AccountResource {
      * This endpoint sends a test email to verify mail service is working.
      */
     @GetMapping("/account/test-email")
+    @PreAuthorize("isAuthenticated()")
     public void testEmailService() {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new UserNotAuthenticatedException("Current user login not found")
@@ -262,6 +267,7 @@ public class AccountResource {
      * Use case 12: Lock/Unlock account
      */
     @PostMapping("/account/lock")
+    @PreAuthorize("isAuthenticated()")
     public void lockOwnAccount() {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new UserNotAuthenticatedException("Current user login not found")
@@ -274,6 +280,7 @@ public class AccountResource {
      * Use case 12: Lock/Unlock account
      */
     @PostMapping("/account/unlock")
+    @PreAuthorize("isAuthenticated()")
     public void unlockOwnAccount() {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new UserNotAuthenticatedException("Current user login not found")
@@ -287,6 +294,7 @@ public class AccountResource {
      * Updates User.imageUrl field (supports both URLs and base64)
      */
     @PutMapping("/account/avatar")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, String> updateAvatar(@RequestBody Map<String, String> payload) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new UserNotAuthenticatedException("Current user login not found")
@@ -354,6 +362,7 @@ public class AccountResource {
      * Use case 10: Edit profile
      */
     @PutMapping("/account/profile")
+    @PreAuthorize("isAuthenticated()")
     public AdminUserDTO updateProfile(@RequestBody Map<String, String> profileData) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
             new UserNotAuthenticatedException("Current user login not found")

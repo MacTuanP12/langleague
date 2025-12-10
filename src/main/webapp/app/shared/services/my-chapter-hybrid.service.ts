@@ -58,13 +58,22 @@ export const getMyCompletedChapters = () => {
 
 // Mark chapter as completed
 export const markChapterComplete = (chapterId: number) => {
-  return axios.post(`${API_URL_PROGRESS}/chapter/${chapterId}/complete`);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return axios.post(`${API_URL_PROGRESS}/chapter/${chapterId}/complete`, null, {
+    headers: {
+      'X-Timezone': timezone,
+    },
+  });
 };
 
 // Update chapter progress
 export const updateChapterProgress = (chapterId: number, percent: number) => {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return axios.put(`${API_URL_PROGRESS}/chapter/${chapterId}/progress`, null, {
     params: { percent },
+    headers: {
+      'X-Timezone': timezone,
+    },
   });
 };
 

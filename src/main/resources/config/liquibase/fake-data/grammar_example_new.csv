@@ -1,0 +1,16 @@
+id;example_text;translation;explanation;grammar_id
+1;사과가 맛있어요.;The apple is delicious.;'사과' (apple) ends in a vowel, so '가' is used.;1
+2;학생이 책을 읽어요.;The student reads a book.;'학생' (student) ends in a consonant, so '이' is used.;1
+3;오늘은 날씨가 좋네요.;As for today, the weather is good.;'오늘' (today) is the topic. We are talking about the weather today specifically.;2
+4;저는 학생입니다.;As for me, I am a student.;'저' (I) is the topic. The sentence is about me.;2
+5;지금 영화를 봐요.;I am watching a movie now.;The verb stem '보' (to see) ends with 'ㅗ', so '아요' is added.;3
+6;김치를 먹어요.;I am eating kimchi.;The verb stem '먹' (to eat) has a vowel other than 'ㅏ' or 'ㅗ', so '어요' is added.;3
+7;어제 친구를 만났어요.;I met a friend yesterday.;The verb stem '만나' ends with 'ㅏ', so '았어요' is added.;4
+8;점심을 먹었어요.;I ate lunch.;The verb stem '먹' has a vowel other than 'ㅏ' or 'ㅗ', so '었어요' is added.;4
+9;저는 밥을 먹어요.;I eat rice.;'밥' (rice) is the object of the verb '먹다' (to eat).;5
+10;책을 읽으세요.;Read the book, please.;Politely requesting someone to read a book.;6
+11;커피 주세요.;Coffee, please.;Used when ordering at a cafe.;6
+12;주말에 영화를 볼 거예요.;I'm going to watch a movie on the weekend.;Expressing a future plan.;7
+13;친구가 재미있다고 했어요.;My friend said it was fun.;Reporting what the friend said.;8
+14;비가 와서 집에 있었어요.;I stayed home because it was raining.;The reason for staying home is the rain.;9
+15;한국에 가고 싶어요.;I want to go to Korea.;Expressing the desire to visit Korea.;10

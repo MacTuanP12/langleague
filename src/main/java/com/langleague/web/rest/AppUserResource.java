@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -30,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/app-users")
+@PreAuthorize("isAuthenticated()")
 public class AppUserResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppUserResource.class);
@@ -183,8 +185,7 @@ public class AppUserResource {
      * {@code DELETE  /app-users/:id} : delete the "id" appUser.
      *
      * @param id the id of the appUserDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.*/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppUser(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete AppUser : {}", id);

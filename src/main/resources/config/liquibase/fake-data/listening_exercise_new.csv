@@ -1,0 +1,6 @@
+id;audio_path;image_url;transcript;question;correct_answer;max_score;chapter_id
+1;/audio/listening-1.mp3;/images/listening-1.jpg;가: 오늘 날씨가 어때요? 나: 비가 와요.;What is the weather like today?;Rainy;10;11
+2;/audio/listening-2.mp3;/images/listening-2.jpg;가: 뭐 마실래요? 나: 저는 커피요.;What does the second speaker want to drink?;Coffee;10;5
+3;/audio/listening-3.mp3;/images/listening-3.jpg;가: 이 영화 어때요? 나: 아주 재미있어요.;What does the second speaker think of the movie?;It's very fun.;10;9
+4;/audio/listening-4.mp3;/images/listening-4.jpg;가: 시장에서 뭘 샀어요? 나: 사과하고 오렌지요.;What did the speaker buy at the market?;Apples and Oranges;15;17
+5;/audio/listening-5.mp3;/images/listening-5.jpg;다음 뉴스를 듣고 질문에 답하십시오. 서울의 내일 아침 기온은 10도, 낮 기온은 22도로 예상됩니다.;What will be the high temperature in Seoul tomorrow?;22 degrees;15;13

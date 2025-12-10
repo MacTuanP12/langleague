@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, Button, Typography, Space, Radio, Row, Col, message, Spin, Alert, Image, Slider } from 'antd';
 import {
   CheckCircleOutlined,
@@ -16,6 +16,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Howl } from 'howler';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
+import { saveExerciseResult } from 'app/shared/services/exercise-result.service';
 import { IListeningExercise } from 'app/shared/model/models';
 import { colors, spacing, borderRadius, shadows, typography, cardBaseStyle, pageContainerStyle } from 'app/shared/styles/design-system';
 
@@ -193,6 +194,16 @@ const ListeningExercise: React.FC = () => {
     const correct = selectedAnswer === exercise?.correctAnswer;
     setIsCorrect(correct);
     setIsSubmitted(true);
+
+    if (exercise) {
+      dispatch(saveExerciseResult({
+        exerciseId: exercise.id,
+        exerciseType: 'LISTENING',
+        isCorrect: correct,
+        score: correct ? exercise.maxScore : 0,
+        userAnswer: selectedAnswer,
+      }));
+    }
 
     if (correct) {
       message.success('Chính xác! Bạn đã trả lời đúng! 🎉');
