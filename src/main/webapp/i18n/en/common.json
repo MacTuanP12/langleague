@@ -33,7 +33,9 @@
     "download": "Download",
     "upload": "Upload",
     "success": "Success",
-    "error": "Error"
+    "error": "Error",
+    "reviews": "reviews",
+    "noDescription": "No description"
   },
   "dashboard": {
     "title": "Dashboard",

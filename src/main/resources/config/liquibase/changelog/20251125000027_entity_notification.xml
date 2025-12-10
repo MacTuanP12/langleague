@@ -45,7 +45,7 @@
     </changeSet>
 
     <changeSet id="20251125000027-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_notification_user_read" tableName="notification"/></not>
         </preConditions>
         <createIndex indexName="idx_notification_user_read" tableName="notification">
@@ -56,7 +56,7 @@
     </changeSet>
 
     <changeSet id="20251125000027-4" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_notification_created" tableName="notification"/></not>
         </preConditions>
         <createIndex indexName="idx_notification_created" tableName="notification">

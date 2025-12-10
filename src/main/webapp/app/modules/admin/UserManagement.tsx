@@ -470,7 +470,7 @@ const UserManagement: React.FC = () => {
               onClick={() => fetchUsers(0, pagination.pageSize)}
               style={{ borderRadius: 8, fontFamily: 'Inter, system-ui, sans-serif' }}
             >
-              Refresh
+              {t('admin:userManagement.refresh')}
             </Button>
           </Col>
         </Row>
@@ -484,7 +484,9 @@ const UserManagement: React.FC = () => {
           pagination={{
             ...pagination,
             showSizeChanger: true,
-            showTotal: total => <Text style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>{`Total ${total} users`}</Text>,
+            showTotal: total => (
+              <Text style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>{t('admin:userManagement.totalUsers', { count: total })}</Text>
+            ),
           }}
           onChange={handleTableChange}
           scroll={{ x: 1200 }}

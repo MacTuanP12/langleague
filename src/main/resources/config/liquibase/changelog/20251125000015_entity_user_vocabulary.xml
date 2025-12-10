@@ -48,7 +48,7 @@
 
     <!-- Add indexes -->
     <changeSet id="20251125000015-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_user_vocabulary_app_user_id"/></not>
         </preConditions>
         <createIndex indexName="idx_user_vocabulary_app_user_id" tableName="user_vocabulary">
@@ -57,7 +57,7 @@
     </changeSet>
 
     <changeSet id="20251125000015-4" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_user_vocabulary_next_review"/></not>
         </preConditions>
         <createIndex indexName="idx_user_vocabulary_next_review" tableName="user_vocabulary">

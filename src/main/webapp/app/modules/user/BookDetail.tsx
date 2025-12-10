@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography, Button, Space, Progress, Tag, List, Spin, Empty, Statistic } from 'antd';
+import { Card, Row, Col, Typography, Button, Space, Progress, Tag, List, Spin, Empty, Statistic, message } from 'antd';
 import {
   BookOutlined,
   ReadOutlined,
@@ -27,20 +27,37 @@ const BookDetail: React.FC = () => {
   const [bookProgress, setBookProgress] = useState<IBookProgress | null>(null);
   const [chapterProgresses, setChapterProgresses] = useState<IChapterProgress[]>([]);
   const [loading, setLoading] = useState(false);
+  const [chaptersError, setChaptersError] = useState(false);
 
   useEffect(() => {
     if (!bookId) return;
 
     const fetchData = async () => {
       setLoading(true);
+      setChaptersError(false);
       try {
         // Fetch book info
         const bookData = await dispatch(getBook(parseInt(bookId, 10))).unwrap();
+        console.log('Book data loaded:', bookData);
         setBook(bookData);
 
         // Fetch chapters using book API endpoint
-        const chaptersData = await dispatch(getBookChapters(parseInt(bookId, 10))).unwrap();
-        setChapters(Array.isArray(chaptersData) ? chaptersData : []);
+        try {
+          const chaptersData = await dispatch(getBookChapters(parseInt(bookId, 10))).unwrap();
+          console.log('Chapters data loaded:', chaptersData);
+          const chaptersArray = Array.isArray(chaptersData) ? chaptersData : [];
+
+          if (chaptersArray.length === 0) {
+            console.warn('No chapters found for book:', bookId);
+            setChaptersError(true);
+          }
+
+          setChapters(chaptersArray);
+        } catch (chapterError: any) {
+          console.error('Error fetching chapters:', chapterError);
+          setChaptersError(true);
+          message.error('Không thể tải danh sách chương');
+        }
 
         // Fetch progress (optional - user might not have progress yet)
         try {
@@ -52,8 +69,9 @@ const BookDetail: React.FC = () => {
         } catch (progressError) {
           console.log('No progress data yet for this book');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching book data:', error);
+        message.error('Không thể tải thông tin sách');
       } finally {
         setLoading(false);
       }
@@ -156,7 +174,20 @@ const BookDetail: React.FC = () => {
               </Title>
 
               {chapters.length === 0 ? (
-                <Empty description="Chưa có chương nào" />
+                <Empty
+                  description={
+                    chaptersError
+                      ? 'Không thể tải danh sách chương. Vui lòng thử lại sau hoặc liên hệ quản trị viên.'
+                      : 'Chưa có chương nào'
+                  }
+                  image={chaptersError ? Empty.PRESENTED_IMAGE_SIMPLE : Empty.PRESENTED_IMAGE_DEFAULT}
+                >
+                  {chaptersError && (
+                    <Button type="primary" onClick={() => window.location.reload()}>
+                      Tải lại trang
+                    </Button>
+                  )}
+                </Empty>
               ) : (
                 <List
                   itemLayout="horizontal"

@@ -35,7 +35,7 @@
 
     <!-- Add index -->
     <changeSet id="20251125000013-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_writing_exercise_chapter_id"/></not>
         </preConditions>
         <createIndex indexName="idx_writing_exercise_chapter_id" tableName="writing_exercise">

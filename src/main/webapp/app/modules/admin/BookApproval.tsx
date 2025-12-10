@@ -83,7 +83,7 @@ const BookApproval: React.FC = () => {
 
   const columns: ColumnsType<IBook> = [
     {
-      title: 'Thumbnail',
+      title: t('admin:bookApproval.thumbnail'),
       dataIndex: 'thumbnail',
       key: 'thumbnail',
       width: 100,
@@ -107,7 +107,7 @@ const BookApproval: React.FC = () => {
         ),
     },
     {
-      title: 'Tiêu đề',
+      title: t('admin:bookApproval.title_column'),
       dataIndex: 'title',
       key: 'title',
       width: 300,
@@ -119,7 +119,7 @@ const BookApproval: React.FC = () => {
       ),
     },
     {
-      title: 'Mô tả',
+      title: t('admin:bookApproval.description_column'),
       dataIndex: 'description',
       key: 'description',
       ellipsis: true,
@@ -131,22 +131,26 @@ const BookApproval: React.FC = () => {
       ),
     },
     {
-      title: 'Trạng thái',
+      title: t('admin:bookApproval.status_column'),
       dataIndex: 'isActive',
       key: 'isActive',
       width: 120,
       align: 'center',
-      render: (isActive: boolean) => <Tag color={isActive ? 'success' : 'error'}>{isActive ? 'Đã duyệt' : 'Chờ duyệt'}</Tag>,
+      render: (isActive: boolean) => (
+        <Tag color={isActive ? 'success' : 'error'}>
+          {isActive ? t('admin:bookApproval.approved_status') : t('admin:bookApproval.pending_status')}
+        </Tag>
+      ),
     },
     {
-      title: 'Hành động',
+      title: t('admin:bookApproval.actions'),
       key: 'actions',
       width: 250,
       align: 'center',
       render: (_: any, record: IBook) => (
         <Space>
           <Button type="link" icon={<EyeOutlined />} onClick={() => showBookDetail(record)} size="small">
-            Chi tiết
+            {t('admin:bookApproval.viewDetails')}
           </Button>
           <Button
             type="primary"
@@ -155,18 +159,18 @@ const BookApproval: React.FC = () => {
             loading={actionLoading === record.id}
             size="small"
           >
-            Duyệt
+            {t('admin:bookApproval.approve')}
           </Button>
           <Popconfirm
-            title="Xóa vĩnh viễn sách?"
-            description="Hành động này không thể hoàn tác!"
+            title={t('admin:bookApproval.confirmDelete')}
+            description={t('admin:bookApproval.confirmDeleteMessage')}
             onConfirm={() => handleHardDelete(record.id)}
-            okText="Xóa"
-            cancelText="Hủy"
+            okText={t('admin:bookApproval.delete')}
+            cancelText={t('common:cancel')}
             okButtonProps={{ danger: true }}
           >
             <Button danger icon={<DeleteOutlined />} loading={actionLoading === record.id} size="small">
-              Xóa
+              {t('admin:bookApproval.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -180,10 +184,10 @@ const BookApproval: React.FC = () => {
         <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Title level={2} style={{ margin: 0 }}>
             <BookOutlined style={{ marginRight: 12, color: '#1890ff' }} />
-            Duyệt Sách
+            {t('admin:bookApproval.title')}
           </Title>
           <Button icon={<ReloadOutlined />} onClick={fetchInactiveBooks} loading={loading}>
-            Làm mới
+            {t('admin:bookApproval.refresh')}
           </Button>
         </div>
 
@@ -195,10 +199,10 @@ const BookApproval: React.FC = () => {
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: total => `Tổng ${total} sách`,
+            showTotal: total => t('admin:bookApproval.totalBooks', { count: total }),
           }}
           locale={{
-            emptyText: 'Không có sách nào cần duyệt',
+            emptyText: t('admin:bookApproval.noBooksToApprove'),
           }}
         />
       </Card>
@@ -208,14 +212,14 @@ const BookApproval: React.FC = () => {
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <BookOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-            Chi tiết sách
+            {t('admin:bookApproval.bookDetails')}
           </div>
         }
         open={isDetailModalVisible}
         onCancel={() => setIsDetailModalVisible(false)}
         footer={[
           <Button key="close" onClick={() => setIsDetailModalVisible(false)}>
-            Đóng
+            {t('admin:bookApproval.close')}
           </Button>,
           <Button
             key="approve"
@@ -228,7 +232,7 @@ const BookApproval: React.FC = () => {
               }
             }}
           >
-            Duyệt sách
+            {t('admin:bookApproval.approveBook')}
           </Button>,
         ]}
         width={800}
@@ -245,25 +249,27 @@ const BookApproval: React.FC = () => {
               </div>
             )}
             <Descriptions column={2} bordered>
-              <Descriptions.Item label="Tiêu đề" span={2}>
+              <Descriptions.Item label={t('admin:bookApproval.title_column')} span={2}>
                 <Text strong style={{ fontSize: 16 }}>
                   {selectedBook.title}
                 </Text>
               </Descriptions.Item>
-              <Descriptions.Item label="Cấp độ">
+              <Descriptions.Item label={t('admin:bookApproval.level')}>
                 <Tag color={selectedBook.level === 'BEGINNER' ? 'green' : selectedBook.level === 'INTERMEDIATE' ? 'blue' : 'orange'}>
                   {selectedBook.level}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="Trạng thái">
-                <Tag color={selectedBook.isActive ? 'success' : 'error'}>{selectedBook.isActive ? 'Đã kích hoạt' : 'Chưa kích hoạt'}</Tag>
+              <Descriptions.Item label={t('admin:bookApproval.status_column')}>
+                <Tag color={selectedBook.isActive ? 'success' : 'error'}>
+                  {selectedBook.isActive ? t('admin:bookApproval.activated') : t('admin:bookApproval.notActivated')}
+                </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="Đánh giá trung bình">
-                {selectedBook.averageRating?.toFixed(1)} ⭐ ({selectedBook.totalReviews} đánh giá)
+              <Descriptions.Item label={t('admin:bookApproval.averageRating')}>
+                {selectedBook.averageRating?.toFixed(1)} ⭐ ({selectedBook.totalReviews} {t('common:reviews')})
               </Descriptions.Item>
-              <Descriptions.Item label="ID">#{selectedBook.id}</Descriptions.Item>
-              <Descriptions.Item label="Mô tả" span={2}>
-                <div style={{ whiteSpace: 'pre-wrap' }}>{selectedBook.description || 'Không có mô tả'}</div>
+              <Descriptions.Item label={t('admin:bookApproval.id')}>#{selectedBook.id}</Descriptions.Item>
+              <Descriptions.Item label={t('admin:bookApproval.description')} span={2}>
+                <div style={{ whiteSpace: 'pre-wrap' }}>{selectedBook.description || t('common:noDescription')}</div>
               </Descriptions.Item>
             </Descriptions>
           </div>

@@ -56,14 +56,13 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
-    // Enhanced imageUrl to support both HTTP(S) URLs and base64 data URIs
-    // Accepts: http(s) URLs or data:image URIs (base64) for avatar images
-    @Pattern(
-        regexp = "^(https?://.*|data:image/(png|jpg|jpeg|gif|webp|svg\\+xml);base64,[A-Za-z0-9+/=]+)?$",
-        message = "Image URL must be a valid HTTP(S) URL or base64 image data URI"
-    )
-    @Lob
-    @Column(name = "image_url")
+    // PERFORMANCE FIX: Changed from LONGTEXT (base64) to VARCHAR(255) (file URLs)
+    // Storing base64 images in DB bloats the table and slows queries
+    // Now only stores file paths like: /uploads/avatars/user_123_abc.jpg
+    // Default: /assets/images/default-avatar.png for new users
+    @Pattern(regexp = "^(/uploads/.*|/assets/.*|https?://.*)?$", message = "Image URL must be a valid file path or HTTP(S) URL")
+    @Size(max = 255)
+    @Column(name = "image_url", length = 255)
     private String imageUrl;
 
     @NotNull

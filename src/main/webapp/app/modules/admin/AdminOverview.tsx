@@ -13,11 +13,13 @@ import {
 import { Line, Column } from '@ant-design/plots';
 import { useAppDispatch } from 'app/config/store';
 import { getAdminStatistics, AdminStatisticsDTO } from 'app/shared/services/learning-report.service';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const AdminOverview: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['admin', 'common']);
   const [loading, setLoading] = useState(false);
   const [statistics, setStatistics] = useState<AdminStatisticsDTO>({});
 
@@ -154,10 +156,10 @@ const AdminOverview: React.FC = () => {
               level={2}
               style={{ color: 'white', margin: 0, marginBottom: 8, fontFamily: 'Inter, system-ui, sans-serif', fontWeight: 600 }}
             >
-              Welcome, Admin! 👋
+              {t('admin:dashboard.welcome')} 👋
             </Title>
             <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px', fontFamily: 'Inter, system-ui, sans-serif' }}>
-              Overview of LangLeague Platform
+              {t('admin:dashboard.subtitle')}
             </Text>
           </Col>
           <Col>
@@ -212,7 +214,7 @@ const AdminOverview: React.FC = () => {
                   <TeamOutlined style={{ fontSize: 32, color: '#fff' }} />
                 </div>
                 <div style={{ marginBottom: 8 }}>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>Total Users</Text>
+                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>{t('admin:dashboard.totalUsers')}</Text>
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   <Text strong style={{ color: '#fff', fontSize: 32, fontWeight: 700 }}>
@@ -258,14 +260,14 @@ const AdminOverview: React.FC = () => {
                   <UserOutlined style={{ fontSize: 32, color: '#fff' }} />
                 </div>
                 <div style={{ marginBottom: 8 }}>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>Active Users</Text>
+                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>{t('admin:dashboard.activeUsers')}</Text>
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   <Text strong style={{ color: '#fff', fontSize: 32, fontWeight: 700 }}>
                     {userStats.active}
                   </Text>
                 </div>
-                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>This Week</Text>
+                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{t('admin:dashboard.thisWeek')}</Text>
               </div>
             )}
           </Card>
@@ -300,14 +302,16 @@ const AdminOverview: React.FC = () => {
                   <BookOutlined style={{ fontSize: 32, color: '#fff' }} />
                 </div>
                 <div style={{ marginBottom: 8 }}>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>Total Courses</Text>
+                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>{t('admin:dashboard.totalCourses')}</Text>
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   <Text strong style={{ color: '#fff', fontSize: 32, fontWeight: 700 }}>
                     {courseStats.total}
                   </Text>
                 </div>
-                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{courseStats.published} Published</Text>
+                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>
+                  {courseStats.published} {t('admin:dashboard.published')}
+                </Text>
               </div>
             )}
           </Card>
@@ -342,14 +346,14 @@ const AdminOverview: React.FC = () => {
                   <TrophyOutlined style={{ fontSize: 32, color: '#fff' }} />
                 </div>
                 <div style={{ marginBottom: 8 }}>
-                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>Completions</Text>
+                  <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14 }}>{t('admin:dashboard.completions')}</Text>
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   <Text strong style={{ color: '#fff', fontSize: 32, fontWeight: 700 }}>
                     {courseStats.completed}
                   </Text>
                 </div>
-                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>Total Achievements</Text>
+                <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{t('admin:dashboard.totalAchievements')}</Text>
               </div>
             )}
           </Card>
@@ -364,7 +368,7 @@ const AdminOverview: React.FC = () => {
               <Space>
                 <LineChartOutlined style={{ color: '#2c5282' }} />
                 <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', color: '#1e3a5f' }}>
-                  User Growth
+                  {t('admin:dashboard.userGrowth')}
                 </Text>
               </Space>
             }
@@ -375,7 +379,7 @@ const AdminOverview: React.FC = () => {
             ) : (
               <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Text type="secondary" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                  {loading ? 'Loading...' : 'No data available'}
+                  {loading ? t('admin:dashboard.loading') : t('admin:dashboard.noData')}
                 </Text>
               </div>
             )}
@@ -388,7 +392,7 @@ const AdminOverview: React.FC = () => {
               <Space>
                 <TrophyOutlined style={{ color: '#2c5282' }} />
                 <Text strong style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '16px', color: '#1e3a5f' }}>
-                  Top Books
+                  {t('admin:dashboard.topBooks')}
                 </Text>
               </Space>
             }
@@ -399,7 +403,7 @@ const AdminOverview: React.FC = () => {
             ) : (
               <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Text type="secondary" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                  {loading ? 'Loading...' : 'No data available'}
+                  {loading ? t('admin:dashboard.loading') : t('admin:dashboard.noData')}
                 </Text>
               </div>
             )}

@@ -160,7 +160,9 @@ const StaffSettings: React.FC = () => {
         imageUrl: newImageUrl,
       });
 
-      setAvatarUrl(newImageUrl);
+      // Add cache-busting timestamp
+      const urlWithTimestamp = `${newImageUrl}?t=${Date.now()}`;
+      setAvatarUrl(urlWithTimestamp);
       message.success('Cập nhật ảnh đại diện thành công!');
       setAvatarModalVisible(false);
       setImageUrlInput('');
@@ -190,7 +192,9 @@ const StaffSettings: React.FC = () => {
       const fileUrl = response.data.data?.fileUrl || response.data.fileUrl || response.data.url || '';
 
       if (fileUrl) {
-        setAvatarUrl(fileUrl);
+        // Add cache-busting timestamp
+        const urlWithTimestamp = `${fileUrl}?t=${Date.now()}`;
+        setAvatarUrl(urlWithTimestamp);
 
         // Also update the account with new avatar
         await axios.post('/api/account', {

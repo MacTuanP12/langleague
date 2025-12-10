@@ -54,7 +54,7 @@
 
     <!-- MySQL/MariaDB -->
     <changeSet id="20251125000001-3-mysql" author="system" dbms="mysql,mariadb">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <columnExists tableName="jhi_user" columnName="image_url"/>
         </preConditions>
 
@@ -68,7 +68,7 @@
 
     <!-- PostgreSQL -->
     <changeSet id="20251125000001-3-postgresql" author="system" dbms="postgresql">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <columnExists tableName="jhi_user" columnName="image_url"/>
         </preConditions>
 
@@ -82,7 +82,7 @@
 
     <!-- Oracle -->
     <changeSet id="20251125000001-3-oracle" author="system" dbms="oracle">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <columnExists tableName="jhi_user" columnName="image_url"/>
         </preConditions>
 
@@ -96,7 +96,7 @@
 
     <!-- H2 (for testing) -->
     <changeSet id="20251125000001-3-h2" author="system" dbms="h2">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <columnExists tableName="jhi_user" columnName="image_url"/>
         </preConditions>
 
@@ -110,7 +110,7 @@
 
     <!-- SQL Server -->
     <changeSet id="20251125000001-3-mssql" author="system" dbms="mssql">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <columnExists tableName="jhi_user" columnName="image_url"/>
         </preConditions>
 
@@ -120,6 +120,22 @@
             tableName="jhi_user"
             columnName="image_url"
             newDataType="NVARCHAR(MAX)"/>
+    </changeSet>
+
+    <!-- ========================================= -->
+    <!-- ADD VERSION COLUMN FOR OPTIMISTIC LOCKING -->
+    <!-- ========================================= -->
+
+    <changeSet id="20251125000001-4-version" author="system">
+        <preConditions onFail="HALT">
+            <not><columnExists tableName="app_user" columnName="version"/></not>
+        </preConditions>
+        <comment>Add version column for optimistic locking to prevent race conditions</comment>
+        <addColumn tableName="app_user">
+            <column name="version" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

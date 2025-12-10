@@ -22,6 +22,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tech.jhipster.security.RandomUtil;
 
 /**
@@ -43,18 +44,22 @@ public class UserService {
 
     private final AppUserService appUserService;
 
+    private final FileStorageService fileStorageService;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         CacheManager cacheManager,
-        AppUserService appUserService
+        AppUserService appUserService,
+        FileStorageService fileStorageService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
         this.appUserService = appUserService;
+        this.fileStorageService = fileStorageService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -137,15 +142,11 @@ public class UserService {
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
 
-        //  Tạo AppUser tương ứng cho user mới đăng ký
-        try {
-            appUserService.createAppUserForNewUser(newUser);
-            LOG.info("AppUser created successfully for new registration: {}", newUser.getLogin());
-        } catch (Exception e) {
-            LOG.error("Failed to create AppUser for user: {}", newUser.getLogin(), e);
-            // Không throw exception để không làm fail cả quá trình đăng ký
-            // AppUser có thể tạo sau qua background job nếu cần
-        }
+        // CRITICAL FIX: Create AppUser within same transaction
+        // If AppUser creation fails, entire transaction rolls back (both User and AppUser)
+        // This prevents data inconsistency where User exists but AppUser is missing
+        appUserService.createAppUserForNewUser(newUser);
+        LOG.info("AppUser created successfully for new registration: {}", newUser.getLogin());
 
         return newUser;
     }
@@ -294,11 +295,22 @@ public class UserService {
     /**
      * Update user's image URL (avatar).
      *
+     * PERFORMANCE FIX: No longer accepts base64 data URIs
+     * Use uploadUserAvatar() to upload image files instead
+     *
      * @param login user login
-     * @param imageUrl new image URL (can be external URL or base64 data URI)
+     * @param imageUrl new image URL (file path or HTTP URL, NOT base64)
+     * @throws IllegalArgumentException if base64 data URI is provided
      */
     @Transactional
     public void updateUserImageUrl(String login, String imageUrl) {
+        // PERFORMANCE FIX: Reject base64 images
+        if (imageUrl != null && imageUrl.startsWith("data:image/")) {
+            throw new IllegalArgumentException(
+                "Base64 images are no longer supported. Please upload the image file using uploadUserAvatar() instead."
+            );
+        }
+
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
@@ -307,6 +319,49 @@ public class UserService {
                 this.clearUserCaches(user);
                 LOG.debug("Updated imageUrl for user: {}", login);
             });
+    }
+
+    /**
+     * Upload user avatar image file
+     *
+     * PERFORMANCE FIX: Replaces base64 image storage with file-based storage
+     * This prevents database bloat and improves query performance
+     *
+     * @param login user login
+     * @param avatarFile the avatar image file
+     * @return the file URL path
+     * @throws Exception if upload fails
+     */
+    @Transactional
+    public String uploadUserAvatar(String login, MultipartFile avatarFile) throws Exception {
+        LOG.debug("Uploading avatar for user: {}", login);
+
+        // Validate file
+        if (avatarFile == null || avatarFile.isEmpty()) {
+            throw new IllegalArgumentException("Avatar file is required");
+        }
+
+        // Validate file type
+        String contentType = avatarFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("File must be an image (png, jpg, jpeg, gif, webp)");
+        }
+
+        // Validate file size (max 5MB)
+        long maxSize = 5 * 1024 * 1024; // 5MB
+        if (avatarFile.getSize() > maxSize) {
+            throw new IllegalArgumentException("Avatar file size must not exceed 5MB");
+        }
+
+        // Store file
+        String fileName = fileStorageService.storeFile(avatarFile, "avatars", login);
+        String imageUrl = "/uploads/avatars/" + fileName;
+
+        // Update user
+        updateUserImageUrl(login, imageUrl);
+
+        LOG.info("Avatar uploaded successfully for user {}: {}", login, imageUrl);
+        return imageUrl;
     }
 
     @Transactional

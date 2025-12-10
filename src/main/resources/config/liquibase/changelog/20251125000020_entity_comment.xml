@@ -33,7 +33,7 @@
 
     <!-- Add index -->
     <changeSet id="20251125000020-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_comment_chapter_id"/></not>
         </preConditions>
         <createIndex indexName="idx_comment_chapter_id" tableName="comment">

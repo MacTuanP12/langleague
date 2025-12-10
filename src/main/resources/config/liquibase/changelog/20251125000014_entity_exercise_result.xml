@@ -54,7 +54,7 @@
 
     <!-- Add indexes -->
     <changeSet id="20251125000014-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_exercise_result_app_user_id"/></not>
         </preConditions>
         <createIndex indexName="idx_exercise_result_app_user_id" tableName="exercise_result">
@@ -63,7 +63,7 @@
     </changeSet>
 
     <changeSet id="20251125000014-4" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_exercise_result_type"/></not>
         </preConditions>
         <createIndex indexName="idx_exercise_result_type" tableName="exercise_result">
@@ -72,12 +72,38 @@
     </changeSet>
 
     <changeSet id="20251125000014-5" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_exercise_result_submitted_at"/></not>
         </preConditions>
         <createIndex indexName="idx_exercise_result_submitted_at" tableName="exercise_result">
             <column name="submitted_at"/>
         </createIndex>
+    </changeSet>
+
+    <!-- Add version column for optimistic locking -->
+    <changeSet id="20251125000014-6-version" author="system">
+        <preConditions onFail="HALT">
+            <not><columnExists tableName="exercise_result" columnName="version"/></not>
+        </preConditions>
+        <comment>Add version column for optimistic locking to prevent race conditions on concurrent exercise submissions</comment>
+        <addColumn tableName="exercise_result">
+            <column name="version" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- Performance index for user exercise history -->
+    <changeSet id="20251125000014-7-perf" author="performance">
+        <preConditions onFail="HALT">
+            <not><indexExists indexName="idx_exercise_result_user_type" tableName="exercise_result"/></not>
+        </preConditions>
+        <createIndex indexName="idx_exercise_result_user_type" tableName="exercise_result">
+            <column name="app_user_id"/>
+            <column name="exercise_type"/>
+            <column name="submitted_at"/>
+        </createIndex>
+        <comment>Performance: For user exercise statistics and history</comment>
     </changeSet>
 
 </databaseChangeLog>

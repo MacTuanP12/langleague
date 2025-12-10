@@ -106,20 +106,27 @@ const StaffChapterManagement: React.FC = () => {
 
       if (isEditMode && selectedChapter?.id) {
         // Update existing chapter
-        await dispatch(updateChapter({ id: selectedChapter.id, chapter: { ...selectedChapter, ...chapterData } as IChapter })).unwrap();
+        const result = await dispatch(
+          updateChapter({ id: selectedChapter.id, chapter: { ...selectedChapter, ...chapterData } as IChapter }),
+        ).unwrap();
+        console.log('Chapter updated successfully:', result);
         message.success(t('chapter.updateSuccess') || 'Cập nhật chương thành công');
       } else {
         // Create new chapter
-        await dispatch(createChapter(chapterData as IChapter)).unwrap();
+        const result = await dispatch(createChapter(chapterData as IChapter)).unwrap();
+        console.log('Chapter created successfully:', result);
         message.success(t('chapter.createSuccess') || 'Tạo chương thành công');
       }
 
       setIsModalVisible(false);
       form.resetFields();
-      fetchData();
+
+      // Force refresh the chapters list
+      await fetchData();
     } catch (error: any) {
-      message.error(error.message || t('error.saveFailed') || 'Có lỗi xảy ra');
       console.error('Error saving chapter:', error);
+      const errorMsg = error.response?.data?.message || error.message || t('error.saveFailed') || 'Có lỗi xảy ra';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -129,12 +136,16 @@ const StaffChapterManagement: React.FC = () => {
   const handleDelete = async (chapter: IChapter) => {
     try {
       setLoading(true);
-      await dispatch(deleteChapter(chapter.id)).unwrap();
+      const result = await dispatch(deleteChapter(chapter.id)).unwrap();
+      console.log('Chapter deleted successfully:', result);
       message.success(t('chapter.deleteSuccess') || 'Xóa chương thành công');
-      fetchData();
+
+      // Force refresh the chapters list
+      await fetchData();
     } catch (error: any) {
-      message.error(t('error.deleteFailed') || 'Không thể xóa chương');
       console.error('Error deleting chapter:', error);
+      const errorMsg = error.response?.data?.message || error.message || t('error.deleteFailed') || 'Không thể xóa chương';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }

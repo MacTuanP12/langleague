@@ -34,7 +34,7 @@
 
     <!-- Add index -->
     <changeSet id="20251125000023-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_learning_streak_app_user_id"/></not>
         </preConditions>
         <createIndex indexName="idx_learning_streak_app_user_id" tableName="learning_streak">

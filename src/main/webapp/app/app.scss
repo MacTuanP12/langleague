@@ -14,10 +14,10 @@
   --color-error: #ff4b4b;
   --color-info: #1cb0f6;
 
-  /* Background colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f5;
-  --bg-tertiary: #e8e8e8;
+  /* Background colors - Modern Clean Palette */
+  --bg-primary: #ffffff; /* Pure white for cards */
+  --bg-secondary: #f8f9fb; /* Soft gray with blue tint (upgraded from #f5f5f5) */
+  --bg-tertiary: #f1f5f9; /* Slate gray light (upgraded from #e8e8e8) */
 
   /* Text colors */
   --text-primary: #262626;
@@ -52,10 +52,10 @@ html.dark {
   --color-secondary: #ffd633;
   --color-secondary-dark: #ffc800;
 
-  /* Background colors */
-  --bg-primary: #141414;
-  --bg-secondary: #1f1f1f;
-  --bg-tertiary: #2d2d2d;
+  /* Background colors - Dark Mode Premium (Slate) */
+  --bg-primary: #1e293b; /* Slate 800 - Blue-gray dark (upgraded from #141414) */
+  --bg-secondary: #0f172a; /* Slate 900 - Deep charcoal (upgraded from #1f1f1f) */
+  --bg-tertiary: #334155; /* Slate 700 - Medium blue-gray (upgraded from #2d2d2d) */
 
   /* Text colors */
   --text-primary: #ffffff;
@@ -63,10 +63,10 @@ html.dark {
   --text-disabled: #4a4a4a;
   --text-white: #ffffff;
 
-  /* Border colors */
-  --border-color: #434343;
-  --border-light: #2d2d2d;
-  --border-default: #434343;
+  /* Border colors - Updated for Slate theme */
+  --border-color: #334155; /* Slate 700 - matches tertiary bg (upgraded from #434343) */
+  --border-light: #1e293b; /* Slate 800 - matches primary bg (upgraded from #2d2d2d) */
+  --border-default: #334155;
 
   /* Shadows - darker for dark mode */
   --shadow: rgba(0, 0, 0, 0.5);

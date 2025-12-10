@@ -41,7 +41,7 @@
 
     <!-- Add indexes -->
     <changeSet id="20251125000004-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_word_chapter_id"/></not>
         </preConditions>
         <createIndex indexName="idx_word_chapter_id" tableName="word">
@@ -50,7 +50,7 @@
     </changeSet>
 
     <changeSet id="20251125000004-4" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_word_text"/></not>
         </preConditions>
         <createIndex indexName="idx_word_text" tableName="word">

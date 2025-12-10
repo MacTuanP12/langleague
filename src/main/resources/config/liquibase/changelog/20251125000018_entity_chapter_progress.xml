@@ -36,13 +36,50 @@
 
     <!-- Add index -->
     <changeSet id="20251125000018-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_chapter_progress_user_chapter"/></not>
         </preConditions>
         <createIndex indexName="idx_chapter_progress_user_chapter" tableName="chapter_progress">
             <column name="app_user_id"/>
             <column name="chapter_id"/>
         </createIndex>
+    </changeSet>
+
+    <!-- Add version column for optimistic locking -->
+    <changeSet id="20251125000018-4-version" author="system">
+        <preConditions onFail="HALT">
+            <not><columnExists tableName="chapter_progress" columnName="version"/></not>
+        </preConditions>
+        <comment>Add version column for optimistic locking to prevent race conditions</comment>
+        <addColumn tableName="chapter_progress">
+            <column name="version" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- Performance indexes for analytics -->
+    <changeSet id="20251125000018-5-perf" author="performance">
+        <preConditions onFail="HALT">
+            <not><indexExists indexName="idx_chapter_progress_analytics" tableName="chapter_progress"/></not>
+        </preConditions>
+        <createIndex indexName="idx_chapter_progress_analytics" tableName="chapter_progress">
+            <column name="chapter_id"/>
+            <column name="completed"/>
+            <column name="app_user_id"/>
+        </createIndex>
+        <comment>Performance: For chapter completion rate and drop-off analysis</comment>
+    </changeSet>
+
+    <changeSet id="20251125000018-6-perf" author="performance">
+        <preConditions onFail="HALT">
+            <not><indexExists indexName="idx_chapter_progress_user" tableName="chapter_progress"/></not>
+        </preConditions>
+        <createIndex indexName="idx_chapter_progress_user" tableName="chapter_progress">
+            <column name="app_user_id"/>
+            <column name="last_accessed"/>
+        </createIndex>
+        <comment>Performance: For user progress tracking and recent activity</comment>
     </changeSet>
 
 </databaseChangeLog>

@@ -159,11 +159,15 @@ const BookManagement: React.FC = () => {
   const handleDelete = async (book: IBook) => {
     try {
       setLoading(true);
-      await dispatch(deleteBook(book.id)).unwrap();
+      // Pass object with id to match service signature
+      await dispatch(deleteBook({ id: book.id, force: false })).unwrap();
       message.success('Xóa sách thành công');
-      fetchBooks();
-    } catch (error) {
-      message.error('Không thể xóa sách');
+      // Refresh the list after successful deletion
+      await fetchBooks();
+    } catch (error: any) {
+      console.error('Delete error:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Không thể xóa sách';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }

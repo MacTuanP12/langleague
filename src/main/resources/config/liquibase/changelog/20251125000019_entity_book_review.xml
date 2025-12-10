@@ -42,7 +42,7 @@
 
     <!-- Add index -->
     <changeSet id="20251125000019-3" author="system">
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="HALT">
             <not><indexExists indexName="idx_book_review_book_id"/></not>
         </preConditions>
         <createIndex indexName="idx_book_review_book_id" tableName="book_review">

@@ -33,7 +33,9 @@
     "download": "Tải xuống",
     "upload": "Tải lên",
     "success": "Thành công",
-    "error": "Lỗi"
+    "error": "Lỗi",
+    "reviews": "đánh giá",
+    "noDescription": "Không có mô tả"
   },
   "dashboard": {
     "title": "Bảng điều khiển",

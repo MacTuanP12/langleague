@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbschema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbschema http://www.liquibase.org/xml/ns/dbschema/dbschema-latest.xsd">
+
+    <!--
+        PERFORMANCE FIX: Migrate User.imageUrl from base64 storage to file URLs
+
+        Problem: Storing base64 images in database bloats the User table and slows queries
+        Solution:
+        1. Change imageUrl column from LONGTEXT to VARCHAR(255) for URLs only
+        2. Existing base64 images will be converted to files by migration script
+
+        Note: Run convert_user_images_to_files.sql script BEFORE applying this migration
+    -->
+
+    <changeSet id="20251210000004-1" author="system">
+        <preConditions onFail="HALT">
+            <columnExists tableName="jhi_user" columnName="image_url"/>
+        </preConditions>
+
+        <comment>
+            Change User.imageUrl from LONGTEXT (base64) to VARCHAR(255) (file URLs)
+            Prerequisites: Existing base64 images must be converted to files first
+        </comment>
+
+        <!-- MySQL/MariaDB -->
+        <modifyDataType
+            tableName="jhi_user"
+            columnName="image_url"
+            newDataType="VARCHAR(255)"/>
+
+        <addNotNullConstraint
+            tableName="jhi_user"
+            columnName="image_url"
+            defaultNullValue="/assets/images/default-avatar.png"/>
+
+        <rollback>
+            <modifyDataType
+                tableName="jhi_user"
+                columnName="image_url"
+                newDataType="LONGTEXT"/>
+
+            <dropNotNullConstraint
+                tableName="jhi_user"
+                columnName="image_url"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="20251210000004-2" author="system">
+        <comment>Add index on imageUrl for faster lookups (optional)</comment>
+
+        <createIndex indexName="idx_user_image_url" tableName="jhi_user">
+            <column name="image_url"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex indexName="idx_user_image_url" tableName="jhi_user"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+

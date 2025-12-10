@@ -121,10 +121,15 @@ const Settings: React.FC = () => {
       const result = await dispatch(updateAvatar(base64)).unwrap();
 
       if (result.url) {
-        setAvatarUrl(result.url);
+        // Add cache-busting timestamp to force reload
+        const urlWithTimestamp = `${result.url}?t=${Date.now()}`;
+        setAvatarUrl(urlWithTimestamp);
         message.success(currentLocale === 'vi' ? 'Cập nhật ảnh thành công!' : 'Avatar updated successfully!');
         setAvatarModalVisible(false);
         setPastedImage(null);
+
+        // Refresh account data to update Redux state
+        await dispatch(getAccount()).unwrap();
       }
     } catch (error) {
       console.error('Error uploading avatar:', error);
@@ -145,10 +150,15 @@ const Settings: React.FC = () => {
       const result = await dispatch(updateAvatar(imageUrlInput)).unwrap();
 
       if (result.url) {
-        setAvatarUrl(result.url);
+        // Add cache-busting timestamp to force reload
+        const urlWithTimestamp = `${result.url}?t=${Date.now()}`;
+        setAvatarUrl(urlWithTimestamp);
         message.success(currentLocale === 'vi' ? 'Cập nhật ảnh thành công!' : 'Avatar updated successfully!');
         setAvatarModalVisible(false);
         setImageUrlInput('');
+
+        // Refresh account data to update Redux state
+        await dispatch(getAccount()).unwrap();
       }
     } catch (error) {
       console.error('Error setting avatar from URL:', error);

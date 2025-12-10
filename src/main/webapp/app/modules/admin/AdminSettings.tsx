@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'app/shared/utils/useTranslation';
-import { Form, Input, Button, Select, Card, Typography, Divider, message, Switch, Space, Row, Col, Spin } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Card,
+  Typography,
+  Divider,
+  message,
+  Switch,
+  Space,
+  Row,
+  Col,
+  Spin,
+  Avatar,
+  Upload,
+  Modal,
+  Tabs,
+} from 'antd';
 import {
   UserOutlined,
   MailOutlined,
@@ -11,9 +29,12 @@ import {
   BgColorsOutlined,
   NotificationOutlined,
   SecurityScanOutlined,
+  CameraOutlined,
+  UploadOutlined,
+  LinkOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getAccount, updateAccount } from 'app/shared/services/account.service';
+import { getAccount, updateAccount, updateAvatar } from 'app/shared/services/account.service';
 import axios from 'axios';
 
 const { Title, Text } = Typography;
@@ -49,6 +70,14 @@ const AdminSettings: React.FC = () => {
   const [dailyReports, setDailyReports] = useState(true);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
+  // Avatar upload states
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
+  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [activeTab, setActiveTab] = useState('upload');
+  const [imageUrlInput, setImageUrlInput] = useState('');
+  const [pastedImage, setPastedImage] = useState<string | null>(null);
+
   // Load account data on mount
   useEffect(() => {
     const loadAccountData = async () => {
@@ -75,6 +104,8 @@ const AdminSettings: React.FC = () => {
         lastName: account.lastName,
         langKey: account.langKey || 'en',
       });
+      // Set avatar URL
+      setAvatarUrl(account.imageUrl || '');
     }
   }, [account, form]);
 
@@ -123,6 +154,89 @@ const AdminSettings: React.FC = () => {
     }
   };
 
+  // Avatar upload handlers
+  const handleAvatarUpload = async (file: File) => {
+    setUploadingAvatar(true);
+    try {
+      // Convert file to base64
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      // Call updateAvatar with base64 string
+      const result = await dispatch(updateAvatar(base64)).unwrap();
+
+      if (result.url) {
+        // Add cache-busting timestamp
+        const urlWithTimestamp = `${result.url}?t=${Date.now()}`;
+        setAvatarUrl(urlWithTimestamp);
+        message.success('Avatar updated successfully!');
+        setAvatarModalVisible(false);
+        setPastedImage(null);
+
+        // Refresh account data
+        await dispatch(getAccount()).unwrap();
+      }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      message.error('Failed to upload avatar');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleAvatarFromUrl = async () => {
+    if (!imageUrlInput || !imageUrlInput.trim()) {
+      message.error('Please enter image URL');
+      return;
+    }
+
+    setUploadingAvatar(true);
+    try {
+      const result = await dispatch(updateAvatar(imageUrlInput)).unwrap();
+
+      if (result.url) {
+        const urlWithTimestamp = `${result.url}?t=${Date.now()}`;
+        setAvatarUrl(urlWithTimestamp);
+        message.success('Avatar updated successfully!');
+        setAvatarModalVisible(false);
+        setImageUrlInput('');
+
+        // Refresh account data
+        await dispatch(getAccount()).unwrap();
+      }
+    } catch (error) {
+      console.error('Error setting avatar from URL:', error);
+      message.error('Failed to update avatar from URL');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.indexOf('image') !== -1) {
+        const file = item.getAsFile();
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = event => {
+            setPastedImage(event.target?.result as string);
+          };
+          reader.readAsDataURL(file);
+          await handleAvatarUpload(file);
+        }
+        break;
+      }
+    }
+  };
+
   if (dataLoading) {
     return (
       <div style={{ padding: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
@@ -136,6 +250,142 @@ const AdminSettings: React.FC = () => {
       <Title level={2} style={{ marginBottom: 32, color: '#667eea' }}>
         Admin Settings
       </Title>
+
+      {/* Avatar Section */}
+      <Card
+        style={{
+          borderRadius: 12,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          marginBottom: 24,
+        }}
+      >
+        <div style={{ textAlign: 'center', marginBottom: 16 }}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <Avatar
+              size={120}
+              src={avatarUrl}
+              icon={<UserOutlined />}
+              style={{ border: '4px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+            />
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<CameraOutlined />}
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              }}
+              onClick={() => setAvatarModalVisible(true)}
+            />
+          </div>
+          <div style={{ marginTop: 12, color: '#6c757d', fontSize: 13 }}>Click the camera icon to change your avatar</div>
+        </div>
+      </Card>
+
+      {/* Avatar Upload Modal */}
+      <Modal
+        title="Update Avatar"
+        open={avatarModalVisible}
+        onCancel={() => {
+          setAvatarModalVisible(false);
+          setImageUrlInput('');
+          setPastedImage(null);
+          setActiveTab('upload');
+        }}
+        footer={null}
+        width={600}
+      >
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <Tabs.TabPane
+            tab={
+              <span>
+                <UploadOutlined /> Upload
+              </span>
+            }
+            key="upload"
+          >
+            <Upload.Dragger
+              accept="image/*"
+              showUploadList={false}
+              beforeUpload={file => {
+                const isImage = file.type.startsWith('image/');
+                if (!isImage) {
+                  message.error('Only image files are allowed!');
+                  return false;
+                }
+                const isLt5M = file.size / 1024 / 1024 < 5;
+                if (!isLt5M) {
+                  message.error('Image must be smaller than 5MB!');
+                  return false;
+                }
+                handleAvatarUpload(file);
+                return false;
+              }}
+              disabled={uploadingAvatar}
+            >
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined style={{ fontSize: 48, color: '#1890ff' }} />
+              </p>
+              <p className="ant-upload-text">Click or drag image to upload</p>
+              <p className="ant-upload-hint">Support JPG, PNG, GIF (max 5MB)</p>
+            </Upload.Dragger>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane
+            tab={
+              <span>
+                <LinkOutlined /> From URL
+              </span>
+            }
+            key="url"
+          >
+            <Space.Compact style={{ width: '100%' }}>
+              <Input
+                placeholder="Enter image URL"
+                value={imageUrlInput}
+                onChange={e => setImageUrlInput(e.target.value)}
+                onPressEnter={handleAvatarFromUrl}
+                disabled={uploadingAvatar}
+              />
+              <Button type="primary" onClick={handleAvatarFromUrl} loading={uploadingAvatar}>
+                Set Avatar
+              </Button>
+            </Space.Compact>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane
+            tab={
+              <span>
+                <CameraOutlined /> Paste
+              </span>
+            }
+            key="paste"
+          >
+            <div
+              onPaste={handlePaste}
+              tabIndex={0}
+              style={{
+                border: '2px dashed #d9d9d9',
+                borderRadius: 8,
+                padding: 40,
+                textAlign: 'center',
+                cursor: 'pointer',
+                background: pastedImage ? `url(${pastedImage}) center/contain no-repeat` : '#fafafa',
+                minHeight: 200,
+              }}
+            >
+              {!pastedImage && (
+                <div>
+                  <CameraOutlined style={{ fontSize: 48, color: '#bbb' }} />
+                  <p>Press Ctrl+V (or Cmd+V) to paste image</p>
+                </div>
+              )}
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
+      </Modal>
 
       {/* Account Information */}
       <Card

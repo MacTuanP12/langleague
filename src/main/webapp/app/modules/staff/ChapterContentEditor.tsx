@@ -145,10 +145,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateWord({ id: editingItem.id, word: wordData })).unwrap();
+            const result = await dispatch(updateWord({ id: editingItem.id, word: wordData })).unwrap();
+            console.log('Word updated:', result);
             message.success('Cập nhật từ vựng thành công');
           } else {
-            await dispatch(createWord(wordData)).unwrap();
+            const result = await dispatch(createWord(wordData)).unwrap();
+            console.log('Word created:', result);
             message.success('Thêm từ vựng thành công');
           }
           break;
@@ -161,10 +163,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateGrammar({ id: editingItem.id, grammar: grammarData })).unwrap();
+            const result = await dispatch(updateGrammar({ id: editingItem.id, grammar: grammarData })).unwrap();
+            console.log('Grammar updated:', result);
             message.success('Cập nhật ngữ pháp thành công');
           } else {
-            await dispatch(createGrammar(grammarData)).unwrap();
+            const result = await dispatch(createGrammar(grammarData)).unwrap();
+            console.log('Grammar created:', result);
             message.success('Thêm ngữ pháp thành công');
           }
           break;
@@ -177,10 +181,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateListeningExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            const result = await dispatch(updateListeningExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            console.log('Listening exercise updated:', result);
             message.success('Cập nhật bài nghe thành công');
           } else {
-            await dispatch(createListeningExercise(exerciseData)).unwrap();
+            const result = await dispatch(createListeningExercise(exerciseData)).unwrap();
+            console.log('Listening exercise created:', result);
             message.success('Thêm bài nghe thành công');
           }
           break;
@@ -193,10 +199,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateSpeakingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            const result = await dispatch(updateSpeakingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            console.log('Speaking exercise updated:', result);
             message.success('Cập nhật bài nói thành công');
           } else {
-            await dispatch(createSpeakingExercise(exerciseData)).unwrap();
+            const result = await dispatch(createSpeakingExercise(exerciseData)).unwrap();
+            console.log('Speaking exercise created:', result);
             message.success('Thêm bài nói thành công');
           }
           break;
@@ -209,10 +217,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateReadingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            const result = await dispatch(updateReadingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            console.log('Reading exercise updated:', result);
             message.success('Cập nhật bài đọc thành công');
           } else {
-            await dispatch(createReadingExercise(exerciseData)).unwrap();
+            const result = await dispatch(createReadingExercise(exerciseData)).unwrap();
+            console.log('Reading exercise created:', result);
             message.success('Thêm bài đọc thành công');
           }
           break;
@@ -225,10 +235,12 @@ const ChapterContentEditor: React.FC = () => {
             chapterId: currentChapterId,
           };
           if (editingItem?.id) {
-            await dispatch(updateWritingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            const result = await dispatch(updateWritingExercise({ id: editingItem.id, exercise: exerciseData })).unwrap();
+            console.log('Writing exercise updated:', result);
             message.success('Cập nhật bài viết thành công');
           } else {
-            await dispatch(createWritingExercise(exerciseData)).unwrap();
+            const result = await dispatch(createWritingExercise(exerciseData)).unwrap();
+            console.log('Writing exercise created:', result);
             message.success('Thêm bài viết thành công');
           }
           break;
@@ -240,10 +252,13 @@ const ChapterContentEditor: React.FC = () => {
 
       setIsModalVisible(false);
       form.resetFields();
-      fetchData();
+
+      // Force refresh all data
+      await fetchData();
     } catch (error: any) {
-      message.error(error.message || 'Có lỗi xảy ra');
       console.error('Error saving content:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Có lỗi xảy ra';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -256,32 +271,38 @@ const ChapterContentEditor: React.FC = () => {
 
       switch (type) {
         case 'word':
-          await dispatch(deleteWord(id)).unwrap();
+          const wordResult = await dispatch(deleteWord(id)).unwrap();
+          console.log('Word deleted:', wordResult);
           message.success('Xóa từ vựng thành công');
           break;
 
         case 'grammar':
-          await dispatch(deleteGrammar(id)).unwrap();
+          const grammarResult = await dispatch(deleteGrammar(id)).unwrap();
+          console.log('Grammar deleted:', grammarResult);
           message.success('Xóa ngữ pháp thành công');
           break;
 
         case 'listening':
-          await dispatch(deleteListeningExercise(id)).unwrap();
+          const listeningResult = await dispatch(deleteListeningExercise(id)).unwrap();
+          console.log('Listening exercise deleted:', listeningResult);
           message.success('Xóa bài nghe thành công');
           break;
 
         case 'speaking':
-          await dispatch(deleteSpeakingExercise(id)).unwrap();
+          const speakingResult = await dispatch(deleteSpeakingExercise(id)).unwrap();
+          console.log('Speaking exercise deleted:', speakingResult);
           message.success('Xóa bài nói thành công');
           break;
 
         case 'reading':
-          await dispatch(deleteReadingExercise(id)).unwrap();
+          const readingResult = await dispatch(deleteReadingExercise(id)).unwrap();
+          console.log('Reading exercise deleted:', readingResult);
           message.success('Xóa bài đọc thành công');
           break;
 
         case 'writing':
-          await dispatch(deleteWritingExercise(id)).unwrap();
+          const writingResult = await dispatch(deleteWritingExercise(id)).unwrap();
+          console.log('Writing exercise deleted:', writingResult);
           message.success('Xóa bài viết thành công');
           break;
 
@@ -289,10 +310,12 @@ const ChapterContentEditor: React.FC = () => {
           throw new Error('Unknown type');
       }
 
-      fetchData();
+      // Force refresh all data
+      await fetchData();
     } catch (error: any) {
-      message.error(error.message || 'Không thể xóa');
       console.error('Error deleting content:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Không thể xóa';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }

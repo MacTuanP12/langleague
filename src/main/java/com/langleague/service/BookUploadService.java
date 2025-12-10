@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +41,7 @@ public class BookUploadService {
     private final ChatbotService chatbotService;
     private final ObjectMapper objectMapper;
     private final BookUploadMapper bookUploadMapper;
+    private final BookUploadAsyncProcessor asyncProcessor;
 
     public BookUploadService(
         BookUploadRepository bookUploadRepository,
@@ -55,7 +55,8 @@ public class BookUploadService {
         FileStorageService fileStorageService,
         ChatbotService chatbotService,
         ObjectMapper objectMapper,
-        BookUploadMapper bookUploadMapper
+        BookUploadMapper bookUploadMapper,
+        BookUploadAsyncProcessor asyncProcessor
     ) {
         this.bookUploadRepository = bookUploadRepository;
         this.bookRepository = bookRepository;
@@ -69,6 +70,7 @@ public class BookUploadService {
         this.chatbotService = chatbotService;
         this.objectMapper = objectMapper;
         this.bookUploadMapper = bookUploadMapper;
+        this.asyncProcessor = asyncProcessor;
     }
 
     /**
@@ -116,8 +118,10 @@ public class BookUploadService {
         bookUpload = bookUploadRepository.save(bookUpload);
 
         if (useAI) {
-            // Process with AI async
-            processUploadAsync(bookUpload.getId(), file);
+            // CRITICAL FIX: Call async processor from separate service
+            // This ensures @Async annotation works properly (external call through proxy)
+            // Internal calls within same class don't trigger Spring AOP proxy
+            asyncProcessor.processUploadAsync(bookUpload.getId(), file);
         } else {
             // Create book directly from manual metadata
             if (metadata == null) {
@@ -130,41 +134,10 @@ public class BookUploadService {
     }
 
     /**
-     * Process upload asynchronously
+     * REMOVED: processUploadAsync method moved to BookUploadAsyncProcessor
+     * Reason: @Async doesn't work when called from same class (internal call)
+     * See: BookUploadAsyncProcessor.processUploadAsync()
      */
-    @Async
-    public void processUploadAsync(Long uploadId, MultipartFile file) {
-        LOG.info("Starting async processing for upload ID: {}", uploadId);
-
-        try {
-            // Update status to PROCESSING
-            updateUploadStatus(uploadId, UploadStatus.PROCESSING);
-
-            // Extract book info using chatbot
-            BookExtractionDTO extractionDTO = chatbotService.extractBookInfo(file);
-            chatbotService.validateExtraction(extractionDTO);
-
-            // Save chatbot response
-            String chatbotResponse = objectMapper.writeValueAsString(extractionDTO);
-            BookUpload upload = bookUploadRepository.findById(uploadId).orElseThrow();
-            upload.setChatbotResponse(chatbotResponse);
-            bookUploadRepository.save(upload);
-
-            // Create book and chapters
-            Book createdBook = createBookFromExtraction(extractionDTO, upload);
-
-            // Update upload record
-            upload.setCreatedBook(createdBook);
-            upload.setStatus(UploadStatus.COMPLETED);
-            upload.setProcessedAt(Instant.now());
-            bookUploadRepository.save(upload);
-
-            LOG.info("Successfully processed upload ID: {}", uploadId);
-        } catch (Exception e) {
-            LOG.error("Failed to process upload ID: {}", uploadId, e);
-            handleProcessingError(uploadId, e);
-        }
-    }
 
     /**
      * Create Book and Chapters from extraction DTO
