@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  * A user.
@@ -23,6 +25,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "jhi_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+// Soft-delete: Overrides the delete command with an update statement
+@SQLDelete(sql = "UPDATE jhi_user SET deleted = true, activated = false, login = CONCAT(login, '#DELETED#', id) WHERE id = ?")
+// Soft-delete: Filters out deleted records from all queries
+@Where(clause = "deleted = false")
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,10 +62,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
-    // PERFORMANCE FIX: Changed from LONGTEXT (base64) to VARCHAR(255) (file URLs)
-    // Storing base64 images in DB bloats the table and slows queries
-    // Now only stores file paths like: /uploads/avatars/user_123_abc.jpg
-    // Default: /assets/images/default-avatar.png for new users
     @Pattern(regexp = "^(/uploads/.*|/assets/.*|https?://.*)?$", message = "Image URL must be a valid file path or HTTP(S) URL")
     @Size(max = 255)
     @Column(name = "image_url", length = 255)
@@ -98,6 +100,12 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Column(name = "locked_until")
     private Instant lockedUntil;
+
+    // --- Soft-delete field ---
+    @NotNull
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+    // -------------------------
 
     @JsonIgnore
     @ManyToMany
@@ -245,6 +253,14 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setLockedUntil(Instant lockedUntil) {
         this.lockedUntil = lockedUntil;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
