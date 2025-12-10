@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Button, Input, Row, Col, Tag, Typography, Space, Modal, Form, Select, Upload, message, Popconfirm, Image } from 'antd';
 import {

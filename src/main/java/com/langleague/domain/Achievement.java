@@ -34,6 +34,17 @@ public class Achievement implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Size(max = 50)
+    @Column(name = "criteria_type", length = 50)
+    private String criteriaType;
+
+    @Column(name = "target_value")
+    private Long targetValue;
+
+    @Size(max = 500)
+    @Column(name = "icon_url", length = 500)
+    private String iconUrl;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "achievement")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "appUser", "achievement" }, allowSetters = true)

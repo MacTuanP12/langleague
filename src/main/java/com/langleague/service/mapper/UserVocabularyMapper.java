@@ -19,10 +19,21 @@ public interface UserVocabularyMapper extends EntityMapper<UserVocabularyDTO, Us
     @Mapping(target = "word", source = "word", qualifiedByName = "wordId")
     UserVocabularyDTO toDto(UserVocabulary s);
 
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "word", ignore = true)
+    @Mapping(target = "easeFactor", ignore = true)
+    @Mapping(target = "intervalDays", ignore = true)
+    @Mapping(target = "nextReviewDate", ignore = true)
+    UserVocabulary toEntity(UserVocabularyDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "appUser", ignore = true)
-    // @Mapping(target = "lesson", ignore = true)
     @Mapping(target = "word", ignore = true)
+    @Mapping(target = "easeFactor", ignore = true)
+    @Mapping(target = "intervalDays", ignore = true)
+    @Mapping(target = "nextReviewDate", ignore = true)
     void partialUpdate(@MappingTarget UserVocabulary entity, UserVocabularyDTO dto);
 
     @Named("appUserId")
@@ -39,5 +50,10 @@ public interface UserVocabularyMapper extends EntityMapper<UserVocabularyDTO, Us
     @Named("wordId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "text", source = "text")
+    @Mapping(target = "meaning", source = "meaning")
+    @Mapping(target = "pronunciation", source = "pronunciation")
+    @Mapping(target = "partOfSpeech", source = "partOfSpeech")
+    @Mapping(target = "imageUrl", source = "imageUrl")
     WordDTO toDtoWordId(Word word);
 }

@@ -1,6 +1,6 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,15 +8,18 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.ReadingExercise} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ReadingExerciseDTO implements Serializable {
 
     private Long id;
 
-    @Lob
+    @NotBlank(message = "Passage is required")
+    @Size(max = 20000, message = "Passage cannot exceed 20000 characters")
     private String passage;
 
-    @Lob
+    @NotBlank(message = "Question is required")
+    @Size(max = 5000, message = "Question cannot exceed 5000 characters")
     private String question;
 
     @Size(max = 255)

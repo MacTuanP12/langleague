@@ -26,13 +26,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
      * Find book by ID with full details (chapters and their exercises) to prevent N+1 queries.
      * Use case: Get complete book details for learning
      */
-    @EntityGraph(attributePaths = {
-        "chapters",
-        "chapters.listeningExercises",
-        "chapters.speakingExercises",
-        "chapters.readingExercises",
-        "chapters.writingExercises"
-    })
+    @EntityGraph(
+        attributePaths = {
+            "chapters",
+            "chapters.listeningExercises",
+            "chapters.speakingExercises",
+            "chapters.readingExercises",
+            "chapters.writingExercises",
+        }
+    )
     Optional<Book> findWithFullDetailsById(Long id);
 
     /**
@@ -42,6 +44,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @EntityGraph(attributePaths = { "chapters" })
     @Query("SELECT b FROM Book b WHERE b.isActive = true")
     Page<Book> findActiveWithChapters(Pageable pageable);
+
     /**
      * Find books by title or description containing keyword (case-insensitive).
      * Use case 18: Search lessons
@@ -108,5 +111,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
      * Use case: Display only inactive books to admins
      */
     Page<Book> findByIsActiveFalse(Pageable pageable);
-
 }

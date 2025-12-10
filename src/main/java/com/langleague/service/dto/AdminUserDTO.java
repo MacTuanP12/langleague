@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.langleague.config.Constants;
 import com.langleague.domain.Authority;
 import com.langleague.domain.User;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AdminUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

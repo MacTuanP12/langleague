@@ -2,7 +2,6 @@ package com.langleague.repository;
 
 import com.langleague.domain.AppUser;
 import com.langleague.domain.User;
-
 import java.time.Instant;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.*;

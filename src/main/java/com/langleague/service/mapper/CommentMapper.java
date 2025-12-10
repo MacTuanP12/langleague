@@ -16,9 +16,15 @@ public interface CommentMapper extends EntityMapper<CommentDTO, Comment> {
     // @Mapping(target = "lesson", source = "lesson", qualifiedByName = "lessonId")
     CommentDTO toDto(Comment s);
 
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "chapter", ignore = true)
+    Comment toEntity(CommentDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "appUser", ignore = true)
-    // @Mapping(target = "lesson", ignore = true)
+    @Mapping(target = "chapter", ignore = true)
     void partialUpdate(@MappingTarget Comment entity, CommentDTO dto);
 
     @Named("appUserId")

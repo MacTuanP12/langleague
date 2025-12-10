@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.langleague.domain.enumeration.LearningStatus;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.UserChapter} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserChapterDTO implements Serializable {
 
     private Long id;
@@ -32,6 +34,8 @@ public class UserChapterDTO implements Serializable {
     private ChapterDTO chapter;
 
     // Extended fields for display
+    private Long chapterId;
+
     private String chapterTitle;
 
     private Integer chapterOrderIndex;
@@ -119,6 +123,14 @@ public class UserChapterDTO implements Serializable {
 
     public void setChapter(ChapterDTO chapter) {
         this.chapter = chapter;
+    }
+
+    public Long getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Long chapterId) {
+        this.chapterId = chapterId;
     }
 
     public String getChapterTitle() {

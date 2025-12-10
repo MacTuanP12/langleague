@@ -48,7 +48,7 @@ const BookList: React.FC = () => {
                     <div
                       style={{
                         height: 200,
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        background: 'linear-gradient(135deg, #58CC02 0%, #46A302 100%)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

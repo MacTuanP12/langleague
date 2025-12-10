@@ -1,5 +1,8 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -7,11 +10,14 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.ChapterProgress} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ChapterProgressDTO implements Serializable {
 
     private Long id;
 
+    @Min(value = 0, message = "Percent must be at least 0")
+    @Max(value = 100, message = "Percent cannot exceed 100")
     private Integer percent;
 
     private Instant lastAccessed;

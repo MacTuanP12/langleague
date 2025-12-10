@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -7,6 +8,7 @@ import java.time.Instant;
  * A DTO for user's chapters with progress information.
  * Used to display "My Chapters" page showing chapters user has saved and is learning.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MyChapterDTO implements Serializable {
 
     private Long chapterId;

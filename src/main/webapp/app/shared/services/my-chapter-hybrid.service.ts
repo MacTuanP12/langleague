@@ -95,9 +95,9 @@ export const removeChapter = (chapterId: number) => {
   return axios.delete(`${API_URL_SAVED}/${chapterId}`);
 };
 
-// Toggle favorite - calls the correct backend endpoint
+// Toggle favorite - calls the UserChapter endpoint for saved chapters
 export const toggleFavorite = (chapterId: number) => {
-  return axios.put<boolean>(`/api/favorites/chapter/${chapterId}/toggle`);
+  return axios.put<UserChapterDTO>(`${API_URL_SAVED}/${chapterId}/favorite`);
 };
 
 // Update notes

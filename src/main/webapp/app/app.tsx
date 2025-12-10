@@ -15,7 +15,11 @@ const App = () => {
       theme={{
         algorithm: themeMode === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
         token: {
-          colorPrimary: '#667eea',
+          colorPrimary: '#58CC02',
+          colorSuccess: '#58CC02',
+          colorWarning: '#FFC800',
+          colorError: '#FF4B4B',
+          colorInfo: '#1CB0F6',
           borderRadius: 8,
         },
       }}

@@ -57,7 +57,6 @@
     <include file="config/liquibase/changelog/20251125000015_entity_user_vocabulary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251125000016_entity_user_grammar.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251125000018_entity_chapter_progress.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20251210000001_add_version_columns.xml" relativeToChangelogFile="false"/>
 
     <!-- ========================================= -->
     <!-- 6. GAMIFICATION DOMAIN                   -->

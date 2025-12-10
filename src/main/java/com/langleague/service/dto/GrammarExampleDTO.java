@@ -1,26 +1,32 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A DTO for the {@link com.langleague.domain.GrammarExample} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class GrammarExampleDTO implements Serializable {
 
     private Long id;
 
-    @Lob
+    @NotBlank(message = "Example text is required")
+    @Size(max = 2000, message = "Example text cannot exceed 2000 characters")
     private String exampleText;
 
-    @Lob
+    @Size(max = 2000, message = "Translation cannot exceed 2000 characters")
     private String translation;
 
-    @Lob
+    @Size(max = 5000, message = "Explanation cannot exceed 5000 characters")
     private String explanation;
 
+    @NotNull(message = "Grammar is required")
     private GrammarDTO grammar;
 
     public Long getId() {

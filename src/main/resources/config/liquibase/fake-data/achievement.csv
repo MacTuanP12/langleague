@@ -1,8 +1,8 @@
-id;title;description
-1;First Steps;Complete your first lesson
-2;Vocabulary Master;Learn 50 new words
-3;Week Warrior;Study for 7 days straight
-4;Grammar Guru;Master 10 grammar rules
-5;Conversation King;Complete 20 speaking exercises
-6;Reading Champion;Finish 3 reading exercises
+id;title;description;criteria_type;target_value;icon_url
+1;First Steps;Complete your first lesson;LESSONS;1;/images/achievements/first-steps.png
+2;Vocabulary Master;Learn 50 new words;VOCABULARY;50;/images/achievements/vocab-master.png
+3;Week Warrior;Study for 7 days straight;STREAK;7;/images/achievements/week-warrior.png
+4;Grammar Guru;Master 10 grammar rules;GRAMMAR;10;/images/achievements/grammar-guru.png
+5;Conversation King;Complete 20 speaking exercises;SPEAKING;20;/images/achievements/conversation-king.png
+6;Reading Champion;Finish 3 reading exercises;READING;3;/images/achievements/reading-champion.png
 

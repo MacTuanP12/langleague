@@ -1,6 +1,6 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.Achievement} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class AchievementDTO implements Serializable {
 
@@ -17,7 +18,7 @@ public class AchievementDTO implements Serializable {
     @Size(max = 255)
     private String title;
 
-    @Lob
+    @Size(max = 2000, message = "Description cannot exceed 2000 characters")
     private String description;
 
     public Long getId() {

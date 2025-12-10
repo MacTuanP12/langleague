@@ -1,5 +1,7 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import java.io.Serializable;
@@ -9,6 +11,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.StudySession} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class StudySessionDTO implements Serializable {
 
@@ -21,6 +24,7 @@ public class StudySessionDTO implements Serializable {
     @PastOrPresent(message = "End time cannot be in the future")
     private Instant endAt;
 
+    @Min(value = 0, message = "Duration must be at least 0")
     private Integer durationMinutes;
 
     private AppUserDTO appUser;

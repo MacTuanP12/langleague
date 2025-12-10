@@ -31,17 +31,12 @@ public class GamificationListener {
 
         try {
             // 1. Tính toán thành tích (Achievements)
-            achievementService.checkAndAwardAchievements(
-                event.getUserId(),
-                event.getExerciseType(),
-                event.getScore()
-            );
+            achievementService.checkAndAwardAchievements(event.getUserId(), event.getExerciseType(), event.getScore());
 
             // 2. Cập nhật tiến độ sách (Book Progress)
             if (event.getBookId() != null) {
                 userBookService.autoUpdateBookProgress(event.getBookId(), event.getUserId());
             }
-
         } catch (Exception e) {
             log.error("Error in background gamification task: {}", e.getMessage(), e);
         }

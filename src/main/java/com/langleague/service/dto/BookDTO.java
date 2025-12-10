@@ -1,7 +1,7 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.langleague.domain.enumeration.Level;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.Book} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class BookDTO implements Serializable {
 
@@ -21,7 +22,6 @@ public class BookDTO implements Serializable {
     @NotNull
     private Level level;
 
-    @Lob
     @Size(max = 5000, message = "Description cannot exceed 5000 characters")
     private String description;
 

@@ -1,10 +1,12 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 
 /**
  * A DTO for vocabulary statistics.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VocabularyStatisticsDTO implements Serializable {
 
     private Long totalWords;

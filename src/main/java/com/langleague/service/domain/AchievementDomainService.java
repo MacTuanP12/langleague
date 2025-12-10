@@ -92,7 +92,8 @@ public class AchievementDomainService {
                 userAchievementRepository.save(userAch);
                 newlyUnlocked.add(userAch);
 
-                LOG.info("🎉 Achievement unlocked! User: {} | Achievement: {} | Progress: {}/{}",
+                LOG.info(
+                    "🎉 Achievement unlocked! User: {} | Achievement: {} | Progress: {}/{}",
                     userLogin,
                     achievement.getTitle(), // Use getTitle() instead of getName()
                     currentValue,
@@ -104,10 +105,7 @@ public class AchievementDomainService {
             } else if (userAch.isLocked()) {
                 // Save progress even if not unlocked yet
                 userAchievementRepository.save(userAch);
-                LOG.debug("Progress updated: {} | {}% complete",
-                    achievement.getTitle(),
-                    userAch.getProgressPercent()
-                );
+                LOG.debug("Progress updated: {} | {}% complete", achievement.getTitle(), userAch.getProgressPercent());
             }
         }
 
@@ -123,7 +121,8 @@ public class AchievementDomainService {
      */
     @Transactional(readOnly = true)
     public List<UserAchievement> getAchievementProgress(String userLogin) {
-        AppUser appUser = appUserRepository.findByInternalUser_Login(userLogin)
+        AppUser appUser = appUserRepository
+            .findByInternalUser_Login(userLogin)
             .orElseThrow(() -> new IllegalArgumentException("AppUser not found: " + userLogin));
 
         // Get all user achievements (includes locked and unlocked)
@@ -141,4 +140,3 @@ public class AchievementDomainService {
         return userAchievements;
     }
 }
-

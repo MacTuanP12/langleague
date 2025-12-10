@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
 import { ISpeakingExercise } from 'app/shared/model/models';
-import FocusLayout from 'app/shared/layout/FocusLayout';
+import { colors, spacing, borderRadius, shadows, typography, cardBaseStyle, pageContainerStyle } from 'app/shared/styles/design-system';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -129,42 +129,44 @@ const SpeakingExercise: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: 900, margin: '0 auto', background: '#f0f2f5', minHeight: '100vh' }}>
+    <div
+      className="speaking-exercise-container"
+      style={{
+        ...pageContainerStyle,
+        maxWidth: 900,
+        margin: '0 auto',
+        padding: undefined,
+      }}
+    >
       {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
+      <div style={{ marginBottom: spacing.lg }}>
         <Button icon={<LeftOutlined />} onClick={handleBack} type="text" size="large">
           Quay lại
         </Button>
       </div>
 
-      <Card
-        style={{
-          borderRadius: '16px',
-          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.1)',
-          border: '2px solid rgba(102, 126, 234, 0.1)',
-        }}
-      >
+      <Card style={{ ...cardBaseStyle }}>
         {/* Exercise Header */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <div style={{ textAlign: 'center', marginBottom: spacing.xl }}>
           <div
             style={{
               width: '80px',
               height: '80px',
-              background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
-              borderRadius: '50%',
+              background: colors.error,
+              borderRadius: borderRadius.full,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 20px',
-              boxShadow: '0 4px 12px rgba(255, 107, 107, 0.3)',
+              margin: `0 auto ${spacing.lg}`,
+              boxShadow: '0 4px 12px rgba(255, 75, 75, 0.3)',
             }}
           >
-            <AudioOutlined style={{ fontSize: '40px', color: '#fff' }} />
+            <AudioOutlined style={{ fontSize: '40px', color: '#FFFFFF' }} />
           </div>
-          <Title level={2} style={{ marginBottom: '8px', color: '#1a1a1a' }}>
+          <Title level={2} style={{ marginBottom: spacing.sm, color: colors.text.primary }}>
             Bài tập Luyện nói
           </Title>
-          <Text type="secondary" style={{ fontSize: '16px' }}>
+          <Text type="secondary" style={{ fontSize: typography.fontSize.md, color: colors.text.secondary }}>
             Luyện phát âm và diễn đạt tiếng Hàn
           </Text>
         </div>
@@ -172,38 +174,40 @@ const SpeakingExercise: React.FC = () => {
         {/* Instructions */}
         <Card
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.05) 0%, rgba(238, 90, 111, 0.05) 100%)',
-            border: '2px solid rgba(255, 107, 107, 0.2)',
-            borderRadius: '12px',
-            marginBottom: '32px',
+            background: colors.background.secondary,
+            border: `2px solid ${colors.border.light}`,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.xl,
           }}
         >
-          <Title level={4} style={{ marginBottom: '16px', color: '#1a1a1a' }}>
-            <SoundOutlined style={{ marginRight: '8px', color: '#ff6b6b' }} />
+          <Title level={4} style={{ marginBottom: spacing.md, color: colors.text.primary }}>
+            <SoundOutlined style={{ marginRight: spacing.sm, color: colors.error }} />
             Yêu cầu:
           </Title>
-          <Paragraph style={{ fontSize: '16px', lineHeight: '1.8', color: '#262626', marginBottom: '16px' }}>{exercise.prompt}</Paragraph>
+          <Paragraph style={{ fontSize: typography.fontSize.md, lineHeight: '1.8', color: colors.text.primary, marginBottom: spacing.md }}>
+            {exercise.prompt}
+          </Paragraph>
 
-          <Divider style={{ margin: '20px 0' }} />
+          <Divider style={{ margin: `${spacing.md} 0` }} />
 
           <div>
-            <Text strong style={{ fontSize: '14px', color: '#8c8c8c' }}>
+            <Text strong style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
               Cụm từ mục tiêu:
             </Text>
             <div
               style={{
-                marginTop: '12px',
-                padding: '16px',
-                background: 'white',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 107, 107, 0.3)',
+                marginTop: spacing.md,
+                padding: spacing.md,
+                background: colors.background.primary,
+                borderRadius: borderRadius.sm,
+                border: `1px solid ${colors.border.light}`,
               }}
             >
               <Text
                 style={{
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#ff6b6b',
+                  fontSize: typography.fontSize.xl,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.error,
                   fontFamily: "'Noto Sans KR', sans-serif",
                 }}
               >
@@ -217,16 +221,16 @@ const SpeakingExercise: React.FC = () => {
         {exercise.sampleAudio && (
           <Card
             style={{
-              background: 'rgba(102, 126, 234, 0.05)',
-              border: '1px solid rgba(102, 126, 234, 0.2)',
-              borderRadius: '12px',
-              marginBottom: '32px',
+              background: colors.background.secondary,
+              border: `1px solid ${colors.border.light}`,
+              borderRadius: borderRadius.md,
+              marginBottom: spacing.xl,
             }}
           >
             <Row align="middle" justify="space-between">
               <Col>
-                <Text strong style={{ fontSize: '15px' }}>
-                  <PlayCircleOutlined style={{ marginRight: '8px', color: '#667eea' }} />
+                <Text strong style={{ fontSize: typography.fontSize.base }}>
+                  <PlayCircleOutlined style={{ marginRight: spacing.sm, color: colors.primary.DEFAULT }} />
                   Audio mẫu - Nghe để tham khảo cách phát âm
                 </Text>
               </Col>
@@ -237,9 +241,9 @@ const SpeakingExercise: React.FC = () => {
                   onClick={handlePlaySample}
                   loading={samplePlaying}
                   style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: colors.primary.gradient,
                     border: 'none',
-                    borderRadius: '20px',
+                    borderRadius: borderRadius.full,
                   }}
                 >
                   {samplePlaying ? 'Đang phát...' : 'Nghe mẫu'}
@@ -252,10 +256,10 @@ const SpeakingExercise: React.FC = () => {
         {/* Recording Section */}
         <Card
           style={{
-            background: isRecording ? 'rgba(255, 107, 107, 0.05)' : 'rgba(102, 126, 234, 0.05)',
-            border: `2px solid ${isRecording ? 'rgba(255, 107, 107, 0.3)' : 'rgba(102, 126, 234, 0.2)'}`,
-            borderRadius: '12px',
-            marginBottom: '32px',
+            background: isRecording ? `rgba(255, 75, 75, 0.05)` : colors.background.secondary,
+            border: `2px solid ${isRecording ? colors.error : colors.border.light}`,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.xl,
             textAlign: 'center',
           }}
         >
@@ -263,11 +267,18 @@ const SpeakingExercise: React.FC = () => {
             {/* Recording Timer */}
             {isRecording && (
               <div>
-                <Tag color="red" style={{ fontSize: '16px', padding: '8px 16px' }}>
+                <Tag color="red" style={{ fontSize: typography.fontSize.md, padding: `${spacing.sm} ${spacing.md}` }}>
                   ⏺ Đang ghi âm...
                 </Tag>
-                <div style={{ marginTop: '12px' }}>
-                  <Text style={{ fontSize: '32px', fontWeight: 600, fontFamily: 'monospace', color: '#ff6b6b' }}>
+                <div style={{ marginTop: spacing.md }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.xxxl,
+                      fontWeight: typography.fontWeight.semibold,
+                      fontFamily: 'monospace',
+                      color: colors.error,
+                    }}
+                  >
                     {formatTime(recordingTime)}
                   </Text>
                 </div>
@@ -279,21 +290,19 @@ const SpeakingExercise: React.FC = () => {
               style={{
                 width: '100px',
                 height: '100px',
-                background: isRecording
-                  ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
-                  : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                borderRadius: '50%',
+                background: isRecording ? colors.error : colors.primary.gradient,
+                borderRadius: borderRadius.full,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto',
-                boxShadow: isRecording ? '0 8px 24px rgba(255, 107, 107, 0.4)' : '0 8px 24px rgba(102, 126, 234, 0.3)',
+                boxShadow: isRecording ? '0 8px 24px rgba(255, 75, 75, 0.4)' : shadows.primary,
                 animation: isRecording ? 'pulse 1.5s infinite' : 'none',
                 cursor: 'pointer',
               }}
               onClick={isRecording ? handleStopRecording : handleStartRecording}
             >
-              <AudioOutlined style={{ fontSize: '48px', color: '#fff' }} />
+              <AudioOutlined style={{ fontSize: '48px', color: '#FFFFFF' }} />
             </div>
 
             {/* Recording Button */}
@@ -305,19 +314,19 @@ const SpeakingExercise: React.FC = () => {
                 onClick={isRecording ? handleStopRecording : handleStartRecording}
                 style={{
                   height: '48px',
-                  fontSize: '16px',
-                  borderRadius: '24px',
-                  padding: '0 40px',
-                  background: isRecording ? undefined : 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+                  fontSize: typography.fontSize.md,
+                  borderRadius: borderRadius.full,
+                  padding: `0 ${spacing.xxl}`,
+                  background: isRecording ? undefined : colors.error,
                   border: isRecording ? undefined : 'none',
-                  fontWeight: 600,
+                  fontWeight: typography.fontWeight.semibold,
                 }}
               >
                 {isRecording ? '⏹ Dừng ghi âm' : '🎤 Bắt đầu ghi âm'}
               </Button>
             )}
 
-            <Text type="secondary" style={{ fontSize: '14px' }}>
+            <Text type="secondary" style={{ fontSize: typography.fontSize.base }}>
               {isRecording ? 'Nhấn nút để dừng ghi âm' : 'Nhấn nút và bắt đầu nói'}
             </Text>
           </Space>
@@ -331,7 +340,7 @@ const SpeakingExercise: React.FC = () => {
             type="success"
             showIcon
             icon={<CheckCircleOutlined />}
-            style={{ marginBottom: '24px', borderRadius: '12px' }}
+            style={{ marginBottom: spacing.lg, borderRadius: borderRadius.md }}
           />
         )}
 
@@ -347,11 +356,11 @@ const SpeakingExercise: React.FC = () => {
                 disabled={recordingTime === 0}
                 style={{
                   height: '48px',
-                  fontSize: '16px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  fontSize: typography.fontSize.md,
+                  borderRadius: borderRadius.md,
+                  background: colors.primary.gradient,
                   border: 'none',
-                  fontWeight: 600,
+                  fontWeight: typography.fontWeight.semibold,
                 }}
               >
                 Nộp bài
@@ -360,7 +369,16 @@ const SpeakingExercise: React.FC = () => {
           ) : (
             <>
               <Col span={12}>
-                <Button size="large" onClick={handleRetry} block style={{ height: '48px', fontSize: '16px', borderRadius: '12px' }}>
+                <Button
+                  size="large"
+                  onClick={handleRetry}
+                  block
+                  style={{
+                    height: '48px',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                  }}
+                >
                   Làm lại
                 </Button>
               </Col>
@@ -372,9 +390,9 @@ const SpeakingExercise: React.FC = () => {
                   block
                   style={{
                     height: '48px',
-                    fontSize: '16px',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #52c41a 0%, #73d13d 100%)',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                    background: colors.primary.gradient,
                     border: 'none',
                   }}
                 >
@@ -388,16 +406,16 @@ const SpeakingExercise: React.FC = () => {
         {/* Score Info */}
         <div
           style={{
-            marginTop: '24px',
-            padding: '16px',
-            background: 'rgba(255, 107, 107, 0.05)',
-            borderRadius: '12px',
+            marginTop: spacing.lg,
+            padding: spacing.md,
+            background: colors.background.secondary,
+            borderRadius: borderRadius.md,
             textAlign: 'center',
           }}
         >
           <Text type="secondary">
             Điểm tối đa:{' '}
-            <Text strong style={{ color: '#ff6b6b' }}>
+            <Text strong style={{ color: colors.error }}>
               {exercise.maxScore} điểm
             </Text>
           </Text>
@@ -409,15 +427,15 @@ const SpeakingExercise: React.FC = () => {
           @keyframes pulse {
             0% {
               transform: scale(1);
-              box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+              box-shadow: 0 8px 24px rgba(255, 75, 75, 0.4);
             }
             50% {
               transform: scale(1.05);
-              box-shadow: 0 12px 32px rgba(255, 107, 107, 0.6);
+              box-shadow: 0 12px 32px rgba(255, 75, 75, 0.6);
             }
             100% {
               transform: scale(1);
-              box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+              box-shadow: 0 8px 24px rgba(255, 75, 75, 0.4);
             }
           }
         `}

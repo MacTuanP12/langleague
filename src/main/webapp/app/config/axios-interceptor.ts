@@ -47,6 +47,15 @@ const setupAxiosInterceptors = onUnauthenticated => {
     if (status === 401 && !config._retry) {
       const isAuthCheck = url.includes('/api/account') || url.includes('/api/authenticate');
 
+      // Check if this is a background/silent request that shouldn't trigger redirect
+      const isSilentRequest = config.headers?.['X-Silent-Request'] === 'true';
+
+      // Don't redirect for silent requests - let the caller handle the error
+      if (isSilentRequest) {
+        console.debug('Silent request failed with 401, not redirecting');
+        return Promise.reject(err instanceof Error ? err : new Error(String(err)));
+      }
+
       if (isAuthCheck) {
         // Auth endpoint failed - redirect to login
         console.warn('Authentication failed, redirecting to login');

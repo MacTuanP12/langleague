@@ -1,5 +1,6 @@
 package com.langleague.service;
 
+import com.langleague.domain.AppUser;
 import com.langleague.domain.Notification;
 import com.langleague.domain.User;
 import com.langleague.repository.AppUserRepository;
@@ -257,21 +258,19 @@ public class NotificationService {
 
                 sentCount++;
                 LOG.debug("Sent daily reminder to user: {}", user.getLogin());
-
             } catch (Exception e) {
                 LOG.error("Error sending daily reminder to user {}: {}", user.getLogin(), e.getMessage());
             }
         }
 
-        LOG.info("Daily reminder job completed. Sent: {}, Skipped: {}, Total: {}",
-                 sentCount, skippedCount, allUsers.size());
+        LOG.info("Daily reminder job completed. Sent: {}, Skipped: {}, Total: {}", sentCount, skippedCount, allUsers.size());
     }
 
     /**
      * Send daily reminder email to user
      */
     @Async
-    private void sendDailyReminderEmail(User user) {
+    protected void sendDailyReminderEmail(User user) {
         try {
             if (mailService != null && user.getEmail() != null) {
                 // Use MailService to send email

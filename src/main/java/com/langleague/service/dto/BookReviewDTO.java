@@ -1,7 +1,7 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +14,7 @@ import java.util.Objects;
  * A DTO for the {@link com.langleague.domain.BookReview} entity.
  */
 @Schema(description = "Đánh giá sách")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class BookReviewDTO implements Serializable {
 
@@ -27,7 +28,7 @@ public class BookReviewDTO implements Serializable {
     @Size(max = 255)
     private String title;
 
-    @Lob
+    @Size(max = 5000, message = "Content cannot exceed 5000 characters")
     private String content;
 
     private Instant createdAt;

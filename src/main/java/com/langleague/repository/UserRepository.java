@@ -46,11 +46,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Active = modified within last N days AND activated = true
      * Note: Using lastModifiedDate as proxy for user activity
      */
-    @Query("SELECT u FROM User u WHERE u.activated = true " +
-           "AND u.lastModifiedDate >= :sinceDate " +
-           "ORDER BY u.id")
-    Page<User> findActiveUsersForReminder(
-        @Param("sinceDate") Instant sinceDate,
-        Pageable pageable
-    );
+    @Query("SELECT u FROM User u WHERE u.activated = true " + "AND u.lastModifiedDate >= :sinceDate " + "ORDER BY u.id")
+    Page<User> findActiveUsersForReminder(@Param("sinceDate") Instant sinceDate, Pageable pageable);
 }

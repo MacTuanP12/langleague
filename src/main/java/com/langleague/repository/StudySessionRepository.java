@@ -56,9 +56,11 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
     @Query("SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s WHERE s.startAt BETWEEN :startDate AND :endDate")
     Integer countDistinctUsersBySessionDateBetween(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 
-    @Query("SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s " +
-           "WHERE s.appUser.internalUser.createdDate BETWEEN :regStart AND :regEnd " +
-           "AND s.startAt > :activeAfter")
+    @Query(
+        "SELECT COUNT(DISTINCT s.appUser.id) FROM StudySession s " +
+            "WHERE s.appUser.internalUser.createdDate BETWEEN :regStart AND :regEnd " +
+            "AND s.startAt > :activeAfter"
+    )
     Long countDistinctUsersRegisteredBetweenAndActiveAfter(
         @Param("regStart") Instant regStart,
         @Param("regEnd") Instant regEnd,
@@ -69,14 +71,18 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
      * PERFORMANCE OPTIMIZED: Calculate average session duration using database aggregation.
      * Returns average duration in seconds. This query runs entirely in DB, not in Java.
      */
-    @Query(value = "SELECT AVG(TIMESTAMPDIFF(SECOND, start_at, end_at)) as avg_duration " +
-           "FROM study_session " +
-           "WHERE start_at BETWEEN :startDate AND :endDate AND end_at IS NOT NULL",
-           nativeQuery = true)
+    @Query(
+        value = "SELECT AVG(TIMESTAMPDIFF(SECOND, start_at, end_at)) as avg_duration " +
+            "FROM study_session " +
+            "WHERE start_at BETWEEN :startDate AND :endDate AND end_at IS NOT NULL",
+        nativeQuery = true
+    )
     Double findAvgDurationByDateRangeNative(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 
-    @Query("SELECT AVG(TIMESTAMPDIFF(SECOND, s.startAt, s.endAt)) FROM StudySession s " +
-           "WHERE s.startAt BETWEEN :startDate AND :endDate AND s.endAt IS NOT NULL")
+    @Query(
+        "SELECT AVG(TIMESTAMPDIFF(SECOND, s.startAt, s.endAt)) FROM StudySession s " +
+            "WHERE s.startAt BETWEEN :startDate AND :endDate AND s.endAt IS NOT NULL"
+    )
     List<Object[]> findAvgDurationByDateRange(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 
     /**
@@ -87,13 +93,8 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
     /**
      * Count study sessions today (for analytics)
      */
-    @Query("SELECT COUNT(s) FROM StudySession s " +
-           "WHERE s.appUser.internalUser.id = :userId " +
-           "AND s.startAt >= :todayStart")
-    long countTodayStudySessions(
-        @Param("userId") Long userId,
-        @Param("todayStart") Instant todayStart
-    );
+    @Query("SELECT COUNT(s) FROM StudySession s " + "WHERE s.appUser.internalUser.id = :userId " + "AND s.startAt >= :todayStart")
+    long countTodayStudySessions(@Param("userId") Long userId, @Param("todayStart") Instant todayStart);
 
     /**
      * Count total study sessions for user - optimized query

@@ -5,6 +5,12 @@ import com.langleague.domain.User;
 import com.langleague.repository.NotificationRepository;
 import com.langleague.repository.StudySessionRepository;
 import com.langleague.repository.UserRepository;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,13 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Smart Daily Reminder Job - Cải tiến version
@@ -96,10 +95,8 @@ public class SmartDailyReminderJob {
                     // Create personalized notification
                     Notification notification = createPersonalizedNotification(user, context);
                     notifications.add(notification);
-
                 } catch (Exception e) {
-                    log.error("❌ Error creating reminder for user {}: {}",
-                        user.getLogin(), e.getMessage());
+                    log.error("❌ Error creating reminder for user {}: {}", user.getLogin(), e.getMessage());
                 }
             }
 
@@ -107,17 +104,14 @@ public class SmartDailyReminderJob {
             if (!notifications.isEmpty()) {
                 notificationRepository.saveAll(notifications);
                 totalReminders += notifications.size();
-                log.info("✅ Created {} reminders for batch {} (page size: {})",
-                    notifications.size(), page, userPage.getContent().size());
+                log.info("✅ Created {} reminders for batch {} (page size: {})", notifications.size(), page, userPage.getContent().size());
             }
 
             page++;
-
         } while (userPage.hasNext());
 
         log.info("🎉 Smart Daily Reminder Job completed!");
-        log.info("📊 Stats: {} reminders created, {} users skipped (already studied)",
-            totalReminders, totalSkipped);
+        log.info("📊 Stats: {} reminders created, {} users skipped (already studied)", totalReminders, totalSkipped);
     }
 
     /**
@@ -188,60 +182,57 @@ public class SmartDailyReminderJob {
         if (streak != null && streak >= 3) {
             title = String.format("🔥 Giữ vững streak %d ngày!", streak);
             message = String.format(
-                "Chào %s! Chuỗi %d ngày liên tiếp của bạn đang nóng hổi! 🔥\n" +
-                "Hãy tiếp tục học 5 phút để giữ streak nhé! 💪",
-                name, streak
+                "Chào %s! Chuỗi %d ngày liên tiếp của bạn đang nóng hổi! 🔥\n" + "Hãy tiếp tục học 5 phút để giữ streak nhé! 💪",
+                name,
+                streak
             );
         }
         // Priority 2: Close to daily goal 🎯
-        else if (points != null && dailyGoal != null &&
-                 points > 0 && points >= dailyGoal * 0.7 && points < dailyGoal) {
+        else if (points != null && dailyGoal != null && points > 0 && points >= dailyGoal * 0.7 && points < dailyGoal) {
             int remaining = dailyGoal - points;
             title = "🎯 Gần đạt mục tiêu rồi!";
             message = String.format(
-                "Chào %s! Bạn đã đạt %d/%d XP hôm nay! 🎯\n" +
-                "Chỉ cần %d XP nữa để hoàn thành mục tiêu! ⭐",
-                name, points, dailyGoal, remaining
+                "Chào %s! Bạn đã đạt %d/%d XP hôm nay! 🎯\n" + "Chỉ cần %d XP nữa để hoàn thành mục tiêu! ⭐",
+                name,
+                points,
+                dailyGoal,
+                remaining
             );
         }
         // Priority 3: Has started today but not much
         else if (points != null && points > 0 && points < dailyGoal) {
             title = "💪 Cố lên, bạn đã bắt đầu rồi!";
             message = String.format(
-                "Chào %s! Bạn đã có %d XP hôm nay! 🌟\n" +
-                "Hãy tiếp tục để đạt mục tiêu %d XP nhé! 💪",
-                name, points, dailyGoal
+                "Chào %s! Bạn đã có %d XP hôm nay! 🌟\n" + "Hãy tiếp tục để đạt mục tiêu %d XP nhé! 💪",
+                name,
+                points,
+                dailyGoal
             );
         }
         // Priority 4: New streak opportunity
         else if (streak != null && streak == 1) {
             title = "🎯 Bắt đầu chuỗi mới!";
-            message = String.format(
-                "Chào %s! Hôm qua bạn đã học! 🎉\n" +
-                "Hãy học tiếp hôm nay để bắt đầu streak mới nhé! 🔥",
-                name
-            );
+            message = String.format("Chào %s! Hôm qua bạn đã học! 🎉\n" + "Hãy học tiếp hôm nay để bắt đầu streak mới nhé! 🔥", name);
         }
         // Default: Generic but friendly
         else {
             title = "⏰ Nhắc nhở học tập";
             message = String.format(
-                "Chào %s! Đừng quên dành vài phút học tiếng Hàn hôm nay nhé! 📚\n" +
-                "Kiến thức được tích lũy từng ngày! 💪",
+                "Chào %s! Đừng quên dành vài phút học tiếng Hàn hôm nay nhé! 📚\n" + "Kiến thức được tích lũy từng ngày! 💪",
                 name
             );
         }
 
-        return new String[]{title, message};
+        return new String[] { title, message };
     }
 
     /**
      * DTO for learning context
      */
     private static class LearningContextDTO {
+
         Integer streak;
         Integer todayPoints;
         Integer dailyGoal;
     }
 }
-

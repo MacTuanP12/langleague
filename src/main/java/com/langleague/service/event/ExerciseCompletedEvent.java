@@ -53,13 +53,19 @@ public class ExerciseCompletedEvent extends ApplicationEvent {
 
     @Override
     public String toString() {
-        return "ExerciseCompletedEvent{" +
-            "userId=" + userId +
-            ", exerciseResultId=" + exerciseResultId +
-            ", exerciseType=" + exerciseType +
-            ", score=" + score +
-            ", bookId=" + bookId +
-            '}';
+        return (
+            "ExerciseCompletedEvent{" +
+            "userId=" +
+            userId +
+            ", exerciseResultId=" +
+            exerciseResultId +
+            ", exerciseType=" +
+            exerciseType +
+            ", score=" +
+            score +
+            ", bookId=" +
+            bookId +
+            '}'
+        );
     }
 }
-

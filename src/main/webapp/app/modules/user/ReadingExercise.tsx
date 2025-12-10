@@ -1,11 +1,11 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Card, Button, Typography, Space, Radio, Row, Col, Alert, message, Spin, Divider } from 'antd';
-import { ReadOutlined, CheckCircleOutlined, CloseCircleOutlined, BookOutlined } from '@ant-design/icons';
+import { ReadOutlined, CheckCircleOutlined, CloseCircleOutlined, BookOutlined, LeftOutlined } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
 import { IReadingExercise } from 'app/shared/model/models';
-import FocusLayout from 'app/shared/layout/FocusLayout';
+import { colors, spacing, borderRadius, shadows, typography, cardBaseStyle, pageContainerStyle } from 'app/shared/styles/design-system';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -86,9 +86,6 @@ const ReadingExercise: React.FC = () => {
     navigate(-1);
   };
 
-  // Calculate progress
-  const currentProgress = isSubmitted ? (isCorrect ? 100 : 50) : selectedAnswer ? 50 : 0;
-
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -116,270 +113,290 @@ const ReadingExercise: React.FC = () => {
   ];
 
   return (
-    <FocusLayout title={`Bài tập Đọc: ${exercise?.id || ''}`} progress={currentProgress} onExit={handleBack}>
-      <div className="max-w-3xl mx-auto">
-        <Card
-          style={{
-            borderRadius: '16px',
-            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.1)',
-            border: '2px solid rgba(102, 126, 234, 0.1)',
-          }}
-        >
-          {/* Exercise Header */}
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div
-              style={{
-                width: '80px',
-                height: '80px',
-                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 20px',
-                boxShadow: '0 4px 12px rgba(79, 172, 254, 0.3)',
-              }}
-            >
-              <BookOutlined style={{ fontSize: '40px', color: '#fff' }} />
-            </div>
-            <Title level={2} style={{ marginBottom: '8px', color: '#1a1a1a' }}>
-              Bài tập Luyện đọc
-            </Title>
-            <Text type="secondary" style={{ fontSize: '16px' }}>
-              Đọc hiểu đoạn văn tiếng Hàn
-            </Text>
-          </div>
+    <div
+      className="reading-exercise-container"
+      style={{
+        ...pageContainerStyle,
+        maxWidth: 900,
+        margin: '0 auto',
+        padding: undefined,
+      }}
+    >
+      {/* Header */}
+      <div style={{ marginBottom: spacing.lg }}>
+        <Button icon={<LeftOutlined />} onClick={handleBack} type="text" size="large">
+          Quay lại
+        </Button>
+      </div>
 
-          {/* Reading Passage */}
-          <Card
-            style={{
-              background: 'linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(0, 242, 254, 0.05) 100%)',
-              border: '2px solid rgba(79, 172, 254, 0.2)',
-              borderRadius: '12px',
-              marginBottom: '32px',
-            }}
-          >
-            <div style={{ marginBottom: '16px' }}>
-              <ReadOutlined style={{ fontSize: '20px', color: '#4facfe', marginRight: '8px' }} />
-              <Text strong style={{ fontSize: '16px', color: '#1a1a1a' }}>
-                Đoạn văn:
-              </Text>
-            </div>
-            <div
-              style={{
-                padding: '24px',
-                background: 'white',
-                borderRadius: '8px',
-                border: '1px solid rgba(79, 172, 254, 0.2)',
-              }}
-            >
-              <Paragraph
-                style={{
-                  fontSize: '18px',
-                  lineHeight: '2',
-                  color: '#262626',
-                  fontFamily: "'Noto Sans KR', sans-serif",
-                  marginBottom: 0,
-                }}
-              >
-                {exercise.passage}
-              </Paragraph>
-            </div>
-
-            <Divider style={{ margin: '20px 0' }} />
-
-            {/* Translation Helper */}
-            <div
-              style={{
-                padding: '16px',
-                background: 'rgba(79, 172, 254, 0.05)',
-                borderRadius: '8px',
-              }}
-            >
-              <Text type="secondary" style={{ fontSize: '14px', fontStyle: 'italic' }}>
-                💡 <Text strong>Dịch nghĩa:</Text> Kim Ji-young đã gặp anh ấy lần đầu tiên ở trường đại học. Thời tiết hôm đó rất đẹp và hoa
-                anh đào trong khuôn viên trường đang nở rộ. Anh ấy đang đọc sách trước thư viện, và Ji-young đã yêu từ cái nhìn đầu tiên khi
-                thấy anh ấy đang tập trung đọc sách.
-              </Text>
-            </div>
-          </Card>
-
-          {/* Question */}
-          <div style={{ marginBottom: '32px' }}>
-            <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>
-              Câu hỏi:
-            </Title>
-            <Card
-              style={{
-                background: 'rgba(79, 172, 254, 0.05)',
-                border: '1px solid rgba(79, 172, 254, 0.2)',
-                borderRadius: '8px',
-              }}
-            >
-              <Paragraph style={{ fontSize: '16px', lineHeight: '1.6', color: '#262626', marginBottom: 0 }}>{exercise.question}</Paragraph>
-            </Card>
-          </div>
-
-          {/* Answer Options */}
-          <div style={{ marginBottom: '32px' }}>
-            <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>
-              Chọn đáp án:
-            </Title>
-            <Radio.Group
-              value={selectedAnswer}
-              onChange={e => setSelectedAnswer(e.target.value)}
-              disabled={isSubmitted}
-              style={{ width: '100%' }}
-            >
-              <Space direction="vertical" style={{ width: '100%' }} size="large">
-                {answerOptions.map(option => (
-                  <Card
-                    key={option.value}
-                    hoverable={!isSubmitted}
-                    style={{
-                      border:
-                        selectedAnswer === option.value
-                          ? '2px solid #4facfe'
-                          : isSubmitted && option.value === exercise.correctAnswer
-                            ? '2px solid #52c41a'
-                            : isSubmitted && selectedAnswer === option.value
-                              ? '2px solid #ff4d4f'
-                              : '1px solid #d9d9d9',
-                      background:
-                        selectedAnswer === option.value
-                          ? 'rgba(79, 172, 254, 0.05)'
-                          : isSubmitted && option.value === exercise.correctAnswer
-                            ? 'rgba(82, 196, 26, 0.05)'
-                            : 'white',
-                      borderRadius: '12px',
-                      transition: 'all 0.3s',
-                    }}
-                  >
-                    <Radio value={option.value} style={{ width: '100%' }}>
-                      <Text style={{ fontSize: '16px', fontWeight: selectedAnswer === option.value ? 600 : 400 }}>{option.label}</Text>
-                      {isSubmitted && option.value === exercise.correctAnswer && (
-                        <CheckCircleOutlined style={{ color: '#52c41a', marginLeft: '12px', fontSize: '18px' }} />
-                      )}
-                      {isSubmitted && selectedAnswer === option.value && !isCorrect && (
-                        <CloseCircleOutlined style={{ color: '#ff4d4f', marginLeft: '12px', fontSize: '18px' }} />
-                      )}
-                    </Radio>
-                  </Card>
-                ))}
-              </Space>
-            </Radio.Group>
-          </div>
-
-          {/* Result Message */}
-          {isSubmitted && (
-            <Alert
-              message={isCorrect ? '🎉 Chính xác!' : '❌ Chưa đúng'}
-              description={
-                isCorrect
-                  ? `Bạn đã trả lời đúng! Đáp án là ${exercise.correctAnswer}. Bạn được +${exercise.maxScore} điểm.`
-                  : `Đáp án đúng là ${exercise.correctAnswer}. Hãy đọc lại đoạn văn và chú ý các chi tiết quan trọng nhé!`
-              }
-              type={isCorrect ? 'success' : 'error'}
-              showIcon
-              style={{ marginBottom: '24px', borderRadius: '12px' }}
-            />
-          )}
-
-          {/* Action Buttons */}
-          <Row gutter={16}>
-            {!isSubmitted ? (
-              <Col span={24}>
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={handleSubmit}
-                  block
-                  disabled={!selectedAnswer}
-                  style={{
-                    height: '48px',
-                    fontSize: '16px',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                    border: 'none',
-                    fontWeight: 600,
-                  }}
-                >
-                  Nộp bài
-                </Button>
-              </Col>
-            ) : (
-              <>
-                <Col span={12}>
-                  <Button size="large" onClick={handleRetry} block style={{ height: '48px', fontSize: '16px', borderRadius: '12px' }}>
-                    Làm lại
-                  </Button>
-                </Col>
-                <Col span={12}>
-                  <Button
-                    type="primary"
-                    size="large"
-                    onClick={handleBack}
-                    block
-                    style={{
-                      height: '48px',
-                      fontSize: '16px',
-                      borderRadius: '12px',
-                      background: 'linear-gradient(135deg, #52c41a 0%, #73d13d 100%)',
-                      border: 'none',
-                    }}
-                  >
-                    Tiếp tục học
-                  </Button>
-                </Col>
-              </>
-            )}
-          </Row>
-
-          {/* Tips */}
-          <Card
-            style={{
-              marginTop: '24px',
-              background: 'rgba(79, 172, 254, 0.05)',
-              border: '1px solid rgba(79, 172, 254, 0.2)',
-              borderRadius: '12px',
-            }}
-          >
-            <Space direction="vertical" size="small">
-              <Text strong style={{ color: '#4facfe' }}>
-                💡 Mẹo đọc hiểu:
-              </Text>
-              <Text type="secondary" style={{ fontSize: '14px' }}>
-                • Đọc toàn bộ đoạn văn trước để nắm ý chính
-              </Text>
-              <Text type="secondary" style={{ fontSize: '14px' }}>
-                • Chú ý các từ khóa: 어디서 (ở đâu), 무엇 (gì), 누구 (ai), 언제 (khi nào)
-              </Text>
-              <Text type="secondary" style={{ fontSize: '14px' }}>
-                • Tìm thông tin cụ thể trong đoạn văn để trả lời câu hỏi
-              </Text>
-            </Space>
-          </Card>
-
-          {/* Score Info */}
+      <Card style={{ ...cardBaseStyle }}>
+        {/* Exercise Header */}
+        <div style={{ textAlign: 'center', marginBottom: spacing.xl }}>
           <div
             style={{
-              marginTop: '24px',
-              padding: '16px',
-              background: 'rgba(79, 172, 254, 0.05)',
-              borderRadius: '12px',
-              textAlign: 'center',
+              width: '80px',
+              height: '80px',
+              background: colors.info,
+              borderRadius: borderRadius.full,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: `0 auto ${spacing.lg}`,
+              boxShadow: shadows.admin,
             }}
           >
-            <Text type="secondary">
-              Điểm tối đa:{' '}
-              <Text strong style={{ color: '#4facfe' }}>
-                {exercise.maxScore} điểm
-              </Text>
+            <BookOutlined style={{ fontSize: '40px', color: '#FFFFFF' }} />
+          </div>
+          <Title level={2} style={{ marginBottom: spacing.sm, color: colors.text.primary }}>
+            Bài tập Luyện đọc
+          </Title>
+          <Text type="secondary" style={{ fontSize: typography.fontSize.md, color: colors.text.secondary }}>
+            Đọc hiểu đoạn văn tiếng Hàn
+          </Text>
+        </div>
+
+        {/* Reading Passage */}
+        <Card
+          style={{
+            background: colors.background.secondary,
+            border: `2px solid ${colors.border.light}`,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.xl,
+          }}
+        >
+          <div style={{ marginBottom: spacing.md }}>
+            <ReadOutlined style={{ fontSize: '20px', color: colors.info, marginRight: spacing.sm }} />
+            <Text strong style={{ fontSize: typography.fontSize.md, color: colors.text.primary }}>
+              Đoạn văn:
+            </Text>
+          </div>
+          <div
+            style={{
+              padding: spacing.lg,
+              background: colors.background.primary,
+              borderRadius: borderRadius.sm,
+              border: `1px solid ${colors.border.light}`,
+            }}
+          >
+            <Paragraph
+              style={{
+                fontSize: typography.fontSize.lg,
+                lineHeight: '2',
+                color: colors.text.primary,
+                fontFamily: "'Noto Sans KR', sans-serif",
+                marginBottom: 0,
+              }}
+            >
+              {exercise.passage}
+            </Paragraph>
+          </div>
+
+          <Divider style={{ margin: `${spacing.md} 0` }} />
+
+          {/* Translation Helper */}
+          <div
+            style={{
+              padding: spacing.md,
+              background: colors.background.secondary,
+              borderRadius: borderRadius.sm,
+            }}
+          >
+            <Text type="secondary" style={{ fontSize: typography.fontSize.base, fontStyle: 'italic' }}>
+              💡 <Text strong>Dịch nghĩa:</Text> Kim Ji-young đã gặp anh ấy lần đầu tiên ở trường đại học. Thời tiết hôm đó rất đẹp và hoa
+              anh đào trong khuôn viên trường đang nở rộ. Anh ấy đang đọc sách trước thư viện, và Ji-young đã yêu từ cái nhìn đầu tiên khi
+              thấy anh ấy đang tập trung đọc sách.
             </Text>
           </div>
         </Card>
-      </div>
-    </FocusLayout>
+
+        {/* Question */}
+        <div style={{ marginBottom: spacing.xl }}>
+          <Title level={4} style={{ marginBottom: spacing.md, color: colors.text.primary }}>
+            Câu hỏi:
+          </Title>
+          <Card
+            style={{
+              background: colors.background.secondary,
+              border: `1px solid ${colors.border.light}`,
+              borderRadius: borderRadius.sm,
+            }}
+          >
+            <Paragraph style={{ fontSize: typography.fontSize.md, lineHeight: '1.6', color: colors.text.primary, marginBottom: 0 }}>
+              {exercise.question}
+            </Paragraph>
+          </Card>
+        </div>
+
+        {/* Answer Options */}
+        <div style={{ marginBottom: spacing.xl }}>
+          <Title level={4} style={{ marginBottom: spacing.md, color: colors.text.primary }}>
+            Chọn đáp án:
+          </Title>
+          <Radio.Group
+            value={selectedAnswer}
+            onChange={e => setSelectedAnswer(e.target.value)}
+            disabled={isSubmitted}
+            style={{ width: '100%' }}
+          >
+            <Space direction="vertical" style={{ width: '100%' }} size="large">
+              {answerOptions.map(option => (
+                <Card
+                  key={option.value}
+                  hoverable={!isSubmitted}
+                  style={{
+                    border:
+                      selectedAnswer === option.value
+                        ? `2px solid ${colors.info}`
+                        : isSubmitted && option.value === exercise.correctAnswer
+                          ? `2px solid ${colors.success}`
+                          : isSubmitted && selectedAnswer === option.value
+                            ? `2px solid ${colors.error}`
+                            : `1px solid ${colors.border.default}`,
+                    background:
+                      selectedAnswer === option.value
+                        ? `rgba(28, 176, 246, 0.05)`
+                        : isSubmitted && option.value === exercise.correctAnswer
+                          ? `rgba(88, 204, 2, 0.05)`
+                          : colors.background.primary,
+                    borderRadius: borderRadius.md,
+                    transition: 'all 0.3s',
+                  }}
+                >
+                  <Radio value={option.value} style={{ width: '100%' }}>
+                    <Text style={{ fontSize: typography.fontSize.md, fontWeight: selectedAnswer === option.value ? 600 : 400 }}>
+                      {option.label}
+                    </Text>
+                    {isSubmitted && option.value === exercise.correctAnswer && (
+                      <CheckCircleOutlined style={{ color: colors.success, marginLeft: spacing.md, fontSize: typography.fontSize.lg }} />
+                    )}
+                    {isSubmitted && selectedAnswer === option.value && !isCorrect && (
+                      <CloseCircleOutlined style={{ color: colors.error, marginLeft: spacing.md, fontSize: typography.fontSize.lg }} />
+                    )}
+                  </Radio>
+                </Card>
+              ))}
+            </Space>
+          </Radio.Group>
+        </div>
+
+        {/* Result Message */}
+        {isSubmitted && (
+          <Alert
+            message={isCorrect ? '🎉 Chính xác!' : '❌ Chưa đúng'}
+            description={
+              isCorrect
+                ? `Bạn đã trả lời đúng! Đáp án là ${exercise.correctAnswer}. Bạn được +${exercise.maxScore} điểm.`
+                : `Đáp án đúng là ${exercise.correctAnswer}. Hãy đọc lại đoạn văn và chú ý các chi tiết quan trọng nhé!`
+            }
+            type={isCorrect ? 'success' : 'error'}
+            showIcon
+            style={{ marginBottom: spacing.lg, borderRadius: borderRadius.md }}
+          />
+        )}
+
+        {/* Action Buttons */}
+        <Row gutter={16}>
+          {!isSubmitted ? (
+            <Col span={24}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleSubmit}
+                block
+                disabled={!selectedAnswer}
+                style={{
+                  height: '48px',
+                  fontSize: typography.fontSize.md,
+                  borderRadius: borderRadius.md,
+                  background: colors.primary.gradient,
+                  border: 'none',
+                  fontWeight: typography.fontWeight.semibold,
+                }}
+              >
+                Nộp bài
+              </Button>
+            </Col>
+          ) : (
+            <>
+              <Col span={12}>
+                <Button
+                  size="large"
+                  onClick={handleRetry}
+                  block
+                  style={{
+                    height: '48px',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                  }}
+                >
+                  Làm lại
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={handleBack}
+                  block
+                  style={{
+                    height: '48px',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                    background: colors.primary.gradient,
+                    border: 'none',
+                  }}
+                >
+                  Tiếp tục học
+                </Button>
+              </Col>
+            </>
+          )}
+        </Row>
+
+        {/* Tips */}
+        <Card
+          style={{
+            marginTop: spacing.lg,
+            background: colors.background.secondary,
+            border: `1px solid ${colors.border.light}`,
+            borderRadius: borderRadius.md,
+          }}
+        >
+          <Space direction="vertical" size="small">
+            <Text strong style={{ color: colors.info }}>
+              💡 Mẹo đọc hiểu:
+            </Text>
+            <Text type="secondary" style={{ fontSize: typography.fontSize.base }}>
+              • Đọc toàn bộ đoạn văn trước để nắm ý chính
+            </Text>
+            <Text type="secondary" style={{ fontSize: typography.fontSize.base }}>
+              • Chú ý các từ khóa: 어디서 (ở đâu), 무엇 (gì), 누구 (ai), 언제 (khi nào)
+            </Text>
+            <Text type="secondary" style={{ fontSize: typography.fontSize.base }}>
+              • Tìm thông tin cụ thể trong đoạn văn để trả lời câu hỏi
+            </Text>
+          </Space>
+        </Card>
+
+        {/* Score Info */}
+        <div
+          style={{
+            marginTop: spacing.lg,
+            padding: spacing.md,
+            background: colors.background.secondary,
+            borderRadius: borderRadius.md,
+            textAlign: 'center',
+          }}
+        >
+          <Text type="secondary">
+            Điểm tối đa:{' '}
+            <Text strong style={{ color: colors.info }}>
+              {exercise.maxScore} điểm
+            </Text>
+          </Text>
+        </div>
+      </Card>
+    </div>
   );
 };
 

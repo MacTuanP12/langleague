@@ -66,4 +66,3 @@ public class BusinessAnalyticsResource {
         return ResponseEntity.ok(analytics);
     }
 }
-

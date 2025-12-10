@@ -131,7 +131,11 @@ public class BusinessAnalyticsService {
 
         // Count how many of those users were active today
         Instant today = Instant.now();
-        Long usersActiveToday = studySessionRepository.countDistinctUsersRegisteredBetweenAndActiveAfter(startOfDay, endOfDay, today.minus(1, ChronoUnit.DAYS));
+        Long usersActiveToday = studySessionRepository.countDistinctUsersRegisteredBetweenAndActiveAfter(
+            startOfDay,
+            endOfDay,
+            today.minus(1, ChronoUnit.DAYS)
+        );
 
         return (usersActiveToday.doubleValue() / usersRegistered.doubleValue()) * 100;
     }
@@ -224,4 +228,3 @@ public class BusinessAnalyticsService {
         return performance;
     }
 }
-

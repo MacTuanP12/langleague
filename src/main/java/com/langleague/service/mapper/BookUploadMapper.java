@@ -9,7 +9,9 @@ import com.langleague.service.dto.BookUploadDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Mapper for the entity {@link BookUpload} and its DTO {@link BookUploadDTO}.
@@ -21,6 +23,19 @@ public interface BookUploadMapper extends EntityMapper<BookUploadDTO, BookUpload
     @Mapping(target = "createdBookId", source = "createdBook.id")
     @Mapping(target = "createdBookTitle", source = "createdBook.title")
     BookUploadDTO toDto(BookUpload s);
+
+    @Override
+    @Mapping(target = "useAI", ignore = true)
+    @Mapping(target = "uploadedBy", ignore = true)
+    @Mapping(target = "createdBook", ignore = true)
+    BookUpload toEntity(BookUploadDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "useAI", ignore = true)
+    @Mapping(target = "uploadedBy", ignore = true)
+    @Mapping(target = "createdBook", ignore = true)
+    void partialUpdate(@MappingTarget BookUpload entity, BookUploadDTO dto);
 
     @Named("uploadedById")
     @BeanMapping(ignoreByDefault = true)

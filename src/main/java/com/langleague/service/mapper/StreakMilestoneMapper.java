@@ -14,6 +14,11 @@ public interface StreakMilestoneMapper extends EntityMapper<StreakMilestoneDTO, 
     @Mapping(target = "studySession", source = "studySession", qualifiedByName = "studySessionId")
     StreakMilestoneDTO toDto(StreakMilestone s);
 
+    @Override
+    @Mapping(target = "studySession", ignore = true)
+    StreakMilestone toEntity(StreakMilestoneDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "studySession", ignore = true)
     void partialUpdate(@MappingTarget StreakMilestone entity, StreakMilestoneDTO dto);

@@ -115,9 +115,17 @@ public class AppUserService {
     )
     public AppUserDTO update(AppUserDTO appUserDTO) {
         LOG.debug("Request to update AppUser : {}", appUserDTO);
-        AppUser appUser = appUserMapper.toEntity(appUserDTO);
-        appUser = appUserRepository.save(appUser);
-        return appUserMapper.toDto(appUser);
+
+        // Fetch existing entity to preserve version and other managed fields
+        AppUser existingAppUser = appUserRepository
+            .findById(appUserDTO.getId())
+            .orElseThrow(() -> new IllegalArgumentException("AppUser not found with id: " + appUserDTO.getId()));
+
+        // Update fields from DTO
+        appUserMapper.partialUpdate(existingAppUser, appUserDTO);
+
+        existingAppUser = appUserRepository.save(existingAppUser);
+        return appUserMapper.toDto(existingAppUser);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import java.util.List;
  * DTO for Business Analytics Dashboard.
  * Contains all key business metrics: DAU/MAU, Retention, Engagement, etc.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BusinessAnalyticsDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -168,4 +170,3 @@ public class BusinessAnalyticsDTO implements Serializable {
         );
     }
 }
-

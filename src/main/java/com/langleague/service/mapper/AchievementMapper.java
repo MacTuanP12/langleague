@@ -9,6 +9,20 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface AchievementMapper extends EntityMapper<AchievementDTO, Achievement> {
+    @Override
+    @Mapping(target = "criteriaType", ignore = true)
+    @Mapping(target = "targetValue", ignore = true)
+    @Mapping(target = "iconUrl", ignore = true)
+    @Mapping(target = "userAchievements", ignore = true)
+    @Mapping(target = "removeUserAchievement", ignore = true)
+    Achievement toEntity(AchievementDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "criteriaType", ignore = true)
+    @Mapping(target = "targetValue", ignore = true)
+    @Mapping(target = "iconUrl", ignore = true)
+    @Mapping(target = "userAchievements", ignore = true)
+    @Mapping(target = "removeUserAchievement", ignore = true)
     void partialUpdate(@MappingTarget Achievement entity, AchievementDTO dto);
 }

@@ -14,6 +14,19 @@ public interface WritingExerciseMapper extends EntityMapper<WritingExerciseDTO, 
     @Mapping(target = "chapter", source = "chapter", qualifiedByName = "chapterId")
     WritingExerciseDTO toDto(WritingExercise s);
 
+    @Override
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "exerciseResults", ignore = true)
+    @Mapping(target = "removeExerciseResult", ignore = true)
+    WritingExercise toEntity(WritingExerciseDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "exerciseResults", ignore = true)
+    @Mapping(target = "removeExerciseResult", ignore = true)
+    void partialUpdate(@MappingTarget WritingExercise entity, WritingExerciseDTO dto);
+
     @Named("chapterId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

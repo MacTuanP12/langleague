@@ -17,6 +17,23 @@ public interface UserAchievementMapper extends EntityMapper<UserAchievementDTO, 
     @Mapping(target = "achievement", source = "achievement", qualifiedByName = "achievementId")
     UserAchievementDTO toDto(UserAchievement s);
 
+    @Override
+    @Mapping(target = "progress", ignore = true)
+    @Mapping(target = "isUnlocked", ignore = true)
+    @Mapping(target = "unlockedAt", ignore = true)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "achievement", ignore = true)
+    UserAchievement toEntity(UserAchievementDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "progress", ignore = true)
+    @Mapping(target = "isUnlocked", ignore = true)
+    @Mapping(target = "unlockedAt", ignore = true)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "achievement", ignore = true)
+    void partialUpdate(@MappingTarget UserAchievement entity, UserAchievementDTO dto);
+
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

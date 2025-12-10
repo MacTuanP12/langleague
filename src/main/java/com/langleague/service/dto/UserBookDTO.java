@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.langleague.domain.enumeration.LearningStatus;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.time.Instant;
 /**
  * A DTO for the UserBook entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserBookDTO implements Serializable {
 
     private Long id;

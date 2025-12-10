@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -100,8 +101,7 @@ public class ExerciseResultService {
                 eventPublisher.publishEvent(event);
                 LOG.debug("Published ExerciseCompletedEvent for user {}", exerciseResult.getAppUser().getId());
             } catch (Exception e) {
-                LOG.error("Error publishing ExerciseCompletedEvent for user {}: {}",
-                    exerciseResult.getAppUser().getId(), e.getMessage());
+                LOG.error("Error publishing ExerciseCompletedEvent for user {}: {}", exerciseResult.getAppUser().getId(), e.getMessage());
             }
         }
 
@@ -245,7 +245,6 @@ public class ExerciseResultService {
 
         return exerciseResultMapper.toDto(exerciseResult);
     }
-
 
     /**
      * Get book ID from exercise result based on exercise type

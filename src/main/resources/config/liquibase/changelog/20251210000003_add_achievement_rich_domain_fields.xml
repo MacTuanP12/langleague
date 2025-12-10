@@ -23,6 +23,9 @@
     <!-- ========================================= -->
 
     <changeSet id="20251210000003-1" author="rich-domain-model">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="achievement" columnName="criteria_type"/></not>
+        </preConditions>
         <addColumn tableName="achievement">
             <column name="criteria_type" type="varchar(50)">
                 <constraints nullable="true"/>
@@ -42,6 +45,9 @@
     <!-- ========================================= -->
 
     <changeSet id="20251210000003-2" author="rich-domain-model">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="user_achievement" columnName="progress"/></not>
+        </preConditions>
         <addColumn tableName="user_achievement">
             <column name="progress" type="double">
                 <constraints nullable="true"/>
@@ -61,6 +67,9 @@
     <!-- ========================================= -->
 
     <changeSet id="20251210000003-3" author="performance">
+        <preConditions onFail="MARK_RAN">
+            <not><indexExists indexName="idx_achievement_criteria_type" tableName="achievement"/></not>
+        </preConditions>
         <createIndex indexName="idx_achievement_criteria_type" tableName="achievement">
             <column name="criteria_type"/>
         </createIndex>
@@ -68,6 +77,9 @@
     </changeSet>
 
     <changeSet id="20251210000003-4" author="performance">
+        <preConditions onFail="MARK_RAN">
+            <not><indexExists indexName="idx_user_achievement_unlocked" tableName="user_achievement"/></not>
+        </preConditions>
         <createIndex indexName="idx_user_achievement_unlocked" tableName="user_achievement">
             <column name="app_user_id"/>
             <column name="is_unlocked"/>

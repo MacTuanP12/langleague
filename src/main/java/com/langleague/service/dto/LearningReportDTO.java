@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
  * DTO for learning reports and statistics.
  * Use cases: UC 26, 33, 41, 51-53
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LearningReportDTO implements Serializable {
 
     private String userLogin;

@@ -9,6 +9,9 @@
         on concurrent updates (e.g., when users spam submit exercises or update progress)
     -->
     <changeSet id="20251210000001-1" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="app_user" columnName="version"/></not>
+        </preConditions>
         <addColumn tableName="app_user">
             <column name="version" type="bigint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
@@ -17,6 +20,9 @@
     </changeSet>
 
     <changeSet id="20251210000001-2" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="chapter_progress" columnName="version"/></not>
+        </preConditions>
         <addColumn tableName="chapter_progress">
             <column name="version" type="bigint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
@@ -25,6 +31,9 @@
     </changeSet>
 
     <changeSet id="20251210000001-3" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="exercise_result" columnName="version"/></not>
+        </preConditions>
         <addColumn tableName="exercise_result">
             <column name="version" type="bigint" defaultValueNumeric="0">
                 <constraints nullable="false"/>

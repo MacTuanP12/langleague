@@ -230,11 +230,12 @@ const MyChapters: React.FC = () => {
   };
 
   const handleViewBook = (bookId: number) => {
-    navigate(`/books/${bookId}`);
+    navigate(`/dashboard/books/${bookId}`);
   };
 
   const getChapterId = (chapter: any): number => {
-    return chapter.chapterId || 0;
+    // Support both MyChapterDTO (chapterId) and UserChapterDTO (chapter.id or id from API response)
+    return chapter.chapterId || chapter.chapter?.id || chapter.id || 0;
   };
 
   const getChapterTitle = (chapter: any): string => {

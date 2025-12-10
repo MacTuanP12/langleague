@@ -14,6 +14,19 @@ public interface SpeakingExerciseMapper extends EntityMapper<SpeakingExerciseDTO
     @Mapping(target = "chapter", source = "chapter", qualifiedByName = "chapterId")
     SpeakingExerciseDTO toDto(SpeakingExercise s);
 
+    @Override
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "exerciseResults", ignore = true)
+    @Mapping(target = "removeExerciseResult", ignore = true)
+    SpeakingExercise toEntity(SpeakingExerciseDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "exerciseResults", ignore = true)
+    @Mapping(target = "removeExerciseResult", ignore = true)
+    void partialUpdate(@MappingTarget SpeakingExercise entity, SpeakingExerciseDTO dto);
+
     @Named("chapterId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

@@ -17,7 +17,7 @@ import { Howl } from 'howler';
 import { useAppDispatch } from 'app/config/store';
 import { upsertChapterProgress } from 'app/shared/services/progress.service';
 import { IListeningExercise } from 'app/shared/model/models';
-import FocusLayout from 'app/shared/layout/FocusLayout';
+import { colors, spacing, borderRadius, shadows, typography, cardBaseStyle, pageContainerStyle } from 'app/shared/styles/design-system';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -247,9 +247,17 @@ const ListeningExercise: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: '24px', maxWidth: 900, margin: '0 auto', background: '#f0f2f5', minHeight: '100vh' }}>
+    <div
+      className="listening-exercise-container"
+      style={{
+        ...pageContainerStyle,
+        maxWidth: 900,
+        margin: '0 auto',
+        padding: undefined, // Override to use CSS class for responsive
+      }}
+    >
       {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
+      <div style={{ marginBottom: spacing.lg }}>
         <Button icon={<LeftOutlined />} onClick={handleBack} type="text" size="large">
           Quay lại
         </Button>
@@ -257,43 +265,41 @@ const ListeningExercise: React.FC = () => {
 
       <Card
         style={{
-          borderRadius: '16px',
-          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.1)',
-          border: '2px solid rgba(102, 126, 234, 0.1)',
+          ...cardBaseStyle,
         }}
       >
         {/* Exercise Header */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <div style={{ textAlign: 'center', marginBottom: spacing.xl }}>
           <div
             style={{
               width: '80px',
               height: '80px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              borderRadius: '50%',
+              background: colors.primary.gradient,
+              borderRadius: borderRadius.full,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 20px',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+              margin: `0 auto ${spacing.lg}`,
+              boxShadow: shadows.primary,
             }}
           >
-            <AudioOutlined style={{ fontSize: '40px', color: '#fff' }} />
+            <AudioOutlined style={{ fontSize: '40px', color: '#FFFFFF' }} />
           </div>
-          <Title level={2} style={{ marginBottom: '8px', color: '#1a1a1a' }}>
+          <Title level={2} style={{ marginBottom: spacing.sm, color: colors.text.primary }}>
             Bài tập Luyện nghe
           </Title>
-          <Text type="secondary" style={{ fontSize: '16px' }}>
+          <Text type="secondary" style={{ fontSize: typography.fontSize.md, color: colors.text.secondary }}>
             Nghe kỹ và chọn đáp án đúng nhất
           </Text>
         </div>
 
         {/* Image */}
         {exercise.imageUrl && (
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ textAlign: 'center', marginBottom: spacing.xl }}>
             <Image
               src={exercise.imageUrl}
               alt="Listening exercise"
-              style={{ borderRadius: '12px', maxHeight: '300px', objectFit: 'cover' }}
+              style={{ borderRadius: borderRadius.md, maxHeight: '300px', objectFit: 'cover' }}
               preview={false}
             />
           </div>
@@ -302,21 +308,21 @@ const ListeningExercise: React.FC = () => {
         {/* Audio Player with Howler.js */}
         <Card
           style={{
-            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
-            border: '2px solid rgba(102, 126, 234, 0.2)',
-            borderRadius: '12px',
-            marginBottom: '32px',
+            background: colors.background.secondary,
+            border: `2px solid ${colors.border.light}`,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.xl,
           }}
         >
           <Space direction="vertical" style={{ width: '100%' }} size="large">
             {/* Progress Bar */}
             <div>
               <Slider value={progress} onChange={handleSeek} tooltip={{ formatter: null }} style={{ margin: '0 8px' }} />
-              <Row justify="space-between" style={{ marginTop: '8px', padding: '0 8px' }}>
-                <Text type="secondary" style={{ fontSize: '12px' }}>
+              <Row justify="space-between" style={{ marginTop: spacing.sm, padding: `0 ${spacing.sm}` }}>
+                <Text type="secondary" style={{ fontSize: typography.fontSize.xs }}>
                   {formatTime(currentTime)}
                 </Text>
-                <Text type="secondary" style={{ fontSize: '12px' }}>
+                <Text type="secondary" style={{ fontSize: typography.fontSize.xs }}>
                   {formatTime(duration)}
                 </Text>
               </Row>
@@ -337,9 +343,9 @@ const ListeningExercise: React.FC = () => {
                   style={{
                     width: '64px',
                     height: '64px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: colors.primary.gradient,
                     border: 'none',
-                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+                    boxShadow: shadows.primary,
                   }}
                 />
               </Col>
@@ -354,7 +360,7 @@ const ListeningExercise: React.FC = () => {
             {/* Speed Control */}
             <Row justify="center" gutter={8}>
               <Col>
-                <Text type="secondary" style={{ fontSize: '14px' }}>
+                <Text type="secondary" style={{ fontSize: typography.fontSize.base }}>
                   Tốc độ:
                 </Text>
               </Col>
@@ -365,7 +371,7 @@ const ListeningExercise: React.FC = () => {
                     type={playbackRate === rate ? 'primary' : 'default'}
                     onClick={() => handlePlaybackRateChange(rate)}
                     style={{
-                      borderRadius: '6px',
+                      borderRadius: borderRadius.sm,
                       minWidth: '50px',
                     }}
                   >
@@ -378,7 +384,7 @@ const ListeningExercise: React.FC = () => {
             {/* Volume Control */}
             <Row align="middle" gutter={16}>
               <Col span={3}>
-                <SoundOutlined style={{ fontSize: '18px', color: '#667eea' }} />
+                <SoundOutlined style={{ fontSize: typography.fontSize.lg, color: colors.primary.DEFAULT }} />
               </Col>
               <Col flex="auto">
                 <Slider
@@ -395,16 +401,18 @@ const ListeningExercise: React.FC = () => {
         </Card>
 
         {/* Question */}
-        <div style={{ marginBottom: '32px' }}>
-          <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>
+        <div style={{ marginBottom: spacing.xl }}>
+          <Title level={4} style={{ marginBottom: spacing.md, color: colors.text.primary }}>
             Câu hỏi:
           </Title>
-          <Paragraph style={{ fontSize: '16px', lineHeight: '1.6', color: '#262626' }}>{exercise.question}</Paragraph>
+          <Paragraph style={{ fontSize: typography.fontSize.md, lineHeight: '1.6', color: colors.text.primary }}>
+            {exercise.question}
+          </Paragraph>
         </div>
 
         {/* Answer Options */}
-        <div style={{ marginBottom: '32px' }}>
-          <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>
+        <div style={{ marginBottom: spacing.xl }}>
+          <Title level={4} style={{ marginBottom: spacing.md, color: colors.text.primary }}>
             Chọn đáp án:
           </Title>
           <Radio.Group
@@ -421,29 +429,31 @@ const ListeningExercise: React.FC = () => {
                   style={{
                     border:
                       selectedAnswer === option.value
-                        ? '2px solid #667eea'
+                        ? `2px solid ${colors.primary.DEFAULT}`
                         : isSubmitted && option.value === exercise.correctAnswer
-                          ? '2px solid #52c41a'
+                          ? `2px solid ${colors.success}`
                           : isSubmitted && selectedAnswer === option.value
-                            ? '2px solid #ff4d4f'
-                            : '1px solid #d9d9d9',
+                            ? `2px solid ${colors.error}`
+                            : `1px solid ${colors.border.default}`,
                     background:
                       selectedAnswer === option.value
-                        ? 'rgba(102, 126, 234, 0.05)'
+                        ? `rgba(88, 204, 2, 0.05)`
                         : isSubmitted && option.value === exercise.correctAnswer
-                          ? 'rgba(82, 196, 26, 0.05)'
-                          : 'white',
-                    borderRadius: '12px',
+                          ? `rgba(88, 204, 2, 0.05)`
+                          : colors.background.primary,
+                    borderRadius: borderRadius.md,
                     transition: 'all 0.3s',
                   }}
                 >
                   <Radio value={option.value} style={{ width: '100%' }}>
-                    <Text style={{ fontSize: '16px', fontWeight: selectedAnswer === option.value ? 600 : 400 }}>{option.label}</Text>
+                    <Text style={{ fontSize: typography.fontSize.md, fontWeight: selectedAnswer === option.value ? 600 : 400 }}>
+                      {option.label}
+                    </Text>
                     {isSubmitted && option.value === exercise.correctAnswer && (
-                      <CheckCircleOutlined style={{ color: '#52c41a', marginLeft: '12px', fontSize: '18px' }} />
+                      <CheckCircleOutlined style={{ color: colors.success, marginLeft: spacing.md, fontSize: typography.fontSize.lg }} />
                     )}
                     {isSubmitted && selectedAnswer === option.value && !isCorrect && (
-                      <CloseCircleOutlined style={{ color: '#ff4d4f', marginLeft: '12px', fontSize: '18px' }} />
+                      <CloseCircleOutlined style={{ color: colors.error, marginLeft: spacing.md, fontSize: typography.fontSize.lg }} />
                     )}
                   </Radio>
                 </Card>
@@ -463,7 +473,7 @@ const ListeningExercise: React.FC = () => {
             }
             type={isCorrect ? 'success' : 'error'}
             showIcon
-            style={{ marginBottom: '24px', borderRadius: '12px' }}
+            style={{ marginBottom: spacing.lg, borderRadius: borderRadius.md }}
           />
         )}
 
@@ -479,11 +489,11 @@ const ListeningExercise: React.FC = () => {
                 disabled={!selectedAnswer}
                 style={{
                   height: '48px',
-                  fontSize: '16px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  fontSize: typography.fontSize.md,
+                  borderRadius: borderRadius.md,
+                  background: colors.primary.gradient,
                   border: 'none',
-                  fontWeight: 600,
+                  fontWeight: typography.fontWeight.semibold,
                 }}
               >
                 Nộp bài
@@ -492,7 +502,16 @@ const ListeningExercise: React.FC = () => {
           ) : (
             <>
               <Col span={12}>
-                <Button size="large" onClick={handleRetry} block style={{ height: '48px', fontSize: '16px', borderRadius: '12px' }}>
+                <Button
+                  size="large"
+                  onClick={handleRetry}
+                  block
+                  style={{
+                    height: '48px',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                  }}
+                >
                   Làm lại
                 </Button>
               </Col>
@@ -504,9 +523,9 @@ const ListeningExercise: React.FC = () => {
                   block
                   style={{
                     height: '48px',
-                    fontSize: '16px',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #52c41a 0%, #73d13d 100%)',
+                    fontSize: typography.fontSize.md,
+                    borderRadius: borderRadius.md,
+                    background: colors.primary.gradient,
                     border: 'none',
                   }}
                 >
@@ -520,16 +539,16 @@ const ListeningExercise: React.FC = () => {
         {/* Score Info */}
         <div
           style={{
-            marginTop: '24px',
-            padding: '16px',
-            background: 'rgba(102, 126, 234, 0.05)',
-            borderRadius: '12px',
+            marginTop: spacing.lg,
+            padding: spacing.md,
+            background: colors.background.secondary,
+            borderRadius: borderRadius.md,
             textAlign: 'center',
           }}
         >
           <Text type="secondary">
             Điểm tối đa:{' '}
-            <Text strong style={{ color: '#667eea' }}>
+            <Text strong style={{ color: colors.primary.DEFAULT }}>
               {exercise.maxScore} điểm
             </Text>
           </Text>

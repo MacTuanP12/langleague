@@ -14,6 +14,15 @@ public interface ListeningOptionMapper extends EntityMapper<ListeningOptionDTO, 
     @Mapping(target = "listeningExercise", source = "listeningExercise", qualifiedByName = "listeningExerciseId")
     ListeningOptionDTO toDto(ListeningOption s);
 
+    @Override
+    @Mapping(target = "listeningExercise", ignore = true)
+    ListeningOption toEntity(ListeningOptionDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "listeningExercise", ignore = true)
+    void partialUpdate(@MappingTarget ListeningOption entity, ListeningOptionDTO dto);
+
     @Named("listeningExerciseId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

@@ -45,6 +45,9 @@
             <column name="display_name" type="string"/>
             <column name="bio" type="string"/>
             <column name="timezone" type="string"/>
+            <column name="email_notification_enabled" type="boolean"/>
+            <column name="daily_reminder_enabled" type="boolean"/>
+            <column name="version" type="numeric"/>
             <column name="internal_user_id" type="numeric"/>
         </loadData>
     </changeSet>
@@ -292,6 +295,7 @@
             <column name="score" type="numeric"/>
             <column name="user_answer" type="string"/>
             <column name="submitted_at" type="timestamp"/>
+            <column name="version" type="numeric"/>
             <column name="app_user_id" type="numeric"/>
             <column name="listening_exercise_id" type="numeric"/>
             <column name="speaking_exercise_id" type="numeric"/>
@@ -351,6 +355,7 @@
             <column name="percent" type="numeric"/>
             <column name="last_accessed" type="timestamp"/>
             <column name="completed" type="boolean"/>
+            <column name="version" type="numeric"/>
             <column name="app_user_id" type="numeric"/>
             <column name="chapter_id" type="numeric"/>
         </loadData>
@@ -369,6 +374,9 @@
             <column name="id" type="numeric"/>
             <column name="title" type="string"/>
             <column name="description" type="string"/>
+            <column name="criteria_type" type="string"/>
+            <column name="target_value" type="numeric"/>
+            <column name="icon_url" type="string"/>
         </loadData>
     </changeSet>
 
@@ -381,6 +389,9 @@
             usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="awarded_to" type="timestamp"/>
+            <column name="progress" type="numeric"/>
+            <column name="is_unlocked" type="boolean"/>
+            <column name="unlocked_at" type="timestamp"/>
             <column name="app_user_id" type="numeric"/>
             <column name="achievement_id" type="numeric"/>
         </loadData>

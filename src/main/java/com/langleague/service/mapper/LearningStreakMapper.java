@@ -12,7 +12,19 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface LearningStreakMapper extends EntityMapper<LearningStreakDTO, LearningStreak> {
     @Mapping(target = "appUser", source = "appUser", qualifiedByName = "appUserId")
+    @Mapping(target = "iconUrl", ignore = true)
     LearningStreakDTO toDto(LearningStreak s);
+
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    LearningStreak toEntity(LearningStreakDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    void partialUpdate(@MappingTarget LearningStreak entity, LearningStreakDTO dto);
 
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)

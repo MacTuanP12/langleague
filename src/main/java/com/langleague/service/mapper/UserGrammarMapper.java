@@ -9,7 +9,9 @@ import com.langleague.service.dto.UserGrammarDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Mapper for the entity {@link UserGrammar} and its DTO {@link UserGrammarDTO}.
@@ -20,6 +22,17 @@ public interface UserGrammarMapper extends EntityMapper<UserGrammarDTO, UserGram
     @Mapping(target = "grammar", source = "grammar", qualifiedByName = "grammarId")
     UserGrammarDTO toDto(UserGrammar s);
 
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "grammar", ignore = true)
+    UserGrammar toEntity(UserGrammarDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "grammar", ignore = true)
+    void partialUpdate(@MappingTarget UserGrammar entity, UserGrammarDTO dto);
+
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -28,5 +41,8 @@ public interface UserGrammarMapper extends EntityMapper<UserGrammarDTO, UserGram
     @Named("grammarId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "level", source = "level")
     GrammarDTO toDtoGrammarId(Grammar grammar);
 }

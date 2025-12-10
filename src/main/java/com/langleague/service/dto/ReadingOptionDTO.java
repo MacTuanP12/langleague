@@ -1,6 +1,6 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.ReadingOption} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ReadingOptionDTO implements Serializable {
 
@@ -16,7 +17,8 @@ public class ReadingOptionDTO implements Serializable {
     @Size(max = 10)
     private String label;
 
-    @Lob
+    @NotBlank(message = "Content is required")
+    @Size(max = 1000, message = "Content cannot exceed 1000 characters")
     private String content;
 
     private Boolean isCorrect;

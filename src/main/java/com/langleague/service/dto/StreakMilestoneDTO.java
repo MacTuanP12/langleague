@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,11 +8,14 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.StreakMilestone} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class StreakMilestoneDTO implements Serializable {
 
     private Long id;
 
+    @NotNull(message = "Milestone days is required")
+    @Min(value = 1, message = "Milestone days must be at least 1")
     private Integer milestoneDays;
 
     @Size(max = 255)

@@ -32,10 +32,7 @@ export const setupOptimisticLockingInterceptor = () => {
           const delay = RETRY_DELAY * Math.pow(2, config._retryCount - 1);
 
           // Show friendly message to user
-          message.warning(
-            `Hệ thống đang bận xử lý... Tự động thử lại lần ${config._retryCount}/${MAX_RETRIES}`,
-            2
-          );
+          message.warning(`Hệ thống đang bận xử lý... Tự động thử lại lần ${config._retryCount}/${MAX_RETRIES}`, 2);
 
           // Wait before retry
           await new Promise(resolve => setTimeout(resolve, delay));
@@ -50,7 +47,7 @@ export const setupOptimisticLockingInterceptor = () => {
 
       // For other errors or max retries reached, pass through
       return Promise.reject(error);
-    }
+    },
   );
 };
 
@@ -61,11 +58,7 @@ export const setupOptimisticLockingInterceptor = () => {
  * const result = await retryOnConflict(() => submitExercise(data));
  * ```
  */
-export const retryOnConflict = async <T,>(
-  fn: () => Promise<T>,
-  maxRetries = 2,
-  baseDelay = 1000
-): Promise<T> => {
+export const retryOnConflict = async <T>(fn: () => Promise<T>, maxRetries = 2, baseDelay = 1000): Promise<T> => {
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -77,10 +70,7 @@ export const retryOnConflict = async <T,>(
       if (error.response?.status === 409 && attempt < maxRetries) {
         const delay = baseDelay * Math.pow(2, attempt);
 
-        message.warning(
-          `Đang thử lại... (${attempt + 1}/${maxRetries})`,
-          1.5
-        );
+        message.warning(`Đang thử lại... (${attempt + 1}/${maxRetries})`, 1.5);
 
         await new Promise(resolve => setTimeout(resolve, delay));
       } else {
@@ -97,4 +87,3 @@ export const retryOnConflict = async <T,>(
 
   throw new Error('Unexpected error in retryOnConflict');
 };
-

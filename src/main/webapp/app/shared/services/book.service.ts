@@ -120,9 +120,10 @@ export const getBooks = createAsyncThunk('book/fetch_entity_list', async (params
     const response = await axios.get<IBook[]>(requestUrl);
     return response.data;
   } catch (error: any) {
-    // Fallback to mock if backend not ready
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Books API not ready, using mock data');
+    // Fallback to mock if backend not ready or unauthorized
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Books API not ready or unauthorized, using mock data');
       return MOCK_BOOKS;
     }
     throw error;
@@ -137,9 +138,10 @@ export const getBook = createAsyncThunk('book/fetch_entity', async (id: number) 
     const response = await axios.get<IBook>(`${API_URL}/${id}`);
     return response.data;
   } catch (error: any) {
-    // Fallback to mock if backend not ready
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Book API not ready, using mock data');
+    // Fallback to mock if backend not ready or unauthorized
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Book API not ready or unauthorized, using mock data');
       return MOCK_BOOKS.find(b => b.id === id) || MOCK_BOOKS[0];
     }
     throw error;
@@ -208,8 +210,9 @@ export const searchBooks = createAsyncThunk('book/search', async (params: { keyw
     });
     return response.data;
   } catch (error: any) {
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Search API not ready, filtering mock data');
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Search API not ready or unauthorized, filtering mock data');
       const keyword = params.keyword?.toLowerCase() || '';
       return MOCK_BOOKS.filter(
         b =>
@@ -228,8 +231,9 @@ export const getBooksByLevel = createAsyncThunk('book/fetch_by_level', async (le
     const response = await axios.get<IBook[]>(`${API_URL}/by-level/${level}`);
     return response.data;
   } catch (error: any) {
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Books by level API not ready, filtering mock data');
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Books by level API not ready or unauthorized, filtering mock data');
       return MOCK_BOOKS.filter(b => b.level === level);
     }
     throw error;
@@ -255,8 +259,10 @@ export const getActiveBooks = createAsyncThunk('book/fetch_active', async (param
     });
     return response.data;
   } catch (error: any) {
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Active books API not ready, using mock data');
+    // Handle both 500 errors and 401 (unauthenticated) with mock data for better UX
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Active books API not ready or unauthorized, using mock data');
       return { content: MOCK_BOOKS, totalElements: MOCK_BOOKS.length };
     }
     throw error;
@@ -269,8 +275,9 @@ export const getBookDetails = createAsyncThunk('book/fetch_details', async (id: 
     const response = await axios.get<any>(`${API_URL}/${id}/details`);
     return response.data;
   } catch (error: any) {
-    if (error?.response?.status === 500 || error?.code === 'ERR_BAD_RESPONSE') {
-      console.warn('Book details API not ready, using basic book data');
+    const status = error?.response?.status;
+    if (status === 500 || status === 401 || error?.code === 'ERR_BAD_RESPONSE') {
+      console.warn('Book details API not ready or unauthorized, using basic book data');
       return MOCK_BOOKS.find(b => b.id === id) || MOCK_BOOKS[0];
     }
     throw error;

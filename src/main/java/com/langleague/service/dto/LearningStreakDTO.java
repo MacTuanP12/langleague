@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -8,13 +9,16 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.LearningStreak} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class LearningStreakDTO implements Serializable {
 
     private Long id;
 
+    @Min(value = 0, message = "Current streak must be at least 0")
     private Integer currentStreak;
 
+    @Min(value = 0, message = "Longest streak must be at least 0")
     private Integer longestStreak;
 
     private Instant lastStudyDate;

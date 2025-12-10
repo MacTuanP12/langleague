@@ -1,7 +1,7 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,6 +10,7 @@ import java.util.Objects;
  * A DTO for the {@link com.langleague.domain.ListeningOption} entity.
  */
 @Schema(description = "Options for Multiple Choice")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ListeningOptionDTO implements Serializable {
 
@@ -18,7 +19,8 @@ public class ListeningOptionDTO implements Serializable {
     @Size(max = 10)
     private String label;
 
-    @Lob
+    @NotBlank(message = "Content is required")
+    @Size(max = 1000, message = "Content cannot exceed 1000 characters")
     private String content;
 
     private Boolean isCorrect;

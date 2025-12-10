@@ -14,6 +14,19 @@ public interface StudySessionMapper extends EntityMapper<StudySessionDTO, StudyS
     @Mapping(target = "appUser", source = "appUser", qualifiedByName = "appUserId")
     StudySessionDTO toDto(StudySession s);
 
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "streakMilestones", ignore = true)
+    @Mapping(target = "removeStreakMilestone", ignore = true)
+    StudySession toEntity(StudySessionDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "streakMilestones", ignore = true)
+    @Mapping(target = "removeStreakMilestone", ignore = true)
+    void partialUpdate(@MappingTarget StudySession entity, StudySessionDTO dto);
+
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

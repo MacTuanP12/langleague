@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'app/shared/utils/useTranslation';
 import { Form, Input, Button, Select, Card, Typography, Divider, message, Switch, Space, Row, Col, Spin } from 'antd';
 import {

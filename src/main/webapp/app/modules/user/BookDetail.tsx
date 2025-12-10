@@ -183,7 +183,20 @@ const BookDetail: React.FC = () => {
                         onMouseLeave={e => {
                           e.currentTarget.style.boxShadow = 'none';
                         }}
-                        onClick={() => navigate(`/dashboard/chapters/${chapter.id}`)}
+                        onClick={() => navigate(`/dashboard/books/${bookId}/chapter/${chapter.id}`)}
+                        actions={[
+                          <Button
+                            key="action"
+                            type="primary"
+                            icon={<ArrowRightOutlined />}
+                            onClick={e => {
+                              e.stopPropagation();
+                              navigate(`/dashboard/books/${bookId}/chapter/${chapter.id}`);
+                            }}
+                          >
+                            {isCompleted ? 'Ôn tập' : progress ? 'Tiếp tục' : 'Bắt đầu'}
+                          </Button>,
+                        ]}
                       >
                         <List.Item.Meta
                           avatar={
@@ -242,9 +255,6 @@ const BookDetail: React.FC = () => {
                             </Space>
                           }
                         />
-                        <Button type="primary" icon={<ArrowRightOutlined />} onClick={() => navigate(`/dashboard/chapters/${chapter.id}`)}>
-                          {isCompleted ? 'Ôn tập' : progress ? 'Tiếp tục' : 'Bắt đầu'}
-                        </Button>
                       </List.Item>
                     );
                   }}

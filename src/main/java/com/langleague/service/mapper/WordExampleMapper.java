@@ -14,6 +14,11 @@ public interface WordExampleMapper extends EntityMapper<WordExampleDTO, WordExam
     @Mapping(target = "word", source = "word", qualifiedByName = "wordId")
     WordExampleDTO toDto(WordExample s);
 
+    @Override
+    @Mapping(target = "word", ignore = true)
+    WordExample toEntity(WordExampleDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "word", ignore = true)
     void partialUpdate(@MappingTarget WordExample entity, WordExampleDTO dto);

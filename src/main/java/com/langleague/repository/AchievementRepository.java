@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
-
     /**
      * Find all achievements by criteria type (e.g., "STREAK", "EXERCISES", "CHAPTERS").
      * Used by AchievementDomainService to check which achievements to evaluate.

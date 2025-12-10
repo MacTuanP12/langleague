@@ -14,6 +14,15 @@ public interface ReadingOptionMapper extends EntityMapper<ReadingOptionDTO, Read
     @Mapping(target = "readingExercise", source = "readingExercise", qualifiedByName = "readingExerciseId")
     ReadingOptionDTO toDto(ReadingOption s);
 
+    @Override
+    @Mapping(target = "readingExercise", ignore = true)
+    ReadingOption toEntity(ReadingOptionDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "readingExercise", ignore = true)
+    void partialUpdate(@MappingTarget ReadingOption entity, ReadingOptionDTO dto);
+
     @Named("readingExerciseId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

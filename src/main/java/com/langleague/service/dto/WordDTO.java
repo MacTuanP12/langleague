@@ -1,7 +1,7 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,6 +10,7 @@ import java.util.Objects;
  * A DTO for the {@link com.langleague.domain.Word} entity.
  */
 @Schema(description = "Vocabulary Definitions")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class WordDTO implements Serializable {
 
@@ -19,7 +20,7 @@ public class WordDTO implements Serializable {
     @Size(max = 255)
     private String text;
 
-    @Lob
+    @Size(max = 5000, message = "Meaning cannot exceed 5000 characters")
     private String meaning;
 
     @Size(max = 255)

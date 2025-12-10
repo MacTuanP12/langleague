@@ -3,10 +3,7 @@ package com.langleague.service.mapper;
 import com.langleague.domain.*;
 import com.langleague.service.dto.*;
 import com.langleague.service.dto.WritingExerciseDTO;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link ExerciseResult} and its DTO {@link ExerciseResultDTO}.
@@ -19,6 +16,23 @@ public interface ExerciseResultMapper extends EntityMapper<ExerciseResultDTO, Ex
     @Mapping(target = "readingExercise", source = "readingExercise", qualifiedByName = "readingExerciseId")
     @Mapping(target = "writingExercise", source = "writingExercise", qualifiedByName = "writingExerciseId")
     ExerciseResultDTO toDto(ExerciseResult s);
+
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "listeningExercise", ignore = true)
+    @Mapping(target = "speakingExercise", ignore = true)
+    @Mapping(target = "readingExercise", ignore = true)
+    @Mapping(target = "writingExercise", ignore = true)
+    ExerciseResult toEntity(ExerciseResultDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "listeningExercise", ignore = true)
+    @Mapping(target = "speakingExercise", ignore = true)
+    @Mapping(target = "readingExercise", ignore = true)
+    @Mapping(target = "writingExercise", ignore = true)
+    void partialUpdate(@MappingTarget ExerciseResult entity, ExerciseResultDTO dto);
 
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)

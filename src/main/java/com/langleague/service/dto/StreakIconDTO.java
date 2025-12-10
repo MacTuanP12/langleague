@@ -1,5 +1,6 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,14 +8,18 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.StreakIcon} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class StreakIconDTO implements Serializable {
 
     private Long id;
 
+    @NotBlank(message = "Level is required")
     @Size(max = 50)
     private String level;
 
+    @NotNull(message = "Min days is required")
+    @Min(value = 0, message = "Min days must be at least 0")
     private Integer minDays;
 
     @Size(max = 256)

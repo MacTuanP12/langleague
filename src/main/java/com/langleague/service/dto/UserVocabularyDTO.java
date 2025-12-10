@@ -1,6 +1,8 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
@@ -10,6 +12,7 @@ import java.util.Objects;
  * A DTO for the {@link com.langleague.domain.UserVocabulary} entity.
  */
 @Schema(description = "User vocabulary progress (Flashcards)")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class UserVocabularyDTO implements Serializable {
 
@@ -21,6 +24,7 @@ public class UserVocabularyDTO implements Serializable {
 
     private Instant lastReviewed;
 
+    @Min(value = 0, message = "Review count must be at least 0")
     private Integer reviewCount;
 
     private AppUserDTO appUser;

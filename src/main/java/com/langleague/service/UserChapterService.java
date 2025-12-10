@@ -303,6 +303,7 @@ public class UserChapterService {
 
         // Add chapter details
         if (userChapter.getChapter() != null) {
+            dto.setChapterId(userChapter.getChapter().getId());
             dto.setChapterTitle(userChapter.getChapter().getTitle());
             dto.setChapterOrderIndex(userChapter.getChapter().getOrderIndex());
 

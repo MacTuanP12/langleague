@@ -204,20 +204,14 @@ const BusinessAnalytics: React.FC = () => {
       dataIndex: 'avgScore',
       key: 'avgScore',
       sorter: (a: ChapterPerformanceData, b: ChapterPerformanceData) => a.avgScore - b.avgScore,
-      render: (val: number) => (
-        <Tag color={val >= 80 ? 'green' : val >= 60 ? 'orange' : 'red'}>{val.toFixed(1)}%</Tag>
-      ),
+      render: (val: number) => <Tag color={val >= 80 ? 'green' : val >= 60 ? 'orange' : 'red'}>{val.toFixed(1)}%</Tag>,
     },
     {
       title: 'Tỷ lệ bỏ dở',
       dataIndex: 'dropoffRate',
       key: 'dropoffRate',
       sorter: (a: ChapterPerformanceData, b: ChapterPerformanceData) => a.dropoffRate - b.dropoffRate,
-      render: (val: number) => (
-        <span style={{ color: val > 20 ? '#ff4d4f' : val > 10 ? '#faad14' : '#52c41a' }}>
-          {val.toFixed(1)}%
-        </span>
-      ),
+      render: (val: number) => <span style={{ color: val > 20 ? '#ff4d4f' : val > 10 ? '#faad14' : '#52c41a' }}>{val.toFixed(1)}%</span>,
     },
   ];
 
@@ -243,7 +237,7 @@ const BusinessAnalytics: React.FC = () => {
           <Space>
             <RangePicker
               value={dateRange}
-              onChange={(dates) => dates && setDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs])}
+              onChange={dates => dates && setDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs])}
               format="YYYY-MM-DD"
             />
           </Space>
@@ -316,22 +310,12 @@ const BusinessAnalytics: React.FC = () => {
             <Row gutter={16}>
               <Col span={8}>
                 <Card size="small" style={{ textAlign: 'center', background: '#f0f5ff' }}>
-                  <Statistic
-                    title="Day 1"
-                    value={metrics.retentionRate.day1}
-                    suffix="%"
-                    valueStyle={{ color: '#1890ff', fontSize: 24 }}
-                  />
+                  <Statistic title="Day 1" value={metrics.retentionRate.day1} suffix="%" valueStyle={{ color: '#1890ff', fontSize: 24 }} />
                 </Card>
               </Col>
               <Col span={8}>
                 <Card size="small" style={{ textAlign: 'center', background: '#f6ffed' }}>
-                  <Statistic
-                    title="Day 7"
-                    value={metrics.retentionRate.day7}
-                    suffix="%"
-                    valueStyle={{ color: '#52c41a', fontSize: 24 }}
-                  />
+                  <Statistic title="Day 7" value={metrics.retentionRate.day7} suffix="%" valueStyle={{ color: '#52c41a', fontSize: 24 }} />
                 </Card>
               </Col>
               <Col span={8}>
@@ -359,11 +343,7 @@ const BusinessAnalytics: React.FC = () => {
               valueStyle={{ color: metrics.churnRate > 15 ? '#ff4d4f' : '#faad14' }}
               prefix={metrics.churnRate > 15 ? <FallOutlined /> : <RiseOutlined />}
             />
-            <Progress
-              percent={metrics.churnRate}
-              strokeColor={metrics.churnRate > 15 ? '#ff4d4f' : '#faad14'}
-              style={{ marginTop: 16 }}
-            />
+            <Progress percent={metrics.churnRate} strokeColor={metrics.churnRate > 15 ? '#ff4d4f' : '#faad14'} style={{ marginTop: 16 }} />
             <div style={{ marginTop: 24 }}>
               <Title level={5}>Recommended Actions:</Title>
               <ul style={{ paddingLeft: 20 }}>
@@ -389,13 +369,7 @@ const BusinessAnalytics: React.FC = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={14}>
           <Card title="📚 Chapter Performance" bordered={false}>
-            <Table
-              columns={chapterColumns}
-              dataSource={chapterPerformance}
-              pagination={false}
-              rowKey="chapterName"
-              size="small"
-            />
+            <Table columns={chapterColumns} dataSource={chapterPerformance} pagination={false} rowKey="chapterName" size="small" />
           </Card>
         </Col>
         <Col xs={24} lg={10}>
@@ -409,4 +383,3 @@ const BusinessAnalytics: React.FC = () => {
 };
 
 export default BusinessAnalytics;
-

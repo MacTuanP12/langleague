@@ -1,12 +1,13 @@
 package com.langleague.service;
 
+import static com.langleague.domain.LearningStreak.createNewStreak;
+
 import com.langleague.domain.AppUser;
 import com.langleague.domain.LearningStreak;
 import com.langleague.repository.AppUserRepository;
 import com.langleague.repository.LearningStreakRepository;
 import com.langleague.service.dto.LearningStreakDTO;
 import com.langleague.service.mapper.LearningStreakMapper;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -20,8 +21,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.langleague.domain.LearningStreak.createNewStreak;
 
 /**
  * Service Implementation for managing {@link com.langleague.domain.LearningStreak}.
@@ -159,9 +158,11 @@ public class LearningStreakService {
     }
 
     /**
-     * Update streak when user completes a study session with retry on conflict.
+     * Record study activity using Rich Domain Model pattern.
      * Use case 39: Track learning streak
-     * OPTIMIZED: Accepts timezone from client instead of storing in DB
+     *
+     * REFACTORED: All business logic is now encapsulated in Entity.
+     * Service only orchestrates: find/create -> delegate to entity -> save
      *
      * @param userLogin the user login
      * @param userTimezone the user's timezone (e.g., "Asia/Ho_Chi_Minh", "UTC")
@@ -171,41 +172,23 @@ public class LearningStreakService {
     public void recordStudyActivity(String userLogin, ZoneId userTimezone) {
         LOG.debug("Recording study activity for user: {} in timezone: {}", userLogin, userTimezone);
 
+        // 1. Find or create streak
         AppUser appUser = appUserRepository
             .findByUser_Login(userLogin)
             .orElseThrow(() -> new RuntimeException("AppUser not found for login: " + userLogin));
 
-        LocalDate today = LocalDate.now(userTimezone);
-
         LearningStreak streak = learningStreakRepository.findByAppUserId(appUser.getId()).orElseGet(() -> createNewStreak(appUser));
 
-        LocalDate lastStudyDate = streak.getLastStudyDate() != null ? LocalDate.ofInstant(streak.getLastStudyDate(), userTimezone) : null;
+        // 2. Delegate business logic to Entity (Rich Domain Model)
+        LocalDate today = LocalDate.now(userTimezone);
+        boolean updated = streak.recordActivity(today, userTimezone);
 
-        // Already recorded today
-        if (lastStudyDate != null && lastStudyDate.equals(today)) {
+        if (!updated) {
             LOG.debug("Streak already recorded today for user: {}", userLogin);
             return;
         }
 
-        // Calculate new streak
-        if (lastStudyDate == null) {
-            // First time
-            streak.setCurrentStreak(1);
-            streak.setLongestStreak(1);
-        } else if (lastStudyDate.equals(today.minusDays(1))) {
-            // Consecutive day - increment streak
-            int newStreak = streak.getCurrentStreak() + 1;
-            streak.setCurrentStreak(newStreak);
-
-            if (newStreak > streak.getLongestStreak()) {
-                streak.setLongestStreak(newStreak);
-            }
-        } else {
-            // Streak broken - reset to 1
-            streak.setCurrentStreak(1);
-        }
-
-        streak.setLastStudyDate(Instant.now());
+        // 3. Persist
         learningStreakRepository.save(streak);
 
         LOG.info("Streak updated for user: {}, current: {}, longest: {}", userLogin, streak.getCurrentStreak(), streak.getLongestStreak());

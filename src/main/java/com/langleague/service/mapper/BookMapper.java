@@ -9,6 +9,18 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface BookMapper extends EntityMapper<BookDTO, Book> {
+    @Override
+    @Mapping(target = "chapters", ignore = true)
+    @Mapping(target = "removeChapter", ignore = true)
+    @Mapping(target = "bookReviews", ignore = true)
+    @Mapping(target = "removeBookReview", ignore = true)
+    Book toEntity(BookDTO dto);
+
+    @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "chapters", ignore = true)
+    @Mapping(target = "removeChapter", ignore = true)
+    @Mapping(target = "bookReviews", ignore = true)
+    @Mapping(target = "removeBookReview", ignore = true)
     void partialUpdate(@MappingTarget Book entity, BookDTO dto);
 }

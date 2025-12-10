@@ -1,7 +1,7 @@
-id;percent;last_accessed;completed;app_user_id;chapter_id
-1;100;2025-11-28 14:30:00;true;2;1
-2;100;2025-11-29 10:15:00;true;2;2
-3;75;2025-12-05 09:30:00;false;2;3
-4;50;2025-12-04 16:45:00;false;3;1
-5;100;2025-12-03 11:20:00;true;3;4
+id;percent;last_accessed;completed;version;app_user_id;chapter_id
+1;100;2025-11-28 14:30:00;true;0;2;1
+2;100;2025-11-29 10:15:00;true;0;2;2
+3;75;2025-12-05 09:30:00;false;0;2;3
+4;50;2025-12-04 16:45:00;false;0;3;1
+5;100;2025-12-03 11:20:00;true;0;3;4
 

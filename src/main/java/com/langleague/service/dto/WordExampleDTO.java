@@ -1,24 +1,26 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A DTO for the {@link com.langleague.domain.WordExample} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class WordExampleDTO implements Serializable {
 
     private Long id;
 
-    @Lob
     @NotBlank(message = "Example text is required")
+    @Size(max = 2000, message = "Example text cannot exceed 2000 characters")
     private String exampleText;
 
-    @Lob
+    @Size(max = 2000, message = "Translation cannot exceed 2000 characters")
     private String translation;
 
     @NotNull(message = "Word is required")

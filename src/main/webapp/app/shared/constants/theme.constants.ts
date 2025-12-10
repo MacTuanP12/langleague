@@ -1,29 +1,47 @@
 /**
  * Theme constants - Định nghĩa màu sắc và style thống nhất cho toàn dự án
+ * ⚠️ SYNCED WITH design-system.ts
  */
 
 // ==================== COLORS ====================
 export const COLORS = {
-  primary: '#667eea',
-  primaryDark: '#081edf',
-  primaryLight: '#764ba2',
+  // Primary brand colors - SYNCED WITH design-system.ts
+  primary: '#58CC02',
+  primaryDark: '#46A302',
+  primaryLight: '#D7FFB8',
+  secondary: '#FFC800',
+  secondaryDark: '#E5B400',
 
-  success: '#52c41a',
-  warning: '#faad14',
-  error: '#f5222d',
-  info: '#1890ff',
+  // Semantic colors
+  success: '#58CC02',
+  successDark: '#46A302',
+  warning: '#FFC800',
+  warningDark: '#E5B400',
+  error: '#FF4B4B',
+  errorDark: '#EA2B2B',
+  info: '#1CB0F6',
+  infoDark: '#0E8FD6',
+
+  // Level colors
+  beginner: '#58CC02',
+  intermediate: '#FFC800',
+  advanced: '#FF4B4B',
 
   text: {
     primary: '#262626',
-    secondary: '#595959',
+    secondary: '#666666',
     disabled: '#bfbfbf',
+    white: '#ffffff',
   },
 
   background: {
-    default: '#f0f2f5',
+    primary: '#ffffff',
+    secondary: '#f5f5f5',
+    tertiary: '#e8e8e8',
+    default: '#f5f5f5',
     white: '#ffffff',
     light: '#fafafa',
-    dark: '#001529',
+    dark: '#141414',
   },
 
   border: {
@@ -34,9 +52,10 @@ export const COLORS = {
 
 // ==================== GRADIENTS ====================
 export const GRADIENTS = {
-  primary: 'linear-gradient(180deg, #667eea 0%, #081edfff 100%)',
-  primaryHorizontal: 'linear-gradient(90deg, #667eea 0%, #7308dfff 100%)',
-  card: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  primary: 'linear-gradient(135deg, #58CC02 0%, #46A302 100%)',
+  secondary: 'linear-gradient(135deg, #FFC800 0%, #FFB000 100%)',
+  info: 'linear-gradient(135deg, #1CB0F6 0%, #0E8FD6 100%)',
+  card: 'linear-gradient(135deg, #58CC02 0%, #46A302 100%)',
 } as const;
 
 // ==================== SHADOWS ====================

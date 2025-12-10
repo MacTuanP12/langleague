@@ -1,21 +1,80 @@
 /* Global App Styles with Dark Mode Support */
 
 :root {
+  /* Primary brand colors - SYNCED WITH design-system.ts */
+  --color-primary: #58cc02;
+  --color-primary-dark: #46a302;
+  --color-primary-light: #d7ffb8;
+  --color-secondary: #ffc800;
+  --color-secondary-dark: #e5b400;
+
+  /* Semantic colors */
+  --color-success: #58cc02;
+  --color-warning: #ffc800;
+  --color-error: #ff4b4b;
+  --color-info: #1cb0f6;
+
+  /* Background colors */
   --bg-primary: #ffffff;
   --bg-secondary: #f5f5f5;
-  --text-primary: #000000;
+  --bg-tertiary: #e8e8e8;
+
+  /* Text colors */
+  --text-primary: #262626;
   --text-secondary: #666666;
+  --text-disabled: #bfbfbf;
+  --text-white: #ffffff;
+
+  /* Border colors */
   --border-color: #d9d9d9;
+  --border-light: #f0f0f0;
+  --border-default: #d9d9d9;
+
+  /* Shadows */
   --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #58cc02 0%, #46a302 100%);
+  --gradient-secondary: linear-gradient(135deg, #ffc800 0%, #ffb000 100%);
+  --gradient-info: linear-gradient(135deg, #1cb0f6 0%, #0e8fd6 100%);
 }
 
 html.dark {
+  /* Primary brand colors - slightly adjusted for dark mode */
+  --color-primary: #6bd60a;
+  --color-primary-dark: #58cc02;
+  --color-primary-light: #2d4a1a;
+  --color-secondary: #ffd633;
+  --color-secondary-dark: #ffc800;
+
+  /* Background colors */
   --bg-primary: #141414;
   --bg-secondary: #1f1f1f;
+  --bg-tertiary: #2d2d2d;
+
+  /* Text colors */
   --text-primary: #ffffff;
   --text-secondary: #a0a0a0;
+  --text-disabled: #4a4a4a;
+  --text-white: #ffffff;
+
+  /* Border colors */
   --border-color: #434343;
+  --border-light: #2d2d2d;
+  --border-default: #434343;
+
+  /* Shadows - darker for dark mode */
   --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================
@@ -28,11 +87,19 @@ html.dark {
 }
 
 body {
-  font-family: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Nunito',
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   background-color: var(--bg-secondary); /* Soft gray-blue background */
-  color: var(--text-primary);           /* #3C3C3C instead of pure black */
+  color: var(--text-primary); /* #3C3C3C instead of pure black */
   line-height: 1.5;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -239,5 +306,71 @@ html.dark {
   /* Progress */
   .ant-progress-text {
     color: var(--text-primary);
+  }
+}
+
+/* ============================================
+   RESPONSIVE EXERCISE CONTAINERS
+   ============================================ */
+.listening-exercise-container,
+.reading-exercise-container,
+.writing-exercise-container,
+.speaking-exercise-container,
+.exercise-container {
+  padding: 24px; /* Desktop: p-6 */
+  background: var(--bg-secondary);
+  min-height: 100vh;
+  font-family:
+    'Nunito',
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: var(--text-primary);
+
+  @media (max-width: 768px) {
+    padding: 16px; /* Tablet/Mobile: p-4 */
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px; /* Small Mobile: p-3 */
+  }
+}
+
+/* Responsive card padding */
+.listening-exercise-container .ant-card,
+.reading-exercise-container .ant-card,
+.writing-exercise-container .ant-card,
+.speaking-exercise-container .ant-card,
+.exercise-container .ant-card {
+  @media (max-width: 768px) {
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ant-card-body {
+      padding: 12px;
+    }
+  }
+}
+
+/* Responsive audio controls */
+.listening-exercise-container {
+  .ant-row[gutter] {
+    @media (max-width: 480px) {
+      gap: 8px;
+    }
+  }
+
+  /* Speed buttons on mobile */
+  .ant-btn-sm {
+    @media (max-width: 480px) {
+      min-width: 40px !important;
+      padding: 0 8px;
+      font-size: 12px;
+    }
   }
 }

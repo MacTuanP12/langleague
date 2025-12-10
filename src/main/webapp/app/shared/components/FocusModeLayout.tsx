@@ -73,7 +73,7 @@ const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ children, onExit, pro
               <div
                 style={{
                   height: '100%',
-                  background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(90deg, #58CC02 0%, #46A302 100%)',
                   width: `${progress}%`,
                   transition: 'width 0.3s ease',
                   borderRadius: 4,

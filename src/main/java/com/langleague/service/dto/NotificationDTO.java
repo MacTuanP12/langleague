@@ -1,6 +1,8 @@
 package com.langleague.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -8,6 +10,7 @@ import java.time.Instant;
  * DTO for Notification.
  * Use cases: UC 14, 40, 57
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NotificationDTO implements Serializable {
 
     private Long id;
@@ -15,9 +18,11 @@ public class NotificationDTO implements Serializable {
     private String userLogin;
 
     @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title cannot exceed 255 characters")
     private String title;
 
     @NotBlank(message = "Message is required")
+    @Size(max = 5000, message = "Message cannot exceed 5000 characters")
     private String message;
 
     private String type; // REMINDER, ANNOUNCEMENT, ACHIEVEMENT, etc.

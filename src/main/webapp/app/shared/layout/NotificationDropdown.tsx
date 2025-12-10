@@ -68,7 +68,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 size="small"
                 icon={<CheckOutlined />}
                 onClick={onMarkAllRead}
-                style={{ color: isDark ? '#667eea' : '#1e3a5f', fontWeight: 500 }}
+                style={{ color: isDark ? '#58CC02' : '#1e3a5f', fontWeight: 500 }}
               >
                 Mark all read
               </Button>

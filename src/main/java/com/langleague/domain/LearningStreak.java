@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -162,9 +161,7 @@ public class LearningStreak implements Serializable {
      */
     public boolean recordActivity(LocalDate activityDate, ZoneId timezone) {
         // Get last study date in user's timezone
-        LocalDate lastDate = this.lastStudyDate != null
-            ? this.lastStudyDate.atZone(timezone).toLocalDate()
-            : null;
+        LocalDate lastDate = this.lastStudyDate != null ? this.lastStudyDate.atZone(timezone).toLocalDate() : null;
 
         // Business Rule 4: Same day - already recorded
         if (lastDate != null && lastDate.equals(activityDate)) {
@@ -239,9 +236,7 @@ public class LearningStreak implements Serializable {
      * @return true if current streak equals longest streak (new record)
      */
     public boolean isNewRecord() {
-        return this.currentStreak != null &&
-               this.longestStreak != null &&
-               this.currentStreak.equals(this.longestStreak);
+        return this.currentStreak != null && this.longestStreak != null && this.currentStreak.equals(this.longestStreak);
     }
 
     /**

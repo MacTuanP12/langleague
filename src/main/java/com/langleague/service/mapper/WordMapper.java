@@ -14,6 +14,23 @@ public interface WordMapper extends EntityMapper<WordDTO, Word> {
     @Mapping(target = "chapter", source = "chapter", qualifiedByName = "chapterId")
     WordDTO toDto(Word s);
 
+    @Override
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "wordExamples", ignore = true)
+    @Mapping(target = "removeWordExample", ignore = true)
+    @Mapping(target = "userVocabularies", ignore = true)
+    @Mapping(target = "removeUserVocabulary", ignore = true)
+    Word toEntity(WordDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "chapter", ignore = true)
+    @Mapping(target = "wordExamples", ignore = true)
+    @Mapping(target = "removeWordExample", ignore = true)
+    @Mapping(target = "userVocabularies", ignore = true)
+    @Mapping(target = "removeUserVocabulary", ignore = true)
+    void partialUpdate(@MappingTarget Word entity, WordDTO dto);
+
     @Named("chapterId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

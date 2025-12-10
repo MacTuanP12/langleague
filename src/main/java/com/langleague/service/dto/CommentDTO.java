@@ -1,6 +1,8 @@
 package com.langleague.service.dto;
 
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -8,12 +10,14 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.langleague.domain.Comment} entity.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class CommentDTO implements Serializable {
 
     private Long id;
 
-    @Lob
+    @NotBlank(message = "Content is required")
+    @Size(max = 5000, message = "Content cannot exceed 5000 characters")
     private String content;
 
     private Instant createdAt;

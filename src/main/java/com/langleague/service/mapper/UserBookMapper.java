@@ -9,7 +9,9 @@ import com.langleague.service.dto.UserBookDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Mapper for the entity {@link UserBook} and its DTO {@link UserBookDTO}.
@@ -23,7 +25,19 @@ public interface UserBookMapper extends EntityMapper<UserBookDTO, UserBook> {
     @Mapping(target = "bookThumbnail", source = "book.thumbnail")
     @Mapping(target = "bookLevel", source = "book.level")
     @Mapping(target = "bookDescription", source = "book.description")
+    @Mapping(target = "currentChapterTitle", ignore = true)
     UserBookDTO toDto(UserBook s);
+
+    @Override
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "book", ignore = true)
+    UserBook toEntity(UserBookDTO dto);
+
+    @Override
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "appUser", ignore = true)
+    @Mapping(target = "book", ignore = true)
+    void partialUpdate(@MappingTarget UserBook entity, UserBookDTO dto);
 
     @Named("appUserId")
     @BeanMapping(ignoreByDefault = true)
