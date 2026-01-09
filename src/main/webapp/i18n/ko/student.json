@@ -1,0 +1,185 @@
+{
+  "langleague": {
+    "student": {
+      "dashboard": {
+        "loading": "강좌를 불러오는 중...",
+        "error": "강좌를 불러오지 못했습니다",
+        "tryAgain": "다시 시도",
+        "search": {
+          "placeholder": "강좌 검색..."
+        },
+        "filter": {
+          "all": "전체 강좌",
+          "inProgress": "진행 중",
+          "completed": "완료됨"
+        },
+        "noCourses": "강좌를 찾을 수 없습니다",
+        "course": {
+          "continue": "이어하기",
+          "start": "학습 시작",
+          "units": "개 단원"
+        }
+      },
+      "books": {
+        "title": "내 교재",
+        "search": {
+          "placeholder": "교재 검색..."
+        },
+        "noBooks": "사용 가능한 교재가 없습니다",
+        "createdDate": "생성일:",
+        "detail": {
+          "loading": "로딩 중...",
+          "backToBooks": "목록으로 돌아가기",
+          "startLearning": "학습 시작",
+          "description": "학습할 교재를 선택하세요",
+          "details": "교재 상세",
+          "createdBy": "제작:",
+          "totalUnits": "총 단원:",
+          "public": "공개 여부:",
+          "yes": "예",
+          "no": "아니요",
+          "units": {
+            "title": "이 교재의 단원",
+            "empty": "아직 등록된 단원이 없습니다"
+          }
+        }
+      },
+      "learning": {
+        "bookLearn": {
+          "loading": "로딩 중...",
+          "backToBooks": "목록으로 돌아가기",
+          "progress": "진도율",
+          "units": "단원",
+          "empty": "단원이 없습니다",
+          "start": "시작",
+          "continue": "이어하기",
+          "completed": "완료됨"
+        },
+        "vocabulary": {
+          "title": "어휘 연습",
+          "backToUnit": "단원으로 돌아가기",
+          "loading": "어휘 불러오는 중...",
+          "learned": "학습 완료",
+          "total": "전체",
+          "noVocabulary": "어휘가 없습니다",
+          "word": "단어:",
+          "phonetic": "발음기호:",
+          "meaning": "뜻:",
+          "example": "예문:",
+          "navigation": {
+            "previous": "이전",
+            "next": "다음"
+          }
+        },
+        "grammar": {
+          "title": "문법 강의",
+          "backToUnit": "단원으로 돌아가기",
+          "loading": "문법 불러오는 중...",
+          "noGrammar": "문법 강의가 없습니다",
+          "navigation": {
+            "previous": "이전",
+            "next": "다음"
+          }
+        },
+        "exercise": {
+          "title": "연습 문제",
+          "backToUnit": "단원으로 돌아가기",
+          "loading": "문제 불러오는 중...",
+          "noExercises": "문제가 없습니다",
+          "question": "문제",
+          "of": "/",
+          "yourAnswer": "내 답안:",
+          "correctAnswer": "정답:",
+          "submit": "답안 제출",
+          "next": "다음 문제",
+          "finish": "연습 종료",
+          "score": "내 점수:",
+          "correct": "정답",
+          "incorrect": "오답"
+        },
+        "flashcard": {
+          "title": "플래시카드 연습",
+          "backToList": "목록으로",
+          "loading": "플래시카드 불러오는 중...",
+          "noFlashcards": "플래시카드가 없습니다",
+          "card": "카드",
+          "of": "/",
+          "flip": "카드 뒤집기",
+          "showAnswer": "정답 보기",
+          "hideAnswer": "정답 숨기기",
+          "navigation": {
+            "previous": "이전",
+            "next": "다음",
+            "finish": "연습 종료"
+          }
+        },
+        "flashcardList": {
+          "title": "내 플래시카드 세트",
+          "loading": "로딩 중...",
+          "noSets": "플래시카드 세트가 없습니다",
+          "cards": "장",
+          "practice": "연습하기"
+        }
+      },
+      "games": {
+        "title": "게임 허브",
+        "subtitle": "재미있는 게임으로 실력을 키워보세요",
+        "search": {
+          "placeholder": "게임 검색..."
+        },
+        "difficulty": {
+          "all": "모든 난이도",
+          "easy": "쉬움",
+          "medium": "보통",
+          "hard": "어려움"
+        },
+        "stats": {
+          "gamesPlayed": "플레이 횟수",
+          "totalScore": "총 점수",
+          "highScore": "최고 점수"
+        },
+        "noGames": "게임이 없습니다",
+        "play": "플레이"
+      },
+      "profile": {
+        "title": "프로필",
+        "personalInfo": {
+          "title": "개인 정보",
+          "firstName": "이름",
+          "lastName": "성",
+          "fullName": "전체 이름",
+          "fullNamePlaceholder": "예: 홍길동",
+          "email": "이메일 주소",
+          "phone": "전화번호",
+          "dateOfBirth": "생년월일",
+          "bio": "자기소개",
+          "bioPlaceholder": "자신에 대해 간단히 소개해 주세요..."
+        },
+        "accountInfo": {
+          "title": "계정 정보",
+          "username": "사용자명(ID)",
+          "usernamePlaceholder": "예: hong2024",
+          "role": "역할",
+          "memberSince": "가입일",
+          "lastLogin": "마지막 로그인"
+        },
+        "learningStats": {
+          "title": "학습 통계",
+          "coursesEnrolled": "수강 중인 강좌",
+          "coursesCompleted": "완료한 강좌",
+          "totalLearningTime": "총 학습 시간",
+          "currentStreak": "현재 연속 학습일",
+          "hours": "시간",
+          "days": "일"
+        },
+        "actions": {
+          "changePhoto": "사진 변경",
+          "editProfile": "프로필 수정",
+          "changePassword": "비밀번호 변경",
+          "saveChanges": "변경사항 저장",
+          "logout": "로그아웃"
+        }
+      }
+    }
+  }
+}

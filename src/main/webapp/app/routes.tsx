@@ -12,6 +12,8 @@ import Home from 'app/modules/home/home';
 import EntitiesRoutes from 'app/entities/routes';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
+import PrivateRoute from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
 
 const loading = <div>loading ...</div>;
 
@@ -52,10 +54,35 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
-        {/* Temporarily PUBLIC - All role-based routes accessible without login */}
-        <Route path="admin/*" element={<Admin />} />
-        <Route path="teacher/*" element={<Teacher />} />
-        <Route path="student/*" element={<Student />} />
+        {/* Protected Admin Routes - Only accessible by ROLE_ADMIN */}
+        <Route
+          path="admin/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Protected Teacher Routes - Accessible by ROLE_TEACHER and ROLE_ADMIN */}
+        <Route
+          path="teacher/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.TEACHER, AUTHORITIES.ADMIN]}>
+              <Teacher />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Protected Student Routes - Only accessible by ROLE_STUDENT */}
+        <Route
+          path="student/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.STUDENT]}>
+              <Student />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<EntitiesRoutes />} />
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>

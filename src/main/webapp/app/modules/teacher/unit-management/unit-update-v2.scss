@@ -56,6 +56,10 @@
         &::placeholder {
           color: #9aa0a6;
         }
+
+        &.error {
+          border-bottom-color: #d93025;
+        }
       }
 
       .chapter-description-input {
@@ -75,6 +79,14 @@
         &::placeholder {
           color: #9aa0a6;
         }
+      }
+
+      .error-message {
+        display: block;
+        color: #d93025;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        font-weight: 400;
       }
     }
 

@@ -1,75 +1,170 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Translate, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBooks, deleteBook } from 'app/shared/reducers/book.reducer';
 import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
+import { DataTable, Column } from 'app/shared/components/data-table';
+import { LoadingSpinner, ErrorDisplay, ConfirmModal } from 'app/shared/components';
+import { IBook } from 'app/shared/model/book.model';
 import './book-management.scss';
 
 export const BookManagement = () => {
-  const [books, setBooks] = useState<IBook[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { books, loading, errorMessage } = useAppSelector(state => state.book);
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<number | null>(null);
 
   useEffect(() => {
-    loadBooks();
-  }, []);
+    dispatch(fetchBooks());
+  }, [dispatch]);
 
-  const loadBooks = async () => {
-    try {
-      const response = await axios.get<IBook[]>('/api/books');
-      setBooks(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error loading books:', error);
-      setLoading(false);
-    }
+  const handleDeleteClick = (id: number) => {
+    setBookToDelete(id);
+    setDeleteModalOpen(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
+  const handleDeleteConfirm = async () => {
+    if (bookToDelete) {
       try {
-        await axios.delete(`/api/books/${id}`);
-        loadBooks();
+        await dispatch(deleteBook(bookToDelete));
+        toast.success(translate('langleague.teacher.books.actions.deleteSuccess'));
       } catch (error) {
-        console.error('Error deleting book:', error);
+        toast.error(translate('langleague.teacher.books.actions.deleteFailed'));
       }
     }
+    setDeleteModalOpen(false);
+    setBookToDelete(null);
   };
 
-  const filteredBooks = books.filter(
-    book =>
-      book.title?.toLowerCase().includes(searchTerm.toLowerCase()) || book.uploadedBy?.toLowerCase().includes(searchTerm.toLowerCase()),
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setBookToDelete(null);
+  };
+
+  // Memoize filtered books to prevent unnecessary recalculations
+  const filteredBooks = useMemo(
+    () =>
+      books.filter(
+        book =>
+          book.title?.toLowerCase().includes(searchTerm.toLowerCase()) || book.uploadedBy?.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [books, searchTerm]
   );
 
-  const totalBooks = books.length;
-  const availableBooks = books.filter(b => b.isPublic).length;
-  const uploadedBooks = books.filter(b => !b.isPublic).length;
+  // Memoize statistics
+  const stats = useMemo(
+    () => ({
+      totalBooks: books.length,
+      availableBooks: books.filter(b => b.isPublic).length,
+      uploadedBooks: books.filter(b => !b.isPublic).length,
+    }),
+    [books]
+  );
+
+  // Define table columns with memoization
+  const columns: Column<IBook>[] = useMemo(
+    () => [
+      {
+        key: 'cover',
+        header: translate('langleague.teacher.books.table.cover'),
+        width: '100px',
+        render: book => <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover" />,
+      },
+      {
+        key: 'details',
+        header: translate('langleague.teacher.books.table.details'),
+        render: book => (
+          <div className="book-details">
+            <strong>{book.title}</strong>
+            <span className="book-description">{book.description}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'uploadedBy',
+        header: translate('langleague.teacher.books.table.uploadedBy'),
+        width: '200px',
+        render: book => book.uploadedBy || 'N/A',
+      },
+      {
+        key: 'actions',
+        header: translate('langleague.teacher.books.table.actions'),
+        width: '150px',
+        render: book => (
+          <div className="action-buttons">
+            <Link to={`/teacher/books/${book.id}/edit`} className="btn-icon" title={translate('langleague.teacher.books.actions.edit')}>
+              <i className="fa fa-edit"></i>
+            </Link>
+            <Link to={`/teacher/books/${book.id}`} className="btn-icon" title={translate('langleague.teacher.books.actions.view')}>
+              <i className="fa fa-eye"></i>
+            </Link>
+            <button onClick={() => handleDeleteClick(book.id)} className="btn-icon" title={translate('langleague.teacher.books.actions.delete')}>
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [handleDeleteClick]
+  );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <TeacherLayout>
+        <LoadingSpinner
+          message="langleague.teacher.books.management.loading"
+          isI18nKey
+        />
+      </TeacherLayout>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <TeacherLayout>
+        <ErrorDisplay
+          message={errorMessage}
+          onRetry={() => dispatch(fetchBooks())}
+        />
+      </TeacherLayout>
+    );
   }
 
   return (
     <TeacherLayout>
       <div className="book-management">
         <div className="page-header">
-          <h2>Book Management</h2>
-          <p>Manage your library inventory, track issued books, and update catalog details.</p>
+          <h2>
+            <Translate contentKey="langleague.teacher.books.management.title">Book Management</Translate>
+          </h2>
+          <p>
+            <Translate contentKey="langleague.teacher.books.management.description">
+              Manage your library inventory, track issued books, and update catalog details.
+            </Translate>
+          </p>
         </div>
 
         <div className="stats-cards">
           <div className="stat-card">
-            <span className="stat-label">Total Books</span>
-            <span className="stat-value">{totalBooks}</span>
+            <span className="stat-label">
+              <Translate contentKey="langleague.teacher.books.stats.total">Total Books</Translate>
+            </span>
+            <span className="stat-value">{stats.totalBooks}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Available</span>
-            <span className="stat-value">{availableBooks}</span>
+            <span className="stat-label">
+              <Translate contentKey="langleague.teacher.books.stats.available">Available</Translate>
+            </span>
+            <span className="stat-value">{stats.availableBooks}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Uploaded</span>
-            <span className="stat-value">{uploadedBooks}</span>
+            <span className="stat-label">
+              <Translate contentKey="langleague.teacher.books.stats.uploaded">Uploaded</Translate>
+            </span>
+            <span className="stat-value">{stats.uploadedBooks}</span>
           </div>
         </div>
 
@@ -77,73 +172,52 @@ export const BookManagement = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="Search by title, author, or ISBN..."
+              placeholder={translate('langleague.teacher.books.search.placeholder')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="btn-filter">Filter</button>
+          <button className="btn-filter">
+            <Translate contentKey="langleague.teacher.books.actions.filter">Filter</Translate>
+          </button>
           <Link to="/teacher/books/new" className="btn-primary">
-            + Add New Book
+            <Translate contentKey="langleague.teacher.books.actions.addNew">+ Add New Book</Translate>
           </Link>
         </div>
 
-        <table className="books-table">
-          <thead>
-            <tr>
-              <th>COVER</th>
-              <th>BOOK DETAILS</th>
-              <th>UPLOADED BY</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBooks.map(book => (
-              <tr key={book.id}>
-                <td>
-                  <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover" />
-                </td>
-                <td>
-                  <div className="book-details">
-                    <strong>{book.title}</strong>
-                    <span className="book-description">{book.description}</span>
-                  </div>
-                </td>
-                <td>{book.uploadedBy}</td>
-                <td>
-                  <div className="action-buttons">
-                    <Link to={`/teacher/books/${book.id}/edit`} className="btn-icon" title="Edit">
-                      <i className="fa fa-edit"></i>
-                    </Link>
-                    <Link to={`/teacher/books/${book.id}`} className="btn-icon" title="View Details">
-                      <i className="fa fa-eye"></i>
-                    </Link>
-                    <button onClick={() => handleDelete(book.id)} className="btn-icon" title="Delete">
-                      <i className="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredBooks.length === 0 && (
-          <div className="no-results">
-            <p>No books found</p>
-          </div>
-        )}
+        <DataTable
+          data={filteredBooks}
+          columns={columns}
+          keyExtractor={book => book.id}
+          emptyMessage={translate('langleague.teacher.books.management.noBooks')}
+        />
 
         <div className="pagination">
-          <button disabled>Previous</button>
+          <button disabled>
+            <Translate contentKey="langleague.teacher.books.pagination.previous">Previous</Translate>
+          </button>
           <button className="active">1</button>
           <button>2</button>
           <button>3</button>
           <button>...</button>
           <button>21</button>
-          <button>Next</button>
+          <button>
+            <Translate contentKey="langleague.teacher.books.pagination.next">Next</Translate>
+          </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="langleague.teacher.books.actions.confirmDeleteTitle"
+        message="langleague.teacher.books.actions.confirmDelete"
+        confirmText="langleague.common.delete"
+        cancelText="langleague.common.cancel"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        isI18nKey
+        variant="danger"
+      />
     </TeacherLayout>
   );
 };

@@ -1,40 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IUnit } from 'app/shared/model/unit.model';
-import { IVocabulary } from 'app/shared/model/vocabulary.model';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
+import { fetchVocabulariesByUnitId } from 'app/shared/reducers/vocabulary.reducer';
+import {Translate} from "react-jhipster";
 
 export const UnitVocabulary = () => {
-  const [unit, setUnit] = useState<IUnit | null>(null);
-  const [vocabularies, setVocabularies] = useState<IVocabulary[]>([]);
+  const dispatch = useAppDispatch();
+  const { selectedUnit } = useAppSelector(state => state.unit);
+  const { vocabularies } = useAppSelector(state => state.vocabulary);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { unitId } = useParams<{ unitId: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (unitId) {
-      loadUnit();
-      loadVocabularies();
+      dispatch(fetchUnitById(unitId));
+      dispatch(fetchVocabulariesByUnitId(unitId));
     }
-  }, [unitId]);
-
-  const loadUnit = async () => {
-    try {
-      const response = await axios.get<IUnit>(`/api/units/${unitId}`);
-      setUnit(response.data);
-    } catch (error) {
-      console.error('Error loading unit:', error);
-    }
-  };
-
-  const loadVocabularies = async () => {
-    try {
-      const response = await axios.get<IVocabulary[]>(`/api/units/${unitId}/vocabularies`);
-      setVocabularies(response.data);
-    } catch (error) {
-      console.error('Error loading vocabularies:', error);
-    }
-  };
+  }, [dispatch, unitId]);
 
   const playAudio = (audioUrl: string) => {
     if (audioUrl) {
@@ -81,7 +65,7 @@ export const UnitVocabulary = () => {
         </div>
 
         <div className="vocabulary-list">
-          <h3>Vocabulary Words</h3>
+          <h3><Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary Words</Translate></h3>
           {vocabularies.map(vocab => (
             <div key={vocab.id} className="vocabulary-card">
               <div className="vocab-header">
@@ -92,12 +76,12 @@ export const UnitVocabulary = () => {
               </div>
 
               <div className="vocab-meaning">
-                <strong>Meaning:</strong> {vocab.meaning}
+                <strong><Translate contentKey="langleague.student.learning.vocabulary.meaning">Meaning:</Translate></strong> {vocab.meaning}
               </div>
 
               {vocab.example && (
                 <div className="vocab-example">
-                  <strong>Example:</strong>
+                  <strong><Translate contentKey="langleague.student.learning.vocabulary.example">Example:</Translate></strong>
                   <p className="example-sentence">&quot;{vocab.example}&quot;</p>
                 </div>
               )}
@@ -113,7 +97,11 @@ export const UnitVocabulary = () => {
 
         {vocabularies.length === 0 && (
           <div className="empty-state">
-            <p>No vocabulary words added yet for this unit.</p>
+            <p>
+              <Translate contentKey="langleague.student.learning.vocabulary.noVocabulary">
+                No vocabulary words added yet for this unit.
+              </Translate>
+            </p>
           </div>
         )}
       </div>

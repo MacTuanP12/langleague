@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IVocabulary } from 'app/shared/model/vocabulary.model';
-import { IUnit } from 'app/shared/model/unit.model';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
+import { fetchVocabulariesByUnitId } from 'app/shared/reducers/vocabulary.reducer';
+import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './flashcard.scss';
+import {Translate} from "react-jhipster";
 
 export const Flashcard = () => {
-  const [vocabularies, setVocabularies] = useState<IVocabulary[]>([]);
-  const [unit, setUnit] = useState<IUnit | null>(null);
+  const dispatch = useAppDispatch();
+  const { selectedUnit } = useAppSelector(state => state.unit);
+  const { vocabularies: initialVocabularies, loading, errorMessage } = useAppSelector(state => state.vocabulary);
+  const [vocabularies, setVocabularies] = useState(initialVocabularies);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isStudyMode, setIsStudyMode] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { unitId } = useParams<{ unitId: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (unitId) {
-      loadVocabularies();
+      dispatch(fetchUnitById(unitId));
+      dispatch(fetchVocabulariesByUnitId(unitId));
     }
-  }, [unitId]);
+  }, [dispatch, unitId]);
 
-  const loadVocabularies = async () => {
-    try {
-      setLoading(true);
-      // Load unit data
-      const unitResponse = await axios.get<IUnit>(`/api/units/${unitId}`);
-      setUnit(unitResponse.data);
-
-      // Load vocabularies
-      const response = await axios.get<IVocabulary[]>(`/api/units/${unitId}/vocabularies`);
-      setVocabularies(response.data);
-    } catch (error) {
-      console.error('Error loading vocabularies:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    setVocabularies(initialVocabularies);
+  }, [initialVocabularies]);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -60,13 +51,20 @@ export const Flashcard = () => {
   };
 
   if (loading) {
+    return <LoadingSpinner message="Loading flashcards..." />;
+  }
+
+  if (errorMessage) {
     return (
-      <div className="flashcard-container">
-        <div className="loading-state">
-          <div className="spinner"></div>
-          <p>Loading flashcards...</p>
-        </div>
-      </div>
+      <ErrorDisplay
+        message={errorMessage}
+        onRetry={() => {
+          if (unitId) {
+            dispatch(fetchUnitById(unitId));
+            dispatch(fetchVocabulariesByUnitId(unitId));
+          }
+        }}
+      />
     );
   }
 
@@ -77,7 +75,7 @@ export const Flashcard = () => {
           <button onClick={() => navigate(-1)} className="back-btn">
             <i className="bi bi-arrow-left"></i> Back
           </button>
-          <h2>{unit?.title || 'Flashcards'}</h2>
+          <h2>{selectedUnit?.title || 'Flashcards'}</h2>
         </div>
         <div className="empty-state">
           <i className="bi bi-card-text"></i>
@@ -99,11 +97,11 @@ export const Flashcard = () => {
           <div className="breadcrumb">
             <span>Learning</span>
             <i className="bi bi-chevron-right"></i>
-            <span>Flashcards</span>
-            {unit && (
+            <span><Translate contentKey="langleague.student.learning.flashcard.title">Flashcards</Translate></span>
+            {selectedUnit && (
               <>
                 <i className="bi bi-chevron-right"></i>
-                <span className="current">{unit.title}</span>
+                <span className="current">{selectedUnit.title}</span>
               </>
             )}
           </div>
@@ -123,7 +121,8 @@ export const Flashcard = () => {
           <div className="progress-fill" style={{ width: `${((currentIndex + 1) / vocabularies.length) * 100}%` }} />
         </div>
         <span className="progress-text">
-          Card {currentIndex + 1} of {vocabularies.length}
+          <Translate contentKey="langleague.student.learning.flashcard.card">Card</Translate> {currentIndex + 1}{' '}
+          <Translate contentKey="langleague.student.learning.flashcard.of">of</Translate> {vocabularies.length}
         </span>
       </div>
 

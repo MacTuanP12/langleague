@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
+import { LoadingSpinner } from 'app/shared/components';
 
 export const BookDetail = () => {
   const [book, setBook] = useState<IBook | null>(null);
@@ -23,6 +25,7 @@ export const BookDetail = () => {
       setBook(response.data);
     } catch (error) {
       console.error('Error loading book:', error);
+      toast.error('Failed to load book details. Please try again.');
     }
   };
 
@@ -32,11 +35,12 @@ export const BookDetail = () => {
       setUnits(response.data);
     } catch (error) {
       console.error('Error loading units:', error);
+      toast.error('Failed to load units. Please try again.');
     }
   };
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner message="Loading book details..." />;
   }
 
   return (

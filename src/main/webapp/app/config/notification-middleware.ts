@@ -8,7 +8,7 @@ import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 type ToastMessage = {
   message?: string;
   key?: string;
-  data?: any;
+  data?: Record<string, unknown>;
 };
 
 const addErrorAlert = (message: ToastMessage) => {

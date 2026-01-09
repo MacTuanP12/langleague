@@ -30,4 +30,9 @@ export type ProblemWithMessage = ProblemDetails & {
   fieldErrors?: FieldErrorVM[];
 };
 
-export const isProblemWithMessage = (data: any): data is ProblemWithMessage => data?.type === ProblemWithMessageType;
+/**
+ * Type guard to check if data is a ProblemWithMessage
+ * @param data - Unknown data to check (accepts unknown for type guard pattern)
+ */
+export const isProblemWithMessage = (data: unknown): data is ProblemWithMessage =>
+  typeof data === 'object' && data !== null && (data as ProblemWithMessage)?.type === ProblemWithMessageType;

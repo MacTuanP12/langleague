@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBookById, createBook, updateBook } from 'app/shared/reducers/book.reducer';
 import { IBook, defaultBookValue } from 'app/shared/model/book.model';
 import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
 import './book-update.scss';
+import {translate, Translate} from "react-jhipster";
 
 export const BookUpdate = () => {
-  const [book, setBook] = useState<IBook>(defaultBookValue);
+  const dispatch = useAppDispatch();
+  const { selectedBook, updating } = useAppSelector(state => state.book);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IBook>({
+    defaultValues: defaultBookValue,
+    mode: 'onBlur',
+  });
+
   const [coverPreview, setCoverPreview] = useState<string>('');
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -14,27 +28,30 @@ export const BookUpdate = () => {
 
   useEffect(() => {
     if (id) {
-      loadBook();
+      dispatch(fetchBookById(Number(id)));
     }
-  }, [id]);
+  }, [dispatch, id]);
 
-  const loadBook = async () => {
-    try {
-      const response = await axios.get(`/api/books/${id}`);
-      setBook(response.data);
-      setCoverPreview(response.data.coverImageUrl);
-    } catch (error) {
-      console.error('Error loading book:', error);
+  useEffect(() => {
+    if (selectedBook && id) {
+      setValue('id', selectedBook.id);
+      setValue('title', selectedBook.title);
+      setValue('description', selectedBook.description);
+      setValue('coverImageUrl', selectedBook.coverImageUrl);
+      setValue('isPublic', selectedBook.isPublic);
+      setValue('uploadedBy', selectedBook.uploadedBy);
+      setCoverPreview(selectedBook.coverImageUrl || '');
     }
-  };
+  }, [selectedBook, id, setValue]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCoverPreview(reader.result as string);
-        setBook({ ...book, coverImageUrl: reader.result as string });
+        const imageUrl = reader.result as string;
+        setCoverPreview(imageUrl);
+        setValue('coverImageUrl', imageUrl, { shouldDirty: true });
       };
       reader.readAsDataURL(file);
     }
@@ -66,20 +83,20 @@ export const BookUpdate = () => {
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCoverPreview(reader.result as string);
-        setBook({ ...book, coverImageUrl: reader.result as string });
+        const imageUrl = reader.result as string;
+        setCoverPreview(imageUrl);
+        setValue('coverImageUrl', imageUrl, { shouldDirty: true });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: IBook) => {
     try {
       if (id) {
-        await axios.put(`/api/books/${id}`, book);
+        await dispatch(updateBook(formData));
       } else {
-        await axios.post('/api/books', book);
+        await dispatch(createBook(formData));
       }
       navigate('/teacher/books');
     } catch (error) {
@@ -100,10 +117,12 @@ export const BookUpdate = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="form-row">
                 <div className="form-group cover-upload">
-                  <label>Book Cover</label>
+                  <label>
+                    <Translate contentKey="langleague.teacher.books.form.fields.coverLabel">Book Cover</Translate>
+                  </label>
                   <div
                     className={`upload-area ${isDragging ? 'dragging' : ''}`}
                     onDragEnter={handleDragEnter}
@@ -116,9 +135,15 @@ export const BookUpdate = () => {
                     ) : (
                       <div className="upload-placeholder">
                         <i className="fa fa-upload"></i>
-                        <p>Upload Cover</p>
-                        <span>Drag and drop or click</span>
-                        <span className="file-info">Supports: JPG, PNG (max. 2MB)</span>
+                        <p>
+                          <Translate contentKey="langleague.teacher.books.form.fields.uploadPlaceholder">Upload Cover</Translate>
+                        </p>
+                        <span>
+                          <Translate contentKey="langleague.teacher.books.form.fields.uploadHint">Drag and drop or click</Translate>
+                        </span>
+                        <span className="file-info">
+                          <Translate contentKey="langleague.teacher.books.form.fields.fileInfo">Supports: JPG, PNG (max. 2MB)</Translate>
+                        </span>
                       </div>
                     )}
                     <input type="file" accept="image/*" onChange={handleImageUpload} />
@@ -126,33 +151,58 @@ export const BookUpdate = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Book Title</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. The Great Gatsby"
-                    value={book.title}
-                    onChange={e => setBook({ ...book, title: e.target.value })}
-                    required
+                  <label>
+                    <Translate contentKey="langleague.teacher.books.form.fields.titleLabel">Book Title</Translate>
+                  </label>
+                  <Controller
+                    name="title"
+                    control={control}
+                    rules={{
+                      required: translate('langleague.teacher.books.form.fields.titleRequired'),
+                      minLength: { value: 2, message: translate('langleague.teacher.books.form.fields.titleMinLength') },
+                    }}
+                    render={({ field }) => (
+                      <div>
+                        <input
+                          {...field}
+                          type="text"
+                          placeholder={translate('langleague.teacher.books.form.fields.titlePlaceholder')}
+                          className={errors.title ? 'error' : ''}
+                        />
+                        {errors.title && <span className="error-text">{errors.title.message}</span>}
+                      </div>
+                    )}
                   />
 
-                  <label>Description</label>
-                  <textarea
-                    placeholder="Enter a brief summary of the book content..."
-                    value={book.description}
-                    onChange={e => setBook({ ...book, description: e.target.value })}
-                    rows={4}
+                  <label>
+                    <Translate contentKey="langleague.teacher.books.form.fields.descriptionLabel">Description</Translate>
+                  </label>
+                  <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                      <textarea
+                        {...field}
+                        placeholder={translate('langleague.teacher.books.form.fields.descriptionPlaceholder')}
+                        rows={4}
+                      />
+                    )}
                   />
                 </div>
               </div>
 
               <div className="form-footer">
-                <p className="info-text">All fields are auto-saved locally.</p>
+                <p className="info-text">
+                  <Translate contentKey="langleague.teacher.books.form.footer.infoText">All fields are auto-saved locally.</Translate>
+                </p>
                 <div className="form-actions">
                   <button type="button" className="btn-secondary" onClick={() => navigate('/teacher/books')}>
-                    Cancel
+                    <Translate contentKey="langleague.teacher.books.form.footer.cancel">Cancel</Translate>
                   </button>
-                  <button type="submit" className="btn-primary">
-                    Save Book
+                  <button type="submit" className="btn-primary" disabled={updating}>
+                    <Translate contentKey={updating ? 'langleague.teacher.books.form.footer.saving' : 'langleague.teacher.books.form.footer.save'}>
+                      {updating ? 'Saving...' : 'Save Book'}
+                    </Translate>
                   </button>
                 </div>
               </div>

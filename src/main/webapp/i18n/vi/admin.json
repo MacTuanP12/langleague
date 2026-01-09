@@ -1,0 +1,74 @@
+{
+  "langleague": {
+    "admin": {
+      "dashboard": {
+        "title": "Bảng Điều Khiển Admin",
+        "welcome": "Chào mừng trở lại, {name}!",
+        "stats": {
+          "totalUsers": "Tổng Số Người Dùng",
+          "totalCourses": "Tổng Số Khóa Học",
+          "activeSessions": "Phiên Hoạt Động",
+          "recentActivities": "Hoạt Động Gần Đây"
+        },
+        "quickActions": {
+          "title": "Thao Tác Nhanh",
+          "addUser": "Thêm Người Dùng",
+          "manageCourses": "Quản Lý Khóa Học",
+          "systemSettings": "Cài Đặt Hệ Thống"
+        }
+      },
+      "userManagement": {
+        "title": "Quản Lý Người Dùng",
+        "subtitle": "Quản lý tài khoản học sinh, giáo viên và nhân viên.",
+        "loading": "Đang tải...",
+        "search": {
+          "placeholder": "Tìm kiếm theo tên, email hoặc username..."
+        },
+        "filters": {
+          "role": {
+            "all": "Tất Cả Vai Trò",
+            "admin": "Quản Trị Viên",
+            "teacher": "Giáo Viên",
+            "student": "Học Sinh"
+          },
+          "status": {
+            "all": "Tất Cả Trạng Thái",
+            "active": "Hoạt Động",
+            "suspended": "Tạm Ngưng"
+          }
+        },
+        "table": {
+          "name": "Tên",
+          "email": "Email",
+          "role": "Vai Trò",
+          "status": "Trạng Thái",
+          "actions": "Thao Tác"
+        },
+        "actions": {
+          "addNew": "Thêm Người Dùng Mới",
+          "edit": "Chỉnh Sửa",
+          "delete": "Xóa",
+          "view": "Xem",
+          "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không?"
+        },
+        "role": {
+          "admin": "Quản Trị Viên",
+          "teacher": "Giáo Viên",
+          "student": "Học Sinh",
+          "librarian": "Thủ Thư"
+        },
+        "status": {
+          "active": "Hoạt Động",
+          "suspended": "Tạm Ngưng"
+        },
+        "pagination": {
+          "showing": "Hiển thị",
+          "to": "đến",
+          "of": "của",
+          "results": "kết quả"
+        }
+      }
+    }
+  }
+}
+

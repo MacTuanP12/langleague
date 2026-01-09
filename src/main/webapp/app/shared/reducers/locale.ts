@@ -4,7 +4,15 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { TranslatorContext } from 'react-jhipster';
 
-const initialState = {
+interface LocaleState {
+  currentLocale: string;
+  sourcePrefixes: string[];
+  lastChange: number;
+  loadedKeys: string[];
+  loadedLocales: string[];
+}
+
+const initialState: LocaleState = {
   currentLocale: '',
   sourcePrefixes: [],
   lastChange: TranslatorContext.context.lastChange,
@@ -12,7 +20,6 @@ const initialState = {
   loadedLocales: [],
 };
 
-export type LocaleState = Readonly<typeof initialState>;
 
 const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) => {
   if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
@@ -21,8 +28,8 @@ const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) =
   }
 };
 
-export const setLocale = createAsyncThunk('locale/setLocale', async (locale: string, thunkAPI: any) => {
-  const { sourcePrefixes, loadedKeys, loadedLocales } = thunkAPI.getState().locale;
+export const setLocale = createAsyncThunk('locale/setLocale', async (locale: string, thunkAPI) => {
+  const { sourcePrefixes, loadedKeys, loadedLocales } = (thunkAPI.getState() as { locale: LocaleState }).locale;
   if (!loadedLocales.includes(locale)) {
     const keys = (
       await Promise.all(
@@ -42,8 +49,8 @@ export const setLocale = createAsyncThunk('locale/setLocale', async (locale: str
 
 export const addTranslationSourcePrefix = createAsyncThunk(
   'locale/addTranslationSourcePrefix',
-  async (sourcePrefix: string, thunkAPI: any) => {
-    const { currentLocale, loadedKeys, sourcePrefixes } = thunkAPI.getState().locale;
+  async (sourcePrefix: string, thunkAPI) => {
+    const { currentLocale, loadedKeys, sourcePrefixes } = (thunkAPI.getState() as { locale: LocaleState }).locale;
     const key = `${sourcePrefix}${currentLocale}`;
     if (!sourcePrefixes.includes(sourcePrefix)) {
       if (!loadedKeys.includes(key)) {

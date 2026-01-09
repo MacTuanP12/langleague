@@ -7,8 +7,20 @@ export interface IPasswordStrengthBarProps {
   password: string;
 }
 
+interface PasswordStrength {
+  idx: number;
+  col: string;
+}
+
 export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => {
-  const colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
+  // Using semantic color values that can be mapped to CSS variables
+  const colors = [
+    'var(--error-color, #F00)',
+    'var(--warning-color, #F90)',
+    '#FF0',
+    '#9F0',
+    'var(--success-color, #0F0)'
+  ];
 
   const measureStrength = (p: string): number => {
     let force = 0;
@@ -36,7 +48,7 @@ export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => 
     return force;
   };
 
-  const getColor = (s: number): any => {
+  const getColor = (s: number): PasswordStrength => {
     let idx = 0;
     if (s > 10) {
       if (s <= 20) {
@@ -52,8 +64,8 @@ export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => 
     return { idx: idx + 1, col: colors[idx] };
   };
 
-  const getPoints = force => {
-    const pts = [] as any[];
+  const getPoints = (force: PasswordStrength): JSX.Element[] => {
+    const pts: JSX.Element[] = [];
     for (let i = 0; i < 5; i++) {
       pts.push(<li key={i} className="point" style={i < force.idx ? { backgroundColor: force.col } : { backgroundColor: '#DDD' }} />);
     }

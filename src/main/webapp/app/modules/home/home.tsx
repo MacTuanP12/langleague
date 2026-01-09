@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from 'app/config/store';
 import './home.scss';
+import {translate, Translate} from "react-jhipster";
 
 const FEATURED_BOOKS = [
   {
@@ -62,17 +63,17 @@ export const HomeNew = () => {
             {!isAuthenticated ? (
               <>
                 <Link to="/login" className="btn-secondary">
-                  Sign In
+                  <Translate contentKey="global.menu.account.login">Sign In</Translate>
                 </Link>
                 <Link to="/account/register" className="btn-primary">
-                  Sign Up
+                  <Translate contentKey="global.menu.account.register">Sign Up</Translate>
                 </Link>
               </>
             ) : (
               <div className="user-menu">
                 <span>Welcome, {account.login}</span>
                 <Link to="/account/settings" className="btn-primary">
-                  Profile
+                  <Translate contentKey="global.menu.account.settings">Profile</Translate>
                 </Link>
               </div>
             )}
@@ -83,19 +84,23 @@ export const HomeNew = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Discover Knowledge</h1>
-          <p>Explore our vast collection of educational resources</p>
+          <h1>
+            <Translate contentKey="home.title">Discover Knowledge</Translate>
+          </h1>
+          <p>
+            <Translate contentKey="home.subtitle">Explore our vast collection of educational resources</Translate>
+          </p>
 
           <form className="search-bar" onSubmit={handleSearch}>
             <i className="bi bi-search"></i>
             <input
               type="text"
-              placeholder="Search by title, author, or ISBN..."
+              placeholder={translate('home.search.placeholder')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
             <button type="submit" className="search-btn">
-              Search
+              <Translate contentKey="home.search.button">Search</Translate>
             </button>
           </form>
         </div>

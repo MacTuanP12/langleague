@@ -3,7 +3,7 @@ import { TranslatorContext } from 'react-jhipster';
 import dayjs from 'dayjs';
 
 export interface IDurationFormat {
-  value: any;
+  value: string | number;
   blankOnInvalid?: boolean;
   locale?: string;
 }
@@ -17,10 +17,13 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
     locale = TranslatorContext.context.locale;
   }
 
+  const valueString = typeof value === 'number' ? value.toString() : value;
+  const durationValue = typeof value === 'number' ? value : parseInt(value, 10);
+
   return (
-    <span title={value}>
+    <span title={valueString}>
       {dayjs
-        .duration(value)
+        .duration(durationValue)
         .locale(locale || 'en')
         .humanize()}
     </span>

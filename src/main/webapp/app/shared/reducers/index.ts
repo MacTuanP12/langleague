@@ -12,6 +12,11 @@ import applicationProfile from './application-profile';
 import authentication from './authentication';
 import locale from './locale';
 import admin from 'app/modules/admin';
+import book from './book.reducer';
+import unit from './unit.reducer';
+import vocabulary from './vocabulary.reducer';
+import grammar from './grammar.reducer';
+import exercise from './exercise.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {
@@ -25,6 +30,11 @@ const rootReducer: ReducersMapObject = {
   password,
   settings,
   loadingBar,
+  book,
+  unit,
+  vocabulary,
+  grammar,
+  exercise,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   ...entitiesReducers,
 };

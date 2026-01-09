@@ -5,7 +5,11 @@ import { setLocale } from 'app/shared/reducers/locale';
 TranslatorContext.setDefaultLocale('en');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
-export const languages: any = {
+interface Language {
+  name: string;
+}
+
+export const languages: Record<string, Language> = {
   en: { name: 'English' },
   'zh-cn': { name: '中文（简体）' },
   'zh-tw': { name: '繁體中文' },

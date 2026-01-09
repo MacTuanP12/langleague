@@ -1,0 +1,73 @@
+{
+  "langleague": {
+    "admin": {
+      "dashboard": {
+        "title": "관리자 대시보드",
+        "welcome": "{name}님, 환영합니다!",
+        "stats": {
+          "totalUsers": "총 사용자",
+          "totalCourses": "총 강좌",
+          "activeSessions": "활성 세션",
+          "recentActivities": "최근 활동"
+        },
+        "quickActions": {
+          "title": "빠른 작업",
+          "addUser": "사용자 추가",
+          "manageCourses": "강좌 관리",
+          "systemSettings": "시스템 설정"
+        },
+        "userManagement": {
+          "title": "사용자 관리",
+          "subtitle": "학생, 교사 및 교직원 계정을 관리합니다.",
+          "loading": "로딩 중...",
+          "search": {
+            "placeholder": "이름, 이메일 또는 사용자명으로 검색..."
+          },
+          "filters": {
+            "role": {
+              "all": "모든 역할",
+              "admin": "관리자",
+              "teacher": "교사",
+              "student": "학생"
+            },
+            "status": {
+              "all": "모든 상태",
+              "active": "활성",
+              "suspended": "정지됨"
+            }
+          },
+          "table": {
+            "name": "이름",
+            "email": "이메일",
+            "role": "역할",
+            "status": "상태",
+            "actions": "작업"
+          },
+          "actions": {
+            "addNew": "새 사용자 추가",
+            "edit": "수정",
+            "delete": "삭제",
+            "view": "보기",
+            "confirmDelete": "이 사용자를 삭제하시겠습니까?"
+          },
+          "role": {
+            "admin": "관리자",
+            "teacher": "교사",
+            "student": "학생",
+            "librarian": "사서"
+          },
+          "status": {
+            "active": "활성",
+            "suspended": "정지됨"
+          },
+          "pagination": {
+            "showing": "표시 중",
+            "to": "~",
+            "of": "/",
+            "results": "결과"
+          }
+        }
+      }
+    }
+  }
+}

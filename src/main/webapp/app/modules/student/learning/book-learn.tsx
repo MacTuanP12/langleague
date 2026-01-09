@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
 import { UnitProgressIndicator } from 'app/shared/components/progress';
+import { ProgressBar } from 'app/shared/components/progress';
+import { LoadingSpinner } from 'app/shared/components';
 import './book-learn.scss';
 
 export const BookLearn = () => {
@@ -26,6 +30,7 @@ export const BookLearn = () => {
       setBook(response.data);
     } catch (error) {
       console.error('Error loading book:', error);
+      toast.error('Failed to load book. Please try again.');
     }
   };
 
@@ -35,6 +40,7 @@ export const BookLearn = () => {
       setUnits(response.data);
     } catch (error) {
       console.error('Error loading units:', error);
+      toast.error('Failed to load units. Please try again.');
     }
   };
 
@@ -49,7 +55,7 @@ export const BookLearn = () => {
   };
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner message="langleague.student.learning.loading" isI18nKey />;
   }
 
   return (
@@ -68,37 +74,43 @@ export const BookLearn = () => {
           </div>
 
           <div className="units-list">
-            {units.map(unit => (
-              <div key={unit.id} className="unit-item">
+            {units.length === 0 ? (
+              <div className="empty-state">
+                <p>No units available yet</p>
+              </div>
+            ) : (
+              units.map(unit => (
+                <div key={unit.id} className="unit-item">
                 <div className={`unit-header ${selectedUnit?.id === unit.id ? 'active' : ''}`} onClick={() => handleUnitClick(unit)}>
-                  <span className="unit-icon">▶</span>
+                  <span className="unit-icon"><i className="bi bi-play-fill"></i></span>
                   <span className="unit-title">{unit.title}</span>
                   <UnitProgressIndicator progress={unit.progresses?.[0]} compact />
-                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}>›</span>
+                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}><i className="bi bi-chevron-right"></i></span>
                 </div>
 
                 {expandedUnit === unit.id && (
                   <div className="unit-sections">
                     <Link to={`/student/learn/unit/${unit.id}/vocabulary`} className="section-link">
-                      <span className="section-icon">📚</span>
+                      <span className="section-icon"><i className="bi bi-book"></i></span>
                       Vocabulary
                     </Link>
                     <Link to={`/student/learn/unit/${unit.id}/grammar`} className="section-link">
-                      <span className="section-icon">📝</span>
+                      <span className="section-icon"><i className="bi bi-journal-text"></i></span>
                       Grammar
                     </Link>
                     <Link to={`/student/learn/unit/${unit.id}/exercise`} className="section-link">
-                      <span className="section-icon">✏️</span>
+                      <span className="section-icon"><i className="bi bi-pencil-square"></i></span>
                       Exercise
                     </Link>
                     <Link to={`/student/learn/unit/${unit.id}/flashcard`} className="section-link">
-                      <span className="section-icon">🎴</span>
+                      <span className="section-icon"><i className="bi bi-card-text"></i></span>
                       Flashcard
                     </Link>
                   </div>
                 )}
               </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
@@ -112,9 +124,9 @@ export const BookLearn = () => {
 
               <div className="content-sections">
                 <Link to={`/student/learn/unit/${selectedUnit.id}/vocabulary`} className="content-card">
-                  <div className="card-icon vocabulary">📚</div>
+                  <div className="card-icon vocabulary"><i className="bi bi-book"></i></div>
                   <div className="card-content">
-                    <h3>Vocabulary</h3>
+                    <h3><Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary</Translate></h3>
                     <p>Learn new words and their meanings</p>
                     <span className="item-count">{selectedUnit.vocabularyCount || 0} words</span>
                   </div>
@@ -122,9 +134,9 @@ export const BookLearn = () => {
                 </Link>
 
                 <Link to={`/student/learn/unit/${selectedUnit.id}/grammar`} className="content-card">
-                  <div className="card-icon grammar">📝</div>
+                  <div className="card-icon grammar"><i className="bi bi-journal-text"></i></div>
                   <div className="card-content">
-                    <h3>Grammar</h3>
+                    <h3><Translate contentKey="langleague.student.learning.grammar.title">Grammar</Translate></h3>
                     <p>Master grammar rules and structures</p>
                     <span className="item-count">{selectedUnit.grammarCount || 0} topics</span>
                   </div>
@@ -132,9 +144,9 @@ export const BookLearn = () => {
                 </Link>
 
                 <Link to={`/student/learn/unit/${selectedUnit.id}/exercise`} className="content-card">
-                  <div className="card-icon exercise">✏️</div>
+                  <div className="card-icon exercise"><i className="bi bi-pencil-square"></i></div>
                   <div className="card-content">
-                    <h3>Exercise</h3>
+                    <h3><Translate contentKey="langleague.student.learning.exercise.title">Exercise</Translate></h3>
                     <p>Practice what you&apos;ve learned</p>
                     <span className="item-count">{selectedUnit.exerciseCount || 0} questions</span>
                   </div>
@@ -142,9 +154,9 @@ export const BookLearn = () => {
                 </Link>
 
                 <Link to={`/student/learn/unit/${selectedUnit.id}/flashcard`} className="content-card">
-                  <div className="card-icon flashcard">🎴</div>
+                  <div className="card-icon flashcard"><i className="bi bi-card-text"></i></div>
                   <div className="card-content">
-                    <h3>Flashcard</h3>
+                    <h3><Translate contentKey="langleague.student.learning.flashcard.title">Flashcard</Translate></h3>
                     <p>Review vocabulary with flashcards</p>
                     <span className="item-count">Interactive learning</span>
                   </div>
@@ -153,11 +165,8 @@ export const BookLearn = () => {
               </div>
 
               <div className="unit-progress">
-                <h4>Your Progress</h4>
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '0%' }}></div>
-                </div>
-                <p>0% Complete</p>
+                <h4><Translate contentKey="langleague.student.learning.bookLearn.progress">Your Progress</Translate></h4>
+                <ProgressBar progress={0} height="medium" color="gradient" ariaLabel="Unit progress" />
               </div>
             </div>
           ) : (

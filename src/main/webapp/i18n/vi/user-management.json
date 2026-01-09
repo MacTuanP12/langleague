@@ -13,7 +13,120 @@
       "question": "Bạn có chắc chắn muốn xóa tài khoản {{ login }}?"
     },
     "detail": {
-      "title": "Tài khoản"
+      "title": "Tài khoản",
+      "breadcrumb": "Quản lý người dùng",
+      "editUser": "Chỉnh sửa người dùng",
+      "backToList": "Quay lại danh sách",
+      "userIdLabel": "ID Người dùng",
+      "joinedLabel": "Đã tham gia",
+      "loading": "Đang tải...",
+      "notFound": "Không tìm thấy người dùng",
+      "fields": {
+        "login": "Tên đăng nhập",
+        "email": "Địa chỉ Email",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "language": "Ngôn ngữ",
+        "createdBy": "Người tạo",
+        "createdDate": "Ngày tạo",
+        "lastModifiedBy": "Người sửa đổi cuối",
+        "lastModifiedDate": "Ngày sửa đổi cuối"
+      },
+      "roles": {
+        "student": "Học viên",
+        "teacher": "Giáo viên",
+        "admin": "Quản trị viên",
+        "librarian": "Thủ thư"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "system": "Hệ thống"
+    },
+    "edit": {
+      "title": "Chỉnh sửa thông tin người dùng",
+      "breadcrumb": "Chỉnh sửa thông tin",
+      "subtitle": "Cập nhật thông tin cá nhân, cài đặt vai trò và trạng thái tài khoản.",
+      "loading": "Đang tải...",
+      "notFound": "Không tìm thấy người dùng",
+      "userIdLabel": "ID Người dùng",
+      "joinedLabel": "Đã tham gia",
+      "avatarNote": "Avatar được quản lý bởi người dùng thông qua cài đặt hồ sơ của họ, không phải bởi quản trị viên",
+      "fields": {
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nhập họ và tên",
+        "email": "Địa chỉ Email",
+        "emailReadOnly": "(Chỉ đọc)",
+        "role": "Vai trò",
+        "status": "Trạng thái tài khoản",
+        "bio": "Tiểu sử / Giới thiệu",
+        "bioPlaceholder": "Nhập mô tả ngắn gọn..."
+      },
+      "roles": {
+        "student": "Học viên",
+        "teacher": "Giáo viên",
+        "admin": "Quản trị viên",
+        "librarian": "Thủ thư"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "characterCount": "{{ count }}/500 ký tự",
+      "buttons": {
+        "cancel": "Hủy",
+        "save": "Lưu thay đổi"
+      },
+      "infoBox": {
+        "title": "Chỉnh sửa quyền người dùng",
+        "content": "Thay đổi vai trò của người dùng thành Quản trị viên sẽ cấp cho họ toàn quyền truy cập vào cài đặt hệ thống và bảng quản lý người dùng. Hãy tiến hành cẩn thận."
+      }
+    },
+    "create": {
+      "title": "Thêm người dùng mới",
+      "breadcrumb": "Thêm người dùng mới",
+      "subtitle": "Nhập thông tin người dùng bên dưới để tạo tài khoản mới.",
+      "fields": {
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "vd. Nguyễn Văn A",
+        "role": "Vai trò",
+        "roleSelect": "Chọn vai trò",
+        "status": "Trạng thái",
+        "password": "Mật khẩu",
+        "passwordPlaceholder": "••••••••",
+        "confirmPassword": "Xác nhận mật khẩu"
+      },
+      "roles": {
+        "student": "Học viên",
+        "teacher": "Giáo viên",
+        "admin": "Quản trị viên",
+        "librarian": "Thủ thư"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động",
+        "pending": "Chờ xử lý"
+      },
+      "required": "*",
+      "validation": {
+        "emailRequired": "Email là bắt buộc",
+        "emailInvalid": "Email không hợp lệ",
+        "fullNameRequired": "Họ và tên là bắt buộc",
+        "roleRequired": "Vai trò là bắt buộc",
+        "passwordRequired": "Mật khẩu là bắt buộc",
+        "passwordMinLength": "Mật khẩu phải có ít nhất 8 ký tự",
+        "passwordMismatch": "Mật khẩu không khớp",
+        "submitError": "Không thể tạo người dùng. Vui lòng thử lại."
+      },
+      "buttons": {
+        "cancel": "Hủy",
+        "addUser": "Thêm người dùng"
+      }
     },
     "login": "Tên đăng nhập",
     "firstName": "Tên",

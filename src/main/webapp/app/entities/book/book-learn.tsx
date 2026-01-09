@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
+import { LoadingSpinner } from 'app/shared/components';
 
 export const BookLearn = () => {
   const [book, setBook] = useState<IBook | null>(null);
@@ -24,6 +26,7 @@ export const BookLearn = () => {
       setBook(response.data);
     } catch (error) {
       console.error('Error loading book:', error);
+      toast.error('Failed to load book. Please try again.');
     }
   };
 
@@ -33,11 +36,12 @@ export const BookLearn = () => {
       setUnits(response.data);
     } catch (error) {
       console.error('Error loading units:', error);
+      toast.error('Failed to load units. Please try again.');
     }
   };
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner message="Loading book..." />;
   }
 
   return (
@@ -59,23 +63,23 @@ export const BookLearn = () => {
             {units.map(unit => (
               <div key={unit.id} className="unit-item">
                 <div className="unit-header" onClick={() => setExpandedUnit(expandedUnit === unit.id ? null : unit.id)}>
-                  <span className="unit-icon">▶</span>
+                  <span className="unit-icon"><i className="bi bi-play-fill"></i></span>
                   <span className="unit-title">{unit.title}</span>
-                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}>›</span>
+                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}><i className="bi bi-chevron-right"></i></span>
                 </div>
 
                 {expandedUnit === unit.id && (
                   <div className="unit-sections">
                     <Link to={`/units/${unit.id}/vocabulary`} className="section-link">
-                      <span className="section-icon">📚</span>
+                      <span className="section-icon"><i className="bi bi-book"></i></span>
                       Vocabulary
                     </Link>
                     <Link to={`/units/${unit.id}/grammar`} className="section-link">
-                      <span className="section-icon">📝</span>
+                      <span className="section-icon"><i className="bi bi-journal-text"></i></span>
                       Grammar
                     </Link>
                     <Link to={`/units/${unit.id}/exercise`} className="section-link">
-                      <span className="section-icon">✏️</span>
+                      <span className="section-icon"><i className="bi bi-pencil-square"></i></span>
                       Exercise
                     </Link>
                   </div>

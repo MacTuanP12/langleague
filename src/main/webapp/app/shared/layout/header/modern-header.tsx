@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
 import './modern-header.scss';
@@ -74,7 +75,7 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({
                 className="profile-avatar"
                 style={{
                   backgroundImage: account?.imageUrl ? `url(${account.imageUrl})` : 'none',
-                  backgroundColor: !account?.imageUrl ? '#1152d4' : 'transparent',
+                  backgroundColor: !account?.imageUrl ? 'var(--primary-color, #1152d4)' : 'transparent',
                 }}
               >
                 {!account?.imageUrl && (
@@ -91,16 +92,22 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({
               <div className="profile-menu">
                 <Link to="/account/settings" className="menu-item" onClick={() => setShowProfileMenu(false)}>
                   <i className="bi bi-gear"></i>
-                  <span>Settings</span>
+                  <span>
+                    <Translate contentKey="global.menu.account.settings">Settings</Translate>
+                  </span>
                 </Link>
                 <Link to="/account/password" className="menu-item" onClick={() => setShowProfileMenu(false)}>
                   <i className="bi bi-shield-lock"></i>
-                  <span>Change Password</span>
+                  <span>
+                    <Translate contentKey="global.menu.account.password">Change Password</Translate>
+                  </span>
                 </Link>
                 <div className="menu-divider"></div>
                 <button className="menu-item logout-item" onClick={handleLogout}>
                   <i className="bi bi-box-arrow-right"></i>
-                  <span>Log Out</span>
+                  <span>
+                    <Translate contentKey="global.menu.account.logout">Log Out</Translate>
+                  </span>
                 </button>
               </div>
             )}

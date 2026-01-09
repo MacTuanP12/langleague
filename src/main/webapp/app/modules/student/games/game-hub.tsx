@@ -1,98 +1,114 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AVAILABLE_GAMES, DifficultyFilter, GameCard } from './game-hub.constants';
+import { useGameFilters } from './hooks/useGameFilters';
+import { GameCardComponent } from './components/GameCardComponent';
+import { DifficultyFilterSection } from './components/DifficultyFilterSection';
+import { GameStats } from './components/GameStats';
+import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './game-hub.scss';
 
-interface GameCard {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  color: string;
-  status: 'available' | 'coming-soon' | 'locked';
-  difficulty: 'easy' | 'medium' | 'hard';
-  estimatedTime: string;
-}
-
-const AVAILABLE_GAMES: GameCard[] = [
-  {
-    id: 'vocabulary-match',
-    title: 'Vocabulary Match',
-    description: 'Match words with their meanings in this fast-paced memory game',
-    icon: '🎯',
-    color: '#4A90E2',
-    status: 'coming-soon',
-    difficulty: 'easy',
-    estimatedTime: '5-10 min',
-  },
-  {
-    id: 'word-scramble',
-    title: 'Word Scramble',
-    description: 'Unscramble letters to form the correct vocabulary words',
-    icon: '🔤',
-    color: '#F5A623',
-    status: 'coming-soon',
-    difficulty: 'medium',
-    estimatedTime: '10-15 min',
-  },
-  {
-    id: 'grammar-quest',
-    title: 'Grammar Quest',
-    description: 'Adventure through grammar challenges and unlock achievements',
-    icon: '⚔️',
-    color: '#7ED321',
-    status: 'coming-soon',
-    difficulty: 'medium',
-    estimatedTime: '15-20 min',
-  },
-  {
-    id: 'listening-challenge',
-    title: 'Listening Challenge',
-    description: 'Listen and identify the correct words in various contexts',
-    icon: '🎧',
-    color: '#BD10E0',
-    status: 'coming-soon',
-    difficulty: 'hard',
-    estimatedTime: '10-15 min',
-  },
-  {
-    id: 'speed-quiz',
-    title: 'Speed Quiz',
-    description: 'Answer as many questions as possible in limited time',
-    icon: '⚡',
-    color: '#FF6B6B',
-    status: 'coming-soon',
-    difficulty: 'hard',
-    estimatedTime: '5 min',
-  },
-  {
-    id: 'sentence-builder',
-    title: 'Sentence Builder',
-    description: 'Build correct sentences from scrambled words and phrases',
-    icon: '🏗️',
-    color: '#50E3C2',
-    status: 'coming-soon',
-    difficulty: 'medium',
-    estimatedTime: '10-15 min',
-  },
-];
-
+/**
+ * GameHub Component - Refactored for better performance and maintainability
+ *
+ * Improvements:
+ * - Extracted hardcoded data to constants file
+ * - Added loading and error states
+ * - Used useMemo for expensive filter operations (via custom hook)
+ * - Split into smaller, reusable components
+ * - Added proper accessibility attributes
+ * - Optimized with useCallback for event handlers
+ * - TODO: Replace AVAILABLE_GAMES with API call to fetch real game data
+ */
 export const GameHub = () => {
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
+  const [games, setGames] = useState(AVAILABLE_GAMES);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyFilter>('all');
+  // NOTE: These state setters are kept for future API integration (see loadGames and loadGameStats TODOs)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [gameStats, setGameStats] = useState({
+    gamesPlayed: 0,
+    totalScore: 0,
+    achievements: 0,
+  });
   const navigate = useNavigate();
 
-  const filteredGames =
-    selectedDifficulty === 'all' ? AVAILABLE_GAMES : AVAILABLE_GAMES.filter(game => game.difficulty === selectedDifficulty);
+  // Use custom hook for filtering with memoization
+  const { filteredGames } = useGameFilters({ games, selectedDifficulty });
 
-  const handleGameClick = (game: GameCard) => {
-    if (game.status === 'available') {
-      navigate(`/student/games/${game.id}`);
-    }
-  };
+  /**
+   * TODO: Replace this with actual API calls
+   * Example:
+   * const loadGames = async () => {
+   *   try {
+   *     setLoading(true);
+   *     const response = await axios.get('/api/games/available');
+   *     setGames(response.data);
+   *   } catch (err) {
+   *     setError('Failed to load games');
+   *   } finally {
+   *     setLoading(false);
+   *   }
+   * };
+   *
+   * const loadGameStats = async () => {
+   *   try {
+   *     const response = await axios.get('/api/games/my-stats');
+   *     setGameStats(response.data);
+   *   } catch (err) {
+   *     console.error('Failed to load game stats', err);
+   *   }
+   * };
+   */
+  const loadGames = useCallback(() => {
+    // Using fallback data for now
+    setGames(AVAILABLE_GAMES);
+  }, []);
+
+  useEffect(() => {
+    loadGames();
+    // loadGameStats(); // TODO: Uncomment when API is ready
+  }, [loadGames]);
+
+  const handleGameClick = useCallback(
+    (game: GameCard) => {
+      if (game.status === 'available') {
+        navigate(`/student/games/${game.id}`);
+      }
+    },
+    [navigate]
+  );
+
+  const handleDifficultyChange = useCallback((difficulty: DifficultyFilter) => {
+    setSelectedDifficulty(difficulty);
+  }, []);
+
+  const handleBack = useCallback(() => {
+    navigate('/student/dashboard');
+  }, [navigate]);
+
+  // Error state
+  if (error) {
+    return (
+      <div className="game-hub">
+        <ErrorDisplay message={error} onRetry={loadGames} />
+      </div>
+    );
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="game-hub">
+        <LoadingSpinner message="Loading games..." />
+      </div>
+    );
+  }
 
   return (
     <div className="game-hub">
       <div className="game-hub-header">
-        <button onClick={() => navigate('/student/dashboard')} className="back-btn">
+        <button onClick={handleBack} className="back-btn" aria-label="Back to Dashboard">
           <i className="bi bi-arrow-left"></i> Back to Dashboard
         </button>
         <div className="header-content">
@@ -105,113 +121,19 @@ export const GameHub = () => {
 
       <div className="game-hub-content">
         {/* Filter Section */}
-        <div className="filter-section">
-          <div className="filter-label">
-            <i className="bi bi-funnel"></i> Filter by difficulty:
-          </div>
-          <div className="difficulty-filters">
-            <button className={`filter-btn ${selectedDifficulty === 'all' ? 'active' : ''}`} onClick={() => setSelectedDifficulty('all')}>
-              All Games
-            </button>
-            <button
-              className={`filter-btn easy ${selectedDifficulty === 'easy' ? 'active' : ''}`}
-              onClick={() => setSelectedDifficulty('easy')}
-            >
-              <i className="bi bi-star"></i> Easy
-            </button>
-            <button
-              className={`filter-btn medium ${selectedDifficulty === 'medium' ? 'active' : ''}`}
-              onClick={() => setSelectedDifficulty('medium')}
-            >
-              <i className="bi bi-star-fill"></i> Medium
-            </button>
-            <button
-              className={`filter-btn hard ${selectedDifficulty === 'hard' ? 'active' : ''}`}
-              onClick={() => setSelectedDifficulty('hard')}
-            >
-              <i className="bi bi-fire"></i> Hard
-            </button>
-          </div>
-        </div>
+        <DifficultyFilterSection selectedDifficulty={selectedDifficulty} onDifficultyChange={handleDifficultyChange} />
 
         {/* Stats Section */}
-        <div className="stats-section">
-          <div className="stat-card">
-            <i className="bi bi-trophy"></i>
-            <div className="stat-content">
-              <h3>0</h3>
-              <p>Games Played</p>
-            </div>
-          </div>
-          <div className="stat-card">
-            <i className="bi bi-star-fill"></i>
-            <div className="stat-content">
-              <h3>0</h3>
-              <p>Total Score</p>
-            </div>
-          </div>
-          <div className="stat-card">
-            <i className="bi bi-award"></i>
-            <div className="stat-content">
-              <h3>0</h3>
-              <p>Achievements</p>
-            </div>
-          </div>
-        </div>
+        <GameStats gamesPlayed={gameStats.gamesPlayed} totalScore={gameStats.totalScore} achievements={gameStats.achievements} />
 
         {/* Games Grid */}
-        <div className="games-grid">
+        <div className="games-grid" role="list">
           {filteredGames.map(game => (
-            <div
-              key={game.id}
-              className={`game-card ${game.status}`}
-              style={{ borderTopColor: game.color }}
-              onClick={() => handleGameClick(game)}
-            >
-              {game.status === 'coming-soon' && (
-                <div className="coming-soon-badge">
-                  <i className="bi bi-clock"></i> Coming Soon
-                </div>
-              )}
-              {game.status === 'locked' && (
-                <div className="locked-badge">
-                  <i className="bi bi-lock"></i> Locked
-                </div>
-              )}
-
-              <div className="game-icon" style={{ backgroundColor: game.color }}>
-                {game.icon}
-              </div>
-
-              <div className="game-info">
-                <h3>{game.title}</h3>
-                <p>{game.description}</p>
-
-                <div className="game-meta">
-                  <span className={`difficulty-badge ${game.difficulty}`}>
-                    <i className="bi bi-speedometer2"></i> {game.difficulty.charAt(0).toUpperCase() + game.difficulty.slice(1)}
-                  </span>
-                  <span className="time-badge">
-                    <i className="bi bi-clock"></i> {game.estimatedTime}
-                  </span>
-                </div>
-
-                <button className={`play-btn ${game.status !== 'available' ? 'disabled' : ''}`} disabled={game.status !== 'available'}>
-                  {game.status === 'available' ? (
-                    <>
-                      <i className="bi bi-play-fill"></i> Play Now
-                    </>
-                  ) : (
-                    <>
-                      <i className="bi bi-hourglass-split"></i> Coming Soon
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
+            <GameCardComponent key={game.id} game={game} onClick={handleGameClick} />
           ))}
         </div>
 
+        {/* Empty State */}
         {filteredGames.length === 0 && (
           <div className="no-games">
             <i className="bi bi-controller"></i>

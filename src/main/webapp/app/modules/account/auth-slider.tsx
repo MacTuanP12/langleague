@@ -14,6 +14,18 @@ interface CaptchaData {
   captchaId: string;
 }
 
+interface LoginFormValues {
+  email: string;
+  password: string;
+  remember?: boolean;
+}
+
+interface RegisterFormValues {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+}
+
 const AuthSlider = () => {
   const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(location.pathname === '/register');
@@ -96,20 +108,20 @@ const AuthSlider = () => {
     }
   }, [isAuthenticated, account, navigate]);
 
-  const handleLoginSubmit = (values: any) => {
+  const handleLoginSubmit = (values: LoginFormValues) => {
     setLoginLoading(true);
     try {
       // Call login action
       dispatch(login(values.email, values.password, values.remember || false));
 
       message.success(translate('login.messages.success'));
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Login error handling
-
+      const error = err as { response?: { data?: { title?: string; message?: string; detail?: string } }; message?: string };
       let errorMessage = translate('login.messages.error.authentication');
 
-      if (err.response?.data) {
-        const errorData = err.response.data;
+      if (error.response?.data) {
+        const errorData = error.response.data;
 
         if (errorData.title === 'Invalid captcha' || errorData.message?.includes('captcha')) {
           errorMessage = translate('login.messages.error.captcha');
@@ -120,8 +132,8 @@ const AuthSlider = () => {
         } else if (errorData.message) {
           errorMessage = errorData.message;
         }
-      } else if (err.message) {
-        errorMessage = err.message;
+      } else if (error.message) {
+        errorMessage = error.message;
       }
 
       message.error(errorMessage);
@@ -135,7 +147,7 @@ const AuthSlider = () => {
     }
   };
 
-  const handleRegisterSubmit = async (values: any) => {
+  const handleRegisterSubmit = async (values: RegisterFormValues) => {
     setRegisterLoading(true);
     try {
       await dispatch(
@@ -152,9 +164,10 @@ const AuthSlider = () => {
         setIsSignUp(false);
         navigate('/login');
       }, 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error);
-      const errorMsg = error?.message || translate('register.messages.error.fail');
+      const err = error as { message?: string };
+      const errorMsg = err?.message || translate('register.messages.error.fail');
       message.error(errorMsg);
     } finally {
       setRegisterLoading(false);

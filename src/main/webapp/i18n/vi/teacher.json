@@ -1,0 +1,181 @@
+{
+  "langleague": {
+    "teacher": {
+      "dashboard": {
+        "title": "Bảng Điều Khiển Giáo Viên",
+        "welcome": "Chào mừng trở lại, {name}!",
+        "stats": {
+          "myCourses": "Khóa Học Của Tôi",
+          "totalStudents": "Tổng Số Học Sinh",
+          "pendingAssignments": "Bài Tập Chờ Duyệt",
+          "averageRating": "Đánh Giá Trung Bình"
+        },
+        "quickActions": {
+          "title": "Thao Tác Nhanh",
+          "manageBooks": "Quản Lý Sách",
+          "createBook": "Tạo Sách Mới",
+          "viewStudents": "Xem Học Sinh"
+        },
+        "recentActivity": {
+          "title": "Hoạt Động Gần Đây",
+          "noData": "Không có hoạt động gần đây"
+        }
+      },
+      "books": {
+        "management": {
+          "title": "Quản Lý Sách",
+          "description": "Quản lý kho sách của bạn, theo dõi sách đã phát hành và cập nhật chi tiết danh mục.",
+          "loading": "Đang tải...",
+          "noBooks": "Không tìm thấy sách"
+        },
+        "stats": {
+          "total": "Tổng Số Sách",
+          "available": "Có Sẵn",
+          "uploaded": "Đã Tải Lên"
+        },
+        "search": {
+          "placeholder": "Tìm kiếm theo tiêu đề, tác giả hoặc ISBN..."
+        },
+        "actions": {
+          "filter": "Lọc",
+          "addNew": "+ Thêm Sách Mới",
+          "edit": "Chỉnh Sửa",
+          "view": "Xem Chi Tiết",
+          "delete": "Xóa",
+          "confirmDelete": "Bạn có chắc chắn muốn xóa cuốn sách này không?"
+        },
+        "table": {
+          "cover": "BÌA SÁCH",
+          "details": "CHI TIẾT SÁCH",
+          "uploadedBy": "NGƯỜI TẢI LÊN",
+          "actions": "THAO TÁC"
+        },
+        "pagination": {
+          "previous": "Trước",
+          "next": "Tiếp"
+        },
+        "detail": {
+          "loading": "Đang tải...",
+          "backToBooks": "Quay Lại Danh Sách",
+          "editBook": "Chỉnh Sửa Sách",
+          "addUnit": "Thêm Bài",
+          "meta": {
+            "totalUnits": "Tổng Số Bài:",
+            "created": "Ngày Tạo:",
+            "public": "Công Khai:",
+            "yes": "Có",
+            "no": "Không"
+          },
+          "units": {
+            "title": "Danh Sách Bài",
+            "hint": "Kéo và thả để sắp xếp lại bài học",
+            "empty": {
+              "title": "Chưa có bài học",
+              "description": "Bắt đầu bằng cách thêm bài học đầu tiên cho cuốn sách này",
+              "addFirst": "Thêm Bài Đầu Tiên"
+            },
+            "stats": {
+              "vocabulary": "Từ Vựng:",
+              "grammar": "Ngữ Pháp:",
+              "exercises": "Bài Tập:"
+            },
+            "actions": {
+              "edit": "Chỉnh Sửa",
+              "delete": "Xóa",
+              "confirmDelete": "Bạn có chắc chắn muốn xóa bài học này không?"
+            }
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Thêm Sách Mới",
+            "edit": "Chỉnh Sửa Sách"
+          },
+          "description": {
+            "create": "Nhập chi tiết bên dưới để thêm sách mới.",
+            "edit": "Nhập chi tiết bên dưới để cập nhật sách."
+          },
+          "fields": {
+            "coverLabel": "Bìa Sách",
+            "uploadPlaceholder": "Tải Lên Bìa",
+            "uploadHint": "Kéo thả hoặc nhấp chuột",
+            "fileInfo": "Hỗ trợ: JPG, PNG (tối đa 2MB)",
+            "titleLabel": "Tiêu Đề Sách",
+            "titlePlaceholder": "vd. Gatsby Vĩ Đại",
+            "titleRequired": "Tiêu đề sách là bắt buộc",
+            "titleMinLength": "Tiêu đề phải có ít nhất 2 ký tự",
+            "descriptionLabel": "Mô Tả",
+            "descriptionPlaceholder": "Nhập mô tả ngắn gọn về nội dung sách..."
+          },
+          "footer": {
+            "infoText": "Tất cả các trường được tự động lưu cục bộ.",
+            "cancel": "Hủy",
+            "save": "Lưu Sách",
+            "saving": "Đang lưu..."
+          }
+        }
+      },
+      "units": {
+        "form": {
+          "backButton": "Quay Lại",
+          "titlePlaceholder": "Tiêu Đề Bài Học",
+          "titleRequired": "Tiêu đề bài học là bắt buộc",
+          "titleMinLength": "Tiêu đề phải có ít nhất 3 ký tự",
+          "descriptionPlaceholder": "Mô Tả Bài Học",
+          "submitButton": "Gửi",
+          "saving": "Đang lưu..."
+        },
+        "vocabulary": {
+          "sectionTitle": "Từ Vựng",
+          "addButton": "Thêm Từ Vựng",
+          "fields": {
+            "word": "Từ (vd: Hello)",
+            "phonetic": "Phiên âm (vd: /həˈloʊ/)",
+            "meaning": "Nghĩa",
+            "example": "Câu ví dụ",
+            "imageUrl": "URL Hình Ảnh",
+            "order": "Thứ Tự"
+          }
+        },
+        "grammar": {
+          "sectionTitle": "Ngữ Pháp",
+          "addButton": "Thêm Ngữ Pháp",
+          "fields": {
+            "title": "Tiêu đề ngữ pháp",
+            "content": "Nội dung (Hỗ trợ Markdown)",
+            "contentHint": "Hỗ trợ Markdown: **bold**, *italic*, # heading",
+            "example": "Ví dụ sử dụng",
+            "exampleHint": "Các ví dụ sử dụng",
+            "order": "Thứ Tự"
+          }
+        },
+        "exercises": {
+          "sectionTitle": "Bài Tập",
+          "addButton": "Thêm Bài Tập",
+          "types": {
+            "singleChoice": "Một Đáp Án",
+            "multiChoice": "Nhiều Đáp Án",
+            "fillInBlank": "Điền Vào Chỗ Trống"
+          },
+          "fields": {
+            "question": "Nội dung câu hỏi",
+            "correctAnswer": "Nhập câu trả lời đúng...",
+            "imageUrl": "URL Hình Ảnh (tùy chọn)",
+            "audioUrl": "URL Âm Thanh (tùy chọn)",
+            "option": "Lựa chọn {number}"
+          },
+          "options": {
+            "addButton": "Thêm lựa chọn"
+          },
+          "menu": {
+            "addExercise": "Thêm Bài Tập",
+            "singleChoice": "Một Đáp Án",
+            "multiChoice": "Nhiều Đáp Án",
+            "fillInBlank": "Điền Vào Chỗ Trống"
+          }
+        }
+      }
+    }
+  }
+}
+

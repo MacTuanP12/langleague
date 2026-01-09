@@ -125,6 +125,15 @@
           &::placeholder {
             color: #9ca3af;
           }
+
+          &.error {
+            border-color: #ef4444;
+
+            &:focus {
+              border-color: #dc2626;
+              box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            }
+          }
         }
 
         textarea {
@@ -141,6 +150,27 @@
           background-position: right 12px center;
           padding-right: 36px;
         }
+      }
+    }
+
+    .error-text {
+      display: block;
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+      margin-top: 16px;
+
+      &:first-child {
+        margin-top: 0;
       }
     }
   }
@@ -263,4 +293,3 @@
     }
   }
 }
-

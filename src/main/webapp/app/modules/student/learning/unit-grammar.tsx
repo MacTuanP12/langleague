@@ -1,44 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
-import { IUnit } from 'app/shared/model/unit.model';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
+import { fetchGrammarsByUnitId } from 'app/shared/reducers/grammar.reducer';
 import { IGrammar, IGrammarExample } from 'app/shared/model/grammar.model';
+import ReactMarkdown from "react-markdown";
+import { Translate } from "react-jhipster";
 
 export const UnitGrammar = () => {
-  const [unit, setUnit] = useState<IUnit | null>(null);
-  const [grammars, setGrammars] = useState<IGrammar[]>([]);
+  const dispatch = useAppDispatch();
+  const { selectedUnit } = useAppSelector(state => state.unit);
+  const { grammars } = useAppSelector(state => state.grammar);
   const [selectedGrammar, setSelectedGrammar] = useState<IGrammar | null>(null);
   const { unitId } = useParams<{ unitId: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (unitId) {
-      loadUnit();
-      loadGrammars();
+      dispatch(fetchUnitById(unitId));
+      dispatch(fetchGrammarsByUnitId(unitId));
     }
-  }, [unitId]);
+  }, [dispatch, unitId]);
 
-  const loadUnit = async () => {
-    try {
-      const response = await axios.get<IUnit>(`/api/units/${unitId}`);
-      setUnit(response.data);
-    } catch (error) {
-      console.error('Error loading unit:', error);
+  useEffect(() => {
+    if (grammars.length > 0 && !selectedGrammar) {
+      setSelectedGrammar(grammars[0]);
     }
-  };
-
-  const loadGrammars = async () => {
-    try {
-      const response = await axios.get<IGrammar[]>(`/api/units/${unitId}/grammars`);
-      setGrammars(response.data);
-      if (response.data.length > 0) {
-        setSelectedGrammar(response.data[0]);
-      }
-    } catch (error) {
-      console.error('Error loading grammars:', error);
-    }
-  };
+  }, [grammars, selectedGrammar]);
 
   const parseExamples = (examplesJson: string): IGrammarExample[] => {
     try {
@@ -58,7 +46,7 @@ export const UnitGrammar = () => {
           <div className="breadcrumb">
             <span>UNIT 1 - GRAMMAR</span>
           </div>
-          <h2>{unit?.title || 'Grammar'}</h2>
+          <h2>{selectedUnit?.title || 'Grammar'}</h2>
         </div>
       </div>
 
@@ -97,7 +85,11 @@ export const UnitGrammar = () => {
 
         {grammars.length === 0 && (
           <div className="empty-state">
-            <p>No grammar lessons added yet for this unit.</p>
+            <p>
+              <Translate contentKey="langleague.student.learning.grammar.noGrammar">
+                No grammar lessons added yet for this unit.
+              </Translate>
+            </p>
           </div>
         )}
       </div>

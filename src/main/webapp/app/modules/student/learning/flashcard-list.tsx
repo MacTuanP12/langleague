@@ -4,6 +4,7 @@ import axios from 'axios';
 import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
 import './flashcard-list.scss';
+import {Translate} from "react-jhipster";
 
 export const FlashcardList = () => {
   const [books, setBooks] = useState<IBook[]>([]);
@@ -58,7 +59,9 @@ export const FlashcardList = () => {
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="header-content">
-          <h1>📚 Flashcards</h1>
+          <h1>
+            📚 <Translate contentKey="langleague.student.learning.flashcardList.title">Flashcards</Translate>
+          </h1>
           <p>Practice vocabulary with interactive flashcards</p>
         </div>
       </div>
@@ -67,12 +70,16 @@ export const FlashcardList = () => {
         {loading ? (
           <div className="loading-state">
             <div className="spinner"></div>
-            <p>Loading books...</p>
+            <p>
+              <Translate contentKey="langleague.student.learning.flashcardList.loading">Loading...</Translate>
+            </p>
           </div>
         ) : books.length === 0 ? (
           <div className="empty-state">
             <i className="bi bi-book"></i>
-            <h3>No books available</h3>
+            <h3>
+              <Translate contentKey="langleague.student.learning.flashcardList.noSets">No books available</Translate>
+            </h3>
             <p>Start by enrolling in a book from the Books section</p>
             <Link to="/student/books" className="cta-btn">
               Browse Books

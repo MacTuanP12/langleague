@@ -4,6 +4,7 @@ import { Storage } from 'react-jhipster';
 import { getSession } from 'app/shared/reducers/authentication';
 import { AppThunk } from 'app/config/store';
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { IUser } from 'app/shared/model/user.model';
 
 const initialState = {
   loading: false,
@@ -18,7 +19,7 @@ export type SettingsState = Readonly<typeof initialState>;
 // Actions
 const apiUrl = 'api/account';
 
-export const saveAccountSettings: (account: any) => AppThunk = account => async dispatch => {
+export const saveAccountSettings: (account: IUser) => AppThunk = account => async dispatch => {
   await dispatch(updateAccount(account));
 
   if (Storage.session.get(`locale`)) {
@@ -28,7 +29,7 @@ export const saveAccountSettings: (account: any) => AppThunk = account => async 
   dispatch(getSession());
 };
 
-export const updateAccount = createAsyncThunk('settings/update_account', async (account: any) => axios.post<any>(apiUrl, account), {
+export const updateAccount = createAsyncThunk('settings/update_account', async (account: IUser) => axios.post<IUser>(apiUrl, account), {
   serializeError: serializeAxiosError,
 });
 

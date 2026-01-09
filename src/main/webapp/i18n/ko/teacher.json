@@ -1,0 +1,180 @@
+{
+  "langleague": {
+    "teacher": {
+      "dashboard": {
+        "title": "교사 대시보드",
+        "welcome": "{name}님, 환영합니다!",
+        "stats": {
+          "myCourses": "내 강좌",
+          "totalStudents": "총 학생 수",
+          "pendingAssignments": "대기 중인 과제",
+          "averageRating": "평균 평점"
+        },
+        "quickActions": {
+          "title": "빠른 작업",
+          "manageBooks": "교재 관리",
+          "createBook": "새 교재 만들기",
+          "viewStudents": "학생 보기"
+        },
+        "recentActivity": {
+          "title": "최근 활동",
+          "noData": "최근 활동 없음"
+        }
+      },
+      "books": {
+        "management": {
+          "title": "교재 관리",
+          "description": "라이브러리 재고를 관리하고, 발급된 도서를 추적하며, 카탈로그 정보를 업데이트합니다.",
+          "loading": "로딩 중...",
+          "noBooks": "교재를 찾을 수 없습니다"
+        },
+        "stats": {
+          "total": "총 교재",
+          "available": "대여 가능",
+          "uploaded": "업로드됨"
+        },
+        "search": {
+          "placeholder": "제목, 저자 또는 ISBN으로 검색..."
+        },
+        "actions": {
+          "filter": "필터",
+          "addNew": "+ 새 교재 추가",
+          "edit": "수정",
+          "view": "상세 보기",
+          "delete": "삭제",
+          "confirmDelete": "이 교재를 삭제하시겠습니까?"
+        },
+        "table": {
+          "cover": "표지",
+          "details": "교재 상세",
+          "uploadedBy": "업로더",
+          "actions": "작업"
+        },
+        "pagination": {
+          "previous": "이전",
+          "next": "다음"
+        },
+        "detail": {
+          "loading": "로딩 중...",
+          "backToBooks": "목록으로",
+          "editBook": "교재 수정",
+          "addUnit": "단원 추가",
+          "meta": {
+            "totalUnits": "총 단원:",
+            "created": "생성일:",
+            "public": "공개:",
+            "yes": "예",
+            "no": "아니요"
+          },
+          "units": {
+            "title": "단원",
+            "hint": "드래그 앤 드롭으로 단원 순서를 변경하세요"
+          },
+          "empty": {
+            "title": "단원이 없습니다",
+            "description": "이 교재에 첫 번째 단원을 추가해보세요",
+            "addFirst": "첫 단원 추가"
+          },
+          "stats": {
+            "vocabulary": "어휘:",
+            "grammar": "문법:",
+            "exercises": "연습 문제:"
+          },
+          "actions": {
+            "edit": "수정",
+            "delete": "삭제",
+            "confirmDelete": "이 단원을 삭제하시겠습니까?"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "새 교재 추가",
+            "edit": "교재 수정"
+          },
+          "description": {
+            "create": "새 자료를 분류하기 위해 아래 정보를 입력하세요.",
+            "edit": "자료를 업데이트하려면 아래 정보를 입력하세요."
+          },
+          "fields": {
+            "coverLabel": "교재 표지",
+            "uploadPlaceholder": "표지 업로드",
+            "uploadHint": "드래그 앤 드롭 또는 클릭",
+            "fileInfo": "지원 형식: JPG, PNG (최대 2MB)",
+            "titleLabel": "교재 제목",
+            "titlePlaceholder": "예: 위대한 개츠비",
+            "titleRequired": "교재 제목은 필수입니다",
+            "titleMinLength": "제목은 최소 2자 이상이어야 합니다",
+            "descriptionLabel": "설명",
+            "descriptionPlaceholder": "교재 내용에 대한 간단한 요약을 입력하세요..."
+          },
+          "footer": {
+            "infoText": "모든 필드는 로컬에 자동 저장됩니다.",
+            "cancel": "취소",
+            "save": "교재 저장",
+            "saving": "저장 중..."
+          }
+        }
+      },
+      "units": {
+        "form": {
+          "backButton": "뒤로",
+          "titlePlaceholder": "단원 제목",
+          "titleRequired": "단원 제목은 필수입니다",
+          "titleMinLength": "제목은 최소 3자 이상이어야 합니다",
+          "descriptionPlaceholder": "단원 설명",
+          "submitButton": "제출",
+          "saving": "저장 중..."
+        },
+        "vocabulary": {
+          "sectionTitle": "어휘",
+          "addButton": "어휘 추가",
+          "fields": {
+            "word": "단어 (예: Hello)",
+            "phonetic": "발음기호 (예: /həˈloʊ/)",
+            "meaning": "뜻",
+            "example": "예문",
+            "imageUrl": "이미지 URL",
+            "order": "순서"
+          }
+        },
+        "grammar": {
+          "sectionTitle": "문법",
+          "addButton": "문법 추가",
+          "fields": {
+            "title": "문법 제목",
+            "content": "내용 (마크다운 지원)",
+            "contentHint": "마크다운 지원: **굵게**, *기울임*, # 제목",
+            "example": "사용 예시",
+            "exampleHint": "예문 작성",
+            "order": "순서"
+          }
+        },
+        "exercises": {
+          "sectionTitle": "연습 문제",
+          "addButton": "문제 추가",
+          "types": {
+            "singleChoice": "단일 선택",
+            "multiChoice": "다중 선택",
+            "fillInBlank": "빈칸 채우기"
+          },
+          "fields": {
+            "question": "문제 지문",
+            "correctAnswer": "정답 입력...",
+            "imageUrl": "이미지 URL (선택 사항)",
+            "audioUrl": "오디오 URL (선택 사항)",
+            "option": "보기 {number}"
+          },
+          "options": {
+            "addButton": "보기 추가"
+          },
+          "menu": {
+            "addExercise": "문제 추가",
+            "singleChoice": "단일 선택",
+            "multiChoice": "다중 선택",
+            "fillInBlank": "빈칸 채우기"
+          }
+        }
+      }
+    }
+  }
+}

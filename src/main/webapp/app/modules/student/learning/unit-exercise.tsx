@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IUnit } from 'app/shared/model/unit.model';
-import { IExercise } from 'app/shared/model/exercise.model';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
+import { fetchExercisesByUnitId } from 'app/shared/reducers/exercise.reducer';
 import { ExerciseType } from 'app/shared/model';
+import {Translate} from "react-jhipster";
 
 export const UnitExercise = () => {
-  const [unit, setUnit] = useState<IUnit | null>(null);
-  const [exercises, setExercises] = useState<IExercise[]>([]);
+  const dispatch = useAppDispatch();
+  const { selectedUnit } = useAppSelector(state => state.unit);
+  const { exercises } = useAppSelector(state => state.exercise);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>({});
   const { unitId } = useParams<{ unitId: string }>();
@@ -15,28 +17,10 @@ export const UnitExercise = () => {
 
   useEffect(() => {
     if (unitId) {
-      loadUnit();
-      loadExercises();
+      dispatch(fetchUnitById(unitId));
+      dispatch(fetchExercisesByUnitId(unitId));
     }
-  }, [unitId]);
-
-  const loadUnit = async () => {
-    try {
-      const response = await axios.get<IUnit>(`/api/units/${unitId}`);
-      setUnit(response.data);
-    } catch (error) {
-      console.error('Error loading unit:', error);
-    }
-  };
-
-  const loadExercises = async () => {
-    try {
-      const response = await axios.get<IExercise[]>(`/api/units/${unitId}/exercises`);
-      setExercises(response.data);
-    } catch (error) {
-      console.error('Error loading exercises:', error);
-    }
-  };
+  }, [dispatch, unitId]);
 
   const playAudio = (audioUrl: string) => {
     if (audioUrl) {
@@ -64,7 +48,7 @@ export const UnitExercise = () => {
           <div className="breadcrumb">
             <span>UNIT 1 - EXERCISE</span>
           </div>
-          <h2>{unit?.title || 'Exercise'}</h2>
+          <h2>{selectedUnit?.title || 'Exercise'}</h2>
         </div>
       </div>
 
@@ -122,7 +106,11 @@ export const UnitExercise = () => {
 
         {exercises.length === 0 && (
           <div className="empty-state">
-            <p>No exercises added yet for this unit.</p>
+            <p>
+              <Translate contentKey="langleague.student.learning.exercise.noExercises">
+                No exercises added yet for this unit.
+              </Translate>
+            </p>
           </div>
         )}
 
@@ -133,7 +121,7 @@ export const UnitExercise = () => {
               onClick={() => setCurrentExerciseIndex(Math.max(0, currentExerciseIndex - 1))}
               disabled={currentExerciseIndex === 0}
             >
-              ← Previous
+              ← <Translate contentKey="langleague.student.learning.vocabulary.navigation.previous">Previous</Translate>
             </button>
             <span className="exercise-counter">
               {currentExerciseIndex + 1} / {exercises.length}
@@ -143,7 +131,7 @@ export const UnitExercise = () => {
               onClick={() => setCurrentExerciseIndex(Math.min(exercises.length - 1, currentExerciseIndex + 1))}
               disabled={currentExerciseIndex === exercises.length - 1}
             >
-              Next →
+              <Translate contentKey="langleague.student.learning.vocabulary.navigation.next">Next</Translate> →
             </button>
           </div>
         )}

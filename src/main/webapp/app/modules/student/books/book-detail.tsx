@@ -5,14 +5,13 @@ import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
 import { IEnrollment } from 'app/shared/model/enrollment.model';
 import './book-detail.scss';
+import {Translate} from "react-jhipster";
 
 export const BookDetail = () => {
   const [book, setBook] = useState<IBook | null>(null);
   const [units, setUnits] = useState<IUnit[]>([]);
   const [enrollment, setEnrollment] = useState<IEnrollment | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'all' | 'enrolled' | 'not-enrolled'>('all');
   const [relatedBooks, setRelatedBooks] = useState<IBook[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -75,101 +74,79 @@ export const BookDetail = () => {
   };
 
   if (!book) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Translate contentKey="langleague.student.books.detail.loading">Loading...</Translate>
+      </div>
+    );
   }
 
   return (
     <div className="book-detail">
       <div className="book-detail-header">
-        <div className="header-content">
-          <div className="header-left">
-            <button className="sidebar-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)} title="Toggle Sidebar">
-              {isSidebarOpen ? '☰ Hide Sidebar' : '☰ Show Sidebar'}
-            </button>
-            <Link to="/student/dashboard" className="back-link">
-              ← Home
-            </Link>
-          </div>
-          <h2>{book.title}</h2>
-        </div>
+        <Link to="/student/books" className="back-link">
+          ← <Translate contentKey="langleague.student.books.detail.backToBooks">Back to Books</Translate>
+        </Link>
+        <h2>{book.title}</h2>
       </div>
 
-      <div className={`detail-content ${isSidebarOpen ? '' : 'sidebar-collapsed'}`}>
-        <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-          <div className="search-box">
-            <input type="text" placeholder="Search for books, courses, or topics..." />
-          </div>
+      <div className="book-detail-content">
+        <div className="book-info-panel">
+          <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover-large" />
+          <div className="book-description">
+            <h3>{book.title}</h3>
+            <p className="description">{book.description}</p>
 
-          <div className="tabs">
-            <button className={selectedTab === 'all' ? 'active' : ''} onClick={() => setSelectedTab('all')}>
-              All
-            </button>
-            <button className={selectedTab === 'enrolled' ? 'active' : ''} onClick={() => setSelectedTab('enrolled')}>
-              Enrolled
-            </button>
-            <button className={selectedTab === 'not-enrolled' ? 'active' : ''} onClick={() => setSelectedTab('not-enrolled')}>
-              Not Enroll
-            </button>
-          </div>
+            {enrollment ? (
+              <Link to={`/student/learn/book/${book.id}`} className="btn-continue">
+                <i className="bi bi-play-circle"></i>{' '}
+                <Translate contentKey="langleague.student.books.detail.startLearning">Continue Learning</Translate>
+              </Link>
+            ) : (
+              <button onClick={handleEnroll} className="btn-enroll">
+                <i className="bi bi-bookmark-plus"></i>{' '}
+                <Translate contentKey="langleague.student.books.detail.startLearning">Enroll Now</Translate>
+              </button>
+            )}
 
-          <div className="courses-list">
-            <div className="course-card featured">
-              <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} />
-              <div className="course-info">
-                <h4>{book.title}</h4>
-                <p>{book.description}</p>
-                {enrollment ? (
-                  <Link to={`/student/learn/book/${book.id}`} className="btn-continue">
-                    Continue Learning
-                  </Link>
+            <div className="learning-objectives">
+              <h4>
+                <Translate contentKey="langleague.student.books.detail.units.title">UNITS IN THIS BOOK</Translate>
+              </h4>
+              <div className="units-list">
+                {units.length === 0 ? (
+                  <p className="no-units">
+                    <Translate contentKey="langleague.student.books.detail.units.empty">No units available yet</Translate>
+                  </p>
                 ) : (
-                  <button onClick={handleEnroll} className="btn-enroll">
-                    Enroll Now
-                  </button>
+                  units.map((unit, index) => (
+                    <div key={unit.id} className="unit-item">
+                      <span className="unit-number">{index + 1}</span>
+                      <span className="unit-title">{unit.title}</span>
+                    </div>
+                  ))
                 )}
               </div>
             </div>
-
-            {relatedBooks.map(relatedBook => (
-              <div key={relatedBook.id} className="course-card">
-                <img src={relatedBook.coverImageUrl || '/content/images/default-book.png'} alt={relatedBook.title} />
-                <div className="course-info">
-                  <h4>{relatedBook.title}</h4>
-                  <p>{relatedBook.description}</p>
-                  <Link to={`/student/books/${relatedBook.id}`} className="btn-enroll">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
-        <div className="main-content">
-          <div className="book-info-panel">
-            <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover-large" />
-            <div className="book-description">
-              <h3>{book.title}</h3>
-              <p className="subtitle">Dr. Richard Feynman</p>
-              <p className="description">{book.description}</p>
-              <p className="detailed-description">
-                Dive into the fascinating world of physics with this comprehensive eBook that covers the fundamental principles that govern
-                our universe. From the mechanics of motion to the laws of thermodynamics, you will explore real-world applications of
-                physical concepts. The curriculum includes interactive problem-solving sessions, visual demonstrations, and a universal
-                context to bring equations to life.
-              </p>
-              <div className="learning-objectives">
-                <h4>WHAT YOU&apos;LL LEARN</h4>
-                <ul>
-                  <li>Newton&apos;s Laws of Motion</li>
-                  <li>Energy, Work, and Power</li>
-                  <li>Thermodynamics and Heat Transfer</li>
-                  <li>Introduction to Quantum Theory</li>
-                </ul>
-              </div>
+        {relatedBooks.length > 0 && (
+          <div className="related-books">
+            <h4>Related Books</h4>
+            <div className="related-books-grid">
+              {relatedBooks.map(relatedBook => (
+                <Link key={relatedBook.id} to={`/student/books/${relatedBook.id}`} className="related-book-card">
+                  <img src={relatedBook.coverImageUrl || '/content/images/default-book.png'} alt={relatedBook.title} />
+                  <div className="related-book-info">
+                    <h5>{relatedBook.title}</h5>
+                    <p>{relatedBook.description}</p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

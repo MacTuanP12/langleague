@@ -1,0 +1,186 @@
+{
+  "langleague": {
+    "student": {
+      "dashboard": {
+        "loading": "Đang tải khóa học của bạn...",
+        "error": "Không thể tải khóa học",
+        "tryAgain": "Thử Lại",
+        "search": {
+          "placeholder": "Tìm kiếm khóa học..."
+        },
+        "filter": {
+          "all": "Tất Cả Khóa Học",
+          "inProgress": "Đang Học",
+          "completed": "Đã Hoàn Thành"
+        },
+        "noCourses": "Không tìm thấy khóa học",
+        "course": {
+          "continue": "Tiếp Tục",
+          "start": "Bắt Đầu Học",
+          "units": "bài học"
+        }
+      },
+      "books": {
+        "title": "Sách Của Tôi",
+        "search": {
+          "placeholder": "Tìm kiếm sách..."
+        },
+        "noBooks": "Không có sách nào",
+        "createdDate": "Ngày tạo:",
+        "detail": {
+          "loading": "Đang tải...",
+          "backToBooks": "Quay Lại Danh Sách",
+          "startLearning": "Bắt Đầu Học",
+          "description": "Chọn một cuốn sách để bắt đầu học",
+          "details": "Chi Tiết Sách",
+          "createdBy": "Tạo bởi:",
+          "totalUnits": "Tổng số bài:",
+          "public": "Công khai:",
+          "yes": "Có",
+          "no": "Không",
+          "units": {
+            "title": "BÀI HỌC TRONG SÁCH",
+            "empty": "Chưa có bài học nào"
+          }
+        }
+      },
+      "learning": {
+        "bookLearn": {
+          "loading": "Đang tải...",
+          "backToBooks": "Quay Lại Sách",
+          "progress": "Tiến Độ",
+          "units": "Bài Học",
+          "empty": "Không có bài học",
+          "start": "Bắt Đầu",
+          "continue": "Tiếp Tục",
+          "completed": "Đã Hoàn Thành"
+        },
+        "vocabulary": {
+          "title": "Luyện Từ Vựng",
+          "backToUnit": "Quay Lại Bài",
+          "loading": "Đang tải từ vựng...",
+          "learned": "Đã Học",
+          "total": "Tổng Số",
+          "noVocabulary": "Không có từ vựng",
+          "word": "Từ:",
+          "phonetic": "Phiên âm:",
+          "meaning": "Nghĩa:",
+          "example": "Ví dụ:",
+          "navigation": {
+            "previous": "Trước",
+            "next": "Tiếp"
+          }
+        },
+        "grammar": {
+          "title": "Bài Ngữ Pháp",
+          "backToUnit": "Quay Lại Bài",
+          "loading": "Đang tải ngữ pháp...",
+          "noGrammar": "Không có bài ngữ pháp",
+          "navigation": {
+            "previous": "Trước",
+            "next": "Tiếp"
+          }
+        },
+        "exercise": {
+          "title": "Bài Tập",
+          "backToUnit": "Quay Lại Bài",
+          "loading": "Đang tải bài tập...",
+          "noExercises": "Không có bài tập",
+          "question": "Câu hỏi",
+          "of": "của",
+          "yourAnswer": "Câu trả lời của bạn:",
+          "correctAnswer": "Đáp án đúng:",
+          "submit": "Nộp Bài",
+          "next": "Câu Tiếp Theo",
+          "finish": "Hoàn Thành",
+          "score": "Điểm Của Bạn:",
+          "correct": "Đúng",
+          "incorrect": "Sai"
+        },
+        "flashcard": {
+          "title": "Luyện Flashcard",
+          "backToList": "Quay Lại Danh Sách",
+          "loading": "Đang tải flashcard...",
+          "noFlashcards": "Không có flashcard",
+          "card": "Thẻ",
+          "of": "của",
+          "flip": "Lật Thẻ",
+          "showAnswer": "Hiện Đáp Án",
+          "hideAnswer": "Ẩn Đáp Án",
+          "navigation": {
+            "previous": "Trước",
+            "next": "Tiếp",
+            "finish": "Hoàn Thành"
+          }
+        },
+        "flashcardList": {
+          "title": "Bộ Flashcard Của Tôi",
+          "loading": "Đang tải...",
+          "noSets": "Không có bộ flashcard",
+          "cards": "thẻ",
+          "practice": "Luyện Tập"
+        }
+      },
+      "games": {
+        "title": "Trung Tâm Trò Chơi",
+        "subtitle": "Luyện tập kỹ năng với các trò chơi thú vị",
+        "search": {
+          "placeholder": "Tìm kiếm trò chơi..."
+        },
+        "difficulty": {
+          "all": "Tất Cả Cấp Độ",
+          "easy": "Dễ",
+          "medium": "Trung Bình",
+          "hard": "Khó"
+        },
+        "stats": {
+          "gamesPlayed": "Số Lần Chơi",
+          "totalScore": "Tổng Điểm",
+          "highScore": "Điểm Cao Nhất"
+        },
+        "noGames": "Không có trò chơi",
+        "play": "Chơi Ngay"
+      },
+      "profile": {
+        "title": "Hồ Sơ",
+        "personalInfo": {
+          "title": "Thông Tin Cá Nhân",
+          "firstName": "Tên",
+          "lastName": "Họ",
+          "fullName": "Họ Và Tên",
+          "fullNamePlaceholder": "vd: Nguyễn Văn A",
+          "email": "Địa Chỉ Email",
+          "phone": "Số Điện Thoại",
+          "dateOfBirth": "Ngày Sinh",
+          "bio": "Giới Thiệu Bản Thân",
+          "bioPlaceholder": "Hãy chia sẻ một chút về bản thân bạn..."
+        },
+        "accountInfo": {
+          "title": "Thông Tin Tài Khoản",
+          "username": "Tên Đăng Nhập",
+          "usernamePlaceholder": "vd: nguyenvana2024",
+          "role": "Vai Trò",
+          "memberSince": "Tham Gia Từ",
+          "lastLogin": "Đăng Nhập Lần Cuối"
+        },
+        "learningStats": {
+          "title": "Thống Kê Học Tập",
+          "coursesEnrolled": "Khóa Đã Đăng Ký",
+          "coursesCompleted": "Khóa Đã Hoàn Thành",
+          "totalLearningTime": "Tổng Thời Gian Học",
+          "currentStreak": "Chuỗi Ngày Học",
+          "hours": "giờ",
+          "days": "ngày"
+        },
+        "actions": {
+          "changePhoto": "Đổi Ảnh",
+          "editProfile": "Chỉnh Sửa Hồ Sơ",
+          "changePassword": "Đổi Mật Khẩu",
+          "saveChanges": "Lưu Thay Đổi",
+          "logout": "Đăng Xuất"
+        }
+      }
+    }
+  }
+}
+

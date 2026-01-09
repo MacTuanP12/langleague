@@ -13,7 +13,120 @@
       "question": "Are you sure you want to delete user {{ login }}?"
     },
     "detail": {
-      "title": "User"
+      "title": "User",
+      "breadcrumb": "User Management",
+      "editUser": "Edit User",
+      "backToList": "Back to List",
+      "userIdLabel": "User ID",
+      "joinedLabel": "Joined",
+      "loading": "Loading...",
+      "notFound": "User not found",
+      "fields": {
+        "login": "Login",
+        "email": "Email Address",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "role": "Role",
+        "status": "Status",
+        "language": "Language",
+        "createdBy": "Created By",
+        "createdDate": "Created Date",
+        "lastModifiedBy": "Last Modified By",
+        "lastModifiedDate": "Last Modified Date"
+      },
+      "roles": {
+        "student": "Student",
+        "teacher": "Teacher",
+        "admin": "Admin",
+        "librarian": "Librarian"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "system": "System"
+    },
+    "edit": {
+      "title": "Edit User Details",
+      "breadcrumb": "Edit Details",
+      "subtitle": "Update personal information, role settings, and account status.",
+      "loading": "Loading...",
+      "notFound": "User not found",
+      "userIdLabel": "User ID",
+      "joinedLabel": "Joined",
+      "avatarNote": "Avatar is managed by user through their profile settings, not by admin",
+      "fields": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter full name",
+        "email": "Email Address",
+        "emailReadOnly": "(Read-only)",
+        "role": "Role",
+        "status": "Account Status",
+        "bio": "Bio / About Me",
+        "bioPlaceholder": "Enter a brief description..."
+      },
+      "roles": {
+        "student": "Student",
+        "teacher": "Teacher",
+        "admin": "Admin",
+        "librarian": "Librarian"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "characterCount": "{{ count }}/500 characters",
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save Changes"
+      },
+      "infoBox": {
+        "title": "Editing User Permissions",
+        "content": "Changing a user's role to Administrator will grant them full access to the system settings and user management panels. Proceed with caution."
+      }
+    },
+    "create": {
+      "title": "Add New User",
+      "breadcrumb": "Add New User",
+      "subtitle": "Enter the user details below to create a new account.",
+      "fields": {
+        "email": "Email",
+        "emailPlaceholder": "Enter email",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "e.g. Jane Doe",
+        "role": "Role",
+        "roleSelect": "Select a role",
+        "status": "Status",
+        "password": "Password",
+        "passwordPlaceholder": "••••••••",
+        "confirmPassword": "Confirm Password"
+      },
+      "roles": {
+        "student": "Student",
+        "teacher": "Teacher",
+        "admin": "Admin",
+        "librarian": "Librarian"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending"
+      },
+      "required": "*",
+      "validation": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Email is invalid",
+        "fullNameRequired": "Full name is required",
+        "roleRequired": "Role is required",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match",
+        "submitError": "Failed to create user. Please try again."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "addUser": "Add User"
+      }
     },
     "login": "Login",
     "firstName": "First name",

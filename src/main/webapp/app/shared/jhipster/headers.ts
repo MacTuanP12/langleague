@@ -7,7 +7,7 @@ export type HeaderMessage = {
   param?: string;
 };
 
-const headerToString = (headerValue: any): string => {
+const headerToString = (headerValue: string | string[] | undefined): string => {
   if (Array.isArray(headerValue)) {
     if (headerValue.length > 1) {
       throw new Error('Multiple header values found');

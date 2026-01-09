@@ -1,0 +1,74 @@
+{
+}
+  }
+    }
+      }
+        }
+          "results": "results"
+          "of": "of",
+          "to": "to",
+          "showing": "Showing",
+        "pagination": {
+        },
+          "suspended": "Suspended"
+          "active": "Active",
+        "status": {
+        },
+          "librarian": "Librarian"
+          "student": "Student",
+          "teacher": "Teacher",
+          "admin": "Admin",
+        "role": {
+        },
+          "confirmDelete": "Are you sure you want to delete this user?"
+          "view": "View",
+          "delete": "Delete",
+          "edit": "Edit",
+          "addNew": "Add New User",
+        "actions": {
+        },
+          "actions": "Actions"
+          "status": "Status",
+          "role": "Role",
+          "email": "Email",
+          "name": "Name",
+        "table": {
+        },
+          }
+            "suspended": "Suspended"
+            "active": "Active",
+            "all": "All Status",
+          "status": {
+          },
+            "student": "Student"
+            "teacher": "Teacher",
+            "admin": "Admin",
+            "all": "All Roles",
+          "role": {
+        "filters": {
+        },
+          "placeholder": "Search by name, email, or username..."
+        "search": {
+        "loading": "Loading...",
+        "subtitle": "Manage student, teacher, and staff accounts.",
+        "title": "User Management",
+      "userManagement": {
+      },
+        }
+          "systemSettings": "System Settings"
+          "manageCourses": "Manage Courses",
+          "addUser": "Add User",
+          "title": "Quick Actions",
+        "quickActions": {
+        },
+          "recentActivities": "Recent Activities"
+          "activeSessions": "Active Sessions",
+          "totalCourses": "Total Courses",
+          "totalUsers": "Total Users",
+        "stats": {
+        "welcome": "Welcome back, {name}!",
+        "title": "Admin Dashboard",
+      "dashboard": {
+    "admin": {
+  "langleague": {
+

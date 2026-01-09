@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Translate, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { IUser } from 'app/shared/model/user.model';
+import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
 import './user-management.scss';
 
 export const UserManagement = () => {
@@ -12,6 +15,8 @@ export const UserManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,15 +44,29 @@ export const UserManagement = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+  const handleDeleteClick = (id: number) => {
+    setUserToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (userToDelete) {
       try {
-        await axios.delete(`/api/admin/users/${id}`);
+        await axios.delete(`/api/admin/users/${userToDelete}`);
+        toast.success(translate('langleague.admin.userManagement.deleteSuccess'));
         loadUsers();
       } catch (error) {
         console.error('Error deleting user:', error);
+        toast.error(translate('langleague.admin.userManagement.deleteFailed'));
       }
     }
+    setDeleteModalOpen(false);
+    setUserToDelete(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setUserToDelete(null);
   };
 
   const filteredUsers = users.filter(
@@ -62,14 +81,14 @@ export const UserManagement = () => {
     if (authorities?.includes('ROLE_ADMIN')) return 'role-admin';
     if (authorities?.includes('ROLE_TEACHER')) return 'role-teacher';
     if (authorities?.includes('ROLE_STUDENT')) return 'role-student';
-    return 'role-librarian';
+
   };
 
   const getRoleLabel = (authorities: string[]) => {
-    if (authorities?.includes('ROLE_ADMIN')) return 'Admin';
-    if (authorities?.includes('ROLE_TEACHER')) return 'Teacher';
-    if (authorities?.includes('ROLE_STUDENT')) return 'Student';
-    return 'Librarian';
+    if (authorities?.includes('ROLE_ADMIN')) return translate('langleague.admin.userManagement.role.admin');
+    if (authorities?.includes('ROLE_TEACHER')) return translate('langleague.admin.userManagement.role.teacher');
+    if (authorities?.includes('ROLE_STUDENT')) return translate('langleague.admin.userManagement.role.student');
+
   };
 
   const getStatusBadgeClass = (activated: boolean) => {
@@ -77,13 +96,13 @@ export const UserManagement = () => {
   };
 
   const getStatusLabel = (activated: boolean) => {
-    return activated ? 'Active' : 'Suspended';
+    return activated ? translate('langleague.admin.userManagement.status.active') : translate('langleague.admin.userManagement.status.suspended');
   };
 
   if (loading && users.length === 0) {
     return (
       <div className="user-management">
-        <div className="loading">Loading...</div>
+        <LoadingSpinner message="langleague.admin.userManagement.loading" isI18nKey />
       </div>
     );
   }
@@ -92,12 +111,16 @@ export const UserManagement = () => {
     <div className="user-management">
       <div className="page-header">
         <div className="header-content">
-          <h1>User Management</h1>
-          <p>Manage student, teacher, and staff accounts.</p>
+          <h1>
+            <Translate contentKey="langleague.admin.userManagement.title">User Management</Translate>
+          </h1>
+          <p>
+            <Translate contentKey="langleague.admin.userManagement.subtitle">Manage student, teacher, and staff accounts.</Translate>
+          </p>
         </div>
         <button className="btn-add-user" onClick={() => navigate('/admin/user-management/new')}>
           <i className="bi bi-plus-lg"></i>
-          Add New User
+          <Translate contentKey="langleague.admin.userManagement.actions.addNew">Add New User</Translate>
         </button>
       </div>
 
@@ -116,7 +139,7 @@ export const UserManagement = () => {
           <option value="ROLE_STUDENT">Student</option>
           <option value="ROLE_TEACHER">Teacher</option>
           <option value="ROLE_ADMIN">Admin</option>
-          <option value="ROLE_LIBRARIAN">Librarian</option>
+
         </select>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="filter-select">
           <option value="all">All Statuses</option>
@@ -126,7 +149,7 @@ export const UserManagement = () => {
         </select>
       </div>
 
-      <div className="users-table-container">
+      <div className="users-table-container table-responsive">
         <table className="users-table">
           <thead>
             <tr>
@@ -189,9 +212,9 @@ export const UserManagement = () => {
                     <button className="btn-action btn-lock" title="Lock User Account">
                       <i className="bi bi-lock"></i>
                     </button>
-                    <button className="btn-action btn-delete" onClick={() => handleDelete(user.id)} title="Delete User">
-                      <i className="bi bi-trash"></i>
-                    </button>
+                  <button className="btn-action btn-delete" onClick={() => handleDeleteClick(Number(user.id))} title="Delete User">
+                    <i className="bi bi-trash"></i>
+                  </button>
                   </div>
                 </td>
               </tr>
@@ -222,6 +245,18 @@ export const UserManagement = () => {
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="langleague.admin.userManagement.confirmDeleteTitle"
+        message="langleague.admin.userManagement.confirmDelete"
+        confirmText="langleague.common.delete"
+        cancelText="langleague.common.cancel"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        isI18nKey
+        variant="danger"
+      />
     </div>
   );
 };

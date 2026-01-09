@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Translate, translate } from 'react-jhipster';
+import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import { IUser } from 'app/shared/model/user.model';
 import './user-management-edit.scss';
 
@@ -14,6 +16,7 @@ export const UserManagementEdit = () => {
     bio: '',
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login } = useParams<{ login: string }>();
 
@@ -72,18 +75,25 @@ export const UserManagementEdit = () => {
   };
 
   if (loading) {
+    return <LoadingSpinner message="userManagement.edit.loading" isI18nKey />;
+  }
+
+  if (error) {
     return (
-      <div className="user-management-edit">
-        <div className="loading">Loading...</div>
-      </div>
+      <ErrorDisplay
+        message={error}
+        onRetry={loadUser}
+      />
     );
   }
 
   if (!user) {
     return (
-      <div className="user-management-edit">
-        <div className="error">User not found</div>
-      </div>
+      <ErrorDisplay
+        message="userManagement.edit.notFound"
+        isI18nKey
+        iconClass="bi-person-x"
+      />
     );
   }
 
@@ -91,14 +101,22 @@ export const UserManagementEdit = () => {
     <div className="user-management-edit">
       <div className="page-header">
         <div className="breadcrumb">
-          <Link to="/admin/user-management">User Management</Link>
+          <Link to="/admin/user-management">
+            <Translate contentKey="userManagement.detail.breadcrumb">User Management</Translate>
+          </Link>
           <span className="separator">›</span>
           <Link to={`/admin/user-management/${login}`}>{user.login}</Link>
           <span className="separator">›</span>
-          <span className="current">Edit Details</span>
+          <span className="current">
+            <Translate contentKey="userManagement.edit.breadcrumb">Edit Details</Translate>
+          </span>
         </div>
-        <h1>Edit User Details</h1>
-        <p>Update personal information, role settings, and account status.</p>
+        <h1>
+          <Translate contentKey="userManagement.edit.title">Edit User Details</Translate>
+        </h1>
+        <p>
+          <Translate contentKey="userManagement.edit.subtitle">Update personal information, role settings, and account status.</Translate>
+        </p>
       </div>
 
       <div className="form-container">
@@ -113,11 +131,12 @@ export const UserManagementEdit = () => {
           <div className="user-info">
             <h3>{formData.fullName || user.login}</h3>
             <p className="user-meta">
-              User ID: {user.id} • Joined{' '}
+              <Translate contentKey="userManagement.edit.userIdLabel">User ID</Translate>: {user.id} •{' '}
+              <Translate contentKey="userManagement.edit.joinedLabel">Joined</Translate>{' '}
               {user.createdDate ? new Date(user.createdDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A'}
             </p>
             <p className="info-note">
-              <i className="fa fa-info-circle"></i> Avatar is managed by user through their profile settings, not by admin
+              <i className="fa fa-info-circle"></i> <Translate contentKey="userManagement.edit.avatarNote">Avatar is managed by user through their profile settings, not by admin</Translate>
             </p>
           </div>
         </div>
@@ -125,13 +144,24 @@ export const UserManagementEdit = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
-              <label>Full Name</label>
-              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Enter full name" />
+              <label>
+                <Translate contentKey="userManagement.edit.fields.fullName">Full Name</Translate>
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder={translate('userManagement.edit.fields.fullNamePlaceholder')}
+              />
             </div>
 
             <div className="form-group">
               <label>
-                Email Address <span className="read-only-label">(Read-only)</span>
+                <Translate contentKey="userManagement.edit.fields.email">Email Address</Translate>{' '}
+                <span className="read-only-label">
+                  <Translate contentKey="userManagement.edit.fields.emailReadOnly">(Read-only)</Translate>
+                </span>
               </label>
               <div className="input-with-icon">
                 <input type="email" name="email" value={formData.email} onChange={handleChange} readOnly disabled />
@@ -142,39 +172,53 @@ export const UserManagementEdit = () => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Role</label>
+              <label>
+                <Translate contentKey="userManagement.edit.fields.role">Role</Translate>
+              </label>
               <select name="role" value={formData.role} onChange={handleChange}>
-                <option value="ROLE_STUDENT">Student</option>
-                <option value="ROLE_TEACHER">Teacher</option>
-                <option value="ROLE_ADMIN">Admin</option>
-                <option value="ROLE_LIBRARIAN">Librarian</option>
+                <option value="ROLE_STUDENT">{translate('userManagement.edit.roles.student')}</option>
+                <option value="ROLE_TEACHER">{translate('userManagement.edit.roles.teacher')}</option>
+                <option value="ROLE_ADMIN">{translate('userManagement.edit.roles.admin')}</option>
+                <option value="ROLE_LIBRARIAN">{translate('userManagement.edit.roles.librarian')}</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label>Account Status</label>
+              <label>
+                <Translate contentKey="userManagement.edit.fields.status">Account Status</Translate>
+              </label>
               <div className="status-display">
                 <span className={`status-badge ${formData.status === 'active' ? 'status-active' : 'status-inactive'}`}>
                   <span className="status-dot"></span>
-                  {formData.status === 'active' ? 'Active' : 'Inactive'}
+                  {formData.status === 'active' ? translate('userManagement.edit.status.active') : translate('userManagement.edit.status.inactive')}
                 </span>
               </div>
             </div>
           </div>
 
           <div className="form-group full-width">
-            <label>Bio / About Me</label>
-            <textarea name="bio" value={formData.bio} onChange={handleChange} placeholder="Enter a brief description..." rows={5} />
-            <div className="character-count">{formData.bio.length}/500 characters</div>
+            <label>
+              <Translate contentKey="userManagement.edit.fields.bio">Bio / About Me</Translate>
+            </label>
+            <textarea
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              placeholder={translate('userManagement.edit.fields.bioPlaceholder')}
+              rows={5}
+            />
+            <div className="character-count">
+              <Translate contentKey="userManagement.edit.characterCount" interpolate={{ count: formData.bio.length }} />
+            </div>
           </div>
 
           <div className="form-actions">
             <button type="button" className="btn-cancel" onClick={() => navigate('/admin/user-management')}>
-              Cancel
+              <Translate contentKey="userManagement.edit.buttons.cancel">Cancel</Translate>
             </button>
             <button type="submit" className="btn-submit">
               <i className="fa fa-save"></i>
-              Save Changes
+              <Translate contentKey="userManagement.edit.buttons.save">Save Changes</Translate>
             </button>
           </div>
         </form>
@@ -182,10 +226,13 @@ export const UserManagementEdit = () => {
         <div className="info-box">
           <i className="fa fa-info-circle"></i>
           <div>
-            <strong>Editing User Permissions</strong>
+            <strong>
+              <Translate contentKey="userManagement.edit.infoBox.title">Editing User Permissions</Translate>
+            </strong>
             <p>
-              Changing a user&apos;s role to <strong>Administrator</strong> will grant them full access to the system settings and user
-              management panels. Proceed with caution.
+              <Translate contentKey="userManagement.edit.infoBox.content">
+                Changing a user&apos;s role to Administrator will grant them full access to the system settings and user management panels. Proceed with caution.
+              </Translate>
             </p>
           </div>
         </div>

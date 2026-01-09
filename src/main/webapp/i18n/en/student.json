@@ -1,0 +1,186 @@
+{
+  "langleague": {
+    "student": {
+      "dashboard": {
+        "loading": "Loading your courses...",
+        "error": "Failed to load courses",
+        "tryAgain": "Try Again",
+        "search": {
+          "placeholder": "Search courses..."
+        },
+        "filter": {
+          "all": "All Courses",
+          "inProgress": "In Progress",
+          "completed": "Completed"
+        },
+        "noCourses": "No courses found",
+        "course": {
+          "continue": "Continue",
+          "start": "Start Learning",
+          "units": "units"
+        }
+      },
+      "books": {
+        "title": "My Books",
+        "search": {
+          "placeholder": "Search books..."
+        },
+        "noBooks": "No books available",
+        "createdDate": "Created:",
+        "detail": {
+          "loading": "Loading...",
+          "backToBooks": "Back to Books",
+          "startLearning": "Start Learning",
+          "description": "Choose a book to start learning",
+          "details": "Book Details",
+          "createdBy": "Created by:",
+          "totalUnits": "Total units:",
+          "public": "Public:",
+          "yes": "Yes",
+          "no": "No",
+          "units": {
+            "title": "UNITS IN THIS BOOK",
+            "empty": "No units available yet"
+          }
+        }
+      },
+      "learning": {
+        "bookLearn": {
+          "loading": "Loading...",
+          "backToBooks": "Back to Books",
+          "progress": "Progress",
+          "units": "Units",
+          "empty": "No units available",
+          "start": "Start",
+          "continue": "Continue",
+          "completed": "Completed"
+        },
+        "vocabulary": {
+          "title": "Vocabulary Practice",
+          "backToUnit": "Back to Unit",
+          "loading": "Loading vocabulary...",
+          "learned": "Learned",
+          "total": "Total",
+          "noVocabulary": "No vocabulary available",
+          "word": "Word:",
+          "phonetic": "Phonetic:",
+          "meaning": "Meaning:",
+          "example": "Example:",
+          "navigation": {
+            "previous": "Previous",
+            "next": "Next"
+          }
+        },
+        "grammar": {
+          "title": "Grammar Lesson",
+          "backToUnit": "Back to Unit",
+          "loading": "Loading grammar...",
+          "noGrammar": "No grammar lessons available",
+          "navigation": {
+            "previous": "Previous",
+            "next": "Next"
+          }
+        },
+        "exercise": {
+          "title": "Exercise",
+          "backToUnit": "Back to Unit",
+          "loading": "Loading exercises...",
+          "noExercises": "No exercises available",
+          "question": "Question",
+          "of": "of",
+          "yourAnswer": "Your answer:",
+          "correctAnswer": "Correct answer:",
+          "submit": "Submit Answer",
+          "next": "Next Question",
+          "finish": "Finish Exercise",
+          "score": "Your Score:",
+          "correct": "Correct",
+          "incorrect": "Incorrect"
+        },
+        "flashcard": {
+          "title": "Flashcard Practice",
+          "backToList": "Back to List",
+          "loading": "Loading flashcards...",
+          "noFlashcards": "No flashcards available",
+          "card": "Card",
+          "of": "of",
+          "flip": "Flip Card",
+          "showAnswer": "Show Answer",
+          "hideAnswer": "Hide Answer",
+          "navigation": {
+            "previous": "Previous",
+            "next": "Next",
+            "finish": "Finish Practice"
+          }
+        },
+        "flashcardList": {
+          "title": "My Flashcard Sets",
+          "loading": "Loading...",
+          "noSets": "No flashcard sets available",
+          "cards": "cards",
+          "practice": "Practice"
+        }
+      },
+      "games": {
+        "title": "Game Hub",
+        "subtitle": "Practice your skills with fun games",
+        "search": {
+          "placeholder": "Search games..."
+        },
+        "difficulty": {
+          "all": "All Levels",
+          "easy": "Easy",
+          "medium": "Medium",
+          "hard": "Hard"
+        },
+        "stats": {
+          "gamesPlayed": "Games Played",
+          "totalScore": "Total Score",
+          "highScore": "High Score"
+        },
+        "noGames": "No games available",
+        "play": "Play Now"
+      },
+      "profile": {
+        "title": "Profile",
+        "personalInfo": {
+          "title": "Personal Information",
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "fullName": "Full Name",
+          "fullNamePlaceholder": "e.g. Alex Johnson",
+          "email": "Email Address",
+          "phone": "Phone",
+          "dateOfBirth": "Date of Birth",
+          "bio": "Bio / About Me",
+          "bioPlaceholder": "Tell us a little about yourself..."
+        },
+        "accountInfo": {
+          "title": "Account Information",
+          "username": "Username",
+          "usernamePlaceholder": "e.g. alexj2024",
+          "role": "Role",
+          "memberSince": "Member Since",
+          "lastLogin": "Last Login"
+        },
+        "learningStats": {
+          "title": "Learning Statistics",
+          "coursesEnrolled": "Courses Enrolled",
+          "coursesCompleted": "Courses Completed",
+          "totalLearningTime": "Total Learning Time",
+          "currentStreak": "Current Streak",
+          "hours": "hours",
+          "days": "days"
+        },
+        "actions": {
+          "changePhoto": "Change Photo",
+          "editProfile": "Edit Profile",
+          "changePassword": "Change Password",
+          "saveChanges": "Save Changes",
+          "logout": "Logout"
+        }
+      }
+    }
+  }
+}
+

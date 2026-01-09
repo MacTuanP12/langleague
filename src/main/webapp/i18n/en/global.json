@@ -143,5 +143,42 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "This is your footer",
+  "langleague": {
+    "common": {
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "close": "Close",
+      "edit": "Edit",
+      "view": "View",
+      "add": "Add",
+      "search": "Search"
+    },
+    "admin": {
+      "userManagement": {
+        "confirmDelete": "Are you sure you want to delete this user? This action cannot be undone.",
+        "confirmDeleteTitle": "Delete User?",
+        "deleteSuccess": "User deleted successfully",
+        "deleteFailed": "Failed to delete user. Please try again."
+      }
+    },
+    "teacher": {
+      "books": {
+        "actions": {
+          "confirmDelete": "Are you sure you want to delete this book? This action cannot be undone.",
+          "confirmDeleteTitle": "Delete Book?",
+          "deleteSuccess": "Book deleted successfully",
+          "deleteFailed": "Failed to delete book. Please try again."
+        },
+        "unit": {
+          "confirmDelete": "Are you sure you want to delete this unit? All content will be removed.",
+          "confirmDeleteTitle": "Delete Unit?",
+          "deleteSuccess": "Unit deleted successfully",
+          "deleteFailed": "Failed to delete unit. Please try again."
+        }
+      }
+    }
+  }
 }

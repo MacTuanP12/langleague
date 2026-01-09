@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { translate, Translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { IBook } from 'app/shared/model/book.model';
 import { IUnit } from 'app/shared/model/unit.model';
+import { formatDate } from 'app/shared/util';
 import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
+import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
 import './book-detail.scss';
 
 export const BookDetail = () => {
   const [book, setBook] = useState<IBook | null>(null);
   const [units, setUnits] = useState<IUnit[]>([]);
   const [draggedUnitIndex, setDraggedUnitIndex] = useState<number | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [unitToDelete, setUnitToDelete] = useState<number | null>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -76,19 +82,37 @@ export const BookDetail = () => {
     }
   };
 
-  const handleDeleteUnit = async (unitId: number) => {
-    if (window.confirm('Are you sure you want to delete this unit?')) {
+  const handleDeleteUnitClick = (unitId: number) => {
+    setUnitToDelete(unitId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteUnitConfirm = async () => {
+    if (unitToDelete) {
       try {
-        await axios.delete(`/api/units/${unitId}`);
+        await axios.delete(`/api/units/${unitToDelete}`);
+        toast.success(translate('langleague.teacher.books.unit.deleteSuccess'));
         loadUnits();
       } catch (error) {
         console.error('Error deleting unit:', error);
+        toast.error(translate('langleague.teacher.books.unit.deleteFailed'));
       }
     }
+    setDeleteModalOpen(false);
+    setUnitToDelete(null);
+  };
+
+  const handleDeleteUnitCancel = () => {
+    setDeleteModalOpen(false);
+    setUnitToDelete(null);
   };
 
   if (!book) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <TeacherLayout>
+        <LoadingSpinner message="langleague.teacher.books.detail.loading" isI18nKey />
+      </TeacherLayout>
+    );
   }
 
   return (
@@ -121,7 +145,7 @@ export const BookDetail = () => {
             </div>
             <div className="meta-item">
               <span className="label">Created:</span>
-              <span className="value">{book.createdDate ? new Date(book.createdDate).toLocaleDateString() : 'N/A'}</span>
+              <span className="value">{formatDate(book.createdDate)}</span>
             </div>
             <div className="meta-item">
               <span className="label">Public:</span>
@@ -169,21 +193,31 @@ export const BookDetail = () => {
                     <p>{unit.summary}</p>
                     <div className="unit-stats">
                       <span>
-                        <i className="bi bi-book"></i> Vocabulary: {unit.vocabularyCount || 0}
+                        <i className="bi bi-book"></i>{' '}
+                        <Translate contentKey="langleague.teacher.books.detail.units.stats.vocabulary">Vocabulary:</Translate>{' '}
+                        {unit.vocabularyCount || 0}
                       </span>
                       <span>
-                        <i className="bi bi-journal-text"></i> Grammar: {unit.grammarCount || 0}
+                        <i className="bi bi-journal-text"></i>{' '}
+                        <Translate contentKey="langleague.teacher.books.detail.units.stats.grammar">Grammar:</Translate>{' '}
+                        {unit.grammarCount || 0}
                       </span>
                       <span>
-                        <i className="bi bi-question-circle"></i> Exercises: {unit.exerciseCount || 0}
+                        <i className="bi bi-question-circle"></i>{' '}
+                        <Translate contentKey="langleague.teacher.books.detail.units.stats.exercises">Exercises:</Translate>{' '}
+                        {unit.exerciseCount || 0}
                       </span>
                     </div>
                   </div>
                   <div className="unit-actions">
-                    <Link to={`/teacher/units/${unit.id}/edit`} className="btn-icon" title="Edit">
+                    <Link to={`/teacher/units/${unit.id}/edit`} className="btn-icon" title={translate('langleague.teacher.books.detail.units.actions.edit')}>
                       <i className="bi bi-pencil"></i>
                     </Link>
-                    <button onClick={() => handleDeleteUnit(unit.id)} className="btn-icon btn-danger" title="Delete">
+                    <button
+                      onClick={() => handleDeleteUnitClick(unit.id)}
+                      className="btn-icon btn-danger"
+                      title={translate('langleague.teacher.books.detail.units.actions.delete')}
+                    >
                       <i className="bi bi-trash"></i>
                     </button>
                   </div>
@@ -193,6 +227,18 @@ export const BookDetail = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="langleague.teacher.books.unit.confirmDeleteTitle"
+        message="langleague.teacher.books.unit.confirmDelete"
+        confirmText="langleague.common.delete"
+        cancelText="langleague.common.cancel"
+        onConfirm={handleDeleteUnitConfirm}
+        onCancel={handleDeleteUnitCancel}
+        isI18nKey
+        variant="danger"
+      />
     </TeacherLayout>
   );
 };

@@ -79,7 +79,7 @@ export const UnitUpdate = () => {
     setVocabularies([...vocabularies, { ...defaultVocab, unitId: Number(unitId) }]);
   };
 
-  const updateVocabulary = (index: number, field: keyof IVocabulary, value: any) => {
+  const updateVocabulary = <K extends keyof IVocabulary>(index: number, field: K, value: IVocabulary[K]) => {
     const updated = [...vocabularies];
     updated[index] = { ...updated[index], [field]: value };
     setVocabularies(updated);
@@ -109,7 +109,7 @@ export const UnitUpdate = () => {
     setGrammars([...grammars, { ...defaultGrammar, unitId: Number(unitId) }]);
   };
 
-  const updateGrammar = (index: number, field: keyof IGrammar, value: any) => {
+  const updateGrammar = <K extends keyof IGrammar>(index: number, field: K, value: IGrammar[K]) => {
     const updated = [...grammars];
     updated[index] = { ...updated[index], [field]: value };
     setGrammars(updated);
@@ -139,7 +139,7 @@ export const UnitUpdate = () => {
     setExercises([...exercises, { ...defaultExercise, unitId: Number(unitId) }]);
   };
 
-  const updateExercise = (index: number, field: keyof IExercise, value: any) => {
+  const updateExercise = <K extends keyof IExercise>(index: number, field: K, value: IExercise[K]) => {
     const updated = [...exercises];
     updated[index] = { ...updated[index], [field]: value };
     setExercises(updated);

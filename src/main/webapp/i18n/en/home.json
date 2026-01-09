@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
-    "subtitle": "This is your homepage",
+    "title": "Discover Knowledge",
+    "subtitle": "Explore our vast collection of educational resources",
+    "search": {
+      "placeholder": "Search by title, author, or ISBN...",
+      "button": "Search"
+    },
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },

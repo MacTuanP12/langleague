@@ -1,12 +1,12 @@
 export interface IUser {
-  id?: any;
+  id?: number | string;
   login?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
   activated?: boolean;
   langKey?: string;
-  authorities?: any[];
+  authorities?: string[];
   createdBy?: string;
   createdDate?: Date | null;
   lastModifiedBy?: string;

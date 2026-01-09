@@ -16,6 +16,8 @@ export type IQueryParams = { query?: string; page?: number; size?: number; sort?
 
 /**
  * Useful types for working with actions
+ * Note: GenericAsyncThunk uses `any` as required by Redux Toolkit's type system
+ * for handling generic async thunks. This is an acceptable use case.
  */
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
 export type PendingAction = ReturnType<GenericAsyncThunk['pending']>;
@@ -48,6 +50,9 @@ const commonErrorProperties: Array<keyof SerializedError> = ['name', 'message', 
 /**
  * serialize function used for async action errors,
  * since the default function from Redux Toolkit strips useful info from axios errors
+ *
+ * @param value - Error value of any type (accepts any because errors can come in various formats)
+ * @returns Serialized AxiosError or SerializedError
  */
 export const serializeAxiosError = (value: any): AxiosError | SerializedError => {
   if (typeof value === 'object' && value !== null) {
@@ -66,12 +71,19 @@ export const serializeAxiosError = (value: any): AxiosError | SerializedError =>
   return { message: String(value) };
 };
 
+interface PaginationLinks {
+  first?: string;
+  last?: string;
+  next?: string;
+  prev?: string;
+}
+
 export interface EntityState<T> {
   loading: boolean;
   errorMessage: string | null;
   entities: ReadonlyArray<T>;
   entity: T;
-  links?: any;
+  links?: PaginationLinks;
   updating: boolean;
   totalItems?: number;
   updateSuccess: boolean;

@@ -1,43 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
+import { Translate } from 'react-jhipster';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBooks } from 'app/shared/reducers/book.reducer';
+import { formatDate } from 'app/shared/util';
+import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './book-list.scss';
 
 export const BookList = () => {
-  const [books, setBooks] = useState<IBook[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { books, loading, errorMessage } = useAppSelector(state => state.book);
 
   useEffect(() => {
-    loadBooks();
-  }, []);
-
-  const loadBooks = async () => {
-    try {
-      const response = await axios.get<IBook[]>('/api/books');
-      setBooks(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error loading books:', error);
-      setLoading(false);
-    }
-  };
+    dispatch(fetchBooks());
+  }, [dispatch]);
 
   if (loading) {
-    return <div className="loading">Loading books...</div>;
+    return (
+      <LoadingSpinner
+        message="langleague.student.books.detail.loading"
+        isI18nKey
+      />
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <ErrorDisplay
+        message={errorMessage}
+        onRetry={() => dispatch(fetchBooks())}
+      />
+    );
   }
 
   return (
     <div className="book-list-container">
       <div className="book-list-header">
-        <h1>Available Books</h1>
-        <p>Choose a book to start learning</p>
+        <h1>
+          <Translate contentKey="langleague.student.books.title">My Books</Translate>
+        </h1>
+        <p>
+          <Translate contentKey="langleague.student.books.detail.description">Choose a book to start learning</Translate>
+        </p>
       </div>
 
       <div className="book-grid">
         {books.length === 0 ? (
           <div className="empty-state">
-            <p>No books available</p>
+            <p>
+              <Translate contentKey="langleague.student.books.noBooks">No books available</Translate>
+            </p>
           </div>
         ) : (
           books.map(book => (
@@ -53,8 +65,14 @@ export const BookList = () => {
                 <h3>{book.title}</h3>
                 <p className="book-description">{book.description}</p>
                 <div className="book-meta">
-                  <span className="book-status">{book.isPublic ? 'Public' : 'Private'}</span>
-                  {book.createdDate && <span className="book-date">{new Date(book.createdDate).toLocaleDateString()}</span>}
+                  <span className="book-status">
+                    {book.isPublic ? (
+                      <Translate contentKey="langleague.student.books.detail.yes">Yes</Translate>
+                    ) : (
+                      <Translate contentKey="langleague.student.books.detail.no">No</Translate>
+                    )}
+                  </span>
+                  {book.createdDate && <span className="book-date">{formatDate(book.createdDate)}</span>}
                 </div>
               </div>
             </Link>

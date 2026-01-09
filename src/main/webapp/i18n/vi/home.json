@@ -1,19 +1,23 @@
 {
   "home": {
-    "title": "Chào mừng bạn đến với Java Hipster!",
-    "subtitle": "Đây là trang chủ của bạn",
-    "logged": {
-      "message": "Bạn đang đăng nhập bằng tài khoản \"{{username}}\"."
+    "title": "Khám Phá Tri Thức",
+    "subtitle": "Khám phá bộ sưu tập tài nguyên giáo dục phong phú của chúng tôi",
+    "search": {
+      "placeholder": "Tìm kiếm theo tiêu đề, tác giả hoặc ISBN...",
+      "button": "Tìm Kiếm"
     },
-    "question": "Nếu bạn có bất kỳ câu hỏi nào về JHipster vui lòng truy cập:",
+    "logged": {
+      "message": "Bạn đang đăng nhập với tên \"{{username}}\"."
+    },
+    "question": "Nếu bạn có bất kỳ câu hỏi nào về JHipster:",
     "link": {
       "homepage": "Trang chủ JHipster",
       "stackoverflow": "JHipster trên Stack Overflow",
-      "bugtracker": "Theo dõi các lỗi JHipster",
+      "bugtracker": "Trình theo dõi lỗi JHipster",
       "chat": "Phòng chat công cộng JHipster",
-      "follow": "Theo dõi @jhipster trên Twitter"
+      "follow": "theo dõi @jhipster trên Twitter"
     },
-    "like": "Nếu bạn thích JHipster, đừng quên cho chúng tôi thêm một ngôi sao trên",
+    "like": "Nếu bạn thích JHipster, đừng quên cho chúng tôi một ngôi sao trên",
     "github": "GitHub"
   }
 }

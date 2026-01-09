@@ -1,16 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchUnitById, updateUnit, createUnit } from 'app/shared/reducers/unit.reducer';
+import { fetchVocabulariesByUnitId, bulkUpdateVocabularies } from 'app/shared/reducers/vocabulary.reducer';
+import { fetchGrammarsByUnitId, bulkUpdateGrammars } from 'app/shared/reducers/grammar.reducer';
+import { fetchExercisesWithOptions } from 'app/shared/reducers/exercise.reducer';
 import { IUnit, defaultUnitValue as defaultUnit } from 'app/shared/model/unit.model';
 import { IVocabulary, defaultVocabularyValue as defaultVocab } from 'app/shared/model/vocabulary.model';
 import { IGrammar, defaultGrammarValue as defaultGrammar } from 'app/shared/model/grammar.model';
 import { IExercise, defaultExerciseValue as defaultExercise } from 'app/shared/model/exercise.model';
 import { IExerciseOption, defaultExerciseOptionValue as defaultOption } from 'app/shared/model/exercise-option.model';
 import { ExerciseType } from 'app/shared/model/enumerations/enums.model';
+import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './unit-update-v2.scss';
+import {Translate} from "react-jhipster";
 
 export const UnitUpdateV2 = () => {
-  const [unit, setUnit] = useState<IUnit>(defaultUnit);
+  const dispatch = useAppDispatch();
+  const { selectedUnit, loading: unitLoading, errorMessage: unitError } = useAppSelector(state => state.unit);
+  const { vocabularies: reduxVocabularies, loading: vocabLoading, errorMessage: vocabError } = useAppSelector(state => state.vocabulary);
+  const { grammars: reduxGrammars, loading: grammarLoading, errorMessage: grammarError } = useAppSelector(state => state.grammar);
+  const { exercises: reduxExercises, exerciseOptions: reduxExerciseOptions, loading: exerciseLoading, errorMessage: exerciseError } = useAppSelector(state => state.exercise);
+
+  // React Hook Form setup
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<IUnit>({
+    defaultValues: defaultUnit,
+    mode: 'onBlur', // Only validate on blur to prevent re-renders on every keystroke
+  });
+
   const [vocabularies, setVocabularies] = useState<IVocabulary[]>([]);
   const [grammars, setGrammars] = useState<IGrammar[]>([]);
   const [exercises, setExercises] = useState<IExercise[]>([]);
@@ -25,264 +48,327 @@ export const UnitUpdateV2 = () => {
 
   useEffect(() => {
     if (unitId) {
-      loadUnit();
-      loadVocabularies();
-      loadGrammars();
-      loadExercises();
+      dispatch(fetchUnitById(unitId));
+      dispatch(fetchVocabulariesByUnitId(unitId));
+      dispatch(fetchGrammarsByUnitId(unitId));
+      dispatch(fetchExercisesWithOptions(unitId));
     }
-  }, [unitId]);
+  }, [dispatch, unitId]);
 
-  const loadUnit = async () => {
-    try {
-      const response = await axios.get<IUnit>(`/api/units/${unitId}`);
-      setUnit(response.data);
-    } catch (error) {
-      console.error('Error loading unit:', error);
+  useEffect(() => {
+    if (selectedUnit && unitId) {
+      // Populate form with existing unit data
+      setValue('id', selectedUnit.id);
+      setValue('title', selectedUnit.title);
+      setValue('summary', selectedUnit.summary);
+      setValue('orderIndex', selectedUnit.orderIndex);
+      setValue('bookId', selectedUnit.bookId);
     }
-  };
+  }, [selectedUnit, unitId, setValue]);
 
-  const loadVocabularies = async () => {
-    try {
-      const response = await axios.get<IVocabulary[]>(`/api/units/${unitId}/vocabularies`);
-      setVocabularies(response.data);
-    } catch (error) {
-      console.error('Error loading vocabularies:', error);
-    }
-  };
+  useEffect(() => {
+    setVocabularies(reduxVocabularies);
+  }, [reduxVocabularies]);
 
-  const loadGrammars = async () => {
-    try {
-      const response = await axios.get<IGrammar[]>(`/api/units/${unitId}/grammars`);
-      setGrammars(response.data);
-    } catch (error) {
-      console.error('Error loading grammars:', error);
-    }
-  };
+  useEffect(() => {
+    setGrammars(reduxGrammars);
+  }, [reduxGrammars]);
 
-  const loadExercises = async () => {
-    try {
-      const response = await axios.get<IExercise[]>(`/api/units/${unitId}/exercises`);
-      const exercisesData = response.data;
-      setExercises(exercisesData);
+  useEffect(() => {
+    setExercises(reduxExercises);
+    setExerciseOptions(reduxExerciseOptions);
+  }, [reduxExercises, reduxExerciseOptions]);
 
-      // Load options for each exercise
-      const optionsMap: { [exerciseId: number]: IExerciseOption[] } = {};
-      for (const exercise of exercisesData) {
-        if (exercise.id) {
-          const optionsResponse = await axios.get<IExerciseOption[]>(`/api/exercises/${exercise.id}/options`);
-          optionsMap[exercise.id] = optionsResponse.data;
+  const onSubmit = useCallback(
+    async (formData: IUnit) => {
+      try {
+        if (unitId) {
+          await dispatch(updateUnit(formData));
+          await dispatch(bulkUpdateVocabularies(vocabularies));
+          await dispatch(bulkUpdateGrammars(grammars));
+        } else {
+          await dispatch(createUnit({ ...formData, bookId: Number(bookId) }));
         }
+        navigate(`/teacher/books/${bookId}/edit`);
+      } catch (error) {
+        console.error('Error saving unit:', error);
       }
-      setExerciseOptions(optionsMap);
-    } catch (error) {
-      console.error('Error loading exercises:', error);
-    }
-  };
+    },
+    [dispatch, unitId, vocabularies, grammars, bookId, navigate]
+  );
 
-  const handleSaveUnit = async () => {
-    try {
-      if (unitId) {
-        await axios.put(`/api/units/${unitId}`, unit);
-      } else {
-        await axios.post('/api/units', { ...unit, bookId });
-      }
-      navigate(`/teacher/books/${bookId}/edit`);
-    } catch (error) {
-      console.error('Error saving unit:', error);
-    }
-  };
+  // Vocabulary functions - optimized with useCallback
+  const addVocabulary = useCallback(() => {
+    setVocabularies(prev => [...prev, { ...defaultVocab }]);
+  }, []);
 
-  // Vocabulary functions
-  const addVocabulary = () => {
-    setVocabularies([...vocabularies, { ...defaultVocab }]);
-  };
+  const updateVocabulary = useCallback(<K extends keyof IVocabulary>(index: number, field: K, value: IVocabulary[K]) => {
+    setVocabularies(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
 
-  const updateVocabulary = (index: number, field: keyof IVocabulary, value: any) => {
-    const updated = [...vocabularies];
-    updated[index] = { ...updated[index], [field]: value };
-    setVocabularies(updated);
-  };
+  const deleteVocabulary = useCallback((index: number) => {
+    setVocabularies(prev => prev.filter((_, i) => i !== index));
+  }, []);
 
-  const deleteVocabulary = (index: number) => {
-    setVocabularies(vocabularies.filter((_, i) => i !== index));
-  };
-
-  // Vocabulary drag & drop handlers
-  const handleVocabDragStart = (index: number) => {
+  // Vocabulary drag & drop handlers - optimized
+  const handleVocabDragStart = useCallback((index: number) => {
     setDraggedVocabIndex(index);
-  };
+  }, []);
 
-  const handleVocabDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    if (draggedVocabIndex === null || draggedVocabIndex === index) return;
+  const handleVocabDragOver = useCallback(
+    (e: React.DragEvent, index: number) => {
+      e.preventDefault();
+      if (draggedVocabIndex === null || draggedVocabIndex === index) return;
 
-    const items = [...vocabularies];
-    const draggedItem = items[draggedVocabIndex];
-    items.splice(draggedVocabIndex, 1);
-    items.splice(index, 0, draggedItem);
+      setVocabularies(prev => {
+        const items = [...prev];
+        const draggedItem = items[draggedVocabIndex];
+        items.splice(draggedVocabIndex, 1);
+        items.splice(index, 0, draggedItem);
+        return items;
+      });
+      setDraggedVocabIndex(index);
+    },
+    [draggedVocabIndex]
+  );
 
-    setVocabularies(items);
-    setDraggedVocabIndex(index);
-  };
-
-  const handleVocabDragEnd = () => {
+  const handleVocabDragEnd = useCallback(() => {
     setDraggedVocabIndex(null);
     // Update orderIndex for all vocabularies
-    const updated = vocabularies.map((vocab, idx) => ({
-      ...vocab,
-      orderIndex: idx + 1,
-    }));
-    setVocabularies(updated);
-  };
+    setVocabularies(prev =>
+      prev.map((vocab, idx) => ({
+        ...vocab,
+        orderIndex: idx + 1,
+      }))
+    );
+  }, []);
 
-  const duplicateVocabulary = (index: number) => {
-    const vocab = { ...vocabularies[index], id: undefined };
-    const updated = [...vocabularies];
-    updated.splice(index + 1, 0, vocab);
-    setVocabularies(updated);
-  };
+  const duplicateVocabulary = useCallback((index: number) => {
+    setVocabularies(prev => {
+      const vocab = { ...prev[index], id: undefined };
+      const updated = [...prev];
+      updated.splice(index + 1, 0, vocab);
+      return updated;
+    });
+  }, []);
 
-  // Grammar functions
-  const addGrammar = () => {
-    setGrammars([...grammars, { ...defaultGrammar }]);
-  };
+  // Grammar functions - optimized with useCallback
+  const addGrammar = useCallback(() => {
+    setGrammars(prev => [...prev, { ...defaultGrammar }]);
+  }, []);
 
-  const updateGrammar = (index: number, field: keyof IGrammar, value: any) => {
-    const updated = [...grammars];
-    updated[index] = { ...updated[index], [field]: value };
-    setGrammars(updated);
-  };
+  const updateGrammar = useCallback(<K extends keyof IGrammar>(index: number, field: K, value: IGrammar[K]) => {
+    setGrammars(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
 
-  const deleteGrammar = (index: number) => {
-    setGrammars(grammars.filter((_, i) => i !== index));
-  };
+  const deleteGrammar = useCallback((index: number) => {
+    setGrammars(prev => prev.filter((_, i) => i !== index));
+  }, []);
 
-  const duplicateGrammar = (index: number) => {
-    const grammar = { ...grammars[index], id: undefined };
-    const updated = [...grammars];
-    updated.splice(index + 1, 0, grammar);
-    setGrammars(updated);
-  };
+  const duplicateGrammar = useCallback((index: number) => {
+    setGrammars(prev => {
+      const grammar = { ...prev[index], id: undefined };
+      const updated = [...prev];
+      updated.splice(index + 1, 0, grammar);
+      return updated;
+    });
+  }, []);
 
-  const handleGrammarDragStart = (index: number) => {
+  const handleGrammarDragStart = useCallback((index: number) => {
     setDraggedGrammarIndex(index);
-  };
+  }, []);
 
-  const handleGrammarDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    if (draggedGrammarIndex === null || draggedGrammarIndex === index) return;
+  const handleGrammarDragOver = useCallback(
+    (e: React.DragEvent, index: number) => {
+      e.preventDefault();
+      if (draggedGrammarIndex === null || draggedGrammarIndex === index) return;
 
-    const items = [...grammars];
-    const draggedItem = items[draggedGrammarIndex];
-    items.splice(draggedGrammarIndex, 1);
-    items.splice(index, 0, draggedItem);
+      setGrammars(prev => {
+        const items = [...prev];
+        const draggedItem = items[draggedGrammarIndex];
+        items.splice(draggedGrammarIndex, 1);
+        items.splice(index, 0, draggedItem);
+        return items;
+      });
+      setDraggedGrammarIndex(index);
+    },
+    [draggedGrammarIndex]
+  );
 
-    setGrammars(items);
-    setDraggedGrammarIndex(index);
-  };
-
-  const handleGrammarDragEnd = () => {
+  const handleGrammarDragEnd = useCallback(() => {
     setDraggedGrammarIndex(null);
-  };
+  }, []);
 
-  // Exercise functions
-  const addExercise = (type: ExerciseType = ExerciseType.SINGLE_CHOICE) => {
+  // Exercise functions - optimized with useCallback
+  const addExercise = useCallback((type: ExerciseType = ExerciseType.SINGLE_CHOICE) => {
     const newExercise = { ...defaultExercise, exerciseType: type };
-    setExercises([...exercises, newExercise]);
-  };
+    setExercises(prev => [...prev, newExercise]);
+  }, []);
 
-  const updateExercise = (index: number, field: keyof IExercise, value: any) => {
-    const updated = [...exercises];
-    updated[index] = { ...updated[index], [field]: value };
-    setExercises(updated);
-  };
+  const updateExercise = useCallback(<K extends keyof IExercise>(index: number, field: K, value: IExercise[K]) => {
+    setExercises(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
 
-  const deleteExercise = (index: number) => {
-    setExercises(exercises.filter((_, i) => i !== index));
-  };
+  const deleteExercise = useCallback((index: number) => {
+    setExercises(prev => prev.filter((_, i) => i !== index));
+  }, []);
 
-  const duplicateExercise = (index: number) => {
-    const exercise = { ...exercises[index], id: undefined };
-    const updated = [...exercises];
-    updated.splice(index + 1, 0, exercise);
-    setExercises(updated);
-  };
+  const duplicateExercise = useCallback((index: number) => {
+    setExercises(prev => {
+      const exercise = { ...prev[index], id: undefined };
+      const updated = [...prev];
+      updated.splice(index + 1, 0, exercise);
+      return updated;
+    });
+  }, []);
 
-  const handleExerciseDragStart = (index: number) => {
+  const handleExerciseDragStart = useCallback((index: number) => {
     setDraggedExerciseIndex(index);
-  };
+  }, []);
 
-  const handleExerciseDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    if (draggedExerciseIndex === null || draggedExerciseIndex === index) return;
+  const handleExerciseDragOver = useCallback(
+    (e: React.DragEvent, index: number) => {
+      e.preventDefault();
+      if (draggedExerciseIndex === null || draggedExerciseIndex === index) return;
 
-    const items = [...exercises];
-    const draggedItem = items[draggedExerciseIndex];
-    items.splice(draggedExerciseIndex, 1);
-    items.splice(index, 0, draggedItem);
+      setExercises(prev => {
+        const items = [...prev];
+        const draggedItem = items[draggedExerciseIndex];
+        items.splice(draggedExerciseIndex, 1);
+        items.splice(index, 0, draggedItem);
+        return items;
+      });
+      setDraggedExerciseIndex(index);
+    },
+    [draggedExerciseIndex]
+  );
 
-    setExercises(items);
-    setDraggedExerciseIndex(index);
-  };
-
-  const handleExerciseDragEnd = () => {
+  const handleExerciseDragEnd = useCallback(() => {
     setDraggedExerciseIndex(null);
-  };
+  }, []);
 
-  // Exercise options functions
-  const addOption = (exerciseIndex: number) => {
-    const exercise = exercises[exerciseIndex];
-    if (!exercise.id) return;
+  // Exercise options functions - optimized with useCallback
+  const addOption = useCallback(
+    (exerciseIndex: number) => {
+      const exercise = exercises[exerciseIndex];
+      if (!exercise.id) return;
 
-    const currentOptions = exerciseOptions[exercise.id] || [];
-    setExerciseOptions({
-      ...exerciseOptions,
-      [exercise.id]: [...currentOptions, { ...defaultOption, exerciseId: exercise.id }],
+      setExerciseOptions(prev => {
+        const currentOptions = prev[exercise.id] || [];
+        return {
+          ...prev,
+          [exercise.id]: [...currentOptions, { ...defaultOption, exerciseId: exercise.id }],
+        };
+      });
+    },
+    [exercises]
+  );
+
+  const updateOption = useCallback(<K extends keyof IExerciseOption>(
+    exerciseId: number,
+    optionIndex: number,
+    field: K,
+    value: IExerciseOption[K]
+  ) => {
+    setExerciseOptions(prev => {
+      const options = [...(prev[exerciseId] || [])];
+      options[optionIndex] = { ...options[optionIndex], [field]: value };
+      return {
+        ...prev,
+        [exerciseId]: options,
+      };
     });
-  };
+  }, []);
 
-  const updateOption = (exerciseId: number, optionIndex: number, field: keyof IExerciseOption, value: any) => {
-    const options = [...(exerciseOptions[exerciseId] || [])];
-    options[optionIndex] = { ...options[optionIndex], [field]: value };
-    setExerciseOptions({
-      ...exerciseOptions,
-      [exerciseId]: options,
+  const deleteOption = useCallback((exerciseId: number, optionIndex: number) => {
+    setExerciseOptions(prev => {
+      const options = (prev[exerciseId] || []).filter((_, i) => i !== optionIndex);
+      return {
+        ...prev,
+        [exerciseId]: options,
+      };
     });
-  };
+  }, []);
 
-  const deleteOption = (exerciseId: number, optionIndex: number) => {
-    const options = (exerciseOptions[exerciseId] || []).filter((_, i) => i !== optionIndex);
-    setExerciseOptions({
-      ...exerciseOptions,
-      [exerciseId]: options,
-    });
-  };
+  // Check if any data is loading
+  const isLoading = unitLoading || vocabLoading || grammarLoading || exerciseLoading;
+  const hasError = unitError || vocabError || grammarError || exerciseError;
+
+  // Show loading state while fetching data
+  if (isLoading && unitId) {
+    return (
+      <LoadingSpinner
+        message="Loading unit data..."
+        fullScreen
+      />
+    );
+  }
+
+  // Show error state if any fetch failed
+  if (hasError) {
+    const errorMsg = unitError || vocabError || grammarError || exerciseError;
+    return (
+      <ErrorDisplay
+        message={errorMsg || 'Failed to load unit data'}
+        onRetry={() => {
+          if (unitId) {
+            dispatch(fetchUnitById(unitId));
+            dispatch(fetchVocabulariesByUnitId(unitId));
+            dispatch(fetchGrammarsByUnitId(unitId));
+            dispatch(fetchExercisesWithOptions(unitId));
+          }
+        }}
+        fullScreen
+      />
+    );
+  }
 
   return (
     <div className="unit-update-v2">
       {/* Header */}
       <div className="form-header">
-        <button onClick={() => navigate(`/teacher/books/${bookId}/edit`)} className="back-btn">
+        <button onClick={() => navigate(`/teacher/books/${bookId}/edit`)} className="back-btn" type="button">
           <i className="bi bi-arrow-left"></i>
         </button>
         <div className="header-content">
-          <input
-            type="text"
-            className="chapter-title-input"
-            value={unit.title}
-            onChange={e => setUnit({ ...unit, title: e.target.value })}
-            placeholder="Unit Title"
+          <Controller
+            name="title"
+            control={control}
+            rules={{ required: 'Unit title is required', minLength: { value: 3, message: 'Title must be at least 3 characters' } }}
+            render={({ field }) => (
+              <div>
+                <input
+                  {...field}
+                  type="text"
+                  className={`chapter-title-input ${errors.title ? 'error' : ''}`}
+                  placeholder="Unit Title"
+                />
+                {errors.title && <span className="error-message">{errors.title.message}</span>}
+              </div>
+            )}
           />
-          <textarea
-            className="chapter-description-input"
-            value={unit.summary}
-            onChange={e => setUnit({ ...unit, summary: e.target.value })}
-            placeholder="Unit Description"
-            rows={2}
+          <Controller
+            name="summary"
+            control={control}
+            render={({ field }) => (
+              <textarea {...field} className="chapter-description-input" placeholder="Unit Description" rows={2} />
+            )}
           />
         </div>
-        <button onClick={handleSaveUnit} className="send-btn">
-          <i className="bi bi-send"></i> Submit
+        <button onClick={handleSubmit(onSubmit)} className="send-btn" type="button" disabled={isSubmitting}>
+          <i className="bi bi-send"></i> {isSubmitting ? 'Saving...' : 'Submit'}
         </button>
       </div>
 
@@ -608,17 +694,20 @@ export const UnitUpdateV2 = () => {
 
         <div className="add-question-menu">
           <button className="add-section-btn" onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)}>
-            <i className="bi bi-plus-circle"></i> Add Exercise
+            <i className="bi bi-plus-circle"></i> <Translate contentKey="langleague.teacher.units.exercises.menu.addExercise">Add Exercise</Translate>
           </button>
           <div className="question-type-buttons">
             <button onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)} className="type-btn">
-              <i className="bi bi-record-circle"></i> Single Choice
+              <i className="bi bi-record-circle"></i>{' '}
+              <Translate contentKey="langleague.teacher.units.exercises.menu.singleChoice">Single Choice</Translate>
             </button>
             <button onClick={() => addExercise(ExerciseType.MULTI_CHOICE)} className="type-btn">
-              <i className="bi bi-check-square"></i> Multi Choice
+              <i className="bi bi-check-square"></i>{' '}
+              <Translate contentKey="langleague.teacher.units.exercises.menu.multiChoice">Multi Choice</Translate>
             </button>
             <button onClick={() => addExercise(ExerciseType.FILL_IN_BLANK)} className="type-btn">
-              <i className="bi bi-dash-square"></i> Fill in Blank
+              <i className="bi bi-dash-square"></i>{' '}
+              <Translate contentKey="langleague.teacher.units.exercises.menu.fillInBlank">Fill in Blank</Translate>
             </button>
           </div>
         </div>

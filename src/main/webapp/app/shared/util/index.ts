@@ -18,3 +18,31 @@ export { showConfirmDialog, executeWithConfirmation, useConfirmDialog } from './
 
 // System message hook
 export { useSystemMessage } from './use-system-message';
+
+// Date utilities
+export {
+  convertDateTimeFromServer,
+  convertDateTimeToServer,
+  displayDefaultDateTime,
+  formatDate,
+  formatDateTime,
+  formatRelativeTime,
+  formatDateForInput,
+  isToday,
+  isPast,
+  getDuration,
+} from './date-utils';
+
+// Text utilities
+export {
+  capitalize,
+  capitalizeWords,
+  normalizeSearch,
+  truncate,
+  slugify,
+  pluralize,
+  getInitials,
+  formatFullName,
+} from './text-utils';
+
+
