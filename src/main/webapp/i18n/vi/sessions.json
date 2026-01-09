@@ -1,15 +1,15 @@
 {
   "sessions": {
-    "title": "Phiên hoạt động cho [<strong>{{username}}</strong>]",
+    "title": "Các phiên đăng nhập hiện tại của [<strong>{{username}}</strong>]",
     "table": {
       "ipaddress": "Địa chỉ IP",
       "useragent": "Trình duyệt",
       "date": "Ngày",
-      "button": "Vô hiệu hóa"
+      "button": "Đóng phiên này"
     },
     "messages": {
-      "success": "<strong>Đã vô hiệu hóa phiên!</strong>",
-      "error": "<strong>Đã xảy ra lỗi!</strong> Không thể vô hiệu hóa phiên."
+      "success": "<strong>Phiên đăng nhập đã được đóng!</strong>",
+      "error": "<strong>Có lỗi xảy ra!</strong> Không thể đóng phiên đăng nhập."
     }
   }
 }

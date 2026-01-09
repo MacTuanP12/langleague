@@ -1,7 +1,0 @@
-id;level;min_days;icon_path;description
-1;Bronze;1;/icons/streak/bronze.svg;Just getting started!
-2;Silver;3;/icons/streak/silver.svg;3 days strong!
-3;Gold;7;/icons/streak/gold.svg;A full week!
-4;Platinum;14;/icons/streak/platinum.svg;Two weeks of dedication!
-5;Diamond;30;/icons/streak/diamond.svg;30 days of mastery!
-

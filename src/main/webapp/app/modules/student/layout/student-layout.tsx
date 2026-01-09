@@ -1,0 +1,104 @@
+import React, { useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'app/config/store';
+import { logout } from 'app/shared/reducers/authentication';
+import { ModernHeader } from 'app/shared/layout/header/modern-header';
+import { ModernFooter } from 'app/shared/layout/footer/modern-footer';
+import { SidebarToggleButton } from 'app/shared/layout/sidebar/SidebarToggleButton';
+import './student-layout.scss';
+
+export const StudentLayout = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname.includes(path);
+  };
+
+  const getBreadcrumbs = () => {
+    const path = location.pathname;
+    const breadcrumbs: Array<{ label: string; path?: string }> = [{ label: 'Dashboard', path: '/student/dashboard' }];
+
+    if (path.includes('/books')) {
+      breadcrumbs.push({ label: 'My Books' });
+    } else if (path.includes('/flashcards')) {
+      breadcrumbs.push({ label: 'FlashCards' });
+    } else if (path.includes('/games')) {
+      breadcrumbs.push({ label: 'Games' });
+    } else if (path.includes('/profile')) {
+      breadcrumbs.push({ label: 'Profile' });
+    }
+
+    return breadcrumbs;
+  };
+
+  return (
+    <div className="student-layout">
+      {/* Sidebar */}
+      <aside className={`student-sidebar ${isSidebarOpen ? 'open' : 'collapsed'}`}>
+        <div className="sidebar-header">
+          <div className="logo-section">
+            <div className="logo-icon">
+              <i className="bi bi-book"></i>
+            </div>
+            {isSidebarOpen && <h1 className="logo-text">Langleague</h1>}
+          </div>
+        </div>
+
+        <nav className="nav-menu">
+          <Link to="/student/dashboard" className={`nav-item ${isActive('/student/dashboard') ? 'active' : ''}`}>
+            <i className="bi bi-house-door"></i>
+            {isSidebarOpen && <span>Home</span>}
+          </Link>
+
+          <Link to="/student/books" className={`nav-item ${isActive('/student/books') ? 'active' : ''}`}>
+            <i className="bi bi-book"></i>
+            {isSidebarOpen && <span>My Books</span>}
+          </Link>
+
+          <Link to="/student/flashcards" className={`nav-item ${isActive('/student/flashcards') ? 'active' : ''}`}>
+            <i className="bi bi-credit-card-2-front"></i>
+            {isSidebarOpen && <span>FlashCard</span>}
+          </Link>
+
+          <Link to="/student/games" className={`nav-item ${isActive('/student/games') ? 'active' : ''}`}>
+            <i className="bi bi-controller"></i>
+            {isSidebarOpen && <span>Games</span>}
+          </Link>
+
+          <Link to="/student/profile" className={`nav-item ${isActive('/student/profile') ? 'active' : ''}`}>
+            <i className="bi bi-person-circle"></i>
+            {isSidebarOpen && <span>Profile</span>}
+          </Link>
+        </nav>
+
+        <div className="sidebar-footer">
+          <SidebarToggleButton isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+
+          <button className={`logout-btn ${!isSidebarOpen ? 'collapsed' : ''}`} onClick={handleLogout}>
+            <i className="bi bi-box-arrow-right"></i>
+            {isSidebarOpen && <span>Log Out</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className={`student-main ${isSidebarOpen ? '' : 'sidebar-collapsed'}`}>
+        <ModernHeader breadcrumbs={getBreadcrumbs()} />
+
+        <div className="student-content">
+          <Outlet />
+        </div>
+
+        <ModernFooter variant="compact" />
+      </main>
+    </div>
+  );
+};

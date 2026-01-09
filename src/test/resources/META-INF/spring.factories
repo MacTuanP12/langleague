@@ -1,2 +1,2 @@
-com.langleague.config.TestContainersSpringContextCustomizerFactory
-
+org.springframework.test.context.ContextCustomizerFactory = \
+    com.langleague.app.config.SqlTestContainersSpringContextCustomizerFactory

@@ -1,5 +1,0 @@
-id;prompt;sample_audio;max_score;chapter_id
-1;Introduce yourself in Korean;/audio/speaking/sample_intro.mp3;20;3
-2;Count from 1 to 10 in Korean;/audio/speaking/sample_counting.mp3;15;4
-3;Order food at a Korean restaurant;/audio/speaking/sample_order.mp3;20;6
-4;Ask for directions to the subway station;/audio/speaking/sample_directions.mp3;20;7

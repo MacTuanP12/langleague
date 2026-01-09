@@ -1,7 +1,0 @@
-id;remembered;is_memorized;last_reviewed;review_count;ease_factor;interval_days;next_review_date;app_user_id;word_id
-1;true;false;2025-12-05 10:00:00;3;250;7;2025-12-12;2;1
-2;true;true;2025-12-04 14:30:00;8;300;30;2026-01-03;2;2
-3;false;false;2025-12-05 09:15:00;1;200;1;2025-12-06;3;3
-4;true;false;2025-12-03 16:45:00;4;260;10;2025-12-13;2;5
-5;true;false;2025-12-05 11:20:00;2;230;3;2025-12-08;3;7
-

@@ -40,19 +40,6 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
-            <column name="account_locked" type="boolean" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-            <!-- Login Attempt Tracking -->
-            <column name="failed_login_attempts" type="int" defaultValueNumeric="0">
-                <constraints nullable="true"/>
-            </column>
-            <column name="last_failed_login" type="timestamp">
-                <constraints nullable="true"/>
-            </column>
-            <column name="locked_until" type="timestamp">
-                <constraints nullable="true"/>
-            </column>
         </createTable>
 
         <createTable tableName="jhi_authority">
@@ -69,8 +56,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-
 
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
@@ -101,11 +86,8 @@
                   separator=";"
                   tableName="jhi_user"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-            <column name="last_modified_date" type="timestamp"/>
-            <column name="account_locked" type="boolean"/>
         </loadData>
         <loadData
                   file="config/liquibase/data/user_authority.csv"

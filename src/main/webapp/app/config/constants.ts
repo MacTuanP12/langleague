@@ -1,10 +1,9 @@
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
-  STAFF: 'ROLE_STAFF',
-} as const;
+  TEACHER: 'ROLE_TEACHER',
+  STUDENT: 'ROLE_STUDENT',
+};
 
-// JWT Token storage key (single source of truth)
 export const TOKEN_KEY = 'jhi-authenticationToken';
 
 export const messages = {

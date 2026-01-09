@@ -1,0 +1,328 @@
+.modern-header {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #f0f2f4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+
+  &.dark {
+    background: #1a202c;
+    border-bottom-color: #2d3748;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+
+    .breadcrumb-link {
+      color: #616f89;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #1152d4;
+      }
+    }
+
+    .breadcrumb-current {
+      color: #111318;
+      font-weight: 600;
+    }
+
+    .breadcrumb-separator {
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: #616f89;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #f8f9fa;
+        color: #1152d4;
+      }
+
+      i {
+        font-size: 20px;
+      }
+    }
+
+    .notification-btn {
+      .notification-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 8px;
+        height: 8px;
+        background: #ef4444;
+        border-radius: 50%;
+        border: 2px solid white;
+      }
+    }
+
+    .divider {
+      width: 1px;
+      height: 32px;
+      background: #f0f2f4;
+    }
+
+    .profile-section {
+      position: relative;
+
+      .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 4px 4px 8px;
+        border-radius: 24px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        .profile-info {
+          text-align: right;
+          display: none;
+
+          @media (min-width: 640px) {
+            display: block;
+          }
+
+          .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111318;
+            line-height: 1;
+            margin: 0 0 4px 0;
+          }
+
+          .profile-role {
+            font-size: 12px;
+            color: #616f89;
+            line-height: 1;
+            margin: 0;
+            text-transform: capitalize;
+          }
+        }
+
+        .profile-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          border: 2px solid white;
+          box-shadow: 0 0 0 1px #e5e7eb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .avatar-initials {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .profile-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 200px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        z-index: 1000;
+        animation: slideDown 0.2s ease;
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .menu-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+          padding: 10px 12px;
+          border: none;
+          background: transparent;
+          color: #111318;
+          font-size: 14px;
+          font-weight: 500;
+          text-align: left;
+          text-decoration: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          i {
+            font-size: 18px;
+            color: #616f89;
+          }
+
+          &:hover {
+            background: #f8f9fa;
+          }
+
+          &.logout-item {
+            color: #ef4444;
+
+            i {
+              color: #ef4444;
+            }
+
+            &:hover {
+              background: #fef2f2;
+            }
+          }
+        }
+
+        .menu-divider {
+          height: 1px;
+          background: #f0f2f4;
+          margin: 8px 0;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support
+.dark .modern-header {
+  background: #1a202c;
+  border-bottom-color: #2d3748;
+
+  .breadcrumbs {
+    .breadcrumb-link {
+      color: #94a3b8;
+
+      &:hover {
+        color: #60a5fa;
+      }
+    }
+
+    .breadcrumb-current {
+      color: white;
+    }
+
+    .breadcrumb-separator {
+      color: #475569;
+    }
+  }
+
+  .header-actions {
+    .action-btn {
+      color: #94a3b8;
+
+      &:hover {
+        background: #2d3748;
+        color: #60a5fa;
+      }
+    }
+
+    .notification-btn .notification-badge {
+      border-color: #1a202c;
+    }
+
+    .divider {
+      background: #2d3748;
+    }
+
+    .profile-section {
+      .profile-btn {
+        &:hover {
+          background: #2d3748;
+        }
+
+        .profile-info {
+          .profile-name {
+            color: white;
+          }
+
+          .profile-role {
+            color: #94a3b8;
+          }
+        }
+
+        .profile-avatar {
+          border-color: #1a202c;
+          box-shadow: 0 0 0 1px #475569;
+        }
+      }
+
+      .profile-menu {
+        background: #2d3748;
+
+        .menu-item {
+          color: white;
+
+          i {
+            color: #94a3b8;
+          }
+
+          &:hover {
+            background: #374151;
+          }
+
+          &.logout-item {
+            color: #f87171;
+
+            i {
+              color: #f87171;
+            }
+
+            &:hover {
+              background: #7f1d1d;
+            }
+          }
+        }
+
+        .menu-divider {
+          background: #475569;
+        }
+      }
+    }
+  }
+}
+

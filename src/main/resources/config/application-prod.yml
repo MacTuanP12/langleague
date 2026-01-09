@@ -17,7 +17,7 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    com.langleague: INFO
+    com.langleague.app: INFO
 
 management:
   prometheus:
@@ -26,44 +26,6 @@ management:
         enabled: false
 
 spring:
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 200MB
-      max-request-size: 200MB
-  mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    protocol: smtp
-    test-connection: true
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          ssl:
-            trust: ${MAIL_HOST:smtp.gmail.com}
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-        debug: false
-
-  management:
-    health:
-      mail:
-        enabled: true
-
-  jhipster:
-    mail:
-      from: ${MAIL_FROM:noreply@langleague.com}
-      base-url: ${APP_BASE_URL:https://langleague.com}
-  docker:
-    compose:
-      enabled: false # Disable auto Docker Compose in production
   devtools:
     restart:
       enabled: false
@@ -71,21 +33,12 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/Langleague?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/langleague?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
-    password: ${MYSQL_ROOT_PASSWORD:123456}
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
-      connection-test-query: SELECT 1
-      connection-timeout: 30000 # 30s
-      validation-timeout: 5000 # 5s
-      idle-timeout: 600000 # 10 minutes
-      max-lifetime: 1800000 # 30 minutes
-      minimum-idle: 10
-      maximum-pool-size: 20
-      leak-detection-threshold: 60000 # 60s
-      keepalive-time: 300000 # 5 minutes
       data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
@@ -94,7 +47,11 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
-
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
   thymeleaf:
     cache: true
 
@@ -132,8 +89,6 @@ server:
 # ===================================================================
 
 jhipster:
-  clientApp:
-    name: 'langleagueApp'
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
@@ -149,12 +104,12 @@ jhipster:
         # - In the Consul configserver
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: ${JWT_BASE64_SECRET:OThjNmU3ZWYxNWM5N2U2MTlhMTg5ODkyMjEyNjUxNTJkNTlhMTc1NjdhOTBiYmZkZGM2Y2IwZTIxYTljYTRiZjg4YzRmYTA0ZGE4M2E5ZDY0NDE1ZTQ1MDViZjBlOGU4ZTAxNTc5YTExZGM2ZDE1ZGQ1NDY5MjBkNGMyN2RkNzM=}
+        base64-secret: ZTgwMWJlZDgyMDUxYWM4NzhmYThkMGFkM2EzNzgxMDUyOGRhMWEyOGE5MGY4MjBlYjJjNWVkMmRmMTFlYWE5ODIyOTVlNDgwMjAwZGNlYjVjMTk2N2M3MjgwNTdmODM4OTI4OWEzMmFkOWFhMzM1YjEzYWIzN2E1MDQ3Yjc0ZjQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: ${APP_BASE_URL:http://localhost:8080} # Modify according to your server's URL
+    base-url: http://my-server-url-to-change # Modify according to your server's URL
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -162,7 +117,6 @@ jhipster:
       host: localhost
       port: 5000
       ring-buffer-size: 512
-
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -171,25 +125,5 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-# Production email settings
-langleague:
-  mail:
-    # Daily reminder settings
-    daily-reminder:
-      enabled: true
-      time: '09:00' # Send at 9:00 AM
 
-    # Streak warning settings
-    streak-warning:
-      enabled: true
-      hours-before-reset: 2 # Warn 2 hours before streak reset
-
-    # Weekly report settings
-    weekly-report:
-      enabled: true
-      day-of-week: MONDAY
-      time: '08:00'
-
-    # Achievement notifications
-    achievement-notification:
-      enabled: true
+# application:

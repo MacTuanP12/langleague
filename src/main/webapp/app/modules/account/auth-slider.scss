@@ -1,31 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,800');
 
-/* --- 1. CẤU HÌNH THEME: GREEN LEARNING (HỌC TẬP) --- */
+/* --- 1. CẤU HÌNH THEME: MODERN LEARNING --- */
 :root {
-  /* Màu chủ đạo: Xanh Teal (Giáo dục & Tin cậy) */
-  --primary-color: #0d9488; /* Teal đậm */
-  --secondary-color: #5eead4; /* Teal sáng */
-  --primary-rgb: 13, 148, 136; /* Dùng cho bóng mờ */
+  /* Màu chủ đạo hiện đại */
+  --primary-color: #4169e1; /* Royal Blue */
+  --secondary-color: #5a67d8; /* Indigo */
+  --primary-rgb: 65, 105, 225;
 
-  --text-color: #1e293b; /* Màu chữ đen xám hiện đại */
-  --bg-color: #f0fdfa; /* Nền trang rất nhạt */
-  --input-bg: #f8fafc; /* Nền input trắng xám sạch sẽ */
+  --text-color: #1e293b;
+  --bg-color: #f8fafc;
+  --input-bg: #ffffff;
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* --- 2. BACKGROUND: KHÔNG GIAN HỌC TẬP (ĐÃ CHỈNH SỬA) --- */
+/* --- 2. BACKGROUND: KHÔNG GIAN HỌC TẬP HIỆN ĐẠI --- */
 .auth-body {
-  /* Màu nền dự phòng khi ảnh chưa load */
-  background-color: #111827; /* Màu tối */
-
-  /* Ảnh nền: Sách vở, bàn học, không gian thư viện sáng sủa */
-  background-image: url('https://i.pinimg.com/736x/b6/9a/ed/b69aed03ccc04f63c7439f0e8929b4b0.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 
   display: flex;
   justify-content: center;
@@ -38,7 +33,19 @@
   position: relative;
 }
 
-/* --- LỚP PHỦ TỐI NHẸ (THAY CHO LỚP MỜ CŨ) --- */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* --- LỚP PHỦ GLASS EFFECT --- */
 .auth-body::before {
   content: '';
   position: absolute;
@@ -46,28 +53,36 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Phủ một lớp màu đen trong suốt 40% lên ảnh */
-  background-color: rgba(0, 0, 0, 0.4);
-  /* Hoặc dùng gradient tối nếu muốn: background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)); */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
   z-index: 0;
-  /* Đã BỎ thuộc tính backdrop-filter: blur() đi */
 }
 
 /* --- 3. CONTAINER FORM --- */
 .auth-container {
-  background-color: #fff;
-  border-radius: 20px; /* Bo góc mềm mại */
-  /* Đổ bóng sâu để form nổi bật trên nền tối */
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   position: relative;
   overflow: hidden;
   width: 850px;
   max-width: 95%;
   min-height: 600px;
-  z-index: 1; /* Nổi lên trên lớp phủ tối */
+  z-index: 1;
+  transition: all 0.4s ease;
+
+  &:hover {
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    transform: translateY(-5px);
+  }
 }
 
-/* --- 4. NÚT NGÔN NGỮ (SANG TRỌNG & NHỎ GỌN) --- */
+/* --- 4. NÚT NGÔN NGỮ HIỆN ĐẠI --- */
 .language-switch-wrapper {
   position: absolute;
   top: 25px;
@@ -75,23 +90,21 @@
   z-index: 1000;
 }
 
-/* Style đặc biệt cho nút ngôn ngữ bên trong wrapper */
 .language-switch-wrapper .ant-dropdown-trigger,
 .language-switch-wrapper button {
-  background: rgba(255, 255, 255, 0.95); /* Nền trắng đục hơn */
-  border: 1px solid rgba(13, 148, 136, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(65, 105, 225, 0.3);
   border-radius: 30px;
-  padding: 6px 14px;
-  height: 34px;
+  padding: 8px 16px;
+  height: 38px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-  /* Text bên trong */
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--primary-color);
   text-transform: uppercase;
@@ -99,6 +112,9 @@
 
   &:hover {
     background: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 20px rgba(65, 105, 225, 0.3);
+    transform: translateY(-2px);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25);
     border-color: var(--primary-color);

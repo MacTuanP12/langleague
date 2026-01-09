@@ -32,35 +32,24 @@ module.exports = async () =>
               loader: MiniCssExtractPlugin.loader,
               options: {
                 publicPath: '../',
-                esModule: false,
               },
             },
             {
               loader: 'css-loader',
-              options: {
-                url: false,
-                sourceMap: false,
-                esModule: false,
-                importLoaders: 2,
-              },
+              options: { url: true }, // Changed to true to allow font files
             },
             {
               loader: 'postcss-loader',
-              options: {
-                sourceMap: false,
-                postcssOptions: {
-                  plugins: [require('autoprefixer')],
-                },
-              },
             },
             {
               loader: 'sass-loader',
-              options: {
-                implementation: sass,
-                sourceMap: false,
-              },
+              options: { implementation: sass },
             },
           ],
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          type: 'asset/resource',
         },
       ],
     },
@@ -105,14 +94,6 @@ module.exports = async () =>
         }),
         new CssMinimizerPlugin({
           parallel: true,
-          minimizerOptions: {
-            preset: [
-              'default',
-              {
-                discardComments: { removeAll: true },
-              },
-            ],
-          },
         }),
       ],
     },
@@ -121,7 +102,6 @@ module.exports = async () =>
         // Options similar to the same options in webpackOptions.output
         filename: 'content/[name].[contenthash].css',
         chunkFilename: 'content/[name].[chunkhash].css',
-        ignoreOrder: true,
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,

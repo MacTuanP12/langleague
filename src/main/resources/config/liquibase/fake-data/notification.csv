@@ -1,6 +1,0 @@
-id;user_id;title;message;type;is_read;created_at;read_at;link_url;version
-1;2;New Achievement Unlocked!;Congratulations! You earned the First Steps achievement;ACHIEVEMENT;true;2025-11-25 15:00:00;2025-11-25 16:30:00;/achievements;0
-2;2;7-Day Streak!;Amazing! You have studied for 7 days in a row;STREAK;true;2025-11-28 10:30:00;2025-11-28 11:00:00;/profile/streaks;0
-3;3;New Chapter Available;Chapter 5 is now available in your course;COURSE_UPDATE;false;2025-12-05 08:00:00;;/books/2/chapters/5;0
-4;2;Review Reminder;You have 5 vocabulary words ready for review;REMINDER;false;2025-12-05 09:00:00;;/flashcards/review;0
-

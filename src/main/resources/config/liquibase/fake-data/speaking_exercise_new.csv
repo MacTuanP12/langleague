@@ -1,6 +1,0 @@
-id;prompt;sample_audio;max_score;chapter_id
-1;Introduce yourself in Korean (name, nationality, occupation).;/audio/speaking-1-sample.mp3;20;1
-2;Describe what you see in the picture.;/audio/speaking-2-sample.mp3;20;17
-3;Talk about your favorite movie or book.;/audio/speaking-3-sample.mp3;25;9
-4;Explain how to get to your house from the nearest subway station.;/audio/speaking-4-sample.mp3;30;18
-5;You are in a meeting. Express your opinion on the new project proposal.;/audio/speaking-5-sample.mp3;30;20

@@ -1,0 +1,92 @@
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: #616f89;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+
+  &:hover {
+    background: #f8f9fa;
+    color: #1152d4;
+  }
+
+  &.open {
+    justify-content: flex-start;
+
+    .toggle-icon {
+      transform: rotate(0deg);
+    }
+  }
+
+  &.collapsed {
+    justify-content: center;
+    padding: 12px;
+    width: auto;
+
+    .toggle-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .toggle-icon {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .toggle-text {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+  }
+}
+
+// Dark mode support
+.dark .sidebar-toggle-btn {
+  color: #94a3b8;
+
+  &:hover {
+    background: #2d3748;
+    color: #60a5fa;
+  }
+}
+
+// Global sidebar styles that can be applied to any sidebar
+.sidebar-wrapper {
+  transition: all 0.3s ease;
+
+  &.open {
+    width: auto;
+    opacity: 1;
+  }
+
+  &.closed {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+
+.page-with-sidebar {
+  display: flex;
+  min-height: 100vh;
+
+  &.sidebar-collapsed {
+    .sidebar {
+      width: 0 !important;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+  }
+}
+

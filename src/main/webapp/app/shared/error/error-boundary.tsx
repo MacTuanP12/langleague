@@ -1,50 +1,42 @@
-import * as React from 'react';
+import React from 'react';
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
+interface IErrorBoundaryProps {
+  readonly children: React.ReactNode;
 }
 
-interface ErrorBoundaryState {
-  error: Error | null;
-  errorInfo: React.ErrorInfo | null;
+interface IErrorBoundaryState {
+  readonly error: any;
+  readonly errorInfo: any;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      error: null,
-      errorInfo: null,
-    };
-  }
+class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryState> {
+  readonly state: IErrorBoundaryState = { error: undefined, errorInfo: undefined };
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error, errorInfo) {
     this.setState({
       error,
       errorInfo,
     });
-    // You can also log the error to an error reporting service
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
   render() {
     const { error, errorInfo } = this.state;
-    const { children } = this.props;
-
     if (errorInfo) {
+      const errorDetails = DEVELOPMENT ? (
+        <details className="preserve-space">
+          {error && error.toString()}
+          <br />
+          {errorInfo.componentStack}
+        </details>
+      ) : undefined;
       return (
-        <div style={{ padding: '20px' }}>
-          <h2>Something went wrong.</h2>
-          <details style={{ whiteSpace: 'pre-wrap' }}>
-            {error && error.toString()}
-            <br />
-            {errorInfo.componentStack}
-          </details>
+        <div>
+          <h2 className="error">An unexpected error has occurred.</h2>
+          {errorDetails}
         </div>
       );
     }
-
-    return children;
+    return this.props.children;
   }
 }
 

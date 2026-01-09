@@ -1,7 +1,0 @@
-id;saved_at;learning_status;last_accessed_at;is_favorite;notes;tags;app_user_id;chapter_id
-1;2025-11-25 10:00:00;COMPLETED;2025-11-28 14:30:00;true;Mastered all vowel combinations!;hangul,vowels,beginner;2;1
-2;2025-11-26 11:30:00;COMPLETED;2025-11-29 10:15:00;true;Remember the aspiration difference;hangul,consonants,pronunciation;2;2
-3;2025-11-27 09:00:00;IN_PROGRESS;2025-12-05 09:30:00;true;Need to practice more formal greetings;greetings,formal,practice;2;3
-4;2025-11-28 15:45:00;IN_PROGRESS;2025-12-04 16:45:00;false;Native Korean vs Sino-Korean numbers;numbers,difficult;3;4
-5;2025-12-01 10:20:00;COMPLETED;2025-12-03 11:20:00;false;Everyday phrases are very useful!;conversation,daily;3;5
-

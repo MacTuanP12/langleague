@@ -1,6 +1,0 @@
-id;original_file_name;file_url;status;chatbot_response;error_message;uploaded_at;processed_at;retry_count;uploaded_by_id;created_book_id
-1;korean_basics.pdf;/uploads/books/korean_basics.pdf;COMPLETED;Successfully processed Korean language content;;2025-11-20 10:00:00;2025-11-20 10:05:00;0;1;1
-2;intermediate_conversation.pdf;/uploads/books/intermediate_conversation.pdf;COMPLETED;Created intermediate course with conversation practice;;2025-11-21 14:30:00;2025-11-21 14:35:00;0;1;2
-3;advanced_grammar.pdf;/uploads/books/advanced_grammar.pdf;COMPLETED;Advanced grammar rules extracted;;2025-11-22 09:15:00;2025-11-22 09:20:00;0;1;3
-4;business_korean.pdf;/uploads/books/business_korean.pdf;PROCESSING;;;2025-12-05 08:00:00;;0;1;
-

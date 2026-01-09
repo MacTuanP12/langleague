@@ -1,30 +1,30 @@
 {
   "settings": {
-    "title": "Cài đặt người dùng cho [<strong>{{username}}</strong>]",
+    "title": "Cài đặt người dùng của [<strong>{{username}}</strong>]",
     "form": {
       "firstname": "Tên",
-      "firstname.placeholder": "Tên của bạn",
+      "firstname.placeholder": "Nhập tên của bạn",
       "lastname": "Họ",
-      "lastname.placeholder": "Họ của bạn",
+      "lastname.placeholder": "Nhập họ của bạn",
       "language": "Ngôn ngữ",
       "button": "Lưu"
     },
     "messages": {
       "error": {
-        "fail": "<strong>Đã xảy ra lỗi!</strong> Không thể lưu cài đặt.",
-        "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng chọn email khác."
+        "fail": "<strong>Có lỗi xảy ra!</strong> Không thể lưu cài đặt.",
+        "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng nhập email khác."
       },
       "success": "<strong>Đã lưu cài đặt!</strong>",
       "validate": {
         "firstname": {
-          "required": "Tên là bắt buộc.",
+          "required": "Bạn phải nhập tên.",
           "minlength": "Tên phải có ít nhất 1 ký tự",
-          "maxlength": "Tên không được dài quá 50 ký tự"
+          "maxlength": "Tên không được vượt quá 50 ký tự"
         },
         "lastname": {
-          "required": "Họ là bắt buộc.",
-          "minlength": "Họ phải có ít nhất 1 ký tự",
-          "maxlength": "Họ không được dài quá 50 ký tự"
+          "required": "Bạn phải nhập họ tên.",
+          "minlength": "Họ tên phải có ít nhất 1 ký tự",
+          "maxlength": "Họ tên không được vượt quá 50 ký tự"
         }
       }
     }

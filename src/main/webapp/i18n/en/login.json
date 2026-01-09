@@ -1,30 +1,8 @@
 {
   "login": {
-    "title": "Log in",
-    "subtitle": "Log in to continue your learning journey",
-    "email": "Email",
-    "password": "Password",
-    "captcha": "Captcha",
-    "refreshCaptcha": "Refresh",
-    "rememberMe": "Remember me",
-    "forgotPassword": "Forgot Password?",
-    "loginButton": "Log in",
-    "signingIn": "Signing in...",
-    "orContinueWith": "Or continue with",
-    "orUseAccount": "or use your account",
-    "success": "Login successful!",
-    "welcomeMessage": "Welcome to LangLeague",
-    "welcomeBack": "Welcome Back!",
-    "welcomeBackMessage": "To keep connected with us please login with your personal info",
-    "newToLangleague": "Don't have an account?",
-    "signUp": "Sign up",
-    "error": {
-      "generic": "Login failed. Please check your credentials.",
-      "captchaInvalid": "Invalid captcha code. Please try again.",
-      "invalidCredentials": "Invalid email or password. Please try again."
-    },
-    "invalidCaptcha": "Invalid captcha code",
+    "title": "Sign in",
     "form": {
+      "password": "Password",
       "password.placeholder": "Your password",
       "rememberme": "Remember me",
       "button": "Sign in"
@@ -34,13 +12,8 @@
         "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
       }
     },
-    "validation": {
-      "emailRequired": "Please enter your email",
-      "passwordRequired": "Please enter your password",
-      "captchaRequired": "Please enter the captcha"
+    "password": {
+      "forgot": "Did you forget your password?"
     }
-  },
-  "common": {
-    "loading": "Loading..."
   }
 }

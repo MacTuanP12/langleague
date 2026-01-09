@@ -1,376 +1,388 @@
-/* Global App Styles with Dark Mode Support */
+// Override Bootstrap variables
+@import 'bootstrap-variables';
+// Import Bootstrap source files from node_modules
+@import 'bootstrap/scss/bootstrap';
+// Import Bootstrap Icons (removed deprecated ~ syntax)
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+// Import modern UI components
+@import 'modern-ui';
+// Import entities styles
+@import 'entities/entities';
 
+// ========================================
+// Theme Variables
+// ========================================
 :root {
-  /* Primary brand colors - SYNCED WITH design-system.ts */
-  --color-primary: #58cc02;
-  --color-primary-dark: #46a302;
-  --color-primary-light: #d7ffb8;
-  --color-secondary: #ffc800;
-  --color-secondary-dark: #e5b400;
-
-  /* Semantic colors */
-  --color-success: #58cc02;
-  --color-warning: #ffc800;
-  --color-error: #ff4b4b;
-  --color-info: #1cb0f6;
-
-  /* Background colors - Modern Clean Palette */
-  --bg-primary: #ffffff; /* Pure white for cards */
-  --bg-secondary: #f8f9fb; /* Soft gray with blue tint (upgraded from #f5f5f5) */
-  --bg-tertiary: #f1f5f9; /* Slate gray light (upgraded from #e8e8e8) */
-
-  /* Text colors */
-  --text-primary: #262626;
+  // Light Theme (Default)
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #e0e0e0;
+  --text-primary: #1a1a1a;
   --text-secondary: #666666;
-  --text-disabled: #bfbfbf;
-  --text-white: #ffffff;
-
-  /* Border colors */
-  --border-color: #d9d9d9;
-  --border-light: #f0f0f0;
-  --border-default: #d9d9d9;
-
-  /* Shadows */
+  --text-tertiary: #999999;
+  --border-color: #dddddd;
   --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
-
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #58cc02 0%, #46a302 100%);
-  --gradient-secondary: linear-gradient(135deg, #ffc800 0%, #ffb000 100%);
-  --gradient-info: linear-gradient(135deg, #1cb0f6 0%, #0e8fd6 100%);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-large: rgba(0, 0, 0, 0.2);
+  --accent-primary: #2d5f5d;
+  --accent-secondary: #3d6060;
+  --accent-hover: #4a7a78;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --info-color: #2196f3;
 }
 
-html.dark {
-  /* Primary brand colors - slightly adjusted for dark mode */
-  --color-primary: #6bd60a;
-  --color-primary-dark: #58cc02;
-  --color-primary-light: #2d4a1a;
-  --color-secondary: #ffd633;
-  --color-secondary-dark: #ffc800;
-
-  /* Background colors - Dark Mode Premium (Slate) */
-  --bg-primary: #1e293b; /* Slate 800 - Blue-gray dark (upgraded from #141414) */
-  --bg-secondary: #0f172a; /* Slate 900 - Deep charcoal (upgraded from #1f1f1f) */
-  --bg-tertiary: #334155; /* Slate 700 - Medium blue-gray (upgraded from #2d2d2d) */
-
-  /* Text colors */
+body.theme-dark {
+  // Dark Theme
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #404040;
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-disabled: #4a4a4a;
-  --text-white: #ffffff;
-
-  /* Border colors - Updated for Slate theme */
-  --border-color: #334155; /* Slate 700 - matches tertiary bg (upgraded from #434343) */
-  --border-light: #1e293b; /* Slate 800 - matches primary bg (upgraded from #2d2d2d) */
-  --border-default: #334155;
-
-  /* Shadows - darker for dark mode */
+  --text-secondary: #b3b3b3;
+  --text-tertiary: #808080;
+  --border-color: #404040;
   --shadow: rgba(0, 0, 0, 0.5);
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-medium: rgba(0, 0, 0, 0.6);
+  --shadow-large: rgba(0, 0, 0, 0.7);
+  --accent-primary: #4a9b99;
+  --accent-secondary: #5bb1af;
+  --accent-hover: #6cc6c4;
+  --success-color: #66bb6a;
+  --warning-color: #ffa726;
+  --error-color: #ef5350;
+  --info-color: #42a5f5;
 }
+// ========================================
+// End Theme Variables
+// ========================================
 
-/* ============================================
-   GLOBAL STYLES
-   ============================================ */
 * {
-  margin: 0;
-  padding: 0;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
+  &:after,
+  &::before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family:
-    'Nunito',
     'Inter',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
-  background-color: var(--bg-secondary); /* Soft gray-blue background */
-  color: var(--text-primary); /* #3C3C3C instead of pure black */
-  line-height: 1.5;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary, #f8fafc);
+  color: var(--text-primary, #334155);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Smooth scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-default);
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-disabled);
-}
-
-/* Selection color */
-::selection {
-  background-color: var(--color-primary-light);
-  color: var(--text-primary);
-}
-
-::-moz-selection {
-  background-color: var(--color-primary-light);
-  color: var(--text-primary);
-}
-
-/* ============================================
-   ANT DESIGN DARK MODE OVERRIDES
-   ============================================ */
-html.dark {
-  .app-container {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-  }
-
-  /* Layout */
-  .ant-layout {
-    background-color: var(--bg-primary);
-  }
-
-  .ant-layout-header {
-    background-color: var(--bg-secondary) !important;
-    border-bottom-color: var(--border-color) !important;
-  }
-
-  .ant-layout-content {
-    background-color: var(--bg-primary) !important;
-  }
-
-  .ant-layout-footer {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .ant-layout-sider {
-    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
-  }
-
-  /* Cards */
-  .ant-card {
-    background-color: var(--bg-primary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  /* Inputs */
-  .ant-input,
-  .ant-input-number,
-  .ant-select-selector,
-  .ant-picker {
-    background-color: var(--bg-secondary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  .ant-input:focus,
-  .ant-input-focused,
-  .ant-input-number:focus,
-  .ant-select-focused .ant-select-selector {
-    background-color: var(--bg-secondary);
-    border-color: var(--color-primary);
-  }
-
-  /* Tables */
-  .ant-table {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-  }
-
-  .ant-table-thead > tr > th {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  .ant-table-tbody > tr > td {
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  .ant-table-tbody > tr:hover > td {
-    background-color: var(--bg-secondary);
-  }
-
-  /* Modals */
-  .ant-modal-content {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-  }
-
-  .ant-modal-header {
-    background-color: var(--bg-primary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  .ant-modal-title {
-    color: var(--text-primary);
-  }
-
-  /* Dropdowns */
-  .ant-select-dropdown {
-    background-color: var(--bg-secondary);
-  }
-
-  .ant-select-item {
-    color: var(--text-primary);
-  }
-
-  .ant-select-item:hover {
-    background-color: var(--bg-tertiary);
-  }
-
-  .ant-select-item-option-selected {
-    background-color: rgba(88, 204, 2, 0.2);
-  }
-
-  /* Buttons */
-  .ant-btn-default {
-    background-color: var(--bg-secondary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-
-    &:hover:not(:disabled) {
-      border-color: var(--color-primary);
-      color: var(--color-primary);
-    }
-  }
-
-  /* Menu */
-  .ant-menu {
-    background-color: transparent;
-    color: var(--text-primary);
-  }
-
-  .ant-menu-item {
-    color: var(--text-secondary);
-  }
-
-  .ant-menu-item:hover {
-    color: var(--text-primary);
-  }
-
-  .ant-menu-item-selected {
-    background-color: rgba(88, 204, 2, 0.15);
-    color: var(--color-primary);
-  }
-
-  /* Typography */
-  .ant-typography {
-    color: var(--text-primary);
-  }
-
-  /* Dividers */
-  .ant-divider {
-    border-color: var(--border-color);
-  }
-
-  /* Badges */
-  .ant-badge-count {
-    background-color: var(--color-primary);
-  }
-
-  /* Empty state */
-  .ant-empty-description {
-    color: var(--text-secondary);
-  }
-
-  /* Spin */
-  .ant-spin-text {
-    color: var(--text-primary);
-  }
-
-  /* Progress */
-  .ant-progress-text {
-    color: var(--text-primary);
-  }
-}
-
-/* ============================================
-   RESPONSIVE EXERCISE CONTAINERS
-   ============================================ */
-.listening-exercise-container,
-.reading-exercise-container,
-.writing-exercise-container,
-.speaking-exercise-container,
-.exercise-container {
-  padding: 24px; /* Desktop: p-6 */
-  background: var(--bg-secondary);
+.app-container {
   min-height: 100vh;
-  font-family:
-    'Nunito',
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
-  color: var(--text-primary);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 
-  @media (max-width: 768px) {
-    padding: 16px; /* Tablet/Mobile: p-4 */
-  }
-
-  @media (max-width: 480px) {
-    padding: 12px; /* Small Mobile: p-3 */
+  .view-routes {
+    min-height: 100vh;
+    width: 100%;
   }
 }
 
-/* Responsive card padding */
-.listening-exercise-container .ant-card,
-.reading-exercise-container .ant-card,
-.writing-exercise-container .ant-card,
-.speaking-exercise-container .ant-card,
-.exercise-container .ant-card {
-  @media (max-width: 768px) {
-    .ant-card-body {
-      padding: 16px;
-    }
+.fullscreen {
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 99% !important;
+  height: calc(100vh - 110px) !important;
+  margin: 5px;
+  z-index: 1000;
+  padding: 5px 25px 50px 25px !important;
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* ==========================================================================
+Custom button styles
+========================================================================== */
+
+.icon-button > .btn {
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0.625rem;
+  line-height: 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f1f5f9;
+    border-color: transparent;
+    transform: scale(1.1);
   }
 
-  @media (max-width: 480px) {
-    .ant-card-body {
-      padding: 12px;
+  &:focus {
+    -webkit-box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+    box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+  }
+}
+
+/* ==========================================================================
+Generic styles
+========================================================================== */
+
+/* Temporary workaround for availity-reactstrap-validation */
+.invalid-feedback {
+  display: inline;
+}
+
+/* other generic styles */
+
+.title {
+  font-size: 1.25em;
+  margin: 1px 10px 1px 10px;
+}
+
+.description {
+  font-size: 0.9em;
+  margin: 1px 10px 1px 10px;
+}
+
+.shadow {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 0.75rem;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.error {
+  color: white;
+  background-color: red;
+}
+
+.break {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.break-word {
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.preserve-space {
+  white-space: pre-wrap;
+}
+
+/* padding helpers */
+
+@mixin pad($size, $side) {
+  @if $size== '' {
+    @if $side== '' {
+      .pad {
+        padding: 10px !important;
+      }
+    } @else {
+      .pad {
+        padding-#{$side}: 10px !important;
+      }
+    }
+  } @else {
+    @if $side== '' {
+      .pad-#{$size} {
+        padding: #{$size}px !important;
+      }
+    } @else {
+      .pad-#{$side}-#{$size} {
+        padding-#{$side}: #{$size}px !important;
+      }
     }
   }
 }
 
-/* Responsive audio controls */
-.listening-exercise-container {
-  .ant-row[gutter] {
-    @media (max-width: 480px) {
-      gap: 8px;
-    }
-  }
+@include pad('', '');
+@include pad('2', '');
+@include pad('3', '');
+@include pad('5', '');
+@include pad('10', '');
+@include pad('20', '');
+@include pad('25', '');
+@include pad('30', '');
+@include pad('50', '');
+@include pad('75', '');
+@include pad('100', '');
+@include pad('4', 'top');
+@include pad('5', 'top');
+@include pad('10', 'top');
+@include pad('20', 'top');
+@include pad('25', 'top');
+@include pad('30', 'top');
+@include pad('50', 'top');
+@include pad('75', 'top');
+@include pad('100', 'top');
+@include pad('4', 'bottom');
+@include pad('5', 'bottom');
+@include pad('10', 'bottom');
+@include pad('20', 'bottom');
+@include pad('25', 'bottom');
+@include pad('30', 'bottom');
+@include pad('50', 'bottom');
+@include pad('75', 'bottom');
+@include pad('100', 'bottom');
+@include pad('5', 'right');
+@include pad('10', 'right');
+@include pad('20', 'right');
+@include pad('25', 'right');
+@include pad('30', 'right');
+@include pad('50', 'right');
+@include pad('75', 'right');
+@include pad('100', 'right');
+@include pad('5', 'left');
+@include pad('10', 'left');
+@include pad('20', 'left');
+@include pad('25', 'left');
+@include pad('30', 'left');
+@include pad('50', 'left');
+@include pad('75', 'left');
+@include pad('100', 'left');
 
-  /* Speed buttons on mobile */
-  .ant-btn-sm {
-    @media (max-width: 480px) {
-      min-width: 40px !important;
-      padding: 0 8px;
-      font-size: 12px;
+@mixin no-padding($side) {
+  @if $side== 'all' {
+    .no-padding {
+      padding: 0 !important;
+    }
+  } @else {
+    .no-padding-#{$side} {
+      padding-#{$side}: 0 !important;
     }
   }
 }
+
+@include no-padding('left');
+@include no-padding('right');
+@include no-padding('top');
+@include no-padding('bottom');
+@include no-padding('all');
+
+/* end of padding helpers */
+
+.no-margin {
+  margin: 0;
+}
+@mixin voffset($size) {
+  @if $size== '' {
+    .voffset {
+      margin-top: 2px !important;
+    }
+  } @else {
+    .voffset-#{$size} {
+      margin-top: #{$size}px !important;
+    }
+  }
+}
+
+@include voffset('');
+@include voffset('5');
+@include voffset('10');
+@include voffset('15');
+@include voffset('30');
+@include voffset('40');
+@include voffset('60');
+@include voffset('80');
+@include voffset('100');
+@include voffset('150');
+
+.readonly {
+  background-color: #eee;
+  opacity: 1;
+}
+
+/* ==========================================================================
+make sure browsers use the pointer cursor for anchors, even with no href
+========================================================================== */
+
+a:hover {
+  cursor: pointer;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+button.anchor-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  align-items: initial;
+  text-align: initial;
+  width: 100%;
+}
+
+a.anchor-btn:hover {
+  text-decoration: none;
+}
+
+/* ==========================================================================
+Metrics and Health styles
+========================================================================== */
+
+#threadDump .popover,
+#healthCheck .popover {
+  top: inherit;
+  display: block;
+  font-size: 10px;
+  max-width: 1024px;
+}
+
+.thread-dump-modal-lock {
+  max-width: 450px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#healthCheck .popover {
+  margin-left: -50px;
+}
+
+.health-details {
+  min-width: 400px;
+}
+
+/* bootstrap 3 input-group 100% width
+http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+
+.width-min {
+  width: 1% !important;
+}
+
+/* jhipster-needle-scss-add-main JHipster will add new css style */

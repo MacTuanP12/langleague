@@ -1,95 +1,19 @@
 {
   "home": {
-    "nav": {
-      "features": "Features",
-      "courses": "Courses",
-      "testimonials": "Testimonials",
-      "login": "Log In",
-      "signup": "Sign Up"
+    "title": "Welcome, Java Hipster!",
+    "subtitle": "This is your homepage",
+    "logged": {
+      "message": "You are logged in as user \"{{username}}\"."
     },
-    "hero": {
-      "title": "Learn Korean",
-      "subtitle": "Through Reading Books",
-      "description": "Read your favorite Korean novels and stories, learn Korean vocabulary and grammar in natural context. AI automatically analyzes books and creates 4-skill exercises.",
-      "startButton": "Start Free",
-      "libraryButton": "View Library",
-      "stats": {
-        "students": "Students",
-        "books": "Korean Books",
-        "satisfaction": "Satisfied"
-      }
+    "question": "If you have any question on JHipster:",
+    "link": {
+      "homepage": "JHipster homepage",
+      "stackoverflow": "JHipster on Stack Overflow",
+      "bugtracker": "JHipster bug tracker",
+      "chat": "JHipster public chat room",
+      "follow": "follow @jhipster on Twitter"
     },
-    "features": {
-      "title": "Why Choose Langleague?",
-      "subtitle": "Effective method to learn Korean through reading authentic Korean books",
-      "learnThroughBooks": {
-        "title": "Learn Through Books",
-        "description": "Read real Korean novels and stories, learn Korean vocabulary and grammar in natural context"
-      },
-      "aiAnalysis": {
-        "title": "AI Analysis",
-        "description": "AI system automatically analyzes Korean books, creates exercises and vocabulary suitable for your level"
-      },
-      "fourSkills": {
-        "title": "Practice 4 Skills",
-        "description": "Listening - Speaking - Reading - Writing: Comprehensive Korean training with diverse exercises"
-      },
-      "trackProgress": {
-        "title": "Track Progress",
-        "description": "Detailed statistics of learning progress, Korean vocabulary learned, exercises completed"
-      }
-    },
-    "books": {
-      "title": "Popular Korean Books",
-      "subtitle": "Discover the most loved Korean novels",
-      "startLearning": "Start Learning",
-      "chapters": "{{count}} chapters",
-      "levels": {
-        "beginner": "Beginner",
-        "intermediate": "Intermediate",
-        "advanced": "Advanced"
-      }
-    },
-    "testimonials": {
-      "title": "What Students Say?",
-      "subtitle": "Real reviews from Vietnamese students",
-      "student1": {
-        "name": "Nguyen Minh Anh",
-        "role": "Student",
-        "content": "Reading Korean books helps me learn vocabulary very quickly. The AI analysis of Korean vocabulary and grammar is very detailed, helping me understand more deeply!"
-      },
-      "student2": {
-        "name": "Tran Duc Anh",
-        "role": "Student",
-        "content": "Great platform! Reading my favorite Korean stories while learning Korean. The 4-skill exercises are very diverse and practical."
-      },
-      "student3": {
-        "name": "Le Thi Huong",
-        "role": "Student",
-        "content": "The progress tracking system is great! Every day I have motivation to read and learn more Korean."
-      }
-    },
-    "cta": {
-      "title": "Ready to Learn Korean?",
-      "description": "Join 5,000+ students and improve your Korean through reading Korean books today",
-      "button": "Sign Up Free Now"
-    },
-    "footer": {
-      "description": "Learn Korean effectively through reading authentic Korean books with AI support",
-      "courses": "Courses",
-      "learnKorean": "Learn Korean",
-      "learnEnglish": "Learn English",
-      "learnJapanese": "Learn Japanese",
-      "learnChinese": "Learn Chinese",
-      "company": "Company",
-      "aboutUs": "About Us",
-      "contact": "Contact",
-      "careers": "Careers",
-      "blog": "Blog",
-      "contactTitle": "Contact",
-      "copyright": "© 2025 Langleague. All Rights Reserved.",
-      "terms": "Terms & Conditions",
-      "privacy": "Privacy Policy"
-    }
+    "like": "If you like JHipster, don't forget to give us a star on",
+    "github": "GitHub"
   }
 }

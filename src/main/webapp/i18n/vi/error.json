@@ -1,14 +1,14 @@
 {
   "error": {
-    "title": "Trang lỗi!",
+    "title": "Trang thông tin lỗi!",
     "http": {
-      "400": "Yêu cầu không hợp lệ.",
-      "403": "Bạn không có quyền truy cập trang này.",
+      "400": "Bad request.",
+      "403": "Bạn không có quyền xem trang này.",
       "404": "Trang không tồn tại.",
-      "405": "Phương thức HTTP bạn sử dụng không được hỗ trợ cho URL này.",
-      "500": "Lỗi máy chủ nội bộ."
+      "405": "The HTTP verb you used is not supported for this URL.",
+      "500": "Internal server error."
     },
-    "concurrencyFailure": "Người dùng khác đã sửa đổi dữ liệu này cùng lúc với bạn. Các thay đổi của bạn đã bị từ chối.",
-    "validation": "Lỗi xác thực trên máy chủ."
+    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "validation": "Validation error on the server."
   }
 }

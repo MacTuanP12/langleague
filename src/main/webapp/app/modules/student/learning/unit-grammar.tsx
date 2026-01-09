@@ -1,0 +1,108 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import { IUnit } from 'app/shared/model/unit.model';
+import { IGrammar, IGrammarExample } from 'app/shared/model/grammar.model';
+
+export const UnitGrammar = () => {
+  const [unit, setUnit] = useState<IUnit | null>(null);
+  const [grammars, setGrammars] = useState<IGrammar[]>([]);
+  const [selectedGrammar, setSelectedGrammar] = useState<IGrammar | null>(null);
+  const { unitId } = useParams<{ unitId: string }>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (unitId) {
+      loadUnit();
+      loadGrammars();
+    }
+  }, [unitId]);
+
+  const loadUnit = async () => {
+    try {
+      const response = await axios.get<IUnit>(`/api/units/${unitId}`);
+      setUnit(response.data);
+    } catch (error) {
+      console.error('Error loading unit:', error);
+    }
+  };
+
+  const loadGrammars = async () => {
+    try {
+      const response = await axios.get<IGrammar[]>(`/api/units/${unitId}/grammars`);
+      setGrammars(response.data);
+      if (response.data.length > 0) {
+        setSelectedGrammar(response.data[0]);
+      }
+    } catch (error) {
+      console.error('Error loading grammars:', error);
+    }
+  };
+
+  const parseExamples = (examplesJson: string): IGrammarExample[] => {
+    try {
+      return JSON.parse(examplesJson || '[]');
+    } catch (e) {
+      return [];
+    }
+  };
+
+  return (
+    <div className="unit-grammar">
+      <div className="grammar-header">
+        <button onClick={() => navigate(-1)} className="back-btn">
+          ← Back to Book List
+        </button>
+        <div className="header-info">
+          <div className="breadcrumb">
+            <span>UNIT 1 - GRAMMAR</span>
+          </div>
+          <h2>{unit?.title || 'Grammar'}</h2>
+        </div>
+      </div>
+
+      <div className="grammar-content">
+        {selectedGrammar && (
+          <div className="grammar-detail">
+            <h3>{selectedGrammar.title}</h3>
+
+            {selectedGrammar.contentMarkdown && (
+              <div className="grammar-section">
+                <div className="section-header">
+                  <span className="section-icon">📖</span>
+                  <h4>Content</h4>
+                </div>
+                <div className="markdown-content">
+                  <ReactMarkdown>{selectedGrammar.contentMarkdown}</ReactMarkdown>
+                </div>
+              </div>
+            )}
+
+            {selectedGrammar.exampleUsage && (
+              <div className="grammar-section">
+                <div className="section-header">
+                  <span className="section-icon">💡</span>
+                  <h4>Example Usage</h4>
+                </div>
+                <div className="examples-list">
+                  <div className="example-item">
+                    <p className="example-text">{selectedGrammar.exampleUsage}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {grammars.length === 0 && (
+          <div className="empty-state">
+            <p>No grammar lessons added yet for this unit.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default UnitGrammar;

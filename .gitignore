@@ -9,12 +9,6 @@ npm-debug.log.*
 /.cache-loader/*
 
 ######################
-# Environment Variables
-######################
-.env
-.env.local
-.env.*.local
-######################
 # SASS
 ######################
 .sass-cache/
@@ -128,8 +122,6 @@ Desktop.ini
 # Logs
 ######################
 *.log*
-hs_err_pid*.log
-replay_pid*.log
 
 ######################
 # Others
@@ -138,29 +130,6 @@ replay_pid*.log
 *.*~
 *~
 .merge_file*
-
-######################
-# JVM Crash Logs
-######################
-hs_err_pid*.log
-replay_pid*.log
-
-######################
-# Build artifacts
-######################
-checksums.csv
-checksums.csv.old
-spotless-index
-
-######################
-# Frontend build in target
-######################
-/target/node/
-/target/npm
-/target/npm.cmd
-/target/npx
-/target/npx.cmd
-/target/webpack/
 
 ######################
 # Gradle Wrapper

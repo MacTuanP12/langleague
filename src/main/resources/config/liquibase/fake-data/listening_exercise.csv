@@ -1,7 +1,0 @@
-id;audio_path;image_url;transcript;question;correct_answer;max_score;chapter_id
-1;/audio/listening/hello.mp3;;안녕하세요? 저는 김민수입니다.;What is the person name?;A;10;3
-2;/audio/listening/counting.mp3;;하나, 둘, 셋, 넷;How many numbers did you hear?;B;10;4
-3;/audio/listening/restaurant.mp3;;비빔밥 하나 주세요.;What food is being ordered?;C;15;6
-4;/audio/listening/directions.mp3;;왼쪽으로 가세요.;Which direction should you go?;A;15;7
-5;/audio/listening/weather.mp3;;오늘 날씨가 좋아요.;What is today's weather like?;D;20;8
-
