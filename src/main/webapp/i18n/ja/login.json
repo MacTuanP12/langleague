@@ -2,6 +2,8 @@
   "login": {
     "title": "ログイン",
     "form": {
+      "username": "ユーザー名",
+      "username.placeholder": "ユーザー名を入力",
       "password": "パスワード",
       "password.placeholder": "パスワード",
       "rememberme": "自動ログイン",
@@ -10,6 +12,17 @@
     "messages": {
       "error": {
         "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
+      },
+      "info": {
+        "authenticated": {
+          "prefix": "もし ",
+          "link": "ログイン",
+          "suffix": " したい場合は、デフォルトアカウントを試すことができます:<br/>- 管理者 (ログイン=\"admin\" パスワード=\"admin\") <br/>- ユーザー (ログイン=\"user\" パスワード=\"user\")。"
+        },
+        "register": {
+          "noaccount": "まだアカウントをお持ちではありませんか？",
+          "link": "新規アカウント登録"
+        }
       }
     },
     "password": {

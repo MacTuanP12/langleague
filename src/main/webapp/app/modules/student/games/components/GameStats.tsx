@@ -36,5 +36,3 @@ export const GameStats: React.FC<GameStatsProps> = ({ gamesPlayed, totalScore, a
     </div>
   );
 };
-
-

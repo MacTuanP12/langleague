@@ -2,7 +2,12 @@
   display: flex;
   min-height: 100vh;
   background: #f6f6f8;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
 
   /* Sidebar Styles */
   .student-sidebar {
@@ -27,7 +32,7 @@
         justify-content: center;
       }
 
-      .nav-item {
+      .student-nav-item {
         justify-content: center;
         padding: 12px;
 
@@ -95,7 +100,7 @@
       padding: 16px;
       overflow-y: auto;
 
-      .nav-item {
+      .student-nav-item {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -232,7 +237,7 @@
     }
 
     .nav-menu {
-      .nav-item {
+      .student-nav-item {
         color: #94a3b8;
 
         &:hover {
@@ -261,4 +266,3 @@
     }
   }
 }
-

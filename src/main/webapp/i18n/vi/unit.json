@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "unit": {
+      "home": {
+        "title": "Units",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Unit",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Unit",
+        "notFound": "No Units found"
+      },
+      "created": "Một Unit mới được tạo với định danh {{ param }}",
+      "updated": "Một Unit cập nhật với định danh {{ param }}",
+      "deleted": "Một Unit đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Unit {{ id }}?"
+      },
+      "detail": {
+        "title": "Unit"
+      },
+      "id": "ID",
+      "title": "Title",
+      "orderIndex": "Order Index",
+      "summary": "Summary",
+      "vocabularies": "Vocabularies",
+      "grammars": "Grammars",
+      "exercises": "Exercises",
+      "progresses": "Progresses",
+      "book": "Book"
+    }
+  }
+}

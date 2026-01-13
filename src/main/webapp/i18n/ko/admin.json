@@ -6,14 +6,14 @@
         "welcome": "{name}님, 환영합니다!",
         "stats": {
           "totalUsers": "총 사용자",
-          "totalCourses": "총 강좌",
+          "totalBooks": "총 교재",
           "activeSessions": "활성 세션",
           "recentActivities": "최근 활동"
         },
         "quickActions": {
           "title": "빠른 작업",
           "addUser": "사용자 추가",
-          "manageCourses": "강좌 관리",
+          "manageBooks": "교재 관리",
           "systemSettings": "시스템 설정"
         },
         "userManagement": {
@@ -53,8 +53,7 @@
           "role": {
             "admin": "관리자",
             "teacher": "교사",
-            "student": "학생",
-            "librarian": "사서"
+            "student": "학생"
           },
           "status": {
             "active": "활성",

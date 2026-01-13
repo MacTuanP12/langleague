@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from 'app/config/store';
 import './home.scss';
-import {translate, Translate} from "react-jhipster";
+import { translate, Translate } from 'react-jhipster';
+import { ModernHeader } from 'app/shared/layout/header/modern-header';
+import { ModernFooter } from 'app/shared/layout/footer/modern-footer';
 
 const FEATURED_BOOKS = [
   {
@@ -52,34 +54,7 @@ export const HomeNew = () => {
   return (
     <div className="home-new-container">
       {/* Header */}
-      <header className="main-header">
-        <div className="header-content">
-          <div className="logo-section">
-            <div className="logo-icon">◆</div>
-            <span className="logo-text">LangLeague</span>
-          </div>
-
-          <div className="header-actions">
-            {!isAuthenticated ? (
-              <>
-                <Link to="/login" className="btn-secondary">
-                  <Translate contentKey="global.menu.account.login">Sign In</Translate>
-                </Link>
-                <Link to="/account/register" className="btn-primary">
-                  <Translate contentKey="global.menu.account.register">Sign Up</Translate>
-                </Link>
-              </>
-            ) : (
-              <div className="user-menu">
-                <span>Welcome, {account.login}</span>
-                <Link to="/account/settings" className="btn-primary">
-                  <Translate contentKey="global.menu.account.settings">Profile</Translate>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <ModernHeader />
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -136,67 +111,7 @@ export const HomeNew = () => {
       </section>
 
       {/* Footer */}
-      <footer className="main-footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <div className="footer-logo">
-              <div className="logo-icon">◆</div>
-              <span>LangLeague</span>
-            </div>
-            <p>
-              LangLeague is an open educational library dedicated to providing accessible knowledge for everyone. We believe in the power of
-              books to transform lives and build a better future through education.
-            </p>
-          </div>
-
-          <div className="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About Us</Link>
-              </li>
-              <li>
-                <Link to="/privacy">Privacy Policy</Link>
-              </li>
-              <li>
-                <Link to="/terms">Terms of Service</Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h3>Contact Us</h3>
-            <ul className="contact-info">
-              <li>
-                <i className="bi bi-envelope"></i>
-                <a href="mailto:support@bookflow.com">support@bookflow.edu</a>
-              </li>
-              <li>
-                <i className="bi bi-telephone"></i>
-                <span>+1 (555) 123-4567</span>
-              </li>
-            </ul>
-            <div className="social-links">
-              <a href="#" aria-label="Facebook">
-                <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#" aria-label="LinkedIn">
-                <i className="bi bi-linkedin"></i>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <i className="bi bi-twitter"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} LangLeague. All rights reserved.</p>
-        </div>
-      </footer>
+      <ModernFooter />
     </div>
   );
 };

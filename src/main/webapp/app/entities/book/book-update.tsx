@@ -1,121 +1,181 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { IBook, defaultBookValue } from 'app/shared/model/book.model';
+import React, { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button, Col, FormText, Row } from 'reactstrap';
+import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { createBook, updateBook, fetchBookById, reset } from 'app/shared/reducers/book.reducer';
 
 export const BookUpdate = () => {
-  const [book, setBook] = useState<IBook>(defaultBookValue);
-  const [coverPreview, setCoverPreview] = useState<string>('');
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+
+  const { id } = useParams<'id'>();
+  const isNew = id === undefined;
+
+  const userProfiles = useAppSelector(state => state.userProfile.entities);
+  const bookEntity = useAppSelector(state => state.book.selectedBook);
+  const loading = useAppSelector(state => state.book.loading);
+  const updating = useAppSelector(state => state.book.updating);
+
+  const handleClose = () => {
+    navigate('/book');
+  };
 
   useEffect(() => {
-    if (id) {
-      loadBook();
+    if (isNew) {
+      dispatch(reset());
+    } else {
+      dispatch(fetchBookById(Number(id)));
     }
-  }, [id]);
 
-  const loadBook = async () => {
+    dispatch(getUserProfiles({}));
+  }, [id, isNew]);
+
+  const saveEntity = async values => {
+    if (values.id !== undefined && typeof values.id !== 'number') {
+      values.id = Number(values.id);
+    }
+    values.createdAt = convertDateTimeToServer(values.createdAt);
+
+    const entity = {
+      ...bookEntity,
+      ...values,
+      teacherProfile: userProfiles.find(it => it.id.toString() === values.teacherProfile?.toString()),
+    };
+
     try {
-      const response = await axios.get(`/api/books/${id}`);
-      setBook(response.data);
-      setCoverPreview(response.data.coverImageUrl);
-    } catch (error) {
-      console.error('Error loading book:', error);
-    }
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverPreview(reader.result as string);
-        setBook({ ...book, coverImageUrl: reader.result as string });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (id) {
-        await axios.put(`/api/books/${id}`, book);
+      if (isNew) {
+        await dispatch(createBook(entity)).unwrap();
       } else {
-        await axios.post('/api/books', book);
+        await dispatch(updateBook(entity)).unwrap();
       }
-      navigate('/books');
+      handleClose();
     } catch (error) {
-      console.error('Error saving book:', error);
+      console.error('Save failed', error);
     }
   };
+
+  const defaultValues = () =>
+    isNew
+      ? {
+          createdAt: displayDefaultDateTime(),
+        }
+      : {
+          ...bookEntity,
+          createdAt: convertDateTimeFromServer(bookEntity?.createdAt),
+          teacherProfile: bookEntity?.teacherProfile?.id,
+        };
 
   return (
-    <div className="book-update">
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h3>{id ? 'Edit Book' : 'Add New Book'}</h3>
-            <p>Enter the details below to {id ? 'update the' : 'create a new'} resource</p>
-            <button className="close-btn" onClick={() => navigate('/books')}>
-              ×
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group cover-upload">
-                <label>Book Cover</label>
-                <div className="upload-area">
-                  {coverPreview ? (
-                    <img src={coverPreview} alt="Cover preview" className="cover-preview" />
-                  ) : (
-                    <div className="upload-placeholder">
-                      <i className="fa fa-upload"></i>
-                      <p>Upload Cover</p>
-                      <span>Drag and drop or click</span>
-                      <span className="file-info">Supports: JPG, PNG (max. 2MB)</span>
-                    </div>
-                  )}
-                  <input type="file" accept="image/*" onChange={handleImageUpload} />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Book Title</label>
-                <input
-                  type="text"
-                  placeholder="e.g. The Great Gatsby"
-                  value={book.title}
-                  onChange={e => setBook({ ...book, title: e.target.value })}
+    <div>
+      <Row className="justify-content-center">
+        <Col md="8">
+          <h2 id="langleagueApp.book.home.createOrEditLabel" data-cy="BookCreateUpdateHeading">
+            <Translate contentKey="langleagueApp.book.home.createOrEditLabel">Create or edit a Book</Translate>
+          </h2>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col md="8">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+              {!isNew ? (
+                <ValidatedField
+                  name="id"
                   required
+                  readOnly
+                  id="book-id"
+                  label={translate('global.field.id')}
+                  validate={{ required: true }}
                 />
-
-                <label>Description</label>
-                <textarea
-                  placeholder="Enter a brief summary of the book content..."
-                  value={book.description}
-                  onChange={e => setBook({ ...book, description: e.target.value })}
-                  rows={4}
-                />
-              </div>
-            </div>
-
-            <div className="form-footer">
-              <p className="info-text">All fields are auto-saved locally.</p>
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => navigate('/books')}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Save Book
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+              ) : null}
+              <ValidatedField
+                label={translate('langleagueApp.book.title')}
+                id="book-title"
+                name="title"
+                data-cy="title"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={translate('langleagueApp.book.description')}
+                id="book-description"
+                name="description"
+                data-cy="description"
+                type="textarea"
+              />
+              <ValidatedField
+                label={translate('langleagueApp.book.coverImageUrl')}
+                id="book-coverImageUrl"
+                name="coverImageUrl"
+                data-cy="coverImageUrl"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('langleagueApp.book.isPublic')}
+                id="book-isPublic"
+                name="isPublic"
+                data-cy="isPublic"
+                check
+                type="checkbox"
+              />
+              <ValidatedField
+                label={translate('langleagueApp.book.createdAt')}
+                id="book-createdAt"
+                name="createdAt"
+                data-cy="createdAt"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                id="book-teacherProfile"
+                name="teacherProfile"
+                data-cy="teacherProfile"
+                label={translate('langleagueApp.book.teacherProfile')}
+                type="select"
+                required
+              >
+                <option value="" key="0" />
+                {userProfiles
+                  ? userProfiles.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/book" replace color="info">
+                <FontAwesomeIcon icon="arrow-left" />
+                &nbsp;
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
+              </Button>
+              &nbsp;
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+                <FontAwesomeIcon icon="save" />
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
+              </Button>
+            </ValidatedForm>
+          )}
+        </Col>
+      </Row>
     </div>
   );
 };

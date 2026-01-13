@@ -22,23 +22,6 @@ export const StudentLayout = () => {
     return location.pathname.includes(path);
   };
 
-  const getBreadcrumbs = () => {
-    const path = location.pathname;
-    const breadcrumbs: Array<{ label: string; path?: string }> = [{ label: 'Dashboard', path: '/student/dashboard' }];
-
-    if (path.includes('/books')) {
-      breadcrumbs.push({ label: 'My Books' });
-    } else if (path.includes('/flashcards')) {
-      breadcrumbs.push({ label: 'FlashCards' });
-    } else if (path.includes('/games')) {
-      breadcrumbs.push({ label: 'Games' });
-    } else if (path.includes('/profile')) {
-      breadcrumbs.push({ label: 'Profile' });
-    }
-
-    return breadcrumbs;
-  };
-
   return (
     <div className="student-layout">
       {/* Sidebar */}
@@ -53,27 +36,27 @@ export const StudentLayout = () => {
         </div>
 
         <nav className="nav-menu">
-          <Link to="/student/dashboard" className={`nav-item ${isActive('/student/dashboard') ? 'active' : ''}`}>
+          <Link to="/student/dashboard" className={`student-nav-item ${isActive('/student/dashboard') ? 'active' : ''}`}>
             <i className="bi bi-house-door"></i>
             {isSidebarOpen && <span>Home</span>}
           </Link>
 
-          <Link to="/student/books" className={`nav-item ${isActive('/student/books') ? 'active' : ''}`}>
+          <Link to="/student/books" className={`student-nav-item ${isActive('/student/books') ? 'active' : ''}`}>
             <i className="bi bi-book"></i>
             {isSidebarOpen && <span>My Books</span>}
           </Link>
 
-          <Link to="/student/flashcards" className={`nav-item ${isActive('/student/flashcards') ? 'active' : ''}`}>
+          <Link to="/student/flashcards" className={`student-nav-item ${isActive('/student/flashcards') ? 'active' : ''}`}>
             <i className="bi bi-credit-card-2-front"></i>
             {isSidebarOpen && <span>FlashCard</span>}
           </Link>
 
-          <Link to="/student/games" className={`nav-item ${isActive('/student/games') ? 'active' : ''}`}>
+          <Link to="/student/games" className={`student-nav-item ${isActive('/student/games') ? 'active' : ''}`}>
             <i className="bi bi-controller"></i>
             {isSidebarOpen && <span>Games</span>}
           </Link>
 
-          <Link to="/student/profile" className={`nav-item ${isActive('/student/profile') ? 'active' : ''}`}>
+          <Link to="/student/profile" className={`student-nav-item ${isActive('/student/profile') ? 'active' : ''}`}>
             <i className="bi bi-person-circle"></i>
             {isSidebarOpen && <span>Profile</span>}
           </Link>
@@ -91,7 +74,7 @@ export const StudentLayout = () => {
 
       {/* Main Content */}
       <main className={`student-main ${isSidebarOpen ? '' : 'sidebar-collapsed'}`}>
-        <ModernHeader breadcrumbs={getBreadcrumbs()} />
+        <ModernHeader />
 
         <div className="student-content">
           <Outlet />

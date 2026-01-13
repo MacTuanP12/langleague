@@ -6,6 +6,7 @@ import static com.langleague.app.security.SecurityUtils.USER_ID_CLAIM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.langleague.app.security.DomainUserDetailsService.UserWithId;
+import com.langleague.app.service.CaptchaService;
 import com.langleague.app.web.rest.vm.LoginVM;
 import jakarta.validation.Valid;
 import java.security.Principal;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -48,13 +50,25 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    private final CaptchaService captchaService;
+
+    public AuthenticateController(
+        JwtEncoder jwtEncoder,
+        AuthenticationManagerBuilder authenticationManagerBuilder,
+        CaptchaService captchaService
+    ) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.captchaService = captchaService;
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+        // Verify Captcha - TEMPORARILY DISABLED FOR DEBUGGING
+        // if (!captchaService.verifyCaptcha(loginVM.getCaptchaId(), loginVM.getCaptchaAnswer())) {
+        //     throw new BadCredentialsException("Invalid Captcha");
+        // }
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),
             loginVM.getPassword()
@@ -78,6 +92,11 @@ public class AuthenticateController {
     public ResponseEntity<Void> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
         return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/captcha")
+    public ResponseEntity<CaptchaService.Captcha> getCaptcha() {
+        return ResponseEntity.ok(captchaService.generateCaptcha());
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {

@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "book": {
+      "home": {
+        "title": "Books",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 Book",
+        "createOrEditLabel": "建立或編輯 Book",
+        "notFound": "No Books found"
+      },
+      "created": "新的 Book 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 Book 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 Book 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 Book {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "Book"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "coverImageUrl": "Cover Image Url",
+      "isPublic": "Is Public",
+      "createdAt": "Created At",
+      "enrollments": "Enrollments",
+      "units": "Units",
+      "teacherProfile": "Teacher Profile"
+    }
+  }
+}

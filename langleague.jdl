@@ -1,0 +1,152 @@
+// langleague.jdl
+
+// =====================
+// Enums
+// =====================
+enum EnrollmentStatus {
+  ACTIVE,
+  COMPLETED
+}
+
+enum ExerciseType {
+  SINGLE_CHOICE,
+  MULTI_CHOICE,
+  FILL_IN_BLANK
+}
+
+enum ThemeMode {
+  LIGHT,
+  DARK,
+  SYSTEM
+}
+
+// =====================
+// Entities
+// =====================
+entity UserProfile {
+  streakCount Integer,
+  lastLearningDate Instant,
+  bio TextBlob,
+  theme ThemeMode
+}
+
+entity Book {
+  title String required,
+  description TextBlob,
+  coverImageUrl String,
+  isPublic Boolean required,
+  createdAt Instant required
+}
+
+entity Enrollment {
+  enrolledAt Instant required,
+  status EnrollmentStatus required
+}
+
+// CHAPTER -> UNIT
+entity Unit {
+  title String required,
+  orderIndex Integer required,
+  summary TextBlob
+}
+
+entity Vocabulary {
+  word String required,
+  phonetic String,
+  meaning String required,
+  example TextBlob,
+  imageUrl String,
+  orderIndex Integer required
+}
+
+entity Grammar {
+  title String required,
+  contentMarkdown TextBlob required,
+  exampleUsage TextBlob,
+  orderIndex Integer required
+}
+
+entity Exercise {
+  exerciseText TextBlob required,
+  exerciseType ExerciseType required,
+  correctAnswerRaw TextBlob,
+  audioUrl String,
+  imageUrl String,
+  orderIndex Integer required
+}
+
+entity ExerciseOption {
+  optionText String required,
+  isCorrect Boolean required,
+  orderIndex Integer
+}
+
+entity Progress {
+  isCompleted Boolean required,
+  isBookmarked Boolean, // ADDED for UC49
+  score Integer, // ADDED for UC53 (Quiz scores)
+  updatedAt Instant required
+}
+
+// ADDED for UC57-60
+entity Note {
+  content TextBlob required,
+  createdAt Instant required,
+  updatedAt Instant
+}
+
+// =====================
+// Relationships
+// =====================
+
+// Link JHipster built-in User to your profile
+relationship OneToOne {
+  UserProfile{user(login) required} to User with builtInEntity
+}
+
+// userProfile creates books
+relationship OneToMany {
+  UserProfile{books} to Book{teacherProfile required}
+}
+
+// Enrollment: user enrolls book
+relationship OneToMany {
+  UserProfile{enrollments} to Enrollment{userProfile required}
+  Book{enrollments} to Enrollment{book required}
+}
+
+// Book contains units
+relationship OneToMany {
+  Book{units} to Unit{book required}
+}
+
+// Unit content
+relationship OneToMany {
+  Unit{vocabularies} to Vocabulary{unit required}
+  Unit{grammars} to Grammar{unit required}
+  Unit{exercises} to Exercise{unit required}
+}
+
+// Exercise options
+relationship OneToMany {
+  Exercise{options} to ExerciseOption{exercise required}
+}
+
+// Progress tracks: user + unit
+relationship OneToMany {
+  UserProfile{progresses} to Progress{userProfile required}
+  Unit{progresses} to Progress{unit required}
+}
+
+// Notes: User creates notes for a Unit
+relationship OneToMany {
+  UserProfile{notes} to Note{userProfile required}
+  Unit{notes} to Note{unit required}
+}
+
+// =====================
+// Generation options
+// =====================
+dto * with mapstruct
+service * with serviceClass
+paginate Book, Unit, Vocabulary, Grammar, Exercise, Note with pagination

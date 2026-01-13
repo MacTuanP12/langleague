@@ -2,185 +2,162 @@
   "langleague": {
     "student": {
       "dashboard": {
-        "loading": "Loading your courses...",
-        "error": "Failed to load courses",
-        "tryAgain": "Try Again",
-        "search": {
-          "placeholder": "Search courses..."
+        "title": "My Dashboard",
+        "welcome": "Welcome back, {{name}}!",
+        "stats": {
+          "hours": "Hours Studied",
+          "books": "Books Completed"
         },
-        "filter": {
-          "all": "All Courses",
-          "inProgress": "In Progress",
-          "completed": "Completed"
-        },
-        "noCourses": "No courses found",
-        "course": {
-          "continue": "Continue",
-          "start": "Start Learning",
-          "units": "units"
-        }
-      },
-      "books": {
-        "title": "My Books",
+        "noBooks": "No books found matching your search.",
+        "loadMore": "Load more books",
         "search": {
           "placeholder": "Search books..."
         },
-        "noBooks": "No books available",
-        "createdDate": "Created:",
+        "filter": {
+          "all": "All",
+          "enrolled": "Enrolled",
+          "notEnroll": "Not Enrolled"
+        },
+        "book": {
+          "continue": "Continue",
+          "start": "Start"
+        },
+        "streak": {
+          "label": "Day Streak",
+          "start": "Start your streak today!",
+          "active": "You are on fire! {{count}} day streak!",
+          "nextMilestone": "Next milestone: {{count}} days"
+        }
+      },
+      "books": {
         "detail": {
           "loading": "Loading...",
           "backToBooks": "Back to Books",
           "startLearning": "Start Learning",
-          "description": "Choose a book to start learning",
-          "details": "Book Details",
-          "createdBy": "Created by:",
-          "totalUnits": "Total units:",
-          "public": "Public:",
-          "yes": "Yes",
-          "no": "No",
-          "units": {
-            "title": "UNITS IN THIS BOOK",
-            "empty": "No units available yet"
-          }
+          "enrollNow": "Enroll Now"
+        },
+        "messages": {
+          "enrollSuccess": "Successfully enrolled in the book!",
+          "enrollError": "Failed to enroll. Please try again."
         }
       },
       "learning": {
-        "bookLearn": {
-          "loading": "Loading...",
-          "backToBooks": "Back to Books",
-          "progress": "Progress",
-          "units": "Units",
-          "empty": "No units available",
-          "start": "Start",
-          "continue": "Continue",
-          "completed": "Completed"
-        },
+        "unit": "Unit",
+        "nextLesson": "Next Lesson",
+        "previousLesson": "Previous Lesson",
+        "complete": "Complete",
         "vocabulary": {
-          "title": "Vocabulary Practice",
-          "backToUnit": "Back to Unit",
-          "loading": "Loading vocabulary...",
-          "learned": "Learned",
-          "total": "Total",
-          "noVocabulary": "No vocabulary available",
-          "word": "Word:",
-          "phonetic": "Phonetic:",
+          "title": "Vocabulary",
           "meaning": "Meaning:",
           "example": "Example:",
+          "noVocabulary": "No vocabulary words added yet for this unit.",
           "navigation": {
             "previous": "Previous",
             "next": "Next"
           }
         },
         "grammar": {
-          "title": "Grammar Lesson",
-          "backToUnit": "Back to Unit",
-          "loading": "Loading grammar...",
-          "noGrammar": "No grammar lessons available",
-          "navigation": {
-            "previous": "Previous",
-            "next": "Next"
-          }
+          "title": "Grammar",
+          "noGrammar": "No grammar lessons added yet for this unit."
         },
         "exercise": {
           "title": "Exercise",
-          "backToUnit": "Back to Unit",
-          "loading": "Loading exercises...",
-          "noExercises": "No exercises available",
-          "question": "Question",
-          "of": "of",
-          "yourAnswer": "Your answer:",
-          "correctAnswer": "Correct answer:",
-          "submit": "Submit Answer",
-          "next": "Next Question",
-          "finish": "Finish Exercise",
-          "score": "Your Score:",
-          "correct": "Correct",
-          "incorrect": "Incorrect"
+          "noExercises": "No exercises added yet for this unit."
         },
         "flashcard": {
-          "title": "Flashcard Practice",
-          "backToList": "Back to List",
-          "loading": "Loading flashcards...",
-          "noFlashcards": "No flashcards available",
+          "title": "Flashcards",
           "card": "Card",
-          "of": "of",
-          "flip": "Flip Card",
-          "showAnswer": "Show Answer",
-          "hideAnswer": "Hide Answer",
-          "navigation": {
-            "previous": "Previous",
-            "next": "Next",
-            "finish": "Finish Practice"
-          }
+          "of": "of"
         },
         "flashcardList": {
-          "title": "My Flashcard Sets",
+          "title": "Flashcards",
           "loading": "Loading...",
-          "noSets": "No flashcard sets available",
-          "cards": "cards",
-          "practice": "Practice"
+          "noSets": "No books available"
+        },
+        "bookLearn": {
+          "progress": "Your Progress"
+        },
+        "itemCount": {
+          "words": "{{count}} words",
+          "topics": "{{count}} topics",
+          "questions": "{{count}} questions",
+          "interactive": "Interactive"
         }
       },
       "games": {
-        "title": "Game Hub",
-        "subtitle": "Practice your skills with fun games",
-        "search": {
-          "placeholder": "Search games..."
-        },
-        "difficulty": {
-          "all": "All Levels",
-          "easy": "Easy",
-          "medium": "Medium",
-          "hard": "Hard"
-        },
-        "stats": {
-          "gamesPlayed": "Games Played",
-          "totalScore": "Total Score",
-          "highScore": "High Score"
-        },
-        "noGames": "No games available",
-        "play": "Play Now"
+        "title": "Learning Games",
+        "subtitle": "Make learning fun! Play games to improve your language skills",
+        "backToDashboard": "Back to Dashboard",
+        "loading": "Loading games...",
+        "noGamesForDifficulty": "No games found for this difficulty level",
+        "list": {
+          "vocabularyMatch": {
+            "title": "Vocabulary Match",
+            "description": "Match words with their meanings in this fast-paced memory game",
+            "time": "5-10 min"
+          },
+          "wordScramble": {
+            "title": "Word Scramble",
+            "description": "Unscramble letters to form the correct vocabulary words",
+            "time": "10-15 min"
+          },
+          "grammarQuest": {
+            "title": "Grammar Quest",
+            "description": "Adventure through grammar challenges and unlock achievements",
+            "time": "15-20 min"
+          },
+          "listeningChallenge": {
+            "title": "Listening Challenge",
+            "description": "Listen and identify the correct words in various contexts",
+            "time": "10-15 min"
+          },
+          "speedQuiz": {
+            "title": "Speed Quiz",
+            "description": "Answer as many questions as possible in limited time",
+            "time": "5 min"
+          },
+          "sentenceBuilder": {
+            "title": "Sentence Builder",
+            "description": "Build correct sentences from scrambled words and phrases",
+            "time": "10-15 min"
+          }
+        }
       },
       "profile": {
-        "title": "Profile",
+        "actions": {
+          "changePhoto": "Change Photo",
+          "saveChanges": "Save Changes"
+        },
         "personalInfo": {
-          "title": "Personal Information",
-          "firstName": "First Name",
-          "lastName": "Last Name",
           "fullName": "Full Name",
           "fullNamePlaceholder": "e.g. Alex Johnson",
           "email": "Email Address",
-          "phone": "Phone",
-          "dateOfBirth": "Date of Birth",
           "bio": "Bio / About Me",
           "bioPlaceholder": "Tell us a little about yourself..."
         },
-        "accountInfo": {
-          "title": "Account Information",
-          "username": "Username",
-          "usernamePlaceholder": "e.g. alexj2024",
-          "role": "Role",
-          "memberSince": "Member Since",
-          "lastLogin": "Last Login"
+        "preferences": {
+          "theme": "Theme Preference",
+          "themeLight": "☀️ Light",
+          "themeDark": "🌙 Dark",
+          "themeSystem": "💻 System"
         },
-        "learningStats": {
-          "title": "Learning Statistics",
-          "coursesEnrolled": "Courses Enrolled",
-          "coursesCompleted": "Courses Completed",
-          "totalLearningTime": "Total Learning Time",
-          "currentStreak": "Current Streak",
-          "hours": "hours",
-          "days": "days"
-        },
-        "actions": {
-          "changePhoto": "Change Photo",
-          "editProfile": "Edit Profile",
-          "changePassword": "Change Password",
-          "saveChanges": "Save Changes",
-          "logout": "Logout"
+        "messages": {
+          "success": "Profile updated successfully!",
+          "error": "Failed to update profile",
+          "themeChanged": "Theme updated!",
+          "themeError": "Failed to change theme",
+          "photoComingSoon": "Photo upload functionality coming soon!"
         }
       }
     }
+  },
+  "student": {
+    "bookList": {
+      "title": "Library",
+      "search": {
+        "placeholder": "Search for books..."
+      },
+      "startLearning": "Start Learning"
+    }
   }
 }
-

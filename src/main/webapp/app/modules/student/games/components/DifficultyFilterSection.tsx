@@ -30,5 +30,3 @@ export const DifficultyFilterSection: React.FC<DifficultyFilterSectionProps> = (
     </div>
   );
 };
-
-

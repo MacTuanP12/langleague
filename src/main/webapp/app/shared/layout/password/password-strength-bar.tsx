@@ -14,13 +14,7 @@ interface PasswordStrength {
 
 export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => {
   // Using semantic color values that can be mapped to CSS variables
-  const colors = [
-    'var(--error-color, #F00)',
-    'var(--warning-color, #F90)',
-    '#FF0',
-    '#9F0',
-    'var(--success-color, #0F0)'
-  ];
+  const colors = ['var(--error-color, #F00)', 'var(--warning-color, #F90)', '#FF0', '#9F0', 'var(--success-color, #0F0)'];
 
   const measureStrength = (p: string): number => {
     let force = 0;

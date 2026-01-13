@@ -3,11 +3,11 @@
     "title": "Discover Knowledge",
     "subtitle": "Explore our vast collection of educational resources",
     "search": {
-      "placeholder": "Search by title, author, or ISBN...",
+      "placeholder": "Search for books or topics...",
       "button": "Search"
     },
     "logged": {
-      "message": "You are logged in as user \"{{username}}\"."
+      "message": "You are logged in as \"{{username}}\"."
     },
     "question": "If you have any question on JHipster:",
     "link": {

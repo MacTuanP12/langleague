@@ -5,6 +5,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AppThunk } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
 import { serializeAxiosError } from './reducer.utils';
+import { IUser } from 'app/shared/model/user.model';
 
 const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
@@ -14,7 +15,7 @@ export const initialState = {
   loginSuccess: false,
   loginError: false, // Errors returned from server side
   showModalLogin: false,
-  account: {} as any,
+  account: {} as IUser,
   errorMessage: null as unknown as string, // Errors returned from server side
   redirectMessage: null as unknown as string,
   sessionHasBeenFetched: false,
@@ -35,7 +36,7 @@ export const getSession = (): AppThunk => async (dispatch, getState) => {
   }
 };
 
-export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get<any>('api/account'), {
+export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get<IUser>('api/account'), {
   serializeError: serializeAxiosError,
 });
 
@@ -43,20 +44,26 @@ interface IAuthParams {
   username: string;
   password: string;
   rememberMe?: boolean;
+  captchaId?: string;
+  captchaAnswer?: string;
+}
+
+interface IAuthResponse {
+  id_token: string;
 }
 
 export const authenticate = createAsyncThunk(
   'authentication/login',
-  async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth),
+  async (auth: IAuthParams) => axios.post<IAuthResponse>('api/authenticate', auth),
   {
     serializeError: serializeAxiosError,
   },
 );
 
-export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
-  (username, password, rememberMe = false) =>
+export const login: (username: string, password: string, rememberMe?: boolean, captchaId?: string, captchaAnswer?: string) => AppThunk =
+  (username, password, rememberMe = false, captchaId = '', captchaAnswer = '') =>
   async dispatch => {
-    const result = await dispatch(authenticate({ username, password, rememberMe }));
+    const result = await dispatch(authenticate({ username, password, rememberMe, captchaId, captchaAnswer }));
     const response = result.payload as AxiosResponse;
     const bearerToken = response?.headers?.authorization;
     if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {

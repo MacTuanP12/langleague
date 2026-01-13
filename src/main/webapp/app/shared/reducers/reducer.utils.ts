@@ -19,6 +19,7 @@ export type IQueryParams = { query?: string; page?: number; size?: number; sort?
  * Note: GenericAsyncThunk uses `any` as required by Redux Toolkit's type system
  * for handling generic async thunks. This is an acceptable use case.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
 export type PendingAction = ReturnType<GenericAsyncThunk['pending']>;
 export type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>;
@@ -54,6 +55,7 @@ const commonErrorProperties: Array<keyof SerializedError> = ['name', 'message', 
  * @param value - Error value of any type (accepts any because errors can come in various formats)
  * @returns Serialized AxiosError or SerializedError
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const serializeAxiosError = (value: any): AxiosError | SerializedError => {
   if (typeof value === 'object' && value !== null) {
     if (isAxiosError(value)) {

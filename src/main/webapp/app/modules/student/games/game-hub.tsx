@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 import { AVAILABLE_GAMES, DifficultyFilter, GameCard } from './game-hub.constants';
 import { useGameFilters } from './hooks/useGameFilters';
 import { GameCardComponent } from './components/GameCardComponent';
@@ -76,7 +77,7 @@ export const GameHub = () => {
         navigate(`/student/games/${game.id}`);
       }
     },
-    [navigate]
+    [navigate],
   );
 
   const handleDifficultyChange = useCallback((difficulty: DifficultyFilter) => {
@@ -100,7 +101,7 @@ export const GameHub = () => {
   if (loading) {
     return (
       <div className="game-hub">
-        <LoadingSpinner message="Loading games..." />
+        <LoadingSpinner message="langleague.student.games.loading" isI18nKey />
       </div>
     );
   }
@@ -109,13 +110,18 @@ export const GameHub = () => {
     <div className="game-hub">
       <div className="game-hub-header">
         <button onClick={handleBack} className="back-btn" aria-label="Back to Dashboard">
-          <i className="bi bi-arrow-left"></i> Back to Dashboard
+          <i className="bi bi-arrow-left"></i>{' '}
+          <Translate contentKey="langleague.student.games.backToDashboard">Back to Dashboard</Translate>
         </button>
         <div className="header-content">
           <h1>
-            <i className="bi bi-controller"></i> Learning Games
+            <i className="bi bi-controller"></i> <Translate contentKey="langleague.student.games.title">Learning Games</Translate>
           </h1>
-          <p>Make learning fun! Play games to improve your language skills</p>
+          <p>
+            <Translate contentKey="langleague.student.games.subtitle">
+              Make learning fun! Play games to improve your language skills
+            </Translate>
+          </p>
         </div>
       </div>
 
@@ -137,7 +143,9 @@ export const GameHub = () => {
         {filteredGames.length === 0 && (
           <div className="no-games">
             <i className="bi bi-controller"></i>
-            <p>No games found for this difficulty level</p>
+            <p>
+              <Translate contentKey="langleague.student.games.noGamesForDifficulty">No games found for this difficulty level</Translate>
+            </p>
           </div>
         )}
 
@@ -145,8 +153,14 @@ export const GameHub = () => {
         <div className="coming-soon-notice">
           <i className="bi bi-info-circle"></i>
           <div className="notice-content">
-            <h4>Games are under development</h4>
-            <p>We&apos;re working hard to bring you exciting learning games. Check back soon for updates!</p>
+            <h4>
+              <Translate contentKey="langleague.student.games.comingSoon.title">Games are under development</Translate>
+            </h4>
+            <p>
+              <Translate contentKey="langleague.student.games.comingSoon.description">
+                We&apos;re working hard to bring you exciting learning games. Check back soon for updates!
+              </Translate>
+            </p>
           </div>
         </div>
       </div>

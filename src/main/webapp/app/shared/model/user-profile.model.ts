@@ -1,25 +1,23 @@
-import { IUser } from './user.model';
-import { ThemeMode } from './enumerations/enums.model';
+import dayjs from 'dayjs';
+import { IUser } from 'app/shared/model/user.model';
+import { ThemeMode } from 'app/shared/model/enumerations/theme-mode.model';
 
 export interface IUserProfile {
   id?: number;
-  streakCount?: number;
-  lastLearningDate?: Date | null;
-  bio?: string;
-  theme?: ThemeMode;
+  streakCount?: number | null;
+  lastLearningDate?: dayjs.Dayjs | null;
+  bio?: string | null;
+  theme?: ThemeMode | null;
   user?: IUser;
-  imageUrl?: string;
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
 }
 
 export const defaultUserProfileValue: Readonly<IUserProfile> = {
-  id: 0,
+  id: undefined,
   streakCount: 0,
-  lastLearningDate: null,
+  lastLearningDate: undefined,
   bio: '',
   theme: ThemeMode.SYSTEM,
-  imageUrl: '',
-  createdDate: null,
-  lastModifiedDate: null,
+  user: undefined,
 };
+
+export const defaultValue = defaultUserProfileValue;

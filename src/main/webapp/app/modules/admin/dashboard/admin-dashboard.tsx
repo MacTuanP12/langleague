@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Translate } from 'react-jhipster';
-import { useAppSelector } from 'app/config/store';
+import { useAppSelector, useAppDispatch } from 'app/config/store';
+import { useBooks, useEnrollments, useProgress } from 'app/shared/reducers/hooks';
+import { getUsersAsAdmin } from 'app/modules/admin/user-management/user-management.reducer';
 import './admin-dashboard.scss';
 
 export const AdminDashboard = () => {
+  const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account);
+  const { totalItems: totalUsers } = useAppSelector(state => state.userManagement);
+
+  // Redux hooks for statistics
+  const { books, loadBooks } = useBooks();
+  const { enrollments, loadMyEnrollments } = useEnrollments();
+  const { progresses, loadMyProgresses } = useProgress();
+
+  useEffect(() => {
+    // Load data for statistics
+    loadBooks();
+    loadMyEnrollments();
+    loadMyProgresses();
+    // Load users count (page 0, size 1 just to get total count in header)
+    dispatch(getUsersAsAdmin({ page: 0, size: 1, sort: 'id,asc' }));
+  }, [loadBooks, loadMyEnrollments, loadMyProgresses, dispatch]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const totalBooks = (books || []).length;
+    // Note: enrollments here are "my enrollments" due to the hook used.
+    // For admin stats, we ideally need "all enrollments", but we don't have that API exposed to FE easily yet without admin rights check on specific endpoint.
+    // Assuming for now we display what we have access to.
+    const totalEnrollments = (enrollments || []).length;
+    const completedUnits = (progresses || []).filter(p => p.isCompleted).length;
+    const totalUnits = (progresses || []).length;
+    const completionRate = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
+
+    return {
+      totalUsers,
+      totalBooks,
+      totalEnrollments,
+      completionRate,
+    };
+  }, [books, enrollments, progresses, totalUsers]);
 
   return (
     <div className="admin-dashboard">
@@ -28,7 +65,7 @@ export const AdminDashboard = () => {
             <h3>
               <Translate contentKey="langleague.admin.dashboard.stats.totalUsers">Total Users</Translate>
             </h3>
-            <p className="stat-number">0</p>
+            <p className="stat-number">{stats.totalUsers}</p>
           </div>
         </div>
 
@@ -38,9 +75,9 @@ export const AdminDashboard = () => {
           </div>
           <div className="stat-info">
             <h3>
-              <Translate contentKey="langleague.admin.dashboard.stats.totalCourses">Total Courses</Translate>
+              <Translate contentKey="langleague.admin.dashboard.stats.totalBooks">Total Books</Translate>
             </h3>
-            <p className="stat-number">0</p>
+            <p className="stat-number">{stats.totalBooks}</p>
           </div>
         </div>
 

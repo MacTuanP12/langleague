@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "progress": {
+      "home": {
+        "title": "Progresses",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Progress の作成",
+        "createOrEditLabel": "Progressの作成または編集",
+        "notFound": "Progresses が見つかりません。"
+      },
+      "created": "新しい Progress がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Progress が更新されました。",
+      "deleted": "ID {{ param }} の Progress が削除されました。",
+      "delete": {
+        "question": "Progress {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Progress"
+      },
+      "id": "ID",
+      "isCompleted": "Is Completed",
+      "updatedAt": "Updated At",
+      "userProfile": "User Profile",
+      "unit": "Unit"
+    }
+  }
+}

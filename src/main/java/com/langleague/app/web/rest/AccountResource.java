@@ -73,7 +73,7 @@ public class AccountResource {
     @GetMapping("/activate")
     public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
     }
@@ -108,7 +108,7 @@ public class AccountResource {
             throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(
@@ -118,6 +118,27 @@ public class AccountResource {
             userDTO.getLangKey(),
             userDTO.getImageUrl()
         );
+    }
+
+    /**
+     * {@code POST  /account/avatar} : update the current user's avatar.
+     *
+     * @param imageUrl the image URL (can be a data URI or external URL).
+     * @return the updated account information.
+     */
+    @PostMapping("/account/avatar")
+    public AdminUserDTO updateAvatar(@RequestBody String imageUrl) {
+        String userLogin = SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+
+        User user = userRepository.findOneByLogin(userLogin).orElseThrow(() -> new AccountResourceException("User could not be found"));
+
+        // Update only the imageUrl field
+        user.setImageUrl(imageUrl);
+        userRepository.save(user);
+
+        LOG.debug("Updated avatar for User: {}", user);
+        return new AdminUserDTO(user);
     }
 
     /**
@@ -165,7 +186,7 @@ public class AccountResource {
         }
         Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("No user was found for this reset key");
         }
     }

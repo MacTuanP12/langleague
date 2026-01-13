@@ -1,59 +1,72 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Translate } from 'react-jhipster';
-import { AppFooter } from 'app/shared/layout/footer/app-footer';
-import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
-import { FALLBACK_COURSES, FilterTab } from './dashboard.constants';
-import { useCourseFilters } from './hooks/useCourseFilters';
-import { CourseCard } from './components/CourseCard';
+import { LoadingSpinner } from 'app/shared/components';
+import { IProgress } from 'app/shared/model/progress.model';
+import { FilterTab } from './dashboard.constants';
+import { useBookFilters } from './hooks/useBookFilters';
+import { BookCard } from './components/BookCard';
 import { SearchFilterSection } from './components/SearchFilterSection';
-import './student-dashboard.scss';
+import { StreakWidget } from './components/StreakWidget';
+import { useEnrollments, useProgress, useUserProfile } from 'app/shared/reducers/hooks';
+import styles from './student-dashboard.module.scss';
 
 /**
- * StudentDashboard Component - Refactored for better performance and maintainability
+ * StudentDashboard Component - Using Redux for real data
  *
- * Improvements:
- * - Extracted hardcoded data to constants file
- * - Added loading and error states
- * - Used useMemo for expensive filter operations
- * - Split into smaller, reusable components
- * - Added proper error boundaries
- * - TODO: Replace FALLBACK_COURSES with API call to fetch real enrollment data
+ * Features:
+ * - Fetch user enrollments from API
+ * - Track learning progress
+ * - Filter and search books
+ * - Display user statistics
  */
+
+// Helper function to calculate progress (moved outside component for performance)
+const calculateProgress = (bookId: number | undefined, allProgresses: IProgress[] = []): number => {
+  if (!bookId || !allProgresses || allProgresses.length === 0) return 0;
+
+  // Calculate based on completed units
+  const bookProgresses = allProgresses.filter(p => p.unit?.book?.id === bookId);
+  if (bookProgresses.length === 0) return 0;
+
+  const completed = bookProgresses.filter(p => p.isCompleted).length;
+  return Math.round((completed / bookProgresses.length) * 100);
+};
+
 export const StudentDashboard = () => {
-  const [courses, setCourses] = useState(FALLBACK_COURSES);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTab, setFilterTab] = useState<FilterTab>('all');
-  // NOTE: setLoading and setError are kept for future API integration (see loadCourses TODO)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  // Redux hooks
+  const { enrollments, loading, loadMyEnrollments } = useEnrollments();
+  const { progresses, loadMyProgresses } = useProgress();
+  const { loadCurrentProfile } = useUserProfile();
+
+  // Transform enrollments to books format with safe null handling
+  const books = useMemo(() => {
+    if (!enrollments || !Array.isArray(enrollments)) return [];
+
+    return enrollments.map(enrollment => ({
+      id: enrollment.book?.id || 0,
+      title: enrollment.book?.title || 'Untitled Book',
+      description: enrollment.book?.description || '',
+      coverImageUrl: enrollment.book?.coverImageUrl,
+      progress: calculateProgress(enrollment.book?.id, progresses || []),
+      status: enrollment.status || 'ACTIVE',
+      enrolledAt: enrollment.enrolledAt,
+    }));
+  }, [enrollments, progresses]);
 
   // Use custom hook for filtering with memoization
-  const { filteredCourses } = useCourseFilters({ courses, searchQuery, filterTab });
+  const { filteredBooks } = useBookFilters({ books, searchQuery, filterTab });
 
-  /**
-   * TODO: Replace this with actual API call
-   * Example:
-   * const loadCourses = async () => {
-   *   try {
-   *     setLoading(true);
-   *     const response = await axios.get('/api/enrollments/my-courses');
-   *     setCourses(response.data);
-   *   } catch (err) {
-   *     setError('Failed to load courses');
-   *   } finally {
-   *     setLoading(false);
-   *   }
-   * };
-   */
-  const loadCourses = useCallback(() => {
-    // Using fallback data for now
-    setCourses(FALLBACK_COURSES);
-  }, []);
-
+  // Fetch data on mount
   useEffect(() => {
-    loadCourses();
-  }, [loadCourses]);
+    loadMyEnrollments();
+    loadMyProgresses();
+    loadCurrentProfile();
+  }, [loadMyEnrollments, loadMyProgresses, loadCurrentProfile]);
 
+  // Memoized event handlers
   const handleSearchChange = useCallback((query: string) => {
     setSearchQuery(query);
   }, []);
@@ -62,26 +75,20 @@ export const StudentDashboard = () => {
     setFilterTab(tab);
   }, []);
 
-  // Error state
-  if (error) {
-    return (
-      <div className="dashboard-content-wrapper">
-        <ErrorDisplay message={error} onRetry={loadCourses} />
-      </div>
-    );
-  }
-
   // Loading state
   if (loading) {
     return (
-      <div className="dashboard-content-wrapper">
-        <LoadingSpinner message="Loading your courses..." />
+      <div className={styles?.dashboardContentWrapper || 'dashboard-content-wrapper'}>
+        <LoadingSpinner message="Loading your books..." />
       </div>
     );
   }
 
   return (
-    <div className="dashboard-content-wrapper">
+    <div className={styles?.dashboardContentWrapper || 'dashboard-content-wrapper'}>
+      {/* Streak Widget */}
+      <StreakWidget />
+
       {/* Search and Filter */}
       <SearchFilterSection
         searchQuery={searchQuery}
@@ -90,32 +97,31 @@ export const StudentDashboard = () => {
         onFilterChange={handleFilterChange}
       />
 
-      {/* Courses Grid */}
-      <div className="courses-grid">
-        {filteredCourses.map(course => (
-          <CourseCard key={course.id} course={course} />
+      {/* Books Grid */}
+      <div className={styles?.booksGrid || 'books-grid'}>
+        {(filteredBooks || []).map(book => (
+          <BookCard key={book.id} book={book} />
         ))}
       </div>
 
       {/* Empty State */}
-      {filteredCourses.length === 0 && (
-        <div className="no-results">
+      {(!filteredBooks || filteredBooks.length === 0) && (
+        <div className={styles?.noResults || 'no-results'}>
           <i className="bi bi-search"></i>
           <p>
-            <Translate contentKey="langleague.student.dashboard.noCourses">No courses found matching your search.</Translate>
+            <Translate contentKey="langleague.student.dashboard.noBooks">No books found matching your search.</Translate>
           </p>
         </div>
       )}
 
       {/* Load More */}
-      <div className="load-more-section">
-        <button className="load-more-btn" aria-label="Load more books">
-          Load more books <i className="bi bi-arrow-down"></i>
-        </button>
-      </div>
-
-      {/* Footer */}
-      <AppFooter showLogo={true} showSocial={true} />
+      {filteredBooks && filteredBooks.length > 0 && (
+        <div className={styles?.loadMoreSection || 'load-more-section'}>
+          <button className={styles?.loadMoreBtn || 'load-more-btn'} aria-label="Load more books">
+            <Translate contentKey="langleague.student.dashboard.loadMore">Load more books</Translate> <i className="bi bi-arrow-down"></i>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

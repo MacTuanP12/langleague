@@ -5,7 +5,7 @@
         "title": "Bảng Điều Khiển Giáo Viên",
         "welcome": "Chào mừng trở lại, {name}!",
         "stats": {
-          "myCourses": "Khóa Học Của Tôi",
+          "myBooks": "Sách Của Tôi",
           "totalStudents": "Tổng Số Học Sinh",
           "pendingAssignments": "Bài Tập Chờ Duyệt",
           "averageRating": "Đánh Giá Trung Bình"
@@ -42,6 +42,9 @@
           "edit": "Chỉnh Sửa",
           "view": "Xem Chi Tiết",
           "delete": "Xóa",
+          "deleteSuccess": "Xóa sách thành công!",
+          "deleteFailed": "Không thể xóa sách",
+          "confirmDeleteTitle": "Xóa Sách",
           "confirmDelete": "Bạn có chắc chắn muốn xóa cuốn sách này không?"
         },
         "table": {
@@ -87,13 +90,11 @@
           }
         },
         "form": {
-          "title": {
-            "create": "Thêm Sách Mới",
-            "edit": "Chỉnh Sửa Sách"
-          },
-          "description": {
-            "create": "Nhập chi tiết bên dưới để thêm sách mới.",
-            "edit": "Nhập chi tiết bên dưới để cập nhật sách."
+          "header": {
+            "add": "Thêm Sách Mới",
+            "edit": "Chỉnh Sửa Sách",
+            "descriptionAdd": "Nhập chi tiết bên dưới để thêm sách mới.",
+            "descriptionEdit": "Nhập chi tiết bên dưới để cập nhật sách."
           },
           "fields": {
             "coverLabel": "Bìa Sách",
@@ -113,22 +114,54 @@
             "save": "Lưu Sách",
             "saving": "Đang lưu..."
           }
+        },
+        "unit": {
+          "deleteSuccess": "Xóa bài học thành công!",
+          "deleteFailed": "Không thể xóa bài học",
+          "confirmDeleteTitle": "Xóa Bài Học",
+          "confirmDelete": "Bạn có chắc chắn muốn xóa bài học này không?"
         }
       },
       "units": {
         "form": {
           "backButton": "Quay Lại",
           "titlePlaceholder": "Tiêu Đề Bài Học",
-          "titleRequired": "Tiêu đề bài học là bắt buộc",
-          "titleMinLength": "Tiêu đề phải có ít nhất 3 ký tự",
-          "descriptionPlaceholder": "Mô Tả Bài Học",
-          "submitButton": "Gửi",
-          "saving": "Đang lưu..."
+          "summaryPlaceholder": "Mô Tả Bài Học",
+          "submit": "Gửi",
+          "saving": "Đang lưu...",
+          "expandAll": "Mở rộng tất cả",
+          "collapseAll": "Thu gọn tất cả",
+          "addVocabulary": "Thêm Từ Vựng",
+          "addGrammar": "Thêm Ngữ Pháp",
+          "validation": {
+            "titleRequired": "Tiêu đề bài học là bắt buộc",
+            "titleMinLength": "Tiêu đề phải có ít nhất 3 ký tự"
+          },
+          "buttons": {
+            "addVocabulary": "Thêm Từ Vựng",
+            "addGrammar": "Thêm Ngữ Pháp",
+            "expandAll": "Mở rộng tất cả",
+            "collapseAll": "Thu gọn tất cả",
+            "saving": "Đang lưu...",
+            "submit": "Gửi"
+          },
+          "fields": {
+            "titlePlaceholder": "Tiêu Đề Bài Học",
+            "summaryPlaceholder": "Mô Tả Bài Học"
+          }
         },
         "vocabulary": {
           "sectionTitle": "Từ Vựng",
           "addButton": "Thêm Từ Vựng",
           "fields": {
+            "word": "Từ",
+            "phonetic": "Phiên âm",
+            "meaning": "Nghĩa",
+            "example": "Câu ví dụ",
+            "imageUrl": "URL Hình Ảnh",
+            "order": "Thứ Tự"
+          },
+          "placeholders": {
             "word": "Từ (vd: Hello)",
             "phonetic": "Phiên âm (vd: /həˈloʊ/)",
             "meaning": "Nghĩa",
@@ -147,6 +180,12 @@
             "example": "Ví dụ sử dụng",
             "exampleHint": "Các ví dụ sử dụng",
             "order": "Thứ Tự"
+          },
+          "placeholders": {
+            "title": "Tiêu đề ngữ pháp",
+            "content": "Nội dung (Hỗ trợ Markdown)",
+            "example": "Ví dụ sử dụng",
+            "order": "Thứ Tự"
           }
         },
         "exercises": {
@@ -164,6 +203,12 @@
             "audioUrl": "URL Âm Thanh (tùy chọn)",
             "option": "Lựa chọn {number}"
           },
+          "placeholders": {
+            "question": "Nội dung câu hỏi",
+            "correctAnswer": "Nhập câu trả lời đúng...",
+            "imageUrl": "URL Hình Ảnh (tùy chọn)",
+            "audioUrl": "URL Âm Thanh (tùy chọn)"
+          },
           "options": {
             "addButton": "Thêm lựa chọn"
           },
@@ -178,4 +223,3 @@
     }
   }
 }
-

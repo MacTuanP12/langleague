@@ -9,12 +9,7 @@ export interface LoadingSpinnerProps {
   isI18nKey?: boolean;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  message,
-  size = 'medium',
-  fullScreen = false,
-  isI18nKey = false,
-}) => {
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message, size = 'medium', fullScreen = false, isI18nKey = false }) => {
   const containerClass = fullScreen ? 'loading-spinner-fullscreen' : 'loading-spinner-container';
   const spinnerClass = `loading-spinner loading-spinner-${size}`;
 
@@ -23,15 +18,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       <div className={spinnerClass} role="status" aria-label="Loading">
         <span className="visually-hidden">Loading...</span>
       </div>
-      {message && (
-        <p className="loading-spinner-message">
-          {isI18nKey ? (
-            <Translate contentKey={message}>{message}</Translate>
-          ) : (
-            message
-          )}
-        </p>
-      )}
+      {message && <p className="loading-spinner-message">{isI18nKey ? <Translate contentKey={message}>{message}</Translate> : message}</p>}
     </div>
   );
 };
@@ -39,4 +26,3 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 export const InlineSpinner: React.FC<{ size?: 'small' | 'medium' }> = ({ size = 'small' }) => {
   return <div className={`loading-spinner loading-spinner-${size} loading-spinner-inline`} role="status" />;
 };
-

@@ -37,8 +37,7 @@
       "roles": {
         "student": "Student",
         "teacher": "Teacher",
-        "admin": "Admin",
-        "librarian": "Librarian"
+        "admin": "Admin"
       },
       "status": {
         "active": "Active",
@@ -68,8 +67,7 @@
       "roles": {
         "student": "Student",
         "teacher": "Teacher",
-        "admin": "Admin",
-        "librarian": "Librarian"
+        "admin": "Admin"
       },
       "status": {
         "active": "Active",
@@ -104,8 +102,7 @@
       "roles": {
         "student": "Student",
         "teacher": "Teacher",
-        "admin": "Admin",
-        "librarian": "Librarian"
+        "admin": "Admin"
       },
       "status": {
         "active": "Active",

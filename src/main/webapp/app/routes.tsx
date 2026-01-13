@@ -54,6 +54,10 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
+        {/* ============================================
+         * PROTECTED ROUTES - ROLE-BASED ACCESS CONTROL
+         * ============================================ */}
+
         {/* Protected Admin Routes - Only accessible by ROLE_ADMIN */}
         <Route
           path="admin/*"
@@ -65,6 +69,9 @@ const AppRoutes = () => {
         />
 
         {/* Protected Teacher Routes - Accessible by ROLE_TEACHER and ROLE_ADMIN */}
+        {/* TODO: TEMPORARILY PUBLIC FOR FE TESTING - REMOVE BEFORE PRODUCTION */}
+        <Route path="teacher/*" element={<Teacher />} />
+        {/* ORIGINAL PROTECTED ROUTE (uncomment for production):
         <Route
           path="teacher/*"
           element={
@@ -73,8 +80,12 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        */}
 
         {/* Protected Student Routes - Only accessible by ROLE_STUDENT */}
+        {/* TODO: TEMPORARILY PUBLIC FOR FE TESTING - REMOVE BEFORE PRODUCTION */}
+        <Route path="student/*" element={<Student />} />
+        {/* ORIGINAL PROTECTED ROUTE (uncomment for production):
         <Route
           path="student/*"
           element={
@@ -83,6 +94,7 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        */}
         <Route path="*" element={<EntitiesRoutes />} />
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>

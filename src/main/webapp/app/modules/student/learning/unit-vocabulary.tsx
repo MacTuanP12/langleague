@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
-import { fetchVocabulariesByUnitId } from 'app/shared/reducers/vocabulary.reducer';
-import {Translate} from "react-jhipster";
+import { useUnits, useVocabularies } from 'app/shared/reducers/hooks';
+import { Translate } from 'react-jhipster';
 
 export const UnitVocabulary = () => {
-  const dispatch = useAppDispatch();
-  const { selectedUnit } = useAppSelector(state => state.unit);
-  const { vocabularies } = useAppSelector(state => state.vocabulary);
+  const { selectedUnit, loadUnit } = useUnits();
+  const { vocabularies, loading, loadVocabularies } = useVocabularies();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { unitId } = useParams<{ unitId: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (unitId) {
-      dispatch(fetchUnitById(unitId));
-      dispatch(fetchVocabulariesByUnitId(unitId));
+      loadUnit(unitId);
+      loadVocabularies(unitId);
     }
-  }, [dispatch, unitId]);
-
-  const playAudio = (audioUrl: string) => {
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      audio.play();
-    }
-  };
+  }, [unitId, loadUnit, loadVocabularies]);
 
   const categories = [
     { id: 'greeting', label: 'Greeting', subtitle: 'Lời chào hỏi', icon: '👋' },
@@ -65,7 +55,9 @@ export const UnitVocabulary = () => {
         </div>
 
         <div className="vocabulary-list">
-          <h3><Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary Words</Translate></h3>
+          <h3>
+            <Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary Words</Translate>
+          </h3>
           {vocabularies.map(vocab => (
             <div key={vocab.id} className="vocabulary-card">
               <div className="vocab-header">
@@ -76,12 +68,17 @@ export const UnitVocabulary = () => {
               </div>
 
               <div className="vocab-meaning">
-                <strong><Translate contentKey="langleague.student.learning.vocabulary.meaning">Meaning:</Translate></strong> {vocab.meaning}
+                <strong>
+                  <Translate contentKey="langleague.student.learning.vocabulary.meaning">Meaning:</Translate>
+                </strong>{' '}
+                {vocab.meaning}
               </div>
 
               {vocab.example && (
                 <div className="vocab-example">
-                  <strong><Translate contentKey="langleague.student.learning.vocabulary.example">Example:</Translate></strong>
+                  <strong>
+                    <Translate contentKey="langleague.student.learning.vocabulary.example">Example:</Translate>
+                  </strong>
                   <p className="example-sentence">&quot;{vocab.example}&quot;</p>
                 </div>
               )}

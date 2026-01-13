@@ -364,7 +364,6 @@
     right: 1rem;
   }
 
-
   /* Make tables responsive on mobile */
   .table-responsive {
     overflow-x: auto;
@@ -473,4 +472,3 @@
     white-space: nowrap;
   }
 }
-

@@ -65,7 +65,7 @@ export default () => next => action => {
         if (problem?.fieldErrors) {
           getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
         } else {
-          const { error: toastError, param } = getMessageFromHeaders((response.headers as any) ?? {});
+          const { error: toastError, param } = getMessageFromHeaders((response.headers as Record<string, unknown>) ?? {});
           if (toastError) {
             const entityName = translate(`global.menu.entities.${param}`);
             addErrorAlert({ key: toastError, data: { entityName } });

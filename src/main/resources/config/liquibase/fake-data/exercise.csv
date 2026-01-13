@@ -1,0 +1,11 @@
+id;exercise_text;exercise_type;correct_answer_raw;audio_url;image_url;order_index;unit_id
+1;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;if;carefully haze unimpressively;2145;1
+2;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;heartbeat what deflect;ick;25426;2
+3;../fake-data/blob/hipster.txt;MULTI_CHOICE;../fake-data/blob/hipster.txt;yahoo obedience;per;9997;3
+4;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;shameless;enormously supplier skeleton;20911;4
+5;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;hmph lest;pricey gee of;21959;5
+6;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;for gape cutlet;provided aside;25758;6
+7;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;excited or never;supposing inasmuch reluctantly;14119;7
+8;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;unless;reasonable;17124;8
+9;../fake-data/blob/hipster.txt;MULTI_CHOICE;../fake-data/blob/hipster.txt;whenever settler humidity;trusting mid frilly;31441;9
+10;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;scarily;above institute in;4096;10

@@ -22,7 +22,6 @@
     .header-content {
       flex: 1;
 
-
       h1 {
         font-size: 30px;
         font-weight: 700;
@@ -289,11 +288,6 @@
             background: rgba(251, 191, 36, 0.1);
             color: #92400e;
           }
-
-          &.role-librarian {
-            background: rgba(249, 115, 22, 0.1);
-            color: #9a3412;
-          }
         }
 
         .status-badge {
@@ -470,5 +464,3 @@
     }
   }
 }
-
-

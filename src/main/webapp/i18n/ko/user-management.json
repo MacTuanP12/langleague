@@ -37,8 +37,7 @@
       "roles": {
         "student": "학생",
         "teacher": "교사",
-        "admin": "관리자",
-        "librarian": "사서"
+        "admin": "관리자"
       },
       "status": {
         "active": "활성",
@@ -68,8 +67,7 @@
       "roles": {
         "student": "학생",
         "teacher": "교사",
-        "admin": "관리자",
-        "librarian": "사서"
+        "admin": "관리자"
       },
       "status": {
         "active": "활성",
@@ -104,8 +102,7 @@
       "roles": {
         "student": "학생",
         "teacher": "교사",
-        "admin": "관리자",
-        "librarian": "사서"
+        "admin": "관리자"
       },
       "status": {
         "active": "활성",

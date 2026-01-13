@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "progress": {
+      "home": {
+        "title": "Progresses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Progress",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Progress",
+        "notFound": "No Progresses found"
+      },
+      "created": "Một Progress mới được tạo với định danh {{ param }}",
+      "updated": "Một Progress cập nhật với định danh {{ param }}",
+      "deleted": "Một Progress đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Progress {{ id }}?"
+      },
+      "detail": {
+        "title": "Progress"
+      },
+      "id": "ID",
+      "isCompleted": "Is Completed",
+      "updatedAt": "Updated At",
+      "userProfile": "User Profile",
+      "unit": "Unit"
+    }
+  }
+}

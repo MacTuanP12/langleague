@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "exercise": {
+      "home": {
+        "title": "Exercises",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Exercise",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Exercise",
+        "notFound": "No Exercises found"
+      },
+      "created": "Một Exercise mới được tạo với định danh {{ param }}",
+      "updated": "Một Exercise cập nhật với định danh {{ param }}",
+      "deleted": "Một Exercise đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Exercise {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise"
+      },
+      "id": "ID",
+      "exerciseText": "Exercise Text",
+      "exerciseType": "Exercise Type",
+      "correctAnswerRaw": "Correct Answer Raw",
+      "audioUrl": "Audio Url",
+      "imageUrl": "Image Url",
+      "orderIndex": "Order Index",
+      "options": "Options",
+      "unit": "Unit"
+    }
+  }
+}

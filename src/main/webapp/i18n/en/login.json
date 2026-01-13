@@ -2,6 +2,8 @@
   "login": {
     "title": "Sign in",
     "form": {
+      "username": "Username",
+      "username.placeholder": "Your username",
       "password": "Password",
       "password.placeholder": "Your password",
       "rememberme": "Remember me",
@@ -10,6 +12,17 @@
     "messages": {
       "error": {
         "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+      },
+      "info": {
+        "authenticated": {
+          "prefix": "If you want to ",
+          "link": "sign in",
+          "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+        },
+        "register": {
+          "noaccount": "You don't have an account yet?",
+          "link": "Register a new account"
+        }
       }
     },
     "password": {

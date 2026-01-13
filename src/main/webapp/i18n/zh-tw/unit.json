@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "unit": {
+      "home": {
+        "title": "Units",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 Unit",
+        "createOrEditLabel": "建立或編輯 Unit",
+        "notFound": "No Units found"
+      },
+      "created": "新的 Unit 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 Unit 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 Unit 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 Unit {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "Unit"
+      },
+      "id": "ID",
+      "title": "Title",
+      "orderIndex": "Order Index",
+      "summary": "Summary",
+      "vocabularies": "Vocabularies",
+      "grammars": "Grammars",
+      "exercises": "Exercises",
+      "progresses": "Progresses",
+      "book": "Book"
+    }
+  }
+}

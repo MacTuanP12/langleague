@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAppSelector } from 'app/config/store';
 import { toast } from 'react-toastify';
+import { translate, Translate } from 'react-jhipster';
+import { useUserProfile } from 'app/shared/reducers/hooks';
+
 import './student-profile.scss';
-import {translate, Translate} from "react-jhipster";
 
 export const StudentProfile = () => {
+  const { userProfile, loading, editProfile, loadCurrentProfile } = useUserProfile();
   const account = useAppSelector(state => state.authentication.account);
 
   const [formData, setFormData] = useState({
@@ -16,17 +19,20 @@ export const StudentProfile = () => {
   });
 
   useEffect(() => {
+    loadCurrentProfile();
+  }, [loadCurrentProfile]);
+
+  useEffect(() => {
     if (account) {
       setFormData({
         fullName: `${account.firstName || ''} ${account.lastName || ''}`.trim() || account.login,
         email: account.email || '',
         username: account.login || '',
-        bio: '',
+        bio: userProfile?.bio || '',
         imageUrl: account.imageUrl || 'https://via.placeholder.com/150',
       });
     }
-  }, [account]);
-
+  }, [account, userProfile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -36,108 +42,91 @@ export const StudentProfile = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would dispatch an action to save the profile
-    toast.success('Profile updated successfully!');
+    if (!userProfile) return;
+
+    try {
+      await editProfile({ ...userProfile, bio: formData.bio });
+      toast.success(translate('langleague.student.profile.messages.success', 'Profile updated successfully!'));
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile.');
+    }
   };
 
   const handlePhotoChange = () => {
-    toast.info('Photo upload functionality coming soon!');
+    toast.info(translate('langleague.student.profile.messages.photoComingSoon', 'Photo upload functionality coming soon!'));
   };
 
   return (
-    <div className="student-profile-page">
-      <div className="profile-header">
-        <div className="breadcrumb">
-          Account / <span className="current"><Translate contentKey="langleague.student.profile.title">Profile</Translate></span>
-        </div>
-      </div>
-
+    <div className="profile-page-wrapper">
       <div className="profile-content">
+        {/* Profile Card - Using Golden Standard Layout */}
         <div className="profile-card">
-          <div className="profile-card-inner">
-            {/* Avatar Section */}
+          <div className="profile-header">
             <div className="avatar-section">
-              <div className="avatar-container" onClick={handlePhotoChange}>
-                <img src={formData.imageUrl} alt="Large User Avatar" />
-                <div className="avatar-overlay">
-                  <i className="bi bi-camera"></i>
-                </div>
-              </div>
+              {account?.imageUrl ? (
+                <img src={account.imageUrl} alt="Avatar" className="large-avatar-image" />
+              ) : (
+                <div className="large-avatar">{account?.login?.[0]?.toUpperCase() || 'U'}</div>
+              )}
               <button className="change-photo-btn" onClick={handlePhotoChange}>
-                <i className="bi bi-upload"></i>
+                <i className="bi bi-camera"></i>
                 <Translate contentKey="langleague.student.profile.actions.changePhoto">Change Photo</Translate>
               </button>
             </div>
+          </div>
 
-            {/* Profile Form */}
-            <form className="profile-form" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="fullName">
-                  <Translate contentKey="langleague.student.profile.personalInfo.fullName">Full Name</Translate>
-                </label>
-                <div className="input-wrapper">
-                  <i className="bi bi-person input-icon"></i>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder={translate('langleague.student.profile.personalInfo.fullNamePlaceholder', 'e.g. Alex Johnson')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">
-                  <Translate contentKey="langleague.student.profile.personalInfo.email">Email Address</Translate>
-                </label>
-                <div className="input-wrapper readonly">
-                  <i className="bi bi-envelope input-icon"></i>
-                  <input type="email" id="email" name="email" value={formData.email} readOnly />
-                  <i className="bi bi-lock lock-icon" title="Email cannot be changed directly"></i>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="username">
-                  <Translate contentKey="langleague.student.profile.accountInfo.username">Username</Translate>
-                </label>
-                <div className="input-wrapper">
-                  <i className="bi bi-at input-icon"></i>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    placeholder={translate('langleague.student.profile.accountInfo.usernamePlaceholder', 'e.g. alexj2024')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="bio">
-                  <Translate contentKey="langleague.student.profile.personalInfo.bio">Bio / About Me</Translate>
-                </label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  value={formData.bio}
+          <form className="profile-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="fullName">
+                <Translate contentKey="langleague.student.profile.personalInfo.fullName">Full Name</Translate>
+              </label>
+              <div className="input-wrapper">
+                <i className="bi bi-person"></i>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleInputChange}
-                  placeholder={translate('langleague.student.profile.personalInfo.bioPlaceholder', 'Tell us a little about yourself...')}
-                  rows={3}
+                  placeholder={translate('langleague.student.profile.personalInfo.fullNamePlaceholder', 'e.g. Alex Johnson')}
                 />
               </div>
+            </div>
 
-              <button type="submit" className="save-btn">
+            <div className="form-group">
+              <label htmlFor="email">
+                <Translate contentKey="langleague.student.profile.personalInfo.email">Email Address</Translate>
+              </label>
+              <div className="input-wrapper">
+                <i className="bi bi-envelope"></i>
+                <input type="email" id="email" name="email" value={formData.email} readOnly />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="bio">
+                <Translate contentKey="langleague.student.profile.personalInfo.bio">Bio / About Me</Translate>
+              </label>
+              <textarea
+                id="bio"
+                name="bio"
+                value={formData.bio}
+                onChange={handleInputChange}
+                placeholder={translate('langleague.student.profile.personalInfo.bioPlaceholder', 'Tell us a little about yourself...')}
+                rows={4}
+              />
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="save-btn" disabled={loading}>
                 <i className="bi bi-check-circle"></i>
                 <Translate contentKey="langleague.student.profile.actions.saveChanges">Save Changes</Translate>
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

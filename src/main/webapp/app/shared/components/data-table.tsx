@@ -50,5 +50,3 @@ export function DataTable<T>({ data, columns, keyExtractor, emptyMessage = 'No d
     </div>
   );
 }
-
-

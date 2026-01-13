@@ -1,13 +1,33 @@
 {
   "settings": {
     "title": "User settings for [<strong>{{username}}</strong>]",
+    "page": {
+      "profile": "Profile",
+      "account": "Account"
+    },
+    "sidebar": {
+      "home": "Home",
+      "flashcard": "FlashCard",
+      "games": "Games"
+    },
+    "header": {
+      "changePhoto": "Change Photo"
+    },
     "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Alex Johnson",
+      "emailAddress": "Email Address",
+      "emailPlaceholder": "alex.johnson@university.edu",
+      "bio": "Bio / About Me",
+      "bioPlaceholder": "Passionate computer science student with a love for algorithms and open-source software. Learning one flashcard at a time.",
       "firstname": "First Name",
       "firstname.placeholder": "Your first name",
       "lastname": "Last Name",
       "lastname.placeholder": "Your last name",
       "language": "Language",
-      "button": "Save"
+      "button": "Save",
+      "changePassword": "Change Password",
+      "saveChanges": "Save Changes"
     },
     "messages": {
       "error": {
@@ -15,6 +35,11 @@
         "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
       },
       "success": "<strong>Settings saved!</strong>",
+      "profileUpdateSuccess": "Profile updated successfully!",
+      "avatarUploadSuccess": "Avatar uploaded successfully!",
+      "avatarUploadError": "Failed to upload avatar. Please try again.",
+      "invalidImageType": "Please select a valid image file (JPG, PNG, GIF, etc.)",
+      "imageTooLarge": "Image size must be less than 5MB",
       "validate": {
         "firstname": {
           "required": "Your first name is required.",

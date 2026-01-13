@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "enrollment": {
+      "home": {
+        "title": "Enrollments",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Enrollment の作成",
+        "createOrEditLabel": "Enrollmentの作成または編集",
+        "notFound": "Enrollments が見つかりません。"
+      },
+      "created": "新しい Enrollment がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Enrollment が更新されました。",
+      "deleted": "ID {{ param }} の Enrollment が削除されました。",
+      "delete": {
+        "question": "Enrollment {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Enrollment"
+      },
+      "id": "ID",
+      "enrolledAt": "Enrolled At",
+      "status": "Status",
+      "userProfile": "User Profile",
+      "book": "Book"
+    }
+  }
+}

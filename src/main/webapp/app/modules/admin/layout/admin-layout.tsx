@@ -22,21 +22,6 @@ export const AdminLayout = () => {
     return location.pathname.includes(path);
   };
 
-  const getBreadcrumbs = () => {
-    const path = location.pathname;
-    const breadcrumbs: Array<{ label: string; path?: string }> = [{ label: 'Dashboard', path: '/admin/dashboard' }];
-
-    if (path.includes('/user-management')) {
-      breadcrumbs.push({ label: 'User Management' });
-    } else if (path.includes('/books')) {
-      breadcrumbs.push({ label: 'Books' });
-    } else if (path.includes('/settings')) {
-      breadcrumbs.push({ label: 'Settings' });
-    }
-
-    return breadcrumbs;
-  };
-
   return (
     <div className="admin-layout">
       {/* Sidebar */}
@@ -84,7 +69,7 @@ export const AdminLayout = () => {
 
       {/* Main Content */}
       <main className={`admin-main ${isSidebarOpen ? '' : 'sidebar-collapsed'}`}>
-        <ModernHeader breadcrumbs={getBreadcrumbs()} />
+        <ModernHeader />
 
         <div className="admin-content">
           <Outlet />

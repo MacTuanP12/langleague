@@ -1,6 +1,93 @@
-# langleague
+# LangLeague - Digitized Language Textbook Platform
 
-This application was generated using JHipster 8.11.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.11.0](https://www.jhipster.tech/documentation-archive/v8.11.0).
+[![JHipster](https://img.shields.io/badge/JHipster-8.11.0-blue.svg)](https://www.jhipster.tech)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-18.x-61dafb.svg)](https://reactjs.org/)
+
+**LangLeague** is an innovative EdTech platform that digitizes language textbooks, empowering teachers to create comprehensive learning materials with AI assistance and enabling students to learn interactively with gamification features.
+
+## 🎯 Key Features
+
+### 👨‍🏫 For Teachers
+
+- **AI-Powered Content Creation**: Create vocabulary, grammar lessons, and exercises with AI support
+- **Structured Curriculum**: Organize content into Books → Chapters → Learning Materials
+- **Comprehensive Management**: Full CRUD operations for books, chapters, vocabulary, grammar, and exercises
+- **Drag-and-Drop Ordering**: Easily reorder chapters and exercises
+- **Dashboard Analytics**: Track student progress and engagement
+
+### 👨‍🎓 For Students
+
+- **Interactive Learning**: Study vocabulary with audio pronunciation, practice grammar, and complete exercises
+- **AI-Powered Feedback**: Get instant feedback on exercises and grammar checks
+- **Gamification**: Track learning streaks, earn achievements, and compete with peers
+- **Study Tools**: Take notes, use flashcards, play educational games
+- **Progress Tracking**: Bookmark chapters, view learning history, and monitor streaks
+
+### 👨‍💼 For Admins
+
+- **User Management**: Create teacher accounts, manage roles, lock/unlock accounts
+- **System Monitoring**: Dashboard with key metrics and system overview
+- **Content Moderation**: Oversee platform content and user activities
+
+## 📚 Documentation
+
+### Core Documentation
+
+- **[Use Cases (62 Features)](./USE_CASES.md)** - Complete list of all platform features
+- **[Gap Analysis Report](./LangLeague_UC_Gap_Analysis_Report.md)** - Feature completeness review and roadmap
+- **[API Testing Guide](./API_TESTING_GUIDE.md)** - Backend API documentation and testing
+- **[Developer Quick Reference](./DEVELOPER_QUICK_REFERENCE.md)** - Quick start guide for developers
+
+### Project Status
+
+- **[Current Status Report (Vietnamese)](./BAO_CAO.md)** - Latest project status and issues (13/01/2026)
+- **[Technical Documentation (Vietnamese)](./tài%20liệu.md)** - Detailed technical review
+- **[TODO Checklist](./TODO_CHECKLIST.md)** - Pending tasks and improvements
+
+## 🚀 Quick Start
+
+This application was generated using JHipster 8.11.0. For detailed JHipster documentation, visit [https://www.jhipster.tech/documentation-archive/v8.11.0](https://www.jhipster.tech/documentation-archive/v8.11.0).
+
+## 🏗️ Technology Stack
+
+### Backend
+
+- **Framework**: Spring Boot 3.x (Java 21)
+- **Security**: Spring Security with JWT authentication
+- **Database**: MySQL 8.x
+- **ORM**: Spring Data JPA / Hibernate
+- **Build Tool**: Maven
+- **API Documentation**: Swagger/OpenAPI 3.0
+
+### Frontend
+
+- **Framework**: React 18.x with TypeScript
+- **State Management**: Redux Toolkit
+- **UI Framework**: Bootstrap 5 + Reactstrap
+- **Build Tool**: Webpack
+- **Testing**: Jest + React Testing Library
+
+### AI Integration
+
+- **Platform**: OpenAI GPT (for content generation and feedback)
+- **Features**: Vocabulary generation, grammar explanation, exercise creation, answer evaluation
+
+### DevOps
+
+- **Containerization**: Docker & Docker Compose
+- **Code Quality**: SonarQube, ESLint, Checkstyle
+- **CI/CD**: Configurable (Jenkins, GitLab CI, GitHub Actions)
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Java 21** or higher
+- **Node.js 20.x** (LTS) and npm
+- **MySQL 8.x** (or use Docker Compose to run it)
+- **Maven 3.8+** (optional - use included `./mvnw` wrapper)
+- **Docker & Docker Compose** (optional - for containerized services)
 
 ## Project Structure
 
@@ -220,6 +307,175 @@ docker compose -f src/main/docker/app.yml up -d
 ```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+
+## 🎓 Usage Guide
+
+### Default Users
+
+After starting the application, you can login with these default accounts:
+
+| Role    | Username  | Password  | Description                     |
+| ------- | --------- | --------- | ------------------------------- |
+| Admin   | `admin`   | `admin`   | Full system access              |
+| Teacher | `teacher` | `teacher` | Content creation and management |
+| Student | `student` | `student` | Learning and practice           |
+
+### Accessing the Application
+
+- **Frontend**: http://localhost:9000
+- **Backend API**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **H2 Console** (dev only): http://localhost:8080/h2-console
+
+### Key Workflows
+
+#### For Teachers:
+
+1. Login as teacher
+2. Navigate to "Books" → Create a new book
+3. Add chapters to your book
+4. Add vocabulary, grammar, and exercises to each chapter
+5. Use AI assistance for content generation
+6. Reorder content using drag-and-drop
+
+#### For Students:
+
+1. Login as student
+2. Browse available books on homepage
+3. Enroll in a book
+4. Navigate through chapters and learn content
+5. Complete exercises and get AI feedback
+6. Track your learning streak and earn achievements
+7. Use flashcards and games for practice
+
+#### For Admins:
+
+1. Login as admin
+2. Manage users (create teachers, change roles, lock accounts)
+3. Monitor system via dashboard
+4. Review platform analytics
+
+## 🔌 API Endpoints
+
+### Authentication
+
+- `POST /api/authenticate` - Login
+- `POST /api/register` - Register new student
+- `GET /api/activate` - Activate account
+- `POST /api/account/reset-password/init` - Request password reset
+
+### Books (Teacher)
+
+- `GET /api/books` - List all books
+- `POST /api/books` - Create book
+- `PUT /api/books/{id}` - Update book
+- `DELETE /api/books/{id}` - Delete book
+
+### Chapters/Units (Teacher)
+
+- `GET /api/units/by-book/{bookId}` - Get chapters by book
+- `POST /api/units` - Create chapter
+- `PUT /api/books/{id}/units/reorder` - Reorder chapters
+
+### Vocabulary (Teacher)
+
+- `GET /api/vocabularies/by-unit/{unitId}` - Get vocabulary by chapter
+- `POST /api/vocabularies` - Create vocabulary (with AI support)
+- `PUT /api/vocabularies/{id}` - Update vocabulary
+
+### Exercises (Student)
+
+- `GET /api/exercises/by-unit/{unitId}` - Get exercises by chapter
+- `POST /api/exercise-attempts` - Submit exercise attempt
+- `POST /api/exercises/check-answer` - Check answer with AI
+
+### Enrollment (Student)
+
+- `POST /api/enrollments` - Enroll in book
+- `GET /api/enrollments?myCourses=true` - Get my enrolled books
+- `DELETE /api/enrollments/{id}` - Unenroll from book
+
+📖 **Full API documentation**: See [API_TESTING_GUIDE.md](./API_TESTING_GUIDE.md)
+
+## 🐛 Known Issues & Troubleshooting
+
+### Common Issues
+
+1. **Docker auto-start error**: Disable in `application-dev.yml`:
+
+   ```yaml
+   spring:
+     docker:
+       compose:
+         enabled: false
+   ```
+
+2. **Frontend build errors**: Run `./npmw install` to update dependencies
+
+3. **Swagger 401 errors**: Click "Authorize" button and paste your JWT token
+
+4. **Database connection issues**: Ensure MySQL is running or use Docker:
+   ```bash
+   docker compose -f src/main/docker/mysql.yml up -d
+   ```
+
+For detailed issues and resolutions, see [BAO_CAO.md](./BAO_CAO.md)
+
+## 📊 Project Statistics
+
+- **Total Use Cases**: 62 (100% implemented)
+- **AI-Powered Features**: 8
+- **Supported Roles**: 3 (Admin, Teacher, Student)
+- **Lines of Code**: ~50,000+ (Backend + Frontend)
+- **Test Coverage**: In progress
+
+## 🗺️ Roadmap
+
+### Phase 1: MVP Enhancement (Priority)
+
+- [ ] Content publishing workflow (Draft/Published states)
+- [ ] Exercise retry and history review
+- [ ] GDPR compliance (account deletion, data export)
+- [ ] Enhanced admin moderation tools
+- [ ] Notification system
+
+### Phase 2: User Experience (3 months)
+
+- [ ] Learning analytics dashboard
+- [ ] Book preview before enrollment
+- [ ] Teacher progress monitoring
+- [ ] Advanced search and filtering
+
+### Phase 3: Engagement Features (6 months)
+
+- [ ] Leaderboards and social features
+- [ ] Advanced gamification
+- [ ] Discussion forums
+- [ ] Certificate generation
+
+📋 **Full roadmap**: See [LangLeague_UC_Gap_Analysis_Report.md](./LangLeague_UC_Gap_Analysis_Report.md)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is part of a graduation thesis (DATN - Đồ Án Tốt Nghiệp).
+
+## 🙋‍♂️ Support
+
+For issues and questions:
+
+- Check [Known Issues](#-known-issues--troubleshooting)
+- Review [API Testing Guide](./API_TESTING_GUIDE.md)
+- Contact the development team
+
+---
 
 ## Continuous Integration (optional)
 

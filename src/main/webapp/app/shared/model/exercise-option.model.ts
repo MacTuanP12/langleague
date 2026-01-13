@@ -1,22 +1,25 @@
-import { IExercise } from './exercise.model';
+import { IExercise } from 'app/shared/model/exercise.model';
 
 export interface IExerciseOption {
   id?: number;
   optionText?: string;
   isCorrect?: boolean;
-  orderIndex?: number;
+  orderIndex?: number | null;
+  /**
+   * Parent exercise reference.
+   * Note: Usually undefined when fetched as part of exercise.options
+   * to avoid circular references. Only populated when fetching individual options.
+   */
   exercise?: IExercise;
-  exerciseId?: number;
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
+  exerciseId?: number; // Added for reducer compatibility
 }
 
 export const defaultExerciseOptionValue: Readonly<IExerciseOption> = {
-  id: 0,
+  id: undefined,
   optionText: '',
   isCorrect: false,
   orderIndex: 0,
-  exerciseId: 0,
-  createdDate: null,
-  lastModifiedDate: null,
+  exercise: undefined,
 };
+
+export const defaultValue = defaultExerciseOptionValue;

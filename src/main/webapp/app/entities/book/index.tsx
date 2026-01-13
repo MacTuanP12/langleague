@@ -1,21 +1,21 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router';
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
-import { BookDetail } from './book-detail';
-import { BookLearn } from './book-learn';
-import { BookManagement } from './book-management';
-import { BookUpdate } from './book-update';
+import Book from './book';
+import BookDetail from './book-detail';
+import BookUpdate from './book-update';
+import BookDeleteDialog from './book-delete-dialog';
 
 const BookRoutes = () => (
   <ErrorBoundaryRoutes>
-    <Route index element={<BookManagement />} />
+    <Route index element={<Book />} />
     <Route path="new" element={<BookUpdate />} />
     <Route path=":id">
       <Route index element={<BookDetail />} />
       <Route path="edit" element={<BookUpdate />} />
-      <Route path="learn" element={<BookLearn />} />
+      <Route path="delete" element={<BookDeleteDialog />} />
     </Route>
   </ErrorBoundaryRoutes>
 );

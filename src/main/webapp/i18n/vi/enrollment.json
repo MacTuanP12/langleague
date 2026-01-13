@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "enrollment": {
+      "home": {
+        "title": "Enrollments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Enrollment",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Enrollment",
+        "notFound": "No Enrollments found"
+      },
+      "created": "Một Enrollment mới được tạo với định danh {{ param }}",
+      "updated": "Một Enrollment cập nhật với định danh {{ param }}",
+      "deleted": "Một Enrollment đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Enrollment {{ id }}?"
+      },
+      "detail": {
+        "title": "Enrollment"
+      },
+      "id": "ID",
+      "enrolledAt": "Enrolled At",
+      "status": "Status",
+      "userProfile": "User Profile",
+      "book": "Book"
+    }
+  }
+}

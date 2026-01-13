@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Translate, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
+import { useUserManagement } from 'app/shared/reducers/user-management.hook';
 import './user-management-create.scss';
 
 interface FormErrors {
+  username?: string;
   email?: string;
   fullName?: string;
   role?: string;
@@ -14,7 +16,9 @@ interface FormErrors {
 }
 
 export const UserManagementCreate = () => {
+  const { createUser } = useUserManagement();
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     fullName: '',
     role: '',
@@ -38,6 +42,10 @@ export const UserManagementCreate = () => {
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
+
+    if (!formData.username) {
+      newErrors.username = translate('userManagement.create.validation.loginRequired');
+    }
 
     if (!formData.email) {
       newErrors.email = translate('userManagement.create.validation.emailRequired');
@@ -79,7 +87,7 @@ export const UserManagementCreate = () => {
       const lastName = lastNameParts.join(' ');
 
       const userData = {
-        login: formData.email.split('@')[0],
+        login: formData.username,
         email: formData.email,
         firstName,
         lastName,
@@ -88,10 +96,12 @@ export const UserManagementCreate = () => {
         password: formData.password,
       };
 
-      await axios.post('/api/admin/users', userData);
+      await createUser(userData);
+      toast.success(translate('langleague.admin.userManagement.messages.createSuccess'));
       navigate('/admin/user-management');
     } catch (error) {
       console.error('Error creating user:', error);
+      toast.error(translate('langleague.admin.userManagement.messages.createError'));
       setErrors({ submit: translate('userManagement.create.validation.submitError') });
     }
   };
@@ -121,6 +131,24 @@ export const UserManagementCreate = () => {
           <div className="form-row">
             <div className="form-group">
               <label>
+                <Translate contentKey="userManagement.create.fields.login">Username</Translate>{' '}
+                <span className="required">
+                  <Translate contentKey="userManagement.create.required">*</Translate>
+                </span>
+              </label>
+              <input
+                type="text"
+                name="username"
+                placeholder={translate('userManagement.create.fields.loginPlaceholder')}
+                value={formData.username}
+                onChange={handleChange}
+                className={errors.username ? 'error' : ''}
+              />
+              {errors.username && <span className="error-message">{errors.username}</span>}
+            </div>
+
+            <div className="form-group">
+              <label>
                 <Translate contentKey="userManagement.create.fields.email">Email</Translate>{' '}
                 <span className="required">
                   <Translate contentKey="userManagement.create.required">*</Translate>
@@ -136,7 +164,9 @@ export const UserManagementCreate = () => {
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
+          </div>
 
+          <div className="form-row">
             <div className="form-group">
               <label>
                 <Translate contentKey="userManagement.create.fields.fullName">Full Name</Translate>{' '}
@@ -154,9 +184,7 @@ export const UserManagementCreate = () => {
               />
               {errors.fullName && <span className="error-message">{errors.fullName}</span>}
             </div>
-          </div>
 
-          <div className="form-row">
             <div className="form-group">
               <label>
                 <Translate contentKey="userManagement.create.fields.role">Role</Translate>{' '}
@@ -173,7 +201,9 @@ export const UserManagementCreate = () => {
               </select>
               {errors.role && <span className="error-message">{errors.role}</span>}
             </div>
+          </div>
 
+          <div className="form-row">
             <div className="form-group">
               <label>
                 <Translate contentKey="userManagement.create.fields.status">Status</Translate>

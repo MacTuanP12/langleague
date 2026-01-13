@@ -5,7 +5,7 @@
         "title": "교사 대시보드",
         "welcome": "{name}님, 환영합니다!",
         "stats": {
-          "myCourses": "내 강좌",
+          "myBooks": "내 교재",
           "totalStudents": "총 학생 수",
           "pendingAssignments": "대기 중인 과제",
           "averageRating": "평균 평점"

@@ -1,6 +1,8 @@
 import React from 'react';
 import { IProgress } from 'app/shared/model/progress.model';
 import './UnitProgressIndicator.scss';
+import { APP_DATE_FORMAT } from 'app/config/constants';
+import { TextFormat } from 'react-jhipster';
 
 interface Props {
   progress?: IProgress;
@@ -24,7 +26,9 @@ export const UnitProgressIndicator: React.FC<Props> = ({ progress, showDetails =
         <span className="status-icon">✓</span>
         {!compact && <span className="status-text">Completed</span>}
         {showDetails && progress.updatedAt && (
-          <small className="updated-time">Last updated: {new Date(progress.updatedAt).toLocaleDateString()}</small>
+          <small className="updated-time">
+            Last updated: <TextFormat value={progress.updatedAt.toDate()} type="date" format={APP_DATE_FORMAT} />
+          </small>
         )}
       </div>
     );
@@ -35,7 +39,9 @@ export const UnitProgressIndicator: React.FC<Props> = ({ progress, showDetails =
       <span className="status-icon">◐</span>
       {!compact && <span className="status-text">In Progress</span>}
       {showDetails && progress.updatedAt && (
-        <small className="updated-time">Updated: {new Date(progress.updatedAt).toLocaleDateString()}</small>
+        <small className="updated-time">
+          Updated: <TextFormat value={progress.updatedAt.toDate()} type="date" format={APP_DATE_FORMAT} />
+        </small>
       )}
     </div>
   );

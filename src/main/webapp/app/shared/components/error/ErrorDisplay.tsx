@@ -57,16 +57,11 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   );
 };
 
-export const InlineError: React.FC<{ message: string; isI18nKey?: boolean }> = ({
-  message,
-  isI18nKey = false
-}) => {
+export const InlineError: React.FC<{ message: string; isI18nKey?: boolean }> = ({ message, isI18nKey = false }) => {
   return (
     <div className="error-display-inline">
       <i className="bi bi-exclamation-circle"></i>
-      <span>
-        {isI18nKey ? <Translate contentKey={message}>{message}</Translate> : message}
-      </span>
+      <span>{isI18nKey ? <Translate contentKey={message}>{message}</Translate> : message}</span>
     </div>
   );
 };
@@ -86,9 +81,7 @@ export const ErrorAlert: React.FC<{
   return (
     <div className={`error-alert error-alert-${variant}`}>
       <i className={`bi ${variantIcons[variant]}`}></i>
-      <span className="error-alert-message">
-        {isI18nKey ? <Translate contentKey={message}>{message}</Translate> : message}
-      </span>
+      <span className="error-alert-message">{isI18nKey ? <Translate contentKey={message}>{message}</Translate> : message}</span>
       {onClose && (
         <button onClick={onClose} className="error-alert-close" aria-label="Close">
           <i className="bi bi-x"></i>
@@ -97,4 +90,3 @@ export const ErrorAlert: React.FC<{
     </div>
   );
 };
-

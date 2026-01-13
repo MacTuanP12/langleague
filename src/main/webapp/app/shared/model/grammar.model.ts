@@ -1,4 +1,4 @@
-import { IUnit } from './unit.model';
+import { IUnit } from 'app/shared/model/unit.model';
 
 export interface IGrammarExample {
   en: string;
@@ -9,21 +9,18 @@ export interface IGrammar {
   id?: number;
   title?: string;
   contentMarkdown?: string;
-  exampleUsage?: string; // JSON string of IGrammarExample[]
+  exampleUsage?: string | null; // JSON string of IGrammarExample[]
   orderIndex?: number;
   unit?: IUnit;
-  unitId?: number;
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
 }
 
 export const defaultGrammarValue: Readonly<IGrammar> = {
-  id: 0,
+  id: undefined,
   title: '',
   contentMarkdown: '',
   exampleUsage: '',
   orderIndex: 0,
-  unitId: 0,
-  createdDate: null,
-  lastModifiedDate: null,
+  unit: undefined,
 };
+
+export const defaultValue = defaultGrammarValue;

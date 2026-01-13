@@ -1,10 +1,10 @@
 {
   "home": {
-    "title": "Khám Phá Tri Thức",
+    "title": "Khám phá tri thức",
     "subtitle": "Khám phá bộ sưu tập tài nguyên giáo dục phong phú của chúng tôi",
     "search": {
-      "placeholder": "Tìm kiếm theo tiêu đề, tác giả hoặc ISBN...",
-      "button": "Tìm Kiếm"
+      "placeholder": "Tìm kiếm sách, khóa học hoặc chủ đề...",
+      "button": "Tìm kiếm"
     },
     "logged": {
       "message": "Bạn đang đăng nhập với tên \"{{username}}\"."

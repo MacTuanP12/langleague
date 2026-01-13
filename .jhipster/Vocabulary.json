@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20260108164537"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "word",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "phonetic",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "meaning",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "example",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Vocabulary",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "unit",
+      "otherEntityRelationshipName": "vocabularies",
+      "relationshipName": "unit",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

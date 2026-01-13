@@ -2,6 +2,8 @@
   "login": {
     "title": "登录",
     "form": {
+      "username": "用户名",
+      "username.placeholder": "请输入用户名",
       "password": "密码",
       "password.placeholder": "您的密码",
       "rememberme": "自动登录",
@@ -10,6 +12,17 @@
     "messages": {
       "error": {
         "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
+      },
+      "info": {
+        "authenticated": {
+          "prefix": "如果您想 ",
+          "link": "登录",
+          "suffix": "，可以尝试使用默认账户:<br/>- 管理员 (账号=\"admin\" 密码=\"admin\") <br/>- 用户 (账号=\"user\" 密码=\"user\")。"
+        },
+        "register": {
+          "noaccount": "还没有账户？",
+          "link": "注册新账户"
+        }
       }
     },
     "password": {

@@ -12,6 +12,7 @@ const initialState = {
   successMessage: null,
   updateSuccess: false,
   updateFailure: false,
+  avatarUploading: false,
 };
 
 export type SettingsState = Readonly<typeof initialState>;
@@ -32,6 +33,19 @@ export const saveAccountSettings: (account: IUser) => AppThunk = account => asyn
 export const updateAccount = createAsyncThunk('settings/update_account', async (account: IUser) => axios.post<IUser>(apiUrl, account), {
   serializeError: serializeAxiosError,
 });
+
+export const uploadAvatar = createAsyncThunk(
+  'settings/upload_avatar',
+  async (imageUrl: string) => {
+    const response = await axios.post<IUser>(`${apiUrl}/avatar`, imageUrl, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+    return response.data;
+  },
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const SettingsSlice = createSlice({
   name: 'settings',
@@ -58,6 +72,20 @@ export const SettingsSlice = createSlice({
         state.updateSuccess = true;
         state.updateFailure = false;
         state.successMessage = 'settings.messages.success';
+      })
+      .addCase(uploadAvatar.pending, state => {
+        state.avatarUploading = true;
+        state.errorMessage = null;
+      })
+      .addCase(uploadAvatar.rejected, state => {
+        state.avatarUploading = false;
+        state.updateFailure = true;
+        state.errorMessage = 'settings.messages.avatarUploadError';
+      })
+      .addCase(uploadAvatar.fulfilled, state => {
+        state.avatarUploading = false;
+        state.updateSuccess = true;
+        state.successMessage = 'settings.messages.avatarUploadSuccess';
       });
   },
 });

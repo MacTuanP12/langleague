@@ -12,12 +12,7 @@ interface SearchFilterSectionProps {
 /**
  * SearchFilterSection component - Extracted search and filter UI
  */
-export const SearchFilterSection: React.FC<SearchFilterSectionProps> = ({
-  searchQuery,
-  filterTab,
-  onSearchChange,
-  onFilterChange,
-}) => {
+export const SearchFilterSection: React.FC<SearchFilterSectionProps> = ({ searchQuery, filterTab, onSearchChange, onFilterChange }) => {
   return (
     <div className="search-filter-section">
       <div className="search-wrapper">
@@ -48,5 +43,3 @@ export const SearchFilterSection: React.FC<SearchFilterSectionProps> = ({
     </div>
   );
 };
-
-

@@ -7,22 +7,18 @@ export type HeaderMessage = {
   param?: string;
 };
 
-const headerToString = (headerValue: string | string[] | undefined): string => {
-  if (Array.isArray(headerValue)) {
-    if (headerValue.length > 1) {
-      throw new Error('Multiple header values found');
-    }
-    headerValue = headerValue[0];
-  }
-  if (typeof headerValue !== 'string') {
-    throw new Error('Header value is not a string');
-  }
-  return headerValue;
-};
-
 const decodeHeaderValue = (headerValue: string): string => decodeURIComponent(headerValue.replace(/\+/g, ' '));
 
-export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessage => {
+const headerToString = (value: unknown): string | undefined => {
+  if (typeof value === 'string') {
+    return value;
+  } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'string') {
+    return value[0];
+  }
+  return undefined;
+};
+
+export const getMessageFromHeaders = (headers: Record<string, unknown>): HeaderMessage => {
   let alert: string | undefined = undefined;
   let param: string | undefined = undefined;
   let error: string | undefined = undefined;
@@ -32,7 +28,8 @@ export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessa
     } else if (key.toLowerCase().endsWith('-error')) {
       error = headerToString(value);
     } else if (key.toLowerCase().endsWith('-params')) {
-      param = decodeHeaderValue(headerToString(value));
+      const paramValue = headerToString(value);
+      param = paramValue ? decodeHeaderValue(paramValue) : undefined;
     }
   }
   return { alert, error, param };

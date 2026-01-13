@@ -4,10 +4,21 @@
     "browsehappy": "您的瀏覽器已經<strong>過時</strong>，建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>，以便有更好的體驗。",
     "menu": {
       "home": "首頁",
+      "student": "學生",
+      "teacher": "教師",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "實體",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "userProfile": "User Profile",
+        "book": "Book",
+        "enrollment": "Enrollment",
+        "unit": "Unit",
+        "vocabulary": "Vocabulary",
+        "grammar": "Grammar",
+        "exercise": "Exercise",
+        "exerciseOption": "Exercise Option",
+        "progress": "Progress"
       },
       "account": {
         "main": "帳號",

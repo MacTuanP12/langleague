@@ -2,185 +2,162 @@
   "langleague": {
     "student": {
       "dashboard": {
-        "loading": "Đang tải khóa học của bạn...",
-        "error": "Không thể tải khóa học",
-        "tryAgain": "Thử Lại",
-        "search": {
-          "placeholder": "Tìm kiếm khóa học..."
+        "title": "Bảng điều khiển của tôi",
+        "welcome": "Chào mừng trở lại, {{name}}!",
+        "stats": {
+          "hours": "Giờ học",
+          "books": "Sách đã hoàn thành"
         },
-        "filter": {
-          "all": "Tất Cả Khóa Học",
-          "inProgress": "Đang Học",
-          "completed": "Đã Hoàn Thành"
-        },
-        "noCourses": "Không tìm thấy khóa học",
-        "course": {
-          "continue": "Tiếp Tục",
-          "start": "Bắt Đầu Học",
-          "units": "bài học"
-        }
-      },
-      "books": {
-        "title": "Sách Của Tôi",
+        "noBooks": "Không tìm thấy sách phù hợp với tìm kiếm của bạn.",
+        "loadMore": "Tải thêm sách",
         "search": {
           "placeholder": "Tìm kiếm sách..."
         },
-        "noBooks": "Không có sách nào",
-        "createdDate": "Ngày tạo:",
+        "filter": {
+          "all": "Tất cả",
+          "enrolled": "Đã đăng ký",
+          "notEnroll": "Chưa đăng ký"
+        },
+        "book": {
+          "continue": "Tiếp tục",
+          "start": "Bắt đầu"
+        },
+        "streak": {
+          "label": "Chuỗi ngày học",
+          "start": "Bắt đầu chuỗi ngày học ngay hôm nay!",
+          "active": "Bạn đang rất cháy! Chuỗi {{count}} ngày liên tiếp!",
+          "nextMilestone": "Cột mốc tiếp theo: {{count}} ngày"
+        }
+      },
+      "books": {
         "detail": {
           "loading": "Đang tải...",
-          "backToBooks": "Quay Lại Danh Sách",
-          "startLearning": "Bắt Đầu Học",
-          "description": "Chọn một cuốn sách để bắt đầu học",
-          "details": "Chi Tiết Sách",
-          "createdBy": "Tạo bởi:",
-          "totalUnits": "Tổng số bài:",
-          "public": "Công khai:",
-          "yes": "Có",
-          "no": "Không",
-          "units": {
-            "title": "BÀI HỌC TRONG SÁCH",
-            "empty": "Chưa có bài học nào"
-          }
+          "backToBooks": "Quay lại danh sách sách",
+          "startLearning": "Bắt đầu học",
+          "enrollNow": "Đăng ký ngay"
+        },
+        "messages": {
+          "enrollSuccess": "Đăng ký sách thành công!",
+          "enrollError": "Đăng ký thất bại. Vui lòng thử lại."
         }
       },
       "learning": {
-        "bookLearn": {
-          "loading": "Đang tải...",
-          "backToBooks": "Quay Lại Sách",
-          "progress": "Tiến Độ",
-          "units": "Bài Học",
-          "empty": "Không có bài học",
-          "start": "Bắt Đầu",
-          "continue": "Tiếp Tục",
-          "completed": "Đã Hoàn Thành"
-        },
+        "unit": "Bài học",
+        "nextLesson": "Bài tiếp theo",
+        "previousLesson": "Bài trước",
+        "complete": "Hoàn thành",
         "vocabulary": {
-          "title": "Luyện Từ Vựng",
-          "backToUnit": "Quay Lại Bài",
-          "loading": "Đang tải từ vựng...",
-          "learned": "Đã Học",
-          "total": "Tổng Số",
-          "noVocabulary": "Không có từ vựng",
-          "word": "Từ:",
-          "phonetic": "Phiên âm:",
+          "title": "Từ vựng",
           "meaning": "Nghĩa:",
           "example": "Ví dụ:",
+          "noVocabulary": "Chưa có từ vựng nào được thêm cho bài học này.",
           "navigation": {
             "previous": "Trước",
             "next": "Tiếp"
           }
         },
         "grammar": {
-          "title": "Bài Ngữ Pháp",
-          "backToUnit": "Quay Lại Bài",
-          "loading": "Đang tải ngữ pháp...",
-          "noGrammar": "Không có bài ngữ pháp",
-          "navigation": {
-            "previous": "Trước",
-            "next": "Tiếp"
-          }
+          "title": "Ngữ pháp",
+          "noGrammar": "Chưa có bài ngữ pháp nào được thêm cho bài học này."
         },
         "exercise": {
-          "title": "Bài Tập",
-          "backToUnit": "Quay Lại Bài",
-          "loading": "Đang tải bài tập...",
-          "noExercises": "Không có bài tập",
-          "question": "Câu hỏi",
-          "of": "của",
-          "yourAnswer": "Câu trả lời của bạn:",
-          "correctAnswer": "Đáp án đúng:",
-          "submit": "Nộp Bài",
-          "next": "Câu Tiếp Theo",
-          "finish": "Hoàn Thành",
-          "score": "Điểm Của Bạn:",
-          "correct": "Đúng",
-          "incorrect": "Sai"
+          "title": "Bài tập",
+          "noExercises": "Chưa có bài tập nào được thêm cho bài học này."
         },
         "flashcard": {
-          "title": "Luyện Flashcard",
-          "backToList": "Quay Lại Danh Sách",
-          "loading": "Đang tải flashcard...",
-          "noFlashcards": "Không có flashcard",
+          "title": "Thẻ ghi nhớ",
           "card": "Thẻ",
-          "of": "của",
-          "flip": "Lật Thẻ",
-          "showAnswer": "Hiện Đáp Án",
-          "hideAnswer": "Ẩn Đáp Án",
-          "navigation": {
-            "previous": "Trước",
-            "next": "Tiếp",
-            "finish": "Hoàn Thành"
-          }
+          "of": "trong"
         },
         "flashcardList": {
-          "title": "Bộ Flashcard Của Tôi",
+          "title": "Thẻ ghi nhớ",
           "loading": "Đang tải...",
-          "noSets": "Không có bộ flashcard",
-          "cards": "thẻ",
-          "practice": "Luyện Tập"
+          "noSets": "Chưa có sách nào"
+        },
+        "bookLearn": {
+          "progress": "Tiến độ của bạn"
+        },
+        "itemCount": {
+          "words": "{{count}} từ",
+          "topics": "{{count}} chủ đề",
+          "questions": "{{count}} câu hỏi",
+          "interactive": "Tương tác"
         }
       },
       "games": {
-        "title": "Trung Tâm Trò Chơi",
-        "subtitle": "Luyện tập kỹ năng với các trò chơi thú vị",
-        "search": {
-          "placeholder": "Tìm kiếm trò chơi..."
-        },
-        "difficulty": {
-          "all": "Tất Cả Cấp Độ",
-          "easy": "Dễ",
-          "medium": "Trung Bình",
-          "hard": "Khó"
-        },
-        "stats": {
-          "gamesPlayed": "Số Lần Chơi",
-          "totalScore": "Tổng Điểm",
-          "highScore": "Điểm Cao Nhất"
-        },
-        "noGames": "Không có trò chơi",
-        "play": "Chơi Ngay"
+        "title": "Trò chơi học tập",
+        "subtitle": "Học mà vui! Chơi game để cải thiện kỹ năng ngôn ngữ của bạn",
+        "backToDashboard": "Quay lại bảng điều khiển",
+        "loading": "Đang tải trò chơi...",
+        "noGamesForDifficulty": "Không tìm thấy trò chơi nào cho độ khó này",
+        "list": {
+          "vocabularyMatch": {
+            "title": "Ghép từ vựng",
+            "description": "Ghép các từ với nghĩa của chúng trong trò chơi trí nhớ tốc độ cao",
+            "time": "5-10 phút"
+          },
+          "wordScramble": {
+            "title": "Xếp chữ",
+            "description": "Sắp xếp lại các chữ cái để tạo thành từ vựng đúng",
+            "time": "10-15 phút"
+          },
+          "grammarQuest": {
+            "title": "Nhiệm vụ ngữ pháp",
+            "description": "Phiêu lưu qua các thử thách ngữ pháp và mở khóa thành tích",
+            "time": "15-20 phút"
+          },
+          "listeningChallenge": {
+            "title": "Thử thách nghe",
+            "description": "Nghe và nhận diện các từ đúng trong nhiều ngữ cảnh khác nhau",
+            "time": "10-15 phút"
+          },
+          "speedQuiz": {
+            "title": "Đố vui tốc độ",
+            "description": "Trả lời càng nhiều câu hỏi càng tốt trong thời gian giới hạn",
+            "time": "5 phút"
+          },
+          "sentenceBuilder": {
+            "title": "Xây dựng câu",
+            "description": "Tạo câu đúng từ các từ và cụm từ bị xáo trộn",
+            "time": "10-15 phút"
+          }
+        }
       },
       "profile": {
-        "title": "Hồ Sơ",
+        "actions": {
+          "changePhoto": "Thay đổi ảnh",
+          "saveChanges": "Lưu thay đổi"
+        },
         "personalInfo": {
-          "title": "Thông Tin Cá Nhân",
-          "firstName": "Tên",
-          "lastName": "Họ",
-          "fullName": "Họ Và Tên",
-          "fullNamePlaceholder": "vd: Nguyễn Văn A",
-          "email": "Địa Chỉ Email",
-          "phone": "Số Điện Thoại",
-          "dateOfBirth": "Ngày Sinh",
-          "bio": "Giới Thiệu Bản Thân",
+          "fullName": "Họ và tên",
+          "fullNamePlaceholder": "VD: Nguyễn Văn A",
+          "email": "Địa chỉ Email",
+          "bio": "Giới thiệu bản thân",
           "bioPlaceholder": "Hãy chia sẻ một chút về bản thân bạn..."
         },
-        "accountInfo": {
-          "title": "Thông Tin Tài Khoản",
-          "username": "Tên Đăng Nhập",
-          "usernamePlaceholder": "vd: nguyenvana2024",
-          "role": "Vai Trò",
-          "memberSince": "Tham Gia Từ",
-          "lastLogin": "Đăng Nhập Lần Cuối"
+        "preferences": {
+          "theme": "Chủ đề giao diện",
+          "themeLight": "☀️ Sáng",
+          "themeDark": "🌙 Tối",
+          "themeSystem": "💻 Theo hệ thống"
         },
-        "learningStats": {
-          "title": "Thống Kê Học Tập",
-          "coursesEnrolled": "Khóa Đã Đăng Ký",
-          "coursesCompleted": "Khóa Đã Hoàn Thành",
-          "totalLearningTime": "Tổng Thời Gian Học",
-          "currentStreak": "Chuỗi Ngày Học",
-          "hours": "giờ",
-          "days": "ngày"
-        },
-        "actions": {
-          "changePhoto": "Đổi Ảnh",
-          "editProfile": "Chỉnh Sửa Hồ Sơ",
-          "changePassword": "Đổi Mật Khẩu",
-          "saveChanges": "Lưu Thay Đổi",
-          "logout": "Đăng Xuất"
+        "messages": {
+          "success": "Cập nhật hồ sơ thành công!",
+          "error": "Cập nhật hồ sơ thất bại",
+          "themeChanged": "Đã cập nhật chủ đề!",
+          "themeError": "Thay đổi chủ đề thất bại",
+          "photoComingSoon": "Tính năng tải ảnh lên sẽ sớm ra mắt!"
         }
       }
     }
+  },
+  "student": {
+    "bookList": {
+      "title": "Thư viện",
+      "search": {
+        "placeholder": "Tìm kiếm sách..."
+      },
+      "startLearning": "Bắt đầu học"
+    }
   }
 }
-

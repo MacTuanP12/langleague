@@ -18,9 +18,11 @@ interface LoginFormValues {
   email: string;
   password: string;
   remember?: boolean;
+  captchaAnswer?: string;
 }
 
 interface RegisterFormValues {
+  username: string;
   email: string;
   password: string;
   confirmPassword?: string;
@@ -39,6 +41,7 @@ const AuthSlider = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const account = useAppSelector(state => state.authentication.account);
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
 
   useEffect(() => {
     setIsSignUp(location.pathname === '/register');
@@ -50,15 +53,7 @@ const AuthSlider = () => {
       const response = await fetch('/api/captcha');
 
       if (!response.ok) {
-        // Captcha API not available, using mock captcha
-        const mockCaptcha: CaptchaData = {
-          captchaId: 'mock-' + Date.now(),
-          captchaImage:
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAyCAYAAAAZUZThAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDcvMTMvMTNJ6e0NAAACcklEQVR4nO3dz2rCQBQF8JtY/AtqFcSlIuLD+P4P4MaFYncuXLhQbP1D1SRzXbhw4cJNyPQuJmQyk5nkJjnwO5BFIJnJz0xCMgmEEEIIIYQQQgghhBBCCCGEEEIIIcS/S5R+gdYppQpgkKYphBBFg263izRNoes6dF1HnufI8xzbtm3z0nVJc86haZp1kiRJ27ZNAKh934/jOE7SNI3SNE3iOE6SJEniOI7jOE7a973Y973f9/04juM0TeM4juM0TWMAaF0XANq2bQpASZJA0zQkSYI0TaHrOizLQpZlyPMcZVlWJUlSKaUqAFWapjUA1LZt67Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27b/m+d5nmma5nmel/V9X9f3fV3f93V939f1fV/X931d3/d1XddVXddVXddVXddVXddVXddVXddVdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/X9X1f1/d9Xd/3dX3f1/V9X9f3fV3f93Vd11Vd11Vd11Vd11Vd11Vd11V13dd13dd13dd13dd13dd13dd13dd13dd13dd13dd13dd1nd93Xfd93Xfd93Xfd93Xfd93Xfd93Xfd93Xfd9Xdf3VV3fVV3fVV3fVV3fVV3fVd33dd33dd33dd33dd33dd33dd33dd33dd33dd33dd33df/0fd/3fd/3fd/3fd/3fd/3fd/3fd/3fV/X9VVd31Vd31Vd31Vd31Vd33Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xdd3XdV3XdV3XdV3XdV3XdV3XdV3XdV3XdX3f1/V9X9f3fV3f93V939f1fV/X931d3/d1fd/XdX1f1fVdVdd1VV3XVXX/n+d5XpbneSmlVJqmKQzDgGEYMAwDhmFACAFd12GaJkzThGmaEEIgiiJEUQRN06BpGnRdh67r0HUduq4jyzJkWYYsy5BlGbIsQ5qmSNMUaZoiTVMkSYIkSZAkCZIkQZIk0HUduq5D13XouY4sy5BlGbIsQ5qmSNMUaZoiSRIkSYIkSZAkCZIkQZIk0HUduq5D13XkSdJ+vw+lFIQQ0DQNmqZB0zRomgZN06DrOnRdh67rMAEIIYQQQgghhBBCCCGEEEIIIYQQ4u/5BbXh5sN9i7lsAAAAAElFTkSuQmCC',
-        };
-        setCaptchaData(mockCaptcha);
-        loginForm.setFieldValue('captchaAnswer', '');
-        return;
+        throw new Error('Captcha API not available');
       }
 
       const data: CaptchaData = await response.json();
@@ -67,18 +62,10 @@ const AuthSlider = () => {
         setCaptchaData(data);
         loginForm.setFieldValue('captchaAnswer', '');
       } else {
-        // Invalid captcha data received
         setCaptchaData(null);
       }
     } catch (err) {
-      // Captcha feature not available, using mock captcha
-      const mockCaptcha: CaptchaData = {
-        captchaId: 'mock-' + Date.now(),
-        captchaImage:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAyCAYAAAAZUZThAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDcvMTMvMTNJ6e0NAAACcklEQVR4nO3dz2rCQBQF8JtY/AtqFcSlIuLD+P4P4MaFYncuXLhQbP1D1SRzXbhw4cJNyPQuJmQyk5nkJjnwO5BFIJnJz0xCMgmEEEIIIYQQQgghhBBCCCGEEEIIIcS/S5R+gdYppQpgkKYphBBFg263izRNoes6dF1HnufI8xzbtm3z0nVJc86haZp1kiRJ27ZNAKh934/jOE7SNI3SNE3iOE6SJEniOI7jOE7a973Y973f9/04juM0TeM4juM0TWMAaF0XANq2bQpASZJA0zQkSYI0TaHrOizLQpZlyPMcZVlWJUlSKaUqAFWapjUA1LZt67Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27Zt27b/m+d5nmma5nmel/V9X9f3fV3f93V939f1fV/X931d3/d1XddVXddVXddVXddVXddVXddVXddVdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/Xdd/X9X1f1/d9Xd/3dX3f1/V9X9f3fV3f93Vd11Vd11Vd11Vd11Vd11Vd11V13dd13dd13dd13dd13dd13dd13dd13dd13dd13dd13dd1nd93Xfd93Xfd93Xfd93Xfd93Xfd93Xfd93Xfd9Xdf3VV3fVV3fVV3fVV3fVV3fVd33dd33dd33dd33dd33dd33dd33dd33dd33dd33dd33df/0fd/3fd/3fd/3fd/3fd/3fd/3fd/3fV/X9VVd31Vd31Vd31Vd31Vd33Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xd13Xdd3XdV3XdV3XdV3XdV3XdV3XdV3XdV3XdX3f1/V9X9f3fV3f93V939f1fV/X931d3/d1fd/XdX1f1fVdVdd1VV3XVXX/n+d5XpbneSmlVJqmKQzDgGEYMAwDhmFACAFd12GaJkzThGmaEEIgiiJEUQRN06BpGnRdh67r0HUduq4jyzJkWYYsy5BlGbIsQ5qmSNMUaZoiTVMkSYIkSZAkCZIkQZIk0HUduq5D13XouY4sy5BlGbIsQ5qmSNMUaZoiSRIkSYIkSZAkCZIkQZIk0HUduq5D13XkSdJ+vw+lFIQQ0DQNmqZB0zRomgZN06DrOnRdh67rMAEIIYQQQgghhBBCCCGEEEIIIYQQ4u/5BbXh5sN9i7lsAAAAAElFTkSuQmCC',
-      };
-      setCaptchaData(mockCaptcha);
-      loginForm.setFieldValue('captchaAnswer', '');
+      setCaptchaData(null);
     } finally {
       setIsLoadingCaptcha(false);
     }
@@ -86,14 +73,13 @@ const AuthSlider = () => {
 
   useEffect(() => {
     loadCaptcha();
-    const interval = setInterval(loadCaptcha, 60000);
+    const interval = setInterval(loadCaptcha, 180000);
     return () => clearInterval(interval);
   }, []);
 
-  // Redirect after successful authentication
   useEffect(() => {
-    if (isAuthenticated && account) {
-      const authorities = account.authorities || [];
+    if (isAuthenticated && account && account.authorities) {
+      const authorities = account.authorities;
       let targetRoute = '/';
 
       if (authorities.includes('ROLE_ADMIN')) {
@@ -104,58 +90,52 @@ const AuthSlider = () => {
         targetRoute = '/student/dashboard';
       }
 
-      navigate(targetRoute, { replace: true });
+      if (location.pathname === '/login' || location.pathname === '/register') {
+        navigate(targetRoute, { replace: true });
+      }
     }
-  }, [isAuthenticated, account, navigate]);
+  }, [isAuthenticated, account, navigate, location.pathname]);
 
   const handleLoginSubmit = (values: LoginFormValues) => {
     setLoginLoading(true);
     try {
-      // Call login action
-      dispatch(login(values.email, values.password, values.remember || false));
-
-      message.success(translate('login.messages.success'));
+      dispatch(login(values.email, values.password, values.remember || false, captchaData?.captchaId, values.captchaAnswer));
     } catch (err: unknown) {
-      // Login error handling
-      const error = err as { response?: { data?: { title?: string; message?: string; detail?: string } }; message?: string };
-      let errorMessage = translate('login.messages.error.authentication');
-
-      if (error.response?.data) {
-        const errorData = error.response.data;
-
-        if (errorData.title === 'Invalid captcha' || errorData.message?.includes('captcha')) {
-          errorMessage = translate('login.messages.error.captcha');
-        } else if (errorData.title === 'Bad credentials' || errorData.message?.includes('credentials')) {
-          errorMessage = translate('login.messages.error.authentication');
-        } else if (errorData.detail) {
-          errorMessage = errorData.detail;
-        } else if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      message.error(errorMessage);
-
-      // Reload captcha on failure
-      if (captchaData) {
-        loadCaptcha();
-      }
+      // Error handled in useEffect
     } finally {
       setLoginLoading(false);
     }
   };
+
+  const loginError = useAppSelector(state => state.authentication.loginError);
+  const errorMessage = useAppSelector(state => state.authentication.errorMessage);
+
+  useEffect(() => {
+    if (loginError) {
+      let msg = translate('login.messages.error.authentication');
+      if (errorMessage) {
+        if (errorMessage.includes('Captcha')) {
+          msg = translate('login.messages.error.captcha');
+        } else if (errorMessage.includes('Bad credentials')) {
+          msg = translate('login.messages.error.authentication');
+        } else {
+          msg = errorMessage;
+        }
+      }
+      message.error(msg);
+      loadCaptcha();
+    }
+  }, [loginError, errorMessage]);
 
   const handleRegisterSubmit = async (values: RegisterFormValues) => {
     setRegisterLoading(true);
     try {
       await dispatch(
         handleRegister({
-          login: values.email,
+          login: values.username,
           email: values.email,
           password: values.password,
-          langKey: 'en',
+          langKey: currentLocale,
         }),
       ).unwrap();
 
@@ -165,7 +145,6 @@ const AuthSlider = () => {
         navigate('/login');
       }, 2000);
     } catch (error: unknown) {
-      console.error('Registration error:', error);
       const err = error as { message?: string };
       const errorMsg = err?.message || translate('register.messages.error.fail');
       message.error(errorMsg);
@@ -183,7 +162,7 @@ const AuthSlider = () => {
       <div className={`auth-container ${isSignUp ? 'right-panel-active' : ''}`} id="container">
         {/* SIGN UP FORM */}
         <div className="form-container sign-up-container">
-          <Form form={registerForm} onFinish={handleRegisterSubmit} className="auth-form">
+          <Form form={registerForm} name="register" onFinish={handleRegisterSubmit} className="auth-form">
             <h1>{translate('register.title')}</h1>
             <div className="social-container">
               <a href="#" className="social" onClick={() => handleSocialLogin('facebook')}>
@@ -198,11 +177,11 @@ const AuthSlider = () => {
             </div>
             <span>{translate('register.form.email.placeholder')}</span>
             <Form.Item
-              name="name"
-              rules={[{ required: true, message: translate('register.messages.validate.name.required') }]}
+              name="username"
+              rules={[{ required: true, message: translate('register.messages.validate.login.required') }]}
               style={{ marginBottom: '10px' }}
             >
-              <Input placeholder={translate('register.form.name')} size="large" />
+              <Input placeholder={translate('global.form.username.placeholder')} size="large" />
             </Form.Item>
             <Form.Item
               name="email"
@@ -250,7 +229,7 @@ const AuthSlider = () => {
 
         {/* SIGN IN FORM */}
         <div className="form-container sign-in-container">
-          <Form form={loginForm} onFinish={handleLoginSubmit} className="auth-form">
+          <Form form={loginForm} name="login" onFinish={handleLoginSubmit} className="auth-form">
             <h1>{translate('login.title')}</h1>
             <div className="social-container">
               <a href="#" className="social" onClick={() => handleSocialLogin('facebook')}>
@@ -279,27 +258,29 @@ const AuthSlider = () => {
               <Input.Password placeholder={translate('login.form.password.placeholder')} size="large" />
             </Form.Item>
 
-            {captchaData && (
-              <div className="captcha-container">
-                <div className="captcha-image-wrapper">
-                  {isLoadingCaptcha ? (
-                    <span className="captcha-loading">{translate('login.form.captcha.loading')}</span>
-                  ) : (
-                    <img src={captchaData.captchaImage} alt="Captcha" className="captcha-image" />
-                  )}
-                  <button type="button" className="captcha-refresh" onClick={loadCaptcha} disabled={isLoadingCaptcha}>
-                    <ReloadOutlined />
-                  </button>
-                </div>
-                <Form.Item
-                  name="captchaAnswer"
-                  rules={[{ required: true, message: translate('login.messages.validate.captcha.required') }]}
-                  style={{ marginBottom: '8px' }}
-                >
-                  <Input placeholder={translate('login.form.captcha.placeholder')} size="large" />
-                </Form.Item>
+            <div className="captcha-container">
+              <div className="captcha-image-wrapper">
+                {isLoadingCaptcha ? (
+                  <span className="captcha-loading">{translate('login.form.captcha.loading')}</span>
+                ) : captchaData ? (
+                  <img src={captchaData.captchaImage} alt="Captcha" className="captcha-image" />
+                ) : (
+                  <span className="captcha-error" onClick={loadCaptcha} style={{ cursor: 'pointer', color: 'red', fontSize: '12px' }}>
+                    Failed to load. Click to retry.
+                  </span>
+                )}
+                <button type="button" className="captcha-refresh" onClick={loadCaptcha} disabled={isLoadingCaptcha}>
+                  <ReloadOutlined />
+                </button>
               </div>
-            )}
+              <Form.Item
+                name="captchaAnswer"
+                rules={[{ required: true, message: translate('login.messages.validate.captcha.required') }]}
+                style={{ marginBottom: '8px' }}
+              >
+                <Input placeholder={translate('login.form.captcha.placeholder')} size="large" />
+              </Form.Item>
+            </div>
 
             <div className="form-footer">
               <Form.Item name="remember" valuePropName="checked" style={{ marginBottom: 0 }}>

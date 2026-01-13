@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "exercise": {
+      "home": {
+        "title": "Exercises",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 Exercise",
+        "createOrEditLabel": "建立或編輯 Exercise",
+        "notFound": "No Exercises found"
+      },
+      "created": "新的 Exercise 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 Exercise 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 Exercise 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 Exercise {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "Exercise"
+      },
+      "id": "ID",
+      "exerciseText": "Exercise Text",
+      "exerciseType": "Exercise Type",
+      "correctAnswerRaw": "Correct Answer Raw",
+      "audioUrl": "Audio Url",
+      "imageUrl": "Image Url",
+      "orderIndex": "Order Index",
+      "options": "Options",
+      "unit": "Unit"
+    }
+  }
+}

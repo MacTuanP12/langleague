@@ -1,194 +1,493 @@
-.modern-footer {
-  background: white;
-  border-top: 1px solid #f0f2f4;
-  padding: 48px 24px 24px;
+// ============================================
+// Modern Footer - Glassmorphism Style
+// Matching the Header's Modern Aesthetic
+// ============================================
+
+:root {
+  --footer-bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --footer-glass-bg: rgba(15, 23, 42, 0.95);
+  --footer-text-primary: #f8fafc;
+  --footer-text-secondary: #cbd5e1;
+  --footer-text-muted: #94a3b8;
+  --footer-accent: #4169e1;
+  --footer-accent-hover: #60a5fa;
+  --footer-border: rgba(255, 255, 255, 0.1);
+  --footer-shadow: 0 -4px 30px rgba(0, 0, 0, 0.15);
+  --footer-link-hover-bg: rgba(255, 255, 255, 0.05);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// ============================================
+// Main Footer Wrapper - Dark Glassmorphism
+// ============================================
+.modern-footer-wrapper {
+  position: relative;
+  width: 100%;
   margin-top: auto;
+  background: var(--footer-bg-gradient);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+  overflow: hidden;
 
-  &.dark {
-    background: #1a202c;
-    border-top-color: #2d3748;
+  // Glassmorphism overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--footer-glass-bg);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
   }
 
-  .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 32px;
-    margin-bottom: 32px;
+  // Decorative elements
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--footer-accent), transparent);
+    opacity: 0.5;
+  }
 
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 24px;
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% 50%;
     }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+}
 
-    .footer-section {
-      .brand-section {
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 12px;
+// ============================================
+// Footer Container
+// ============================================
+.footer-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
 
-          i {
-            font-size: 24px;
-            color: #1152d4;
-          }
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+}
 
-          span {
-            font-size: 20px;
-            font-weight: 700;
-            color: #111318;
-          }
-        }
+// ============================================
+// Footer Grid - 4 Column Layout
+// ============================================
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
 
-        .description {
-          font-size: 14px;
-          color: #616f89;
-          margin: 0;
-        }
-      }
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
 
-      h4 {
-        font-size: 14px;
-        font-weight: 600;
-        color: #111318;
-        margin: 0 0 16px 0;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
 
-      .links {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+// ============================================
+// Footer Column Base Styles
+// ============================================
+.footer-column {
+  .column-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--footer-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 1.5rem 0;
 
-        a {
-          font-size: 14px;
-          color: #616f89;
-          text-decoration: none;
-          transition: color 0.2s;
-
-          &:hover {
-            color: #1152d4;
-          }
-        }
-      }
-
-      .social-links {
-        display: flex;
-        gap: 12px;
-
-        a {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: #f8f9fa;
-          color: #616f89;
-          text-decoration: none;
-          transition: all 0.2s;
-
-          i {
-            font-size: 18px;
-          }
-
-          &:hover {
-            background: #1152d4;
-            color: white;
-            transform: translateY(-2px);
-          }
-        }
-      }
+    i {
+      font-size: 1rem;
+      color: var(--footer-accent);
     }
   }
 
-  .footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 24px;
-    border-top: 1px solid #f0f2f4;
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      color: var(--footer-text-secondary);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      transition: var(--transition-smooth);
+      border-radius: 0.375rem;
+
+      i {
+        font-size: 1rem;
+        color: var(--footer-text-muted);
+        transition: var(--transition-smooth);
+      }
+
+      &:hover {
+        color: var(--footer-accent-hover);
+        padding-left: 0.5rem;
+
+        i {
+          color: var(--footer-accent-hover);
+          transform: translateX(3px);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// Column 1: Brand Section
+// ============================================
+.brand-column {
+  .brand-section {
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+
+      i {
+        font-size: 2rem;
+        background: linear-gradient(135deg, #4169e1, #60a5fa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .brand-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--footer-text-primary);
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .brand-slogan {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--footer-text-secondary);
+      margin: 0 0 1.5rem 0;
+      max-width: 320px;
+    }
+
+    .brand-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.375rem 0.875rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--footer-text-secondary);
+        transition: var(--transition-smooth);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: var(--footer-accent);
+          color: var(--footer-text-primary);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// Column 4: Contact & Social
+// ============================================
+.contact-column {
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.625rem 0;
+      color: var(--footer-text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: var(--transition-smooth);
+
+      i {
+        font-size: 1.125rem;
+        color: var(--footer-accent);
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        color: var(--footer-accent-hover);
+        padding-left: 0.5rem;
+      }
+    }
+  }
+
+  .social-section {
+    .social-label {
+      font-size: 0.875rem;
+      color: var(--footer-text-muted);
+      margin: 0 0 1rem 0;
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 50%;
+        color: var(--footer-text-secondary);
+        text-decoration: none;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+
+        i {
+          font-size: 1.25rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, var(--footer-accent), #60a5fa);
+          opacity: 0;
+          transition: var(--transition-smooth);
+        }
+
+        &:hover {
+          color: #ffffff;
+          border-color: var(--footer-accent);
+          transform: translateY(-4px) scale(1.05);
+          box-shadow: 0 8px 20px rgba(65, 105, 225, 0.4);
+
+          &::before {
+            opacity: 1;
+          }
+        }
+
+        // Individual social media brand colors on hover
+        &:nth-child(1):hover {
+          // Facebook
+          &::before {
+            background: linear-gradient(135deg, #1877f2, #0a66c2);
+          }
+        }
+
+        &:nth-child(2):hover {
+          // Twitter
+          &::before {
+            background: linear-gradient(135deg, #1da1f2, #0c85d0);
+          }
+        }
+
+        &:nth-child(3):hover {
+          // Instagram
+          &::before {
+            background: linear-gradient(135deg, #e4405f, #fd1d1d, #fcaf45);
+          }
+        }
+
+        &:nth-child(4):hover {
+          // LinkedIn
+          &::before {
+            background: linear-gradient(135deg, #0077b5, #00a0dc);
+          }
+        }
+
+        &:nth-child(5):hover {
+          // YouTube
+          &::before {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// Footer Bottom - Copyright Bar
+// ============================================
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--footer-border);
+
+  .bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .copyright,
+    .made-with-love {
+      font-size: 0.875rem;
+      color: var(--footer-text-muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .made-with-love {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+
+      i {
+        color: #ef4444;
+        font-size: 0.875rem;
+        animation: heartbeat 1.5s ease-in-out infinite;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        10%,
+        30% {
+          transform: scale(1.1);
+        }
+        20%,
+        40% {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// Compact Variant
+// ============================================
+.modern-footer-wrapper.compact {
+  padding: 1.5rem 2rem;
+  background: var(--footer-bg-gradient);
+
+  &::before {
+    background: var(--footer-glass-bg);
+  }
+
+  .footer-container {
+    padding: 0;
     text-align: center;
 
     .copyright {
-      font-size: 14px;
-      color: #616f89;
+      font-size: 0.875rem;
+      color: var(--footer-text-muted);
       margin: 0;
+
+      i {
+        color: #ef4444;
+        margin: 0 0.25rem;
+      }
     }
   }
 
-  &.compact {
-    padding: 16px 24px;
+  @media (max-width: 640px) {
+    padding: 1rem 1.5rem;
+  }
+}
 
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
+// ============================================
+// Light Mode Variant (Optional)
+// ============================================
+@media (prefers-color-scheme: light) {
+  .modern-footer-wrapper.light-mode {
+    --footer-glass-bg: rgba(255, 255, 255, 0.95);
+    --footer-text-primary: #1e293b;
+    --footer-text-secondary: #475569;
+    --footer-text-muted: #64748b;
+    --footer-border: rgba(0, 0, 0, 0.1);
 
-      .copyright {
-        font-size: 14px;
-        color: #616f89;
-        margin: 0;
+    .brand-column .brand-section {
+      .brand-logo {
+        i,
+        .brand-name {
+          -webkit-text-fill-color: unset;
+          background: none;
+          color: #1e293b;
+        }
+
+        i {
+          color: var(--footer-accent);
+        }
       }
+    }
+
+    .social-links a {
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.1);
     }
   }
 }
 
-// Dark mode support
-.dark .modern-footer {
-  background: #1a202c;
-  border-top-color: #2d3748;
-
-  .footer-content {
-    .footer-section {
-      .brand-section {
-        .logo {
-          i {
-            color: #60a5fa;
-          }
-
-          span {
-            color: white;
-          }
-        }
-
-        .description {
-          color: #94a3b8;
-        }
-      }
-
-      h4 {
-        color: white;
-      }
-
-      .links a {
-        color: #94a3b8;
-
-        &:hover {
-          color: #60a5fa;
-        }
-      }
-
-      .social-links a {
-        background: #2d3748;
-        color: #94a3b8;
-
-        &:hover {
-          background: #60a5fa;
-          color: white;
-        }
-      }
-    }
-  }
-
-  .footer-bottom {
-    border-top-color: #2d3748;
-
-    .copyright {
-      color: #94a3b8;
-    }
+// ============================================
+// Accessibility Improvements
+// ============================================
+@media (prefers-reduced-motion: reduce) {
+  .modern-footer-wrapper,
+  .modern-footer-wrapper * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
-

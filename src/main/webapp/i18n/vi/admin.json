@@ -2,18 +2,18 @@
   "langleague": {
     "admin": {
       "dashboard": {
-        "title": "Bảng Điều Khiển Admin",
+        "title": "Bảng Điều Khiển Quản Trị",
         "welcome": "Chào mừng trở lại, {name}!",
         "stats": {
           "totalUsers": "Tổng Số Người Dùng",
-          "totalCourses": "Tổng Số Khóa Học",
+          "totalBooks": "Tổng Số Sách",
           "activeSessions": "Phiên Hoạt Động",
           "recentActivities": "Hoạt Động Gần Đây"
         },
         "quickActions": {
           "title": "Thao Tác Nhanh",
           "addUser": "Thêm Người Dùng",
-          "manageCourses": "Quản Lý Khóa Học",
+          "manageBooks": "Quản Lý Sách",
           "systemSettings": "Cài Đặt Hệ Thống"
         }
       },
@@ -22,7 +22,7 @@
         "subtitle": "Quản lý tài khoản học sinh, giáo viên và nhân viên.",
         "loading": "Đang tải...",
         "search": {
-          "placeholder": "Tìm kiếm theo tên, email hoặc username..."
+          "placeholder": "Tìm kiếm người dùng theo tên hoặc email..."
         },
         "filters": {
           "role": {
@@ -33,42 +33,58 @@
           },
           "status": {
             "all": "Tất Cả Trạng Thái",
-            "active": "Hoạt Động",
-            "suspended": "Tạm Ngưng"
+            "active": "Đang Hoạt Động",
+            "suspended": "Đã Tạm Ngưng",
+            "pending": "Chờ Xử Lý"
           }
         },
         "table": {
-          "name": "Tên",
-          "email": "Email",
-          "role": "Vai Trò",
-          "status": "Trạng Thái",
-          "actions": "Thao Tác"
+          "name": "TÊN NGƯỜI DÙNG",
+          "role": "VAI TRÒ",
+          "status": "TRẠNG THÁI",
+          "registrationDate": "NGÀY ĐĂNG KÝ",
+          "actions": "THAO TÁC"
+        },
+        "role": {
+          "admin": "Quản Trị Viên",
+          "teacher": "Giáo Viên",
+          "student": "Học Sinh"
+        },
+        "status": {
+          "active": "Hoạt Động",
+          "suspended": "Tạm Ngưng"
         },
         "actions": {
           "addNew": "Thêm Người Dùng Mới",
           "edit": "Chỉnh Sửa",
           "delete": "Xóa",
           "view": "Xem",
-          "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không?"
-        },
-        "role": {
-          "admin": "Quản Trị Viên",
-          "teacher": "Giáo Viên",
-          "student": "Học Sinh",
-          "librarian": "Thủ Thư"
-        },
-        "status": {
-          "active": "Hoạt Động",
-          "suspended": "Tạm Ngưng"
+          "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không?",
+          "editTitle": "Chỉnh Sửa Người Dùng",
+          "lockTitle": "Khóa Tài Khoản",
+          "deleteTitle": "Xóa Người Dùng"
         },
         "pagination": {
           "showing": "Hiển thị",
           "to": "đến",
-          "of": "của",
+          "of": "trong",
           "results": "kết quả"
-        }
+        },
+        "deleteSuccess": "Đã xóa người dùng thành công",
+        "deleteFailed": "Không thể xóa người dùng",
+        "confirmDeleteTitle": "Xóa Người Dùng?",
+        "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác."
       }
+    },
+    "common": {
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "confirm": "Xác Nhận",
+      "save": "Lưu",
+      "close": "Đóng",
+      "edit": "Chỉnh Sửa",
+      "view": "Xem",
+      "actions": "Thao Tác"
     }
   }
 }
-

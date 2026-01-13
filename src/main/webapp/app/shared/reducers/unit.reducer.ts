@@ -25,7 +25,7 @@ export const fetchUnitById = createAsyncThunk('unit/fetchUnitById', async (id: n
 });
 
 export const fetchUnitsByBookId = createAsyncThunk('unit/fetchUnitsByBookId', async (bookId: number | string) => {
-  const response = await axios.get<IUnit[]>(`/api/books/${bookId}/units`);
+  const response = await axios.get<IUnit[]>(`/api/units/by-book/${bookId}`);
   return response.data;
 });
 
@@ -44,17 +44,25 @@ export const deleteUnit = createAsyncThunk('unit/deleteUnit', async (id: number)
   return id;
 });
 
+export const reorderUnits = createAsyncThunk(
+  'unit/reorderUnits',
+  async ({ bookId, unitIds }: { bookId: number | string; unitIds: (number | undefined)[] }) => {
+    await axios.put(`/api/books/${bookId}/units/reorder`, { unitIds });
+    return unitIds;
+  },
+);
+
 // Slice
 const unitSlice = createSlice({
   name: 'unit',
   initialState,
   reducers: {
     reset: () => initialState,
-    clearSelectedUnit: state => {
+    clearSelectedUnit(state) {
       state.selectedUnit = null;
     },
   },
-  extraReducers: builder => {
+  extraReducers(builder) {
     builder
       // fetchUnitById
       .addCase(fetchUnitById.pending, state => {
@@ -125,6 +133,19 @@ const unitSlice = createSlice({
       .addCase(deleteUnit.rejected, (state, action) => {
         state.updating = false;
         state.errorMessage = action.error.message || 'Failed to delete unit';
+      })
+      // reorderUnits
+      .addCase(reorderUnits.pending, state => {
+        state.updating = true;
+        state.errorMessage = null;
+      })
+      .addCase(reorderUnits.fulfilled, (state, action) => {
+        state.updating = false;
+        // The order is already updated optimistically in the UI
+      })
+      .addCase(reorderUnits.rejected, (state, action) => {
+        state.updating = false;
+        state.errorMessage = action.error.message || 'Failed to reorder units';
       });
   },
 });
@@ -132,4 +153,3 @@ const unitSlice = createSlice({
 export const { reset, clearSelectedUnit } = unitSlice.actions;
 
 export default unitSlice.reducer;
-

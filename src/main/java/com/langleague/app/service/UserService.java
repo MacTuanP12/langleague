@@ -3,7 +3,10 @@ package com.langleague.app.service;
 import com.langleague.app.config.Constants;
 import com.langleague.app.domain.Authority;
 import com.langleague.app.domain.User;
+import com.langleague.app.domain.UserProfile;
+import com.langleague.app.domain.enumeration.ThemeMode;
 import com.langleague.app.repository.AuthorityRepository;
+import com.langleague.app.repository.UserProfileRepository;
 import com.langleague.app.repository.UserRepository;
 import com.langleague.app.security.AuthoritiesConstants;
 import com.langleague.app.security.SecurityUtils;
@@ -41,16 +44,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UserProfileRepository userProfileRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UserProfileRepository userProfileRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.userProfileRepository = userProfileRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -131,6 +138,10 @@ public class UserService {
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
+
+        // Create UserProfile
+        createUserProfile(newUser);
+
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -176,8 +187,20 @@ public class UserService {
         }
         userRepository.save(user);
         this.clearUserCaches(user);
+
+        // Create UserProfile
+        createUserProfile(user);
+
         LOG.debug("Created Information for User: {}", user);
         return user;
+    }
+
+    private void createUserProfile(User user) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUser(user);
+        userProfile.setStreakCount(0);
+        userProfile.setTheme(ThemeMode.SYSTEM);
+        userProfileRepository.save(userProfile);
     }
 
     /**
@@ -222,6 +245,8 @@ public class UserService {
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
+                // Delete UserProfile first if exists (cascade might handle this but explicit is safer if not configured)
+                // Assuming cascade delete is configured in UserProfile entity or DB
                 userRepository.delete(user);
                 this.clearUserCaches(user);
                 LOG.debug("Deleted User: {}", user);

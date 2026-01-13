@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "Java Hipster 에 오신 것을 환영합니다!",
-    "subtitle": "이것은 당신의 홈페이지입니다.",
+    "title": "지식 탐구",
+    "subtitle": "다양한 교육 자료 컬렉션을 탐색하세요",
+    "search": {
+      "placeholder": "교재, 강좌 또는 주제 검색...",
+      "button": "검색"
+    },
     "logged": {
       "message": "\"{{username}}\"(으)로 로그인하셨습니다."
     },

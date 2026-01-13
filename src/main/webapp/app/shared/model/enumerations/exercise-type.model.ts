@@ -1,0 +1,7 @@
+export enum ExerciseType {
+  SINGLE_CHOICE = 'SINGLE_CHOICE',
+
+  MULTI_CHOICE = 'MULTI_CHOICE',
+
+  FILL_IN_BLANK = 'FILL_IN_BLANK',
+}

@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
 import { fetchGrammarsByUnitId } from 'app/shared/reducers/grammar.reducer';
-import { IGrammar, IGrammarExample } from 'app/shared/model/grammar.model';
-import ReactMarkdown from "react-markdown";
-import { Translate } from "react-jhipster";
+import { IGrammar } from 'app/shared/model/grammar.model';
+import ReactMarkdown from 'react-markdown';
+import { Translate } from 'react-jhipster';
 
 export const UnitGrammar = () => {
   const dispatch = useAppDispatch();
@@ -27,14 +27,6 @@ export const UnitGrammar = () => {
       setSelectedGrammar(grammars[0]);
     }
   }, [grammars, selectedGrammar]);
-
-  const parseExamples = (examplesJson: string): IGrammarExample[] => {
-    try {
-      return JSON.parse(examplesJson || '[]');
-    } catch (e) {
-      return [];
-    }
-  };
 
   return (
     <div className="unit-grammar">
@@ -71,24 +63,20 @@ export const UnitGrammar = () => {
               <div className="grammar-section">
                 <div className="section-header">
                   <span className="section-icon">💡</span>
-                  <h4>Example Usage</h4>
+                  <h4>Examples</h4>
                 </div>
-                <div className="examples-list">
-                  <div className="example-item">
-                    <p className="example-text">{selectedGrammar.exampleUsage}</p>
-                  </div>
+                <div className="markdown-content">
+                  <ReactMarkdown>{selectedGrammar.exampleUsage}</ReactMarkdown>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {grammars.length === 0 && (
+        {(!grammars || grammars.length === 0) && (
           <div className="empty-state">
             <p>
-              <Translate contentKey="langleague.student.learning.grammar.noGrammar">
-                No grammar lessons added yet for this unit.
-              </Translate>
+              <Translate contentKey="langleague.student.learning.grammar.noGrammar">No grammar lessons added yet for this unit.</Translate>
             </p>
           </div>
         )}

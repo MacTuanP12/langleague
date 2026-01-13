@@ -24,6 +24,16 @@ export const fetchBooks = createAsyncThunk('book/fetchBooks', async () => {
   return response.data;
 });
 
+export const fetchPublicBooks = createAsyncThunk('book/fetchPublicBooks', async () => {
+  const response = await axios.get<IBook[]>('/api/books/public');
+  return response.data;
+});
+
+export const fetchMyBooks = createAsyncThunk('book/fetchMyBooks', async () => {
+  const response = await axios.get<IBook[]>('/api/books/my-books');
+  return response.data;
+});
+
 export const fetchBookById = createAsyncThunk('book/fetchBookById', async (id: number) => {
   const response = await axios.get<IBook>(`/api/books/${id}`);
   return response.data;
@@ -50,11 +60,11 @@ const bookSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    clearSelectedBook: state => {
+    clearSelectedBook(state) {
       state.selectedBook = null;
     },
   },
-  extraReducers: builder => {
+  extraReducers(builder) {
     builder
       // fetchBooks
       .addCase(fetchBooks.pending, state => {
@@ -68,6 +78,32 @@ const bookSlice = createSlice({
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.error.message || 'Failed to fetch books';
+      })
+      // fetchPublicBooks
+      .addCase(fetchPublicBooks.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+      })
+      .addCase(fetchPublicBooks.fulfilled, (state, action: PayloadAction<IBook[]>) => {
+        state.loading = false;
+        state.books = action.payload;
+      })
+      .addCase(fetchPublicBooks.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.error.message || 'Failed to fetch public books';
+      })
+      // fetchMyBooks
+      .addCase(fetchMyBooks.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+      })
+      .addCase(fetchMyBooks.fulfilled, (state, action: PayloadAction<IBook[]>) => {
+        state.loading = false;
+        state.books = action.payload;
+      })
+      .addCase(fetchMyBooks.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.error.message || 'Failed to fetch my books';
       })
       // fetchBookById
       .addCase(fetchBookById.pending, state => {
@@ -132,4 +168,3 @@ const bookSlice = createSlice({
 export const { reset, clearSelectedBook } = bookSlice.actions;
 
 export default bookSlice.reducer;
-

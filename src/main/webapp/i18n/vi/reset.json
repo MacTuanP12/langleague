@@ -3,11 +3,19 @@
     "request": {
       "title": "Đặt lại mật khẩu của bạn",
       "form": {
-        "button": "Đặt lại mật khẩu"
+        "button": "Gửi Mã"
       },
       "messages": {
-        "info": "Nhập địa chỉ email mà bạn đã sử dụng để đăng ký",
-        "success": "Vui lòng kiểm tra hòm thư của bạn để xem chi tiết cách lấy lại mật khẩu."
+        "info": "Vui lòng nhập địa chỉ email của bạn để nhận mã xác minh.",
+        "success": "Vui lòng kiểm tra hòm thư của bạn để xem chi tiết cách lấy lại mật khẩu.",
+        "checkEmail": "Kiểm Tra Email Của Bạn",
+        "emailSent": "Chúng tôi đã gửi liên kết đặt lại mật khẩu đến {email}. Vui lòng kiểm tra email và làm theo hướng dẫn để đặt lại mật khẩu của bạn.",
+        "checkSpam": "Không tìm thấy? Kiểm tra thư mục thư rác hoặc spam.",
+        "error": "Không thể gửi email đặt lại. Vui lòng thử lại."
+      },
+      "actions": {
+        "backToLogin": "Quay Lại Đăng Nhập",
+        "tryDifferent": "Thử email khác"
       }
     },
     "finish": {

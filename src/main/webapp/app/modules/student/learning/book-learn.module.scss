@@ -1,0 +1,298 @@
+.bookLearn {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px); // Adjust based on header height
+  background-color: #f8f9fa;
+
+  .learnHeader {
+    padding: 1rem 2rem;
+    background-color: white;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .backLink {
+      color: #6c757d;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        color: #0d6efd;
+      }
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #212529;
+    }
+  }
+
+  .learnContent {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+
+    .unitsSidebar {
+      width: 300px;
+      background-color: white;
+      border-right: 1px solid #e9ecef;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .learnMain {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+
+      .emptyState {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #6c757d;
+        text-align: center;
+
+        .emptyIcon {
+          font-size: 4rem;
+          margin-bottom: 1rem;
+        }
+
+        h3 {
+          font-size: 1.5rem;
+          margin-bottom: 0.5rem;
+          color: #343a40;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .unitContent {
+        max-width: 900px;
+        margin: 0 auto;
+
+        .unitHeaderInfo {
+          margin-bottom: 2rem;
+
+          h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #212529;
+            margin-bottom: 0.5rem;
+          }
+
+          .unitSummary {
+            font-size: 1.1rem;
+            color: #6c757d;
+            line-height: 1.6;
+          }
+        }
+
+        .contentSections {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 3rem;
+
+          .contentCard {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+
+            &:hover {
+              transform: translateY(-4px);
+              box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            }
+
+            .cardIcon {
+              width: 56px;
+              height: 56px;
+              border-radius: 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.5rem;
+              flex-shrink: 0;
+
+              &.vocabulary {
+                background-color: #e0f2fe;
+                color: #0284c7;
+              }
+
+              &.grammar {
+                background-color: #f0fdf4;
+                color: #16a34a;
+              }
+
+              &.exercise {
+                background-color: #fff7ed;
+                color: #ea580c;
+              }
+
+              &.flashcard {
+                background-color: #fdf4ff;
+                color: #c026d3;
+              }
+            }
+
+            .cardContent {
+              flex: 1;
+
+              h3 {
+                margin: 0 0 0.25rem;
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #212529;
+              }
+
+              p {
+                margin: 0 0 0.5rem;
+                font-size: 0.875rem;
+                color: #6c757d;
+                line-height: 1.4;
+              }
+
+              .itemCount {
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #adb5bd;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              }
+            }
+
+            > i {
+              color: #dee2e6;
+              font-size: 1.25rem;
+              transition: transform 0.3s ease;
+            }
+
+            &:hover > i {
+              transform: translateX(4px);
+              color: #0d6efd;
+            }
+
+            &.vocabulary:hover {
+              border-color: #bae6fd;
+            }
+            &.grammar:hover {
+              border-color: #bbf7d0;
+            }
+            &.exercise:hover {
+              border-color: #fed7aa;
+            }
+            &.flashcard:hover {
+              border-color: #f5d0fe;
+            }
+          }
+        }
+
+        .unitProgress {
+          background: white;
+          border-radius: 16px;
+          padding: 2rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+          h4 {
+            margin: 0 0 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #212529;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Grammar Viewer Styles
+.grammarViewer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.grammarCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.grammarTitle {
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.grammarContent {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #495057;
+  margin-bottom: 2rem;
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  ul,
+  ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  strong {
+    color: #212529;
+    font-weight: 700;
+  }
+}
+
+.grammarExample {
+  background-color: #f0f9ff;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 8px;
+  padding: 1.5rem;
+
+  h4 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0369a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.exampleContent {
+  font-size: 1.05rem;
+  color: #334155;
+  font-style: italic;
+
+  p {
+    margin-bottom: 0.5rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -3,11 +3,19 @@
     "request": {
       "title": "Reset your password",
       "form": {
-        "button": "Reset password"
+        "button": "Send Code"
       },
       "messages": {
-        "info": "Enter the email address you used to register",
-        "success": "Check your email for details on how to reset your password."
+        "info": "Please enter your email address to receive a verification code.",
+        "success": "Check your email for details on how to reset your password.",
+        "checkEmail": "Check Your Email",
+        "emailSent": "We've sent a password reset link to {email}. Please check your email and follow the instructions to reset your password.",
+        "checkSpam": "Can't find it? Check your spam or junk folder.",
+        "error": "Failed to send reset email. Please try again."
+      },
+      "actions": {
+        "backToLogin": "Back to Login",
+        "tryDifferent": "Try a different email"
       }
     },
     "finish": {

@@ -3,25 +3,49 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchUnitById, updateUnit, createUnit } from 'app/shared/reducers/unit.reducer';
-import { fetchVocabulariesByUnitId, bulkUpdateVocabularies } from 'app/shared/reducers/vocabulary.reducer';
-import { fetchGrammarsByUnitId, bulkUpdateGrammars } from 'app/shared/reducers/grammar.reducer';
-import { fetchExercisesWithOptions } from 'app/shared/reducers/exercise.reducer';
+import {
+  fetchVocabulariesByUnitId,
+  createVocabulary,
+  updateVocabulary as updateVocabAction,
+  deleteVocabulary as deleteVocabAction,
+} from 'app/shared/reducers/vocabulary.reducer';
+import {
+  fetchGrammarsByUnitId,
+  createGrammar,
+  updateGrammar as updateGrammarAction,
+  deleteGrammar as deleteGrammarAction,
+} from 'app/shared/reducers/grammar.reducer';
+import {
+  fetchExercisesWithOptions,
+  createExercise,
+  updateExercise as updateExerciseAction,
+  deleteExercise as deleteExerciseAction,
+} from 'app/shared/reducers/exercise.reducer';
 import { IUnit, defaultUnitValue as defaultUnit } from 'app/shared/model/unit.model';
 import { IVocabulary, defaultVocabularyValue as defaultVocab } from 'app/shared/model/vocabulary.model';
 import { IGrammar, defaultGrammarValue as defaultGrammar } from 'app/shared/model/grammar.model';
 import { IExercise, defaultExerciseValue as defaultExercise } from 'app/shared/model/exercise.model';
 import { IExerciseOption, defaultExerciseOptionValue as defaultOption } from 'app/shared/model/exercise-option.model';
-import { ExerciseType } from 'app/shared/model/enumerations/enums.model';
+import { ExerciseType } from 'app/shared/model/enumerations/exercise-type.model';
 import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './unit-update-v2.scss';
-import {Translate} from "react-jhipster";
+import { translate, Translate } from 'react-jhipster';
+import { GrammarItemCard } from 'app/modules/teacher/unit-management/GrammarItemCard';
+import { toast } from 'react-toastify';
+
+type FocusedSection = number | string | null;
 
 export const UnitUpdateV2 = () => {
   const dispatch = useAppDispatch();
   const { selectedUnit, loading: unitLoading, errorMessage: unitError } = useAppSelector(state => state.unit);
   const { vocabularies: reduxVocabularies, loading: vocabLoading, errorMessage: vocabError } = useAppSelector(state => state.vocabulary);
   const { grammars: reduxGrammars, loading: grammarLoading, errorMessage: grammarError } = useAppSelector(state => state.grammar);
-  const { exercises: reduxExercises, exerciseOptions: reduxExerciseOptions, loading: exerciseLoading, errorMessage: exerciseError } = useAppSelector(state => state.exercise);
+  const {
+    exercises: reduxExercises,
+    exerciseOptions: reduxExerciseOptions,
+    loading: exerciseLoading,
+    errorMessage: exerciseError,
+  } = useAppSelector(state => state.exercise);
 
   // React Hook Form setup
   const {
@@ -42,6 +66,7 @@ export const UnitUpdateV2 = () => {
   const [draggedVocabIndex, setDraggedVocabIndex] = useState<number | null>(null);
   const [draggedGrammarIndex, setDraggedGrammarIndex] = useState<number | null>(null);
   const [draggedExerciseIndex, setDraggedExerciseIndex] = useState<number | null>(null);
+  const [expandedGrammarItems, setExpandedGrammarItems] = useState<Set<number>>(new Set());
 
   const { bookId, unitId } = useParams<{ bookId: string; unitId: string }>();
   const navigate = useNavigate();
@@ -62,7 +87,6 @@ export const UnitUpdateV2 = () => {
       setValue('title', selectedUnit.title);
       setValue('summary', selectedUnit.summary);
       setValue('orderIndex', selectedUnit.orderIndex);
-      setValue('bookId', selectedUnit.bookId);
     }
   }, [selectedUnit, unitId, setValue]);
 
@@ -83,24 +107,25 @@ export const UnitUpdateV2 = () => {
     async (formData: IUnit) => {
       try {
         if (unitId) {
-          await dispatch(updateUnit(formData));
-          await dispatch(bulkUpdateVocabularies(vocabularies));
-          await dispatch(bulkUpdateGrammars(grammars));
+          await dispatch(updateUnit(formData)).unwrap();
+          toast.success('Unit updated successfully');
         } else {
-          await dispatch(createUnit({ ...formData, bookId: Number(bookId) }));
+          const newUnit = await dispatch(createUnit({ ...formData, book: { id: Number(bookId) } })).unwrap();
+          toast.success('Unit created successfully');
+          navigate(`/teacher/units/${newUnit.id}/edit`);
         }
-        navigate(`/teacher/books/${bookId}/edit`);
       } catch (error) {
         console.error('Error saving unit:', error);
+        toast.error('Failed to save unit');
       }
     },
-    [dispatch, unitId, vocabularies, grammars, bookId, navigate]
+    [dispatch, unitId, bookId, navigate],
   );
 
-  // Vocabulary functions - optimized with useCallback
+  // Vocabulary functions
   const addVocabulary = useCallback(() => {
-    setVocabularies(prev => [...prev, { ...defaultVocab }]);
-  }, []);
+    setVocabularies(prev => [...prev, { ...defaultVocab, unit: { id: Number(unitId) } }]);
+  }, [unitId]);
 
   const updateVocabulary = useCallback(<K extends keyof IVocabulary>(index: number, field: K, value: IVocabulary[K]) => {
     setVocabularies(prev => {
@@ -110,11 +135,42 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const deleteVocabulary = useCallback((index: number) => {
-    setVocabularies(prev => prev.filter((_, i) => i !== index));
-  }, []);
+  const saveVocabulary = async (index: number) => {
+    const vocab = vocabularies[index];
+    try {
+      if (vocab.id) {
+        await dispatch(updateVocabAction(vocab)).unwrap();
+      } else {
+        await dispatch(createVocabulary({ ...vocab, unit: { id: Number(unitId) } })).unwrap();
+      }
+      toast.success('Vocabulary saved');
+    } catch (error) {
+      toast.error('Failed to save vocabulary');
+    }
+  };
 
-  // Vocabulary drag & drop handlers - optimized
+  const deleteVocabulary = useCallback(
+    async (index: number) => {
+      const vocab = vocabularies[index];
+      if (vocab.id) {
+        if (window.confirm('Delete this vocabulary?')) {
+          try {
+            await dispatch(deleteVocabAction(vocab.id)).unwrap();
+            toast.success('Vocabulary deleted');
+          } catch (error) {
+            toast.error('Failed to delete vocabulary');
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+      setVocabularies(prev => prev.filter((_, i) => i !== index));
+    },
+    [vocabularies, dispatch],
+  );
+
+  // ... (Drag and drop handlers remain same) ...
   const handleVocabDragStart = useCallback((index: number) => {
     setDraggedVocabIndex(index);
   }, []);
@@ -133,18 +189,11 @@ export const UnitUpdateV2 = () => {
       });
       setDraggedVocabIndex(index);
     },
-    [draggedVocabIndex]
+    [draggedVocabIndex],
   );
 
   const handleVocabDragEnd = useCallback(() => {
     setDraggedVocabIndex(null);
-    // Update orderIndex for all vocabularies
-    setVocabularies(prev =>
-      prev.map((vocab, idx) => ({
-        ...vocab,
-        orderIndex: idx + 1,
-      }))
-    );
   }, []);
 
   const duplicateVocabulary = useCallback((index: number) => {
@@ -156,10 +205,10 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  // Grammar functions - optimized with useCallback
+  // Grammar functions
   const addGrammar = useCallback(() => {
-    setGrammars(prev => [...prev, { ...defaultGrammar }]);
-  }, []);
+    setGrammars(prev => [...prev, { ...defaultGrammar, unit: { id: Number(unitId) } }]);
+  }, [unitId]);
 
   const updateGrammar = useCallback(<K extends keyof IGrammar>(index: number, field: K, value: IGrammar[K]) => {
     setGrammars(prev => {
@@ -169,8 +218,60 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const deleteGrammar = useCallback((index: number) => {
-    setGrammars(prev => prev.filter((_, i) => i !== index));
+  const saveGrammar = async (index: number) => {
+    const grammar = grammars[index];
+    try {
+      if (grammar.id) {
+        await dispatch(updateGrammarAction(grammar)).unwrap();
+      } else {
+        await dispatch(createGrammar({ ...grammar, unit: { id: Number(unitId) } })).unwrap();
+      }
+      toast.success('Grammar saved');
+    } catch (error) {
+      toast.error('Failed to save grammar');
+    }
+  };
+
+  const deleteGrammar = useCallback(
+    async (index: number) => {
+      const grammar = grammars[index];
+      if (grammar.id) {
+        if (window.confirm('Delete this grammar?')) {
+          try {
+            await dispatch(deleteGrammarAction(grammar.id)).unwrap();
+            toast.success('Grammar deleted');
+          } catch (error) {
+            toast.error('Failed to delete grammar');
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+      setGrammars(prev => prev.filter((_, i) => i !== index));
+    },
+    [grammars, dispatch],
+  );
+
+  // ... (Grammar drag/drop and expand handlers remain same) ...
+  const toggleGrammarItem = useCallback((index: number) => {
+    setExpandedGrammarItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const expandAllGrammar = useCallback(() => {
+    setExpandedGrammarItems(new Set(grammars.map((_, idx) => idx)));
+  }, [grammars]);
+
+  const collapseAllGrammar = useCallback(() => {
+    setExpandedGrammarItems(new Set());
   }, []);
 
   const duplicateGrammar = useCallback((index: number) => {
@@ -200,18 +301,20 @@ export const UnitUpdateV2 = () => {
       });
       setDraggedGrammarIndex(index);
     },
-    [draggedGrammarIndex]
+    [draggedGrammarIndex],
   );
 
   const handleGrammarDragEnd = useCallback(() => {
     setDraggedGrammarIndex(null);
   }, []);
 
-  // Exercise functions - optimized with useCallback
-  const addExercise = useCallback((type: ExerciseType = ExerciseType.SINGLE_CHOICE) => {
-    const newExercise = { ...defaultExercise, exerciseType: type };
-    setExercises(prev => [...prev, newExercise]);
-  }, []);
+  // Exercise functions
+  const addExercise = useCallback(
+    (type: ExerciseType = ExerciseType.SINGLE_CHOICE) => {
+      setExercises(prev => [...prev, { ...defaultExercise, exerciseType: type, unit: { id: Number(unitId) } }]);
+    },
+    [unitId],
+  );
 
   const updateExercise = useCallback(<K extends keyof IExercise>(index: number, field: K, value: IExercise[K]) => {
     setExercises(prev => {
@@ -221,10 +324,42 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const deleteExercise = useCallback((index: number) => {
-    setExercises(prev => prev.filter((_, i) => i !== index));
-  }, []);
+  const saveExercise = async (index: number) => {
+    const exercise = exercises[index];
+    try {
+      if (exercise.id) {
+        await dispatch(updateExerciseAction(exercise)).unwrap();
+      } else {
+        await dispatch(createExercise({ ...exercise, unit: { id: Number(unitId) } })).unwrap();
+      }
+      toast.success('Exercise saved');
+    } catch (error) {
+      toast.error('Failed to save exercise');
+    }
+  };
 
+  const deleteExercise = useCallback(
+    async (index: number) => {
+      const exercise = exercises[index];
+      if (exercise.id) {
+        if (window.confirm('Delete this exercise?')) {
+          try {
+            await dispatch(deleteExerciseAction(exercise.id)).unwrap();
+            toast.success('Exercise deleted');
+          } catch (error) {
+            toast.error('Failed to delete exercise');
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+      setExercises(prev => prev.filter((_, i) => i !== index));
+    },
+    [exercises, dispatch],
+  );
+
+  // ... (Exercise drag/drop and duplicate handlers remain same) ...
   const duplicateExercise = useCallback((index: number) => {
     setExercises(prev => {
       const exercise = { ...prev[index], id: undefined };
@@ -252,14 +387,15 @@ export const UnitUpdateV2 = () => {
       });
       setDraggedExerciseIndex(index);
     },
-    [draggedExerciseIndex]
+    [draggedExerciseIndex],
   );
 
   const handleExerciseDragEnd = useCallback(() => {
     setDraggedExerciseIndex(null);
   }, []);
 
-  // Exercise options functions - optimized with useCallback
+  // Exercise options functions (Simplified for brevity, assuming similar logic)
+  // ... (addOption, updateOption, deleteOption) ...
   const addOption = useCallback(
     (exerciseIndex: number) => {
       const exercise = exercises[exerciseIndex];
@@ -273,24 +409,22 @@ export const UnitUpdateV2 = () => {
         };
       });
     },
-    [exercises]
+    [exercises],
   );
 
-  const updateOption = useCallback(<K extends keyof IExerciseOption>(
-    exerciseId: number,
-    optionIndex: number,
-    field: K,
-    value: IExerciseOption[K]
-  ) => {
-    setExerciseOptions(prev => {
-      const options = [...(prev[exerciseId] || [])];
-      options[optionIndex] = { ...options[optionIndex], [field]: value };
-      return {
-        ...prev,
-        [exerciseId]: options,
-      };
-    });
-  }, []);
+  const updateOption = useCallback(
+    <K extends keyof IExerciseOption>(exerciseId: number, optionIndex: number, field: K, value: IExerciseOption[K]) => {
+      setExerciseOptions(prev => {
+        const options = [...(prev[exerciseId] || [])];
+        options[optionIndex] = { ...options[optionIndex], [field]: value };
+        return {
+          ...prev,
+          [exerciseId]: options,
+        };
+      });
+    },
+    [],
+  );
 
   const deleteOption = useCallback((exerciseId: number, optionIndex: number) => {
     setExerciseOptions(prev => {
@@ -306,17 +440,10 @@ export const UnitUpdateV2 = () => {
   const isLoading = unitLoading || vocabLoading || grammarLoading || exerciseLoading;
   const hasError = unitError || vocabError || grammarError || exerciseError;
 
-  // Show loading state while fetching data
   if (isLoading && unitId) {
-    return (
-      <LoadingSpinner
-        message="Loading unit data..."
-        fullScreen
-      />
-    );
+    return <LoadingSpinner message="Loading unit data..." fullScreen />;
   }
 
-  // Show error state if any fetch failed
   if (hasError) {
     const errorMsg = unitError || vocabError || grammarError || exerciseError;
     return (
@@ -346,14 +473,20 @@ export const UnitUpdateV2 = () => {
           <Controller
             name="title"
             control={control}
-            rules={{ required: 'Unit title is required', minLength: { value: 3, message: 'Title must be at least 3 characters' } }}
+            rules={{
+              required: translate('langleague.teacher.units.form.validation.titleRequired', 'Unit title is required'),
+              minLength: {
+                value: 3,
+                message: translate('langleague.teacher.units.form.validation.titleMinLength', 'Title must be at least 3 characters'),
+              },
+            }}
             render={({ field }) => (
               <div>
                 <input
                   {...field}
                   type="text"
                   className={`chapter-title-input ${errors.title ? 'error' : ''}`}
-                  placeholder="Unit Title"
+                  placeholder={translate('langleague.teacher.units.form.fields.titlePlaceholder', 'Unit Title')}
                 />
                 {errors.title && <span className="error-message">{errors.title.message}</span>}
               </div>
@@ -363,12 +496,20 @@ export const UnitUpdateV2 = () => {
             name="summary"
             control={control}
             render={({ field }) => (
-              <textarea {...field} className="chapter-description-input" placeholder="Unit Description" rows={2} />
+              <textarea
+                {...field}
+                className="chapter-description-input"
+                placeholder={translate('langleague.teacher.units.form.fields.summaryPlaceholder', 'Unit Description')}
+                rows={2}
+              />
             )}
           />
         </div>
         <button onClick={handleSubmit(onSubmit)} className="send-btn" type="button" disabled={isSubmitting}>
-          <i className="bi bi-send"></i> {isSubmitting ? 'Saving...' : 'Submit'}
+          <i className="bi bi-send"></i>{' '}
+          {isSubmitting
+            ? translate('langleague.teacher.units.form.buttons.saving', 'Saving...')
+            : translate('langleague.teacher.units.form.buttons.submit', 'Submit')}
         </button>
       </div>
 
@@ -469,10 +610,13 @@ export const UnitUpdateV2 = () => {
             </div>
 
             <div className="card-footer">
-              <button className="action-btn" onClick={() => duplicateVocabulary(index)}>
+              <button className="action-btn" onClick={() => saveVocabulary(index)} title="Save">
+                <i className="bi bi-save"></i>
+              </button>
+              <button className="action-btn" onClick={() => duplicateVocabulary(index)} title="Duplicate">
                 <i className="bi bi-files"></i>
               </button>
-              <button className="action-btn delete" onClick={() => deleteVocabulary(index)}>
+              <button className="action-btn delete" onClick={() => deleteVocabulary(index)} title="Delete">
                 <i className="bi bi-trash"></i>
               </button>
             </div>
@@ -480,7 +624,8 @@ export const UnitUpdateV2 = () => {
         ))}
 
         <button className="add-section-btn" onClick={addVocabulary}>
-          <i className="bi bi-plus-circle"></i> Add Vocabulary
+          <i className="bi bi-plus-circle"></i>{' '}
+          <Translate contentKey="langleague.teacher.units.form.buttons.addVocabulary">Add Vocabulary</Translate>
         </button>
 
         {/* Grammar Section */}
@@ -492,83 +637,45 @@ export const UnitUpdateV2 = () => {
           <div className="divider-line"></div>
         </div>
 
+        {/* Global Controls */}
+        {grammars.length > 0 && (
+          <div className="global-controls">
+            <button className="control-btn" onClick={expandAllGrammar} type="button">
+              <i className="bi bi-chevron-down"></i>{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.expandAll">Expand All</Translate>
+            </button>
+            <button className="control-btn" onClick={collapseAllGrammar} type="button">
+              <i className="bi bi-chevron-up"></i>{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.collapseAll">Collapse All</Translate>
+            </button>
+          </div>
+        )}
+
         {grammars.map((grammar, index) => (
-          <div
-            key={index}
-            className={`form-card ${focusedSection === `grammar-${index}` ? 'focused' : ''} ${draggedGrammarIndex === index ? 'dragging' : ''}`}
-            onClick={() => setFocusedSection(`grammar-${index}`)}
-            draggable
-            onDragStart={() => handleGrammarDragStart(index)}
-            onDragOver={e => handleGrammarDragOver(e, index)}
-            onDragEnd={handleGrammarDragEnd}
-          >
-            <div className="card-header">
-              <i className="bi bi-grip-vertical drag-handle"></i>
-              <span className="card-number">{index + 1}</span>
-              <i className="bi bi-book card-icon"></i>
-            </div>
-
-            <div className="card-body">
-              <div className="form-field">
-                <input
-                  type="text"
-                  value={grammar.title}
-                  onChange={e => updateGrammar(index, 'title', e.target.value)}
-                  placeholder="Grammar title"
-                  className="field-input"
-                />
-                <div className="field-underline"></div>
-              </div>
-
-              <div className="form-field">
-                <textarea
-                  value={grammar.contentMarkdown}
-                  onChange={e => updateGrammar(index, 'contentMarkdown', e.target.value)}
-                  placeholder="Content (Markdown supported)"
-                  className="field-textarea"
-                  rows={6}
-                />
-                <div className="field-underline"></div>
-                <span className="field-hint">Hỗ trợ Markdown: **bold**, *italic*, # heading</span>
-              </div>
-
-              <div className="form-field">
-                <textarea
-                  value={grammar.exampleUsage}
-                  onChange={e => updateGrammar(index, 'exampleUsage', e.target.value)}
-                  placeholder="Example usage"
-                  className="field-textarea"
-                  rows={4}
-                />
-                <div className="field-underline"></div>
-                <span className="field-hint">Các ví dụ sử dụng</span>
-              </div>
-
-              <div className="form-field">
-                <input
-                  type="number"
-                  value={grammar.orderIndex}
-                  onChange={e => updateGrammar(index, 'orderIndex', parseInt(e.target.value, 10))}
-                  placeholder="Order"
-                  className="field-input"
-                />
-                <div className="field-underline"></div>
-              </div>
-            </div>
-
-            <div className="card-footer">
-              <button className="action-btn" onClick={() => duplicateGrammar(index)}>
-                <i className="bi bi-files"></i>
-              </button>
-              <button className="action-btn delete" onClick={() => deleteGrammar(index)}>
-                <i className="bi bi-trash"></i>
+          <div key={index}>
+            <GrammarItemCard
+              index={index}
+              data={grammar}
+              isExpanded={expandedGrammarItems.has(index)}
+              isDragging={draggedGrammarIndex === index}
+              onToggle={() => toggleGrammarItem(index)}
+              onChange={(field, value) => updateGrammar(index, field, value)}
+              onRemove={() => deleteGrammar(index)}
+              onDuplicate={() => duplicateGrammar(index)}
+              onDragStart={() => handleGrammarDragStart(index)}
+              onDragOver={e => handleGrammarDragOver(e, index)}
+              onDragEnd={handleGrammarDragEnd}
+            />
+            <div className="card-footer" style={{ justifyContent: 'flex-end', padding: '0 1rem 1rem' }}>
+              <button className="action-btn" onClick={() => saveGrammar(index)} title="Save">
+                <i className="bi bi-save"></i>
               </button>
             </div>
           </div>
         ))}
 
         <button className="add-section-btn" onClick={addGrammar}>
-          <i className="bi bi-plus-circle"></i> Add Grammar
+          <i className="bi bi-plus-circle"></i> <Translate contentKey="langleague.teacher.units.form.addGrammar">Add Grammar</Translate>
         </button>
 
         {/* Exercise Section */}
@@ -584,7 +691,7 @@ export const UnitUpdateV2 = () => {
           <div
             key={index}
             className={`form-card ${focusedSection === `exercise-${index}` ? 'focused' : ''} ${draggedExerciseIndex === index ? 'dragging' : ''}`}
-            onClick={() => setFocusedSection(`exercise-${index}` as any)}
+            onClick={() => setFocusedSection(`exercise-${index}` as FocusedSection)}
             draggable
             onDragStart={() => handleExerciseDragStart(index)}
             onDragOver={e => handleExerciseDragOver(e, index)}
@@ -682,10 +789,13 @@ export const UnitUpdateV2 = () => {
             </div>
 
             <div className="card-footer">
-              <button className="action-btn" onClick={() => duplicateExercise(index)}>
+              <button className="action-btn" onClick={() => saveExercise(index)} title="Save">
+                <i className="bi bi-save"></i>
+              </button>
+              <button className="action-btn" onClick={() => duplicateExercise(index)} title="Duplicate">
                 <i className="bi bi-files"></i>
               </button>
-              <button className="action-btn delete" onClick={() => deleteExercise(index)}>
+              <button className="action-btn delete" onClick={() => deleteExercise(index)} title="Delete">
                 <i className="bi bi-trash"></i>
               </button>
             </div>
@@ -694,7 +804,8 @@ export const UnitUpdateV2 = () => {
 
         <div className="add-question-menu">
           <button className="add-section-btn" onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)}>
-            <i className="bi bi-plus-circle"></i> <Translate contentKey="langleague.teacher.units.exercises.menu.addExercise">Add Exercise</Translate>
+            <i className="bi bi-plus-circle"></i>{' '}
+            <Translate contentKey="langleague.teacher.units.exercises.menu.addExercise">Add Exercise</Translate>
           </button>
           <div className="question-type-buttons">
             <button onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)} className="type-btn">

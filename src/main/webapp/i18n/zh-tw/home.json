@@ -1,9 +1,13 @@
 {
   "home": {
-    "title": "Java 文青，歡迎!",
-    "subtitle": "這裡是您的首頁",
+    "title": "探索知識",
+    "subtitle": "探索我們豐富的教育資源庫",
+    "search": {
+      "placeholder": "搜尋教材、課程或主題...",
+      "button": "搜尋"
+    },
     "logged": {
-      "message": "您目前是用 “{{username}}” 帳號登入。"
+      "message": "您目前是用 \"{{username}}\" 帳號登入。"
     },
     "question": "要是您對 JHipster 有任何疑問，可以到:",
     "link": {

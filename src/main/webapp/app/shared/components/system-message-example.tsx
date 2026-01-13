@@ -18,13 +18,13 @@ export const SystemMessageExample: React.FC = () => {
   // Example 1: Display a simple message
   const displaySimpleMessage = () => {
     const message = getMessage(MessageCode.MSG01); // "No search results."
-    console.warn(message);
+    // Message can be displayed in UI
   };
 
   // Example 2: Display a message with parameters
   const displayParameterizedMessage = () => {
     const message = getMessage(MessageCode.MSG03, { max: '50' });
-    console.warn(message); // "This field cannot be longer than 50 characters."
+    // Message: "This field cannot be longer than 50 characters."
   };
 
   // Example 3: Show a toast notification

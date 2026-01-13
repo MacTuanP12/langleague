@@ -37,8 +37,7 @@
       "roles": {
         "student": "Học viên",
         "teacher": "Giáo viên",
-        "admin": "Quản trị viên",
-        "librarian": "Thủ thư"
+        "admin": "Quản trị viên"
       },
       "status": {
         "active": "Hoạt động",
@@ -68,8 +67,7 @@
       "roles": {
         "student": "Học viên",
         "teacher": "Giáo viên",
-        "admin": "Quản trị viên",
-        "librarian": "Thủ thư"
+        "admin": "Quản trị viên"
       },
       "status": {
         "active": "Hoạt động",
@@ -104,8 +102,7 @@
       "roles": {
         "student": "Học viên",
         "teacher": "Giáo viên",
-        "admin": "Quản trị viên",
-        "librarian": "Thủ thư"
+        "admin": "Quản trị viên"
       },
       "status": {
         "active": "Hoạt động",

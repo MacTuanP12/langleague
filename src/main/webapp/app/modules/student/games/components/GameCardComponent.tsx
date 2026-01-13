@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from 'react-jhipster';
 import { GameCard as IGameCard } from '../game-hub.constants';
 
 interface GameCardProps {
@@ -59,22 +60,22 @@ export const GameCardComponent: React.FC<GameCardProps> = ({ game, onClick }) =>
       </div>
 
       <div className="game-info">
-        <h3>{game.title}</h3>
-        <p>{game.description}</p>
+        <h3>{translate(game.titleKey, game.title)}</h3>
+        <p>{translate(game.descriptionKey, game.description)}</p>
 
         <div className="game-meta">
           <span className={`difficulty-badge ${game.difficulty}`}>
             <i className="bi bi-speedometer2"></i> {getDifficultyLabel()}
           </span>
           <span className="time-badge">
-            <i className="bi bi-clock"></i> {game.estimatedTime}
+            <i className="bi bi-clock"></i> {translate(game.estimatedTimeKey, game.estimatedTime)}
           </span>
         </div>
 
         <button
           className={`play-btn ${game.status !== 'available' ? 'disabled' : ''}`}
           disabled={game.status !== 'available'}
-          aria-label={`Play ${game.title}`}
+          aria-label={`Play ${translate(game.titleKey, game.title)}`}
         >
           {getButtonContent()}
         </button>
@@ -82,5 +83,3 @@ export const GameCardComponent: React.FC<GameCardProps> = ({ game, onClick }) =>
     </div>
   );
 };
-
-

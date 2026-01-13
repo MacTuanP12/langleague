@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20260112000001-1" author="jhipster">
+        <!-- Add sample Enrollments for student (user_id=4) -->
+        <!-- Assuming book with id 1 and 2 exist from fake-data -->
+        <insert tableName="enrollment">
+            <column name="id" valueNumeric="1"/>
+            <column name="enrolled_at" valueDate="2024-01-05T10:00:00"/>
+            <column name="status" value="ACTIVE"/>
+            <column name="user_profile_id" valueNumeric="4"/>
+            <column name="book_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="enrollment">
+            <column name="id" valueNumeric="2"/>
+            <column name="enrolled_at" valueDate="2024-01-07T11:30:00"/>
+            <column name="status" value="ACTIVE"/>
+            <column name="user_profile_id" valueNumeric="4"/>
+            <column name="book_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

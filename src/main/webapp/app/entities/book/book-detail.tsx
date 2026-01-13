@@ -1,139 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
-import { IUnit } from 'app/shared/model/unit.model';
-import { LoadingSpinner } from 'app/shared/components';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Col, Row } from 'reactstrap';
+import { TextFormat, Translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { APP_DATE_FORMAT } from 'app/config/constants';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+import { fetchBookById } from 'app/shared/reducers/book.reducer';
 
 export const BookDetail = () => {
-  const [book, setBook] = useState<IBook | null>(null);
-  const [units, setUnits] = useState<IUnit[]>([]);
-  const [selectedTab, setSelectedTab] = useState<'all' | 'enrolled' | 'not-enrolled'>('all');
-  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+
+  const { id } = useParams<'id'>();
 
   useEffect(() => {
     if (id) {
-      loadBook();
-      loadUnits();
+      dispatch(fetchBookById(Number(id)));
     }
   }, [id]);
 
-  const loadBook = async () => {
-    try {
-      const response = await axios.get(`/api/books/${id}`);
-      setBook(response.data);
-    } catch (error) {
-      console.error('Error loading book:', error);
-      toast.error('Failed to load book details. Please try again.');
-    }
-  };
+  const bookEntity = useAppSelector(state => state.book.selectedBook);
 
-  const loadUnits = async () => {
-    try {
-      const response = await axios.get(`/api/books/${id}/units`);
-      setUnits(response.data);
-    } catch (error) {
-      console.error('Error loading units:', error);
-      toast.error('Failed to load units. Please try again.');
-    }
-  };
-
-  if (!book) {
-    return <LoadingSpinner message="Loading book details..." />;
+  if (!bookEntity) {
+    return null;
   }
 
   return (
-    <div className="book-detail">
-      <div className="book-detail-header">
-        <Link to="/student/home" className="back-link">
-          ← Home
-        </Link>
-        <h2>{book.title}</h2>
-      </div>
-
-      <div className="detail-content">
-        <div className="sidebar">
-          <div className="search-box">
-            <input type="text" placeholder="Search for books, courses, or topics..." />
-          </div>
-
-          <div className="tabs">
-            <button className={selectedTab === 'all' ? 'active' : ''} onClick={() => setSelectedTab('all')}>
-              All
-            </button>
-            <button className={selectedTab === 'enrolled' ? 'active' : ''} onClick={() => setSelectedTab('enrolled')}>
-              Enrolled
-            </button>
-            <button className={selectedTab === 'not-enrolled' ? 'active' : ''} onClick={() => setSelectedTab('not-enrolled')}>
-              Not Enroll
-            </button>
-          </div>
-
-          <div className="courses-list">
-            <div className="course-card featured">
-              <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} />
-              <div className="course-info">
-                <h4>{book.title}</h4>
-                <p>{book.description}</p>
-                <Link to={`/books/${book.id}/learn`} className="btn-enroll">
-                  Enroll Now
-                </Link>
-              </div>
-            </div>
-
-            {/* Other courses placeholder */}
-            <div className="course-card">
-              <img src="/content/images/default-book.png" alt="Modern History" />
-              <div className="course-info">
-                <h4>Modern History</h4>
-                <p>Journey through epochs of the 20th century...</p>
-                <Link to="#" className="btn-enroll">
-                  Enroll Now
-                </Link>
-              </div>
-            </div>
-
-            <div className="course-card">
-              <img src="/content/images/default-book.png" alt="Calculus I" />
-              <div className="course-info">
-                <h4>Calculus I</h4>
-                <p>Derivatives, Integrals, and limits explained...</p>
-                <Link to="#" className="btn-continue">
-                  Continue Learning
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="main-content">
-          <div className="book-info-panel">
-            <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover-large" />
-            <div className="book-description">
-              <h3>{book.title}</h3>
-              <p className="subtitle">Dr. Richard Feynman</p>
-              <p className="description">{book.description}</p>
-              <p className="detailed-description">
-                Dive into the fascinating world of physics with this comprehensive eBook that covers the fundamental principles that govern
-                our universe. From the mechanics of motion to the laws of thermodynamics, you will explore real-world applications of
-                physical concepts. The curriculum includes interactive problem-solving sessions, visual demonstrations, and a universal
-                context to bring equations to life.
-              </p>
-              <div className="learning-objectives">
-                <h4>WHAT YOU&apos;LL LEARN</h4>
-                <ul>
-                  <li>Newton&apos;s Laws of Motion</li>
-                  <li>Energy, Work, and Power</li>
-                  <li>Thermodynamics and Heat Transfer</li>
-                  <li>Introduction to Quantum Theory</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Row>
+      <Col md="8">
+        <h2 data-cy="bookDetailsHeading">
+          <Translate contentKey="langleagueApp.book.detail.title">Book</Translate>
+        </h2>
+        <dl className="jh-entity-details">
+          <dt>
+            <span id="id">
+              <Translate contentKey="global.field.id">ID</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.id}</dd>
+          <dt>
+            <span id="title">
+              <Translate contentKey="langleagueApp.book.title">Title</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.title}</dd>
+          <dt>
+            <span id="description">
+              <Translate contentKey="langleagueApp.book.description">Description</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.description}</dd>
+          <dt>
+            <span id="coverImageUrl">
+              <Translate contentKey="langleagueApp.book.coverImageUrl">Cover Image Url</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.coverImageUrl}</dd>
+          <dt>
+            <span id="isPublic">
+              <Translate contentKey="langleagueApp.book.isPublic">Is Public</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.isPublic ? 'true' : 'false'}</dd>
+          <dt>
+            <span id="createdAt">
+              <Translate contentKey="langleagueApp.book.createdAt">Created At</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.createdAt ? <TextFormat value={bookEntity.createdAt} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <Translate contentKey="langleagueApp.book.teacherProfile">Teacher Profile</Translate>
+          </dt>
+          <dd>{bookEntity.teacherProfile ? bookEntity.teacherProfile.id : ''}</dd>
+        </dl>
+        <Button tag={Link} to="/book" replace color="info" data-cy="entityDetailsBackButton">
+          <FontAwesomeIcon icon="arrow-left" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.back">Back</Translate>
+          </span>
+        </Button>
+        &nbsp;
+        <Button tag={Link} to={`/book/${bookEntity.id}/edit`} replace color="primary">
+          <FontAwesomeIcon icon="pencil-alt" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.edit">Edit</Translate>
+          </span>
+        </Button>
+      </Col>
+    </Row>
   );
 };
 

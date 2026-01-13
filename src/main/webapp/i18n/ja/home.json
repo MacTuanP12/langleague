@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "ようこそ, Java Hipster!",
-    "subtitle": "ここはトップページです。",
+    "title": "知識を探求",
+    "subtitle": "豊富な教育リソースコレクションを探索しましょう",
+    "search": {
+      "placeholder": "教材、コース、またはトピックを検索...",
+      "button": "検索"
+    },
     "logged": {
       "message": "\"{{username}}\"としてログインしています。"
     },

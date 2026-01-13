@@ -3,21 +3,23 @@
  * Extracted hardcoded data to separate constants file
  */
 
-export interface EnrolledCourse {
+export interface EnrolledBook {
   id: number;
   title: string;
   description: string;
   progress: number;
-  coverColor: string;
+  coverColor?: string;
+  coverImageUrl?: string;
   status: 'ACTIVE' | 'COMPLETED' | 'ENROLLED';
-  image: string;
+  image?: string;
+  enrolledAt?: string;
 }
 
 export type FilterTab = 'all' | 'enrolled' | 'notEnroll';
 
 // TODO: This should be replaced with API call to /api/enrollments or similar endpoint
 // Keeping as fallback data for demo purposes only
-export const FALLBACK_COURSES: EnrolledCourse[] = [
+export const FALLBACK_BOOKS: EnrolledBook[] = [
   {
     id: 1,
     title: 'Introduction to Physics',
@@ -25,7 +27,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 75,
     coverColor: '#2d5f5d',
     status: 'ACTIVE',
-    image: '/content/images/course-physics.png',
+    image: '/content/images/book-physics.png',
   },
   {
     id: 2,
@@ -34,7 +36,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 45,
     coverColor: '#f4d5b8',
     status: 'ACTIVE',
-    image: '/content/images/course-history.png',
+    image: '/content/images/book-history.png',
   },
   {
     id: 3,
@@ -43,7 +45,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 100,
     coverColor: '#3d6060',
     status: 'COMPLETED',
-    image: '/content/images/course-calculus.png',
+    image: '/content/images/book-calculus.png',
   },
   {
     id: 4,
@@ -52,7 +54,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 30,
     coverColor: '#1e3a5f',
     status: 'ENROLLED',
-    image: '/content/images/course-writing.png',
+    image: '/content/images/book-writing.png',
   },
   {
     id: 5,
@@ -61,7 +63,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 60,
     coverColor: '#1a1a1a',
     status: 'ACTIVE',
-    image: '/content/images/course-cyber.png',
+    image: '/content/images/book-cyber.png',
   },
   {
     id: 6,
@@ -70,7 +72,7 @@ export const FALLBACK_COURSES: EnrolledCourse[] = [
     progress: 20,
     coverColor: '#d4a574',
     status: 'ENROLLED',
-    image: '/content/images/course-biology.png',
+    image: '/content/images/book-biology.png',
   },
 ];
 
@@ -79,4 +81,3 @@ export const FILTER_TABS: Array<{ key: FilterTab; label: string }> = [
   { key: 'enrolled', label: 'Enrolled' },
   { key: 'notEnroll', label: 'Not Enroll' },
 ];
-

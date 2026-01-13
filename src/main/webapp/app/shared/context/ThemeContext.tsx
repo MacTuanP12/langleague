@@ -61,7 +61,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         setThemeState(response.data.theme);
       }
     } catch (error) {
-      console.warn('Could not load user theme preference');
+      // console.warn('Could not load user theme preference');
     }
   };
 
@@ -71,7 +71,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
     // Save to backend user profile
     try {
-      await axios.put('/api/user-profiles/theme', { theme: newTheme });
+      await axios.patch('/api/user-profiles/theme', { theme: newTheme });
     } catch (error) {
       console.error('Failed to save theme preference:', error);
     }

@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20260108164539"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "exerciseText",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseType",
+      "fieldType": "ExerciseType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SINGLE_CHOICE,MULTI_CHOICE,FILL_IN_BLANK"
+    },
+    {
+      "fieldName": "correctAnswerRaw",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "audioUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Exercise",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "exerciseOption",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "options",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "unit",
+      "otherEntityRelationshipName": "exercises",
+      "relationshipName": "unit",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

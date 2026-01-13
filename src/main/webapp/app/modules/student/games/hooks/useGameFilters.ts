@@ -20,4 +20,3 @@ export const useGameFilters = ({ games, selectedDifficulty }: UseGameFiltersProp
 
   return { filteredGames };
 };
-

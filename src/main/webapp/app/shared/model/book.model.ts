@@ -1,14 +1,14 @@
+import dayjs from 'dayjs';
+import { IUserProfile } from 'app/shared/model/user-profile.model';
+
 export interface IBook {
   id?: number;
   title?: string;
-  description?: string; // TextBlob
-  coverImageUrl?: string;
+  description?: string | null; // TextBlob
+  coverImageUrl?: string | null;
   isPublic?: boolean;
-  createdAt?: Date;
-  teacherProfileId?: number; // Relationship to UserProfile
-  uploadedBy?: string; // Teacher/uploader name (frontend extension)
-  createdDate?: Date;
-  lastModifiedDate?: Date;
+  createdAt?: dayjs.Dayjs;
+  teacherProfile?: IUserProfile;
 }
 
 export const defaultBookValue: Readonly<IBook> = {
@@ -18,8 +18,7 @@ export const defaultBookValue: Readonly<IBook> = {
   coverImageUrl: '',
   isPublic: false,
   createdAt: undefined,
-  teacherProfileId: undefined,
-  uploadedBy: '',
-  createdDate: undefined,
-  lastModifiedDate: undefined,
+  teacherProfile: undefined,
 };
+
+export const defaultValue = defaultBookValue;

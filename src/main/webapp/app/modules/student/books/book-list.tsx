@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchBooks } from 'app/shared/reducers/book.reducer';
+import { fetchPublicBooks } from 'app/shared/reducers/book.reducer';
 import { formatDate } from 'app/shared/util';
-import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
+import { BookListSkeleton, ErrorDisplay } from 'app/shared/components';
 import './book-list.scss';
 
 export const BookList = () => {
@@ -12,25 +12,15 @@ export const BookList = () => {
   const { books, loading, errorMessage } = useAppSelector(state => state.book);
 
   useEffect(() => {
-    dispatch(fetchBooks());
+    dispatch(fetchPublicBooks());
   }, [dispatch]);
 
   if (loading) {
-    return (
-      <LoadingSpinner
-        message="langleague.student.books.detail.loading"
-        isI18nKey
-      />
-    );
+    return <BookListSkeleton count={8} />;
   }
 
   if (errorMessage) {
-    return (
-      <ErrorDisplay
-        message={errorMessage}
-        onRetry={() => dispatch(fetchBooks())}
-      />
-    );
+    return <ErrorDisplay message={errorMessage} onRetry={() => dispatch(fetchPublicBooks())} />;
   }
 
   return (
@@ -45,7 +35,7 @@ export const BookList = () => {
       </div>
 
       <div className="book-grid">
-        {books.length === 0 ? (
+        {!books || books.length === 0 ? (
           <div className="empty-state">
             <p>
               <Translate contentKey="langleague.student.books.noBooks">No books available</Translate>

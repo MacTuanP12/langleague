@@ -10,12 +10,21 @@ describe('Axios Interceptor', () => {
     setupAxiosInterceptors(onUnauthenticated);
 
     it('onRequestSuccess is called on fulfilled request', () => {
-      expect((client.interceptors.request as any).handlers[0].fulfilled({ data: 'foo', url: '/test' })).toMatchObject({
+      expect(
+        (client.interceptors.request as unknown as { handlers: Array<{ fulfilled: (config: unknown) => unknown }> }).handlers[0].fulfilled({
+          data: 'foo',
+          url: '/test',
+        }),
+      ).toMatchObject({
         data: 'foo',
       });
     });
     it('onResponseSuccess is called on fulfilled response', () => {
-      expect((client.interceptors.response as any).handlers[0].fulfilled({ data: 'foo' })).toEqual({ data: 'foo' });
+      expect(
+        (
+          client.interceptors.response as unknown as { handlers: Array<{ fulfilled: (response: unknown) => unknown }> }
+        ).handlers[0].fulfilled({ data: 'foo' }),
+      ).toEqual({ data: 'foo' });
     });
     it('onResponseError is called on rejected response', () => {
       const rejectError = {
@@ -25,7 +34,11 @@ describe('Axios Interceptor', () => {
           data: { message: 'Page not found' },
         },
       };
-      expect((client.interceptors.response as any).handlers[0].rejected(rejectError)).rejects.toEqual(rejectError);
+      expect(
+        (
+          client.interceptors.response as unknown as { handlers: Array<{ rejected: (error: unknown) => Promise<unknown> }> }
+        ).handlers[0].rejected(rejectError),
+      ).rejects.toEqual(rejectError);
       expect(onUnauthenticated.calledOnce).toBe(true);
     });
   });

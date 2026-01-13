@@ -1,79 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
-import { IUnit } from 'app/shared/model/unit.model';
-import { IEnrollment } from 'app/shared/model/enrollment.model';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBookById, fetchPublicBooks } from 'app/shared/reducers/book.reducer';
+import { fetchUnitsByBookId } from 'app/shared/reducers/unit.reducer';
+import { fetchEnrollmentByBookId, enrollInBook } from 'app/shared/reducers/enrollment.reducer';
 import './book-detail.scss';
-import {Translate} from "react-jhipster";
+import { Translate, translate } from 'react-jhipster';
 
 export const BookDetail = () => {
-  const [book, setBook] = useState<IBook | null>(null);
-  const [units, setUnits] = useState<IUnit[]>([]);
-  const [enrollment, setEnrollment] = useState<IEnrollment | null>(null);
-  const [relatedBooks, setRelatedBooks] = useState<IBook[]>([]);
   const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+
+  // Redux state
+  const selectedBook = useAppSelector(state => state.book.selectedBook);
+  const books = useAppSelector(state => state.book.books);
+  const bookLoading = useAppSelector(state => state.book.loading);
+  const units = useAppSelector(state => state.unit.units);
+  const selectedEnrollment = useAppSelector(state => state.enrollment.selectedEnrollment);
 
   useEffect(() => {
     if (id) {
-      loadBook();
-      loadUnits();
-      loadEnrollment();
-      loadRelatedBooks();
+      const bookId = Number(id);
+      dispatch(fetchBookById(bookId));
+      dispatch(fetchUnitsByBookId(bookId));
+      dispatch(fetchEnrollmentByBookId(bookId));
+      dispatch(fetchPublicBooks()); // For related books
     }
-  }, [id]);
-
-  const loadBook = async () => {
-    try {
-      const response = await axios.get<IBook>(`/api/books/${id}`);
-      setBook(response.data);
-    } catch (error) {
-      console.error('Error loading book:', error);
-    }
-  };
-
-  const loadUnits = async () => {
-    try {
-      const response = await axios.get<IUnit[]>(`/api/books/${id}/units`);
-      setUnits(response.data);
-    } catch (error) {
-      console.error('Error loading units:', error);
-    }
-  };
-
-  const loadEnrollment = async () => {
-    try {
-      const response = await axios.get<IEnrollment>(`/api/enrollments/book/${id}`);
-      setEnrollment(response.data);
-    } catch (error) {
-      // Not enrolled yet
-      console.warn('Not enrolled in this book');
-    }
-  };
-
-  const loadRelatedBooks = async () => {
-    try {
-      const response = await axios.get<IBook[]>('/api/books', {
-        params: { size: 3 },
-      });
-      setRelatedBooks(response.data.filter(b => b.id !== Number(id)));
-    } catch (error) {
-      console.error('Error loading related books:', error);
-    }
-  };
+  }, [id, dispatch]);
 
   const handleEnroll = async () => {
+    if (!id) return;
     try {
-      await axios.post('/api/enrollments', {
-        bookId: id,
-      });
-      loadEnrollment();
+      await dispatch(enrollInBook(Number(id))).unwrap();
+      toast.success(translate('langleague.student.books.messages.enrollSuccess', 'Successfully enrolled in the course!'));
+      // No need to manually reload enrollment, the thunk updates the state
     } catch (error) {
+      toast.error(translate('langleague.student.books.messages.enrollError', 'Failed to enroll. Please try again.'));
       console.error('Error enrolling:', error);
     }
   };
 
-  if (!book) {
+  if (bookLoading) {
     return (
       <div>
         <Translate contentKey="langleague.student.books.detail.loading">Loading...</Translate>
@@ -81,31 +49,42 @@ export const BookDetail = () => {
     );
   }
 
+  if (!selectedBook) {
+    return null;
+  }
+
+  // Filter related books (excluding current book)
+  const relatedBooks = (books || []).filter(b => b.id !== Number(id)).slice(0, 3);
+
   return (
     <div className="book-detail">
       <div className="book-detail-header">
         <Link to="/student/books" className="back-link">
           ← <Translate contentKey="langleague.student.books.detail.backToBooks">Back to Books</Translate>
         </Link>
-        <h2>{book.title}</h2>
+        <h2>{selectedBook.title}</h2>
       </div>
 
       <div className="book-detail-content">
         <div className="book-info-panel">
-          <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover-large" />
+          <img
+            src={selectedBook.coverImageUrl || '/content/images/default-book.png'}
+            alt={selectedBook.title}
+            className="book-cover-large"
+          />
           <div className="book-description">
-            <h3>{book.title}</h3>
-            <p className="description">{book.description}</p>
+            <h3>{selectedBook.title}</h3>
+            <p className="description">{selectedBook.description}</p>
 
-            {enrollment ? (
-              <Link to={`/student/learn/book/${book.id}`} className="btn-continue">
+            {selectedEnrollment ? (
+              <Link to={`/student/learn/book/${selectedBook.id}`} className="btn-continue">
                 <i className="bi bi-play-circle"></i>{' '}
                 <Translate contentKey="langleague.student.books.detail.startLearning">Continue Learning</Translate>
               </Link>
             ) : (
               <button onClick={handleEnroll} className="btn-enroll">
                 <i className="bi bi-bookmark-plus"></i>{' '}
-                <Translate contentKey="langleague.student.books.detail.startLearning">Enroll Now</Translate>
+                <Translate contentKey="langleague.student.books.detail.enrollNow">Enroll Now</Translate>
               </button>
             )}
 
@@ -133,7 +112,9 @@ export const BookDetail = () => {
 
         {relatedBooks.length > 0 && (
           <div className="related-books">
-            <h4>Related Books</h4>
+            <h4>
+              <Translate contentKey="langleague.student.books.detail.relatedBooks">Related Books</Translate>
+            </h4>
             <div className="related-books-grid">
               {relatedBooks.map(relatedBook => (
                 <Link key={relatedBook.id} to={`/student/books/${relatedBook.id}`} className="related-book-card">

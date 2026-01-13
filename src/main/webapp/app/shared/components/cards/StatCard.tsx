@@ -24,14 +24,7 @@ export interface StatCardProps {
  * <StatCard icon="bi bi-book" label="My Courses" value={12} />
  * <StatCard icon="bi bi-people" label="Students" value={150} variant="success" />
  */
-export const StatCard: React.FC<StatCardProps> = ({
-  icon,
-  label,
-  value,
-  variant = 'default',
-  className = '',
-  onClick,
-}) => {
+export const StatCard: React.FC<StatCardProps> = ({ icon, label, value, variant = 'default', className = '', onClick }) => {
   const isClickable = !!onClick;
 
   return (
@@ -40,20 +33,18 @@ export const StatCard: React.FC<StatCardProps> = ({
       onClick={onClick}
       role={isClickable ? 'button' : undefined}
       tabIndex={isClickable ? 0 : undefined}
-      onKeyDown={isClickable ? (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick?.();
-        }
-      } : undefined}
+      onKeyDown={
+        isClickable
+          ? e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick?.();
+              }
+            }
+          : undefined
+      }
     >
-      <div className="stat-card__icon">
-        {typeof icon === 'string' ? (
-          <i className={icon} aria-hidden="true"></i>
-        ) : (
-          icon
-        )}
-      </div>
+      <div className="stat-card__icon">{typeof icon === 'string' ? <i className={icon} aria-hidden="true"></i> : icon}</div>
       <div className="stat-card__content">
         <h3 className="stat-card__label">{label}</h3>
         <p className="stat-card__value">{value}</p>
@@ -63,4 +54,3 @@ export const StatCard: React.FC<StatCardProps> = ({
 };
 
 export default StatCard;
-

@@ -1,0 +1,114 @@
+.my-students-page {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+
+      i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px 10px 36px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+    }
+
+    .stats-summary {
+      color: #4b5563;
+      font-size: 14px;
+
+      strong {
+        color: #111827;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .students-table-container {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .student-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+      }
+
+      .student-details {
+        display: flex;
+        flex-direction: column;
+
+        .student-name {
+          font-weight: 600;
+          color: #111827;
+          font-size: 14px;
+        }
+
+        .student-login {
+          font-size: 12px;
+          color: #6b7280;
+        }
+      }
+    }
+
+    .book-name {
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.active {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+
+      &.completed {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+    }
+  }
+}

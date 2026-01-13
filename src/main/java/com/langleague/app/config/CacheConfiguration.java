@@ -50,6 +50,25 @@ public class CacheConfiguration {
             createCache(cm, com.langleague.app.domain.User.class.getName());
             createCache(cm, com.langleague.app.domain.Authority.class.getName());
             createCache(cm, com.langleague.app.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.langleague.app.domain.UserProfile.class.getName());
+            createCache(cm, com.langleague.app.domain.UserProfile.class.getName() + ".books");
+            createCache(cm, com.langleague.app.domain.UserProfile.class.getName() + ".enrollments");
+            createCache(cm, com.langleague.app.domain.UserProfile.class.getName() + ".progresses");
+            createCache(cm, com.langleague.app.domain.Book.class.getName());
+            createCache(cm, com.langleague.app.domain.Book.class.getName() + ".enrollments");
+            createCache(cm, com.langleague.app.domain.Book.class.getName() + ".units");
+            createCache(cm, com.langleague.app.domain.Enrollment.class.getName());
+            createCache(cm, com.langleague.app.domain.Unit.class.getName());
+            createCache(cm, com.langleague.app.domain.Unit.class.getName() + ".vocabularies");
+            createCache(cm, com.langleague.app.domain.Unit.class.getName() + ".grammars");
+            createCache(cm, com.langleague.app.domain.Unit.class.getName() + ".exercises");
+            createCache(cm, com.langleague.app.domain.Unit.class.getName() + ".progresses");
+            createCache(cm, com.langleague.app.domain.Vocabulary.class.getName());
+            createCache(cm, com.langleague.app.domain.Grammar.class.getName());
+            createCache(cm, com.langleague.app.domain.Exercise.class.getName());
+            createCache(cm, com.langleague.app.domain.Exercise.class.getName() + ".options");
+            createCache(cm, com.langleague.app.domain.ExerciseOption.class.getName());
+            createCache(cm, com.langleague.app.domain.Progress.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

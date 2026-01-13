@@ -1,0 +1,30 @@
+{
+  "langleagueApp": {
+    "vocabulary": {
+      "home": {
+        "title": "Vocabularies",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Vocabulary の作成",
+        "createOrEditLabel": "Vocabularyの作成または編集",
+        "notFound": "Vocabularies が見つかりません。"
+      },
+      "created": "新しい Vocabulary がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Vocabulary が更新されました。",
+      "deleted": "ID {{ param }} の Vocabulary が削除されました。",
+      "delete": {
+        "question": "Vocabulary {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Vocabulary"
+      },
+      "id": "ID",
+      "word": "Word",
+      "phonetic": "Phonetic",
+      "meaning": "Meaning",
+      "example": "Example",
+      "imageUrl": "Image Url",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

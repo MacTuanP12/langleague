@@ -1,0 +1,28 @@
+{
+  "langleagueApp": {
+    "grammar": {
+      "home": {
+        "title": "Grammars",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 Grammar",
+        "createOrEditLabel": "建立或編輯 Grammar",
+        "notFound": "No Grammars found"
+      },
+      "created": "新的 Grammar 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 Grammar 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 Grammar 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 Grammar {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "Grammar"
+      },
+      "id": "ID",
+      "title": "Title",
+      "contentMarkdown": "Content Markdown",
+      "exampleUsage": "Example Usage",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

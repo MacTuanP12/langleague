@@ -1,0 +1,157 @@
+{
+  "langleague": {
+    "student": {
+      "dashboard": {
+        "title": "我的儀表板",
+        "welcome": "歡迎回來，{{name}}！",
+        "stats": {
+          "hours": "學習時長",
+          "books": "已完成教材"
+        },
+        "noBooks": "未找到符合搜尋條件的教材。",
+        "loadMore": "載入更多",
+        "search": {
+          "placeholder": "搜尋教材..."
+        },
+        "filter": {
+          "all": "全部",
+          "enrolled": "已報名",
+          "notEnroll": "未報名"
+        },
+        "book": {
+          "continue": "繼續",
+          "start": "開始"
+        }
+      },
+      "books": {
+        "detail": {
+          "loading": "載入中...",
+          "backToBooks": "返回教材列表",
+          "startLearning": "開始學習",
+          "enrollNow": "立即報名"
+        },
+        "messages": {
+          "enrollSuccess": "課程報名成功！",
+          "enrollError": "報名失敗，請重試。"
+        }
+      },
+      "learning": {
+        "unit": "單元",
+        "nextLesson": "下一課",
+        "previousLesson": "上一課",
+        "complete": "完成",
+        "vocabulary": {
+          "title": "詞彙",
+          "meaning": "釋義：",
+          "example": "例句：",
+          "noVocabulary": "此單元暫無詞彙內容。",
+          "navigation": {
+            "previous": "上一個",
+            "next": "下一個"
+          }
+        },
+        "grammar": {
+          "title": "語法",
+          "noGrammar": "此單元暫無語法課程。"
+        },
+        "exercise": {
+          "title": "練習",
+          "noExercises": "此單元暫無練習題。"
+        },
+        "flashcard": {
+          "title": "閃卡",
+          "card": "卡片",
+          "of": "/"
+        },
+        "flashcardList": {
+          "title": "閃卡",
+          "loading": "載入中...",
+          "noSets": "暫無可用教材"
+        },
+        "bookLearn": {
+          "progress": "學習進度"
+        },
+        "itemCount": {
+          "words": "{{count}}個單詞",
+          "topics": "{{count}}個主題",
+          "questions": "{{count}}道題",
+          "interactive": "互動式"
+        }
+      },
+      "games": {
+        "title": "學習遊戲",
+        "subtitle": "寓教於樂！透過遊戲提升語言能力",
+        "backToDashboard": "返回儀表板",
+        "loading": "載入遊戲中...",
+        "noGamesForDifficulty": "該難度級別暫無遊戲",
+        "list": {
+          "vocabularyMatch": {
+            "title": "詞彙配對",
+            "description": "在快節奏的記憶遊戲中將單詞與釋義配對",
+            "time": "5-10分鐘"
+          },
+          "wordScramble": {
+            "title": "單詞拼圖",
+            "description": "重新排列字母組成正確的詞彙",
+            "time": "10-15分鐘"
+          },
+          "grammarQuest": {
+            "title": "語法任務",
+            "description": "透過語法挑戰解鎖成就",
+            "time": "15-20分鐘"
+          },
+          "listeningChallenge": {
+            "title": "聽力挑戰",
+            "description": "在各種語境中聽辨正確的單詞",
+            "time": "10-15分鐘"
+          },
+          "speedQuiz": {
+            "title": "速答題",
+            "description": "在限定時間內盡可能多地回答問題",
+            "time": "5分鐘"
+          },
+          "sentenceBuilder": {
+            "title": "造句遊戲",
+            "description": "用打亂的單詞和短語構建正確的句子",
+            "time": "10-15分鐘"
+          }
+        }
+      },
+      "profile": {
+        "actions": {
+          "changePhoto": "更換照片",
+          "saveChanges": "儲存變更"
+        },
+        "personalInfo": {
+          "fullName": "姓名",
+          "fullNamePlaceholder": "例如：張三",
+          "email": "電子郵箱",
+          "bio": "個人簡介",
+          "bioPlaceholder": "簡單介紹一下自己..."
+        },
+        "preferences": {
+          "theme": "主題設定",
+          "themeLight": "☀️ 淺色",
+          "themeDark": "🌙 深色",
+          "themeSystem": "💻 系統"
+        },
+        "messages": {
+          "success": "個人資料更新成功！",
+          "error": "個人資料更新失敗",
+          "themeChanged": "主題已更新！",
+          "themeError": "主題更換失敗",
+          "photoComingSoon": "照片上傳功能即將推出！"
+        }
+      }
+    }
+  },
+  "student": {
+    "bookList": {
+      "title": "圖書館",
+      "search": {
+        "placeholder": "搜尋教材..."
+      },
+      "startLearning": "開始學習"
+    }
+  }
+}

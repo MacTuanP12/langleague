@@ -1,0 +1,9 @@
+{
+  "langleagueApp": {
+    "EnrollmentStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "COMPLETED": "COMPLETED"
+    }
+  }
+}

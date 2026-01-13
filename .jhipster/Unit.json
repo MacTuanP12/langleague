@@ -1,0 +1,65 @@
+{
+  "annotations": {
+    "changelogDate": "20260108164536"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "summary",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "name": "Unit",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "vocabulary",
+      "otherEntityRelationshipName": "unit",
+      "relationshipName": "vocabularies",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "grammar",
+      "otherEntityRelationshipName": "unit",
+      "relationshipName": "grammars",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "exercise",
+      "otherEntityRelationshipName": "unit",
+      "relationshipName": "exercises",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "progress",
+      "otherEntityRelationshipName": "unit",
+      "relationshipName": "progresses",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "book",
+      "otherEntityRelationshipName": "units",
+      "relationshipName": "book",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

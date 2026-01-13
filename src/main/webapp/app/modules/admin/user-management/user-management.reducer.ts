@@ -1,136 +1,159 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
-
-import { IUser, defaultUserValue } from 'app/shared/model/user.model';
+import { IUser } from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-const initialState = {
+interface UserManagementState {
+  users: IUser[];
+  user: IUser | null;
+  loading: boolean;
+  updating: boolean;
+  errorMessage: string | null;
+  totalItems: number;
+}
+
+const initialState: UserManagementState = {
+  users: [],
+  user: null,
   loading: false,
-  errorMessage: null,
-  users: [] as ReadonlyArray<IUser>,
-  authorities: [] as any[],
-  user: defaultUserValue,
   updating: false,
-  updateSuccess: false,
+  errorMessage: null,
   totalItems: 0,
 };
 
-const apiUrl = 'api/users';
-const adminUrl = 'api/admin/users';
+const apiUrl = 'api/admin/users';
 
-// Async Actions
-
-export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return axios.get<IUser[]>(requestUrl);
-});
-
-export const getUsersAsAdmin = createAsyncThunk('userManagement/fetch_users_as_admin', async ({ page, size, sort }: IQueryParams) => {
-  const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return axios.get<IUser[]>(requestUrl);
-});
-
-export const getRoles = createAsyncThunk('userManagement/fetch_roles', async () => {
-  const response = await axios.get<any[]>(`api/authorities`);
-  response.data = response?.data?.map(authority => authority.name);
-  return response;
-});
+// Async thunks
+export const getUsersAsAdmin = createAsyncThunk(
+  'userManagement/fetchAll',
+  async ({ page = 0, size = 10, sort = 'id,asc' }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?page=${page}&size=${size}&sort=${sort}`;
+    return axios.get<IUser[]>(requestUrl);
+  },
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const getUser = createAsyncThunk(
-  'userManagement/fetch_user',
-  async (id: string) => {
-    const requestUrl = `${adminUrl}/${id}`;
-    return axios.get<IUser>(requestUrl);
+  'userManagement/fetch',
+  async (login: string) => {
+    const requestUrl = `${apiUrl}/${login}`;
+    const response = await axios.get<IUser>(requestUrl);
+    return response.data;
   },
-  { serializeError: serializeAxiosError },
+  {
+    serializeError: serializeAxiosError,
+  },
 );
 
 export const createUser = createAsyncThunk(
-  'userManagement/create_user',
+  'userManagement/create',
   async (user: IUser, thunkAPI) => {
-    const result = await axios.post<IUser>(adminUrl, user);
-    thunkAPI.dispatch(getUsersAsAdmin({}));
-    return result;
+    const response = await axios.post<IUser>(apiUrl, user);
+    thunkAPI.dispatch(getUsersAsAdmin({ page: 0, size: 10, sort: 'id,asc' }));
+    return response.data;
   },
-  { serializeError: serializeAxiosError },
+  {
+    serializeError: serializeAxiosError,
+  },
 );
 
 export const updateUser = createAsyncThunk(
-  'userManagement/update_user',
+  'userManagement/update',
   async (user: IUser, thunkAPI) => {
-    const result = await axios.put<IUser>(adminUrl, user);
-    thunkAPI.dispatch(getUsersAsAdmin({}));
-    return result;
+    const response = await axios.put<IUser>(apiUrl, user);
+    thunkAPI.dispatch(getUsersAsAdmin({ page: 0, size: 10, sort: 'id,asc' }));
+    return response.data;
   },
-  { serializeError: serializeAxiosError },
+  {
+    serializeError: serializeAxiosError,
+  },
 );
 
 export const deleteUser = createAsyncThunk(
-  'userManagement/delete_user',
-  async (id: string, thunkAPI) => {
-    const requestUrl = `${adminUrl}/${id}`;
-    const result = await axios.delete<IUser>(requestUrl);
-    thunkAPI.dispatch(getUsersAsAdmin({}));
-    return result;
+  'userManagement/delete',
+  async (login: string, thunkAPI) => {
+    const requestUrl = `${apiUrl}/${login}`;
+    const response = await axios.delete<IUser>(requestUrl);
+    thunkAPI.dispatch(getUsersAsAdmin({ page: 0, size: 10, sort: 'id,asc' }));
+    return response.data;
   },
-  { serializeError: serializeAxiosError },
+  {
+    serializeError: serializeAxiosError,
+  },
 );
 
-export type UserManagementState = Readonly<typeof initialState>;
-
-export const UserManagementSlice = createSlice({
+// Slice
+const userManagementSlice = createSlice({
   name: 'userManagement',
-  initialState: initialState as UserManagementState,
+  initialState,
   reducers: {
-    reset() {
-      return initialState;
-    },
+    reset: () => initialState,
   },
   extraReducers(builder) {
     builder
-      .addCase(getRoles.fulfilled, (state, action) => {
-        state.authorities = action.payload.data;
+      .addCase(getUsersAsAdmin.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.data;
-      })
-      .addCase(deleteUser.fulfilled, state => {
-        state.updating = false;
-        state.updateSuccess = true;
-        state.user = defaultUserValue;
-      })
-      .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
+      .addCase(getUsersAsAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload.data;
         state.totalItems = parseInt(action.payload.headers['x-total-count'], 10);
       })
-      .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
-        state.updating = false;
+      .addCase(getUsersAsAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.updateSuccess = true;
-        state.user = action.payload.data;
+        state.errorMessage = action.error.message;
       })
-      .addMatcher(isPending(getUsers, getUsersAsAdmin, getUser), state => {
-        state.errorMessage = null;
-        state.updateSuccess = false;
+      .addCase(getUser.pending, state => {
         state.loading = true;
-      })
-      .addMatcher(isPending(createUser, updateUser, deleteUser), state => {
         state.errorMessage = null;
-        state.updateSuccess = false;
-        state.updating = true;
       })
-      .addMatcher(isRejected(getUsers, getUsersAsAdmin, getUser, getRoles, createUser, updateUser, deleteUser), (state, action) => {
+      .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(createUser.pending, state => {
+        state.updating = true;
+        state.errorMessage = null;
+      })
+      .addCase(createUser.fulfilled, state => {
         state.updating = false;
-        state.updateSuccess = false;
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.updating = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(updateUser.pending, state => {
+        state.updating = true;
+        state.errorMessage = null;
+      })
+      .addCase(updateUser.fulfilled, state => {
+        state.updating = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updating = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(deleteUser.pending, state => {
+        state.updating = true;
+        state.errorMessage = null;
+      })
+      .addCase(deleteUser.fulfilled, state => {
+        state.updating = false;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.updating = false;
         state.errorMessage = action.error.message;
       });
   },
 });
 
-export const { reset } = UserManagementSlice.actions;
+export const { reset } = userManagementSlice.actions;
 
-// Reducer
-export default UserManagementSlice.reducer;
+export default userManagementSlice.reducer;

@@ -1,142 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
-import { IUnit } from 'app/shared/model/unit.model';
+import React, { useState } from 'react';
+import { IVocabulary } from 'app/shared/model/vocabulary.model';
 import './flashcard-list.scss';
-import {Translate} from "react-jhipster";
+import { Translate } from 'react-jhipster';
 
-export const FlashcardList = () => {
-  const [books, setBooks] = useState<IBook[]>([]);
-  const [units, setUnits] = useState<{ [bookId: number]: IUnit[] }>({});
-  const [expandedBookId, setExpandedBookId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loadingUnits, setLoadingUnits] = useState<{ [bookId: number]: boolean }>({});
-  const navigate = useNavigate();
+interface FlashcardListProps {
+  vocabularies?: IVocabulary[];
+}
 
-  useEffect(() => {
-    loadBooks();
-  }, []);
+export const FlashcardList: React.FC<FlashcardListProps> = ({ vocabularies = [] }) => {
+  const [flippedCards, setFlippedCards] = useState<{ [key: number]: boolean }>({});
 
-  const loadBooks = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get<IBook[]>('/api/books');
-      setBooks(response.data);
-    } catch (error) {
-      console.error('Error loading books:', error);
-    } finally {
-      setLoading(false);
+  const handleFlip = (id: number) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const handleAudioClick = (e: React.MouseEvent, word: string) => {
+    e.stopPropagation(); // Prevent card flip
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
     }
   };
 
-  const loadUnits = async (bookId: number) => {
-    if (units[bookId]) {
-      // Already loaded, just toggle
-      setExpandedBookId(expandedBookId === bookId ? null : bookId);
-      return;
-    }
-
-    try {
-      setLoadingUnits({ ...loadingUnits, [bookId]: true });
-      const response = await axios.get<IUnit[]>(`/api/books/${bookId}/units`);
-      setUnits({
-        ...units,
-        [bookId]: response.data,
-      });
-      setExpandedBookId(bookId);
-    } catch (error) {
-      console.error('Error loading units:', error);
-    } finally {
-      setLoadingUnits({ ...loadingUnits, [bookId]: false });
-    }
-  };
+  if (!vocabularies || vocabularies.length === 0) {
+    return (
+      <div className="empty-state">
+        <Translate contentKey="langleague.student.learning.flashcard.noVocabulary">
+          No vocabulary available. Please select a unit.
+        </Translate>
+      </div>
+    );
+  }
 
   return (
-    <div className="flashcard-list">
-      <div className="page-header">
-        <button onClick={() => navigate('/student/dashboard')} className="back-btn" type="button">
-          <i className="bi bi-arrow-left"></i>
-        </button>
-        <div className="header-content">
-          <h1>
-            📚 <Translate contentKey="langleague.student.learning.flashcardList.title">Flashcards</Translate>
-          </h1>
-          <p>Practice vocabulary with interactive flashcards</p>
-        </div>
-      </div>
+    <div className="flashcard-grid">
+      {vocabularies.map(vocab => (
+        <div key={vocab.id} className={`flashcard-item ${flippedCards[vocab.id] ? 'flipped' : ''}`} onClick={() => handleFlip(vocab.id)}>
+          <div className="flashcard-inner">
+            {/* Front Side */}
+            <div className="flashcard-front">
+              <div className="card-content">
+                <h3 className="word">{vocab.word}</h3>
+                {vocab.phonetic && <span className="phonetic">/{vocab.phonetic}/</span>}
+              </div>
+              <button className="audio-btn" onClick={e => handleAudioClick(e, vocab.word)} title="Listen">
+                <i className="bi bi-volume-up-fill"></i>
+              </button>
+              <div className="flip-hint">Click to flip</div>
+            </div>
 
-      <div className="books-container">
-        {loading ? (
-          <div className="loading-state">
-            <div className="spinner"></div>
-            <p>
-              <Translate contentKey="langleague.student.learning.flashcardList.loading">Loading...</Translate>
-            </p>
-          </div>
-        ) : books.length === 0 ? (
-          <div className="empty-state">
-            <i className="bi bi-book"></i>
-            <h3>
-              <Translate contentKey="langleague.student.learning.flashcardList.noSets">No books available</Translate>
-            </h3>
-            <p>Start by enrolling in a book from the Books section</p>
-            <Link to="/student/books" className="cta-btn">
-              Browse Books
-            </Link>
-          </div>
-        ) : (
-          <div className="books-grid">
-            {books.map(book => (
-              <div key={book.id} className="book-card">
-                <div className="book-header" onClick={() => loadUnits(book.id)}>
-                  <div className="book-cover">
-                    {book.coverImageUrl ? (
-                      <img src={book.coverImageUrl} alt={book.title} />
-                    ) : (
-                      <div className="placeholder-cover">
-                        <i className="bi bi-book"></i>
-                      </div>
-                    )}
-                  </div>
-                  <div className="book-info">
-                    <h3>{book.title}</h3>
-                    {book.description && <p className="book-desc">{book.description}</p>}
-                    <i className={`bi bi-chevron-${expandedBookId === book.id ? 'up' : 'down'}`}></i>
-                  </div>
-                </div>
-
-                {expandedBookId === book.id && (
-                  <div className="units-list">
-                    {loadingUnits[book.id] ? (
-                      <div className="units-loading">
-                        <div className="small-spinner"></div>
-                        <p>Loading units...</p>
-                      </div>
-                    ) : units[book.id]?.length === 0 ? (
-                      <p className="no-units">No units available</p>
-                    ) : (
-                      units[book.id]?.map(unit => (
-                        <Link key={unit.id} to={`/student/learn/unit/${unit.id}/flashcard`} className="unit-item">
-                          <div className="unit-icon">🎴</div>
-                          <div className="unit-info">
-                            <h4>{unit.title}</h4>
-                            {unit.summary && <p className="unit-summary">{unit.summary}</p>}
-                            <span className="vocab-count">
-                              <i className="bi bi-card-text"></i> {unit.vocabularyCount || 0} flashcards
-                            </span>
-                          </div>
-                          <i className="bi bi-arrow-right"></i>
-                        </Link>
-                      ))
-                    )}
+            {/* Back Side */}
+            <div className="flashcard-back">
+              <div className="card-content">
+                <h4 className="meaning">{vocab.meaning}</h4>
+                {vocab.example && (
+                  <p className="example">
+                    <i className="bi bi-quote"></i> {vocab.example}
+                  </p>
+                )}
+                {vocab.imageUrl && (
+                  <div className="image-container">
+                    <img src={vocab.imageUrl} alt={vocab.word} />
                   </div>
                 )}
               </div>
-            ))}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

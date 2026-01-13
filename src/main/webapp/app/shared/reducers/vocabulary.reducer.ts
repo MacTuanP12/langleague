@@ -18,7 +18,7 @@ const initialState: VocabularyState = {
 
 // Async thunks
 export const fetchVocabulariesByUnitId = createAsyncThunk('vocabulary/fetchByUnitId', async (unitId: number | string) => {
-  const response = await axios.get<IVocabulary[]>(`/api/units/${unitId}/vocabularies`);
+  const response = await axios.get<IVocabulary[]>(`/api/vocabularies/by-unit/${unitId}`);
   return response.data;
 });
 
@@ -54,7 +54,7 @@ const vocabularySlice = createSlice({
   reducers: {
     reset: () => initialState,
   },
-  extraReducers: builder => {
+  extraReducers(builder) {
     builder
       // fetchVocabulariesByUnitId
       .addCase(fetchVocabulariesByUnitId.pending, state => {
@@ -143,4 +143,3 @@ const vocabularySlice = createSlice({
 export const { reset } = vocabularySlice.actions;
 
 export default vocabularySlice.reducer;
-

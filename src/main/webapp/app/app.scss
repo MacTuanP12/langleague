@@ -8,51 +8,89 @@
 @import 'modern-ui';
 // Import entities styles
 @import 'entities/entities';
+// Import teacher module overrides to prevent conflicts
+@import 'modules/teacher/teacher-overrides';
 
 // ========================================
-// Theme Variables
+// Centralized Theme Variables
+// All color and theme variables for the entire application
 // ========================================
 :root {
-  // Light Theme (Default)
+  // ===== Light Theme (Default) =====
+
+  // Background Colors
   --bg-primary: #ffffff;
   --bg-secondary: #f5f5f5;
   --bg-tertiary: #e0e0e0;
+  --bg-color: #f8fafc;
+
+  // Text Colors
   --text-primary: #1a1a1a;
   --text-secondary: #666666;
   --text-tertiary: #999999;
-  --border-color: #dddddd;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-medium: rgba(0, 0, 0, 0.15);
-  --shadow-large: rgba(0, 0, 0, 0.2);
-  --primary-color: #1152d4;
+  --text-color: #1e293b;
+
+  // Primary Brand Colors
+  --primary-color: #4169e1; /* Royal Blue - used in modern UI */
+  --primary-color-alt: #1152d4; /* Alternative primary - used in student layouts */
+  --secondary-color: #5a67d8; /* Indigo */
+  --primary-rgb: 65, 105, 225;
+
+  // Accent Colors
   --accent-primary: #2d5f5d;
   --accent-secondary: #3d6060;
   --accent-hover: #4a7a78;
+
+  // Semantic Colors
   --success-color: #4caf50;
   --warning-color: #ff9800;
   --error-color: #f44336;
   --info-color: #2196f3;
+
+  // UI Element Colors
+  --border-color: #dddddd;
+  --input-bg: #ffffff;
+
+  // Shadows
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-large: rgba(0, 0, 0, 0.2);
 }
 
 body.theme-dark {
-  // Dark Theme
+  // ===== Dark Theme =====
+
+  // Background Colors
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
   --bg-tertiary: #404040;
+  --bg-color: #1e293b;
+
+  // Text Colors
   --text-primary: #ffffff;
   --text-secondary: #b3b3b3;
   --text-tertiary: #808080;
-  --border-color: #404040;
-  --shadow: rgba(0, 0, 0, 0.5);
-  --shadow-medium: rgba(0, 0, 0, 0.6);
-  --shadow-large: rgba(0, 0, 0, 0.7);
+  --text-color: #f8fafc;
+
+  // Accent Colors (adjusted for dark mode)
   --accent-primary: #4a9b99;
   --accent-secondary: #5bb1af;
   --accent-hover: #6cc6c4;
+
+  // Semantic Colors (adjusted for dark mode)
   --success-color: #66bb6a;
   --warning-color: #ffa726;
   --error-color: #ef5350;
   --info-color: #42a5f5;
+
+  // UI Element Colors
+  --border-color: #404040;
+  --input-bg: #2d2d2d;
+
+  // Shadows (stronger in dark mode)
+  --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-medium: rgba(0, 0, 0, 0.6);
+  --shadow-large: rgba(0, 0, 0, 0.7);
 }
 // ========================================
 // End Theme Variables
@@ -88,7 +126,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg-primary, #f8fafc);
   color: var(--text-primary, #334155);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .app-container {

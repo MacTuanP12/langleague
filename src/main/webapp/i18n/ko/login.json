@@ -2,6 +2,8 @@
   "login": {
     "title": "인증",
     "form": {
+      "username": "사용자명",
+      "username.placeholder": "사용자명을 입력하세요",
       "password": "비밀번호",
       "password.placeholder": "당신의 비밀번호",
       "rememberme": "자동 로그인",
@@ -10,6 +12,17 @@
     "messages": {
       "error": {
         "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요."
+      },
+      "info": {
+        "authenticated": {
+          "prefix": "만약 ",
+          "link": "로그인",
+          "suffix": "을 원하신다면, 기본 계정을 사용해 보실 수 있습니다:<br/>- 관리자 (아이디=\"admin\" 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\" 비밀번호=\"user\")."
+        },
+        "register": {
+          "noaccount": "아직 계정이 없으신가요?",
+          "link": "새 계정 등록"
+        }
       }
     },
     "password": {

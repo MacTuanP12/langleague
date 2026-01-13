@@ -11,12 +11,16 @@ import entitiesReducers from 'app/entities/reducers';
 import applicationProfile from './application-profile';
 import authentication from './authentication';
 import locale from './locale';
-import admin from 'app/modules/admin';
 import book from './book.reducer';
 import unit from './unit.reducer';
 import vocabulary from './vocabulary.reducer';
 import grammar from './grammar.reducer';
 import exercise from './exercise.reducer';
+import enrollment from './enrollment.reducer';
+import userProfile from './user-profile.reducer';
+import progress from './progress.reducer';
+import exerciseOption from './exercise-option.reducer';
+import teacher from './teacher.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {
@@ -35,6 +39,11 @@ const rootReducer: ReducersMapObject = {
   vocabulary,
   grammar,
   exercise,
+  enrollment,
+  userProfile,
+  progress,
+  exerciseOption,
+  teacher,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   ...entitiesReducers,
 };

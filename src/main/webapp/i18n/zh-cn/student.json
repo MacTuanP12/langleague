@@ -1,0 +1,157 @@
+{
+  "langleague": {
+    "student": {
+      "dashboard": {
+        "title": "我的仪表板",
+        "welcome": "欢迎回来，{{name}}！",
+        "stats": {
+          "hours": "学习时长",
+          "books": "已完成教材"
+        },
+        "noBooks": "未找到符合搜索条件的教材。",
+        "loadMore": "加载更多",
+        "search": {
+          "placeholder": "搜索教材..."
+        },
+        "filter": {
+          "all": "全部",
+          "enrolled": "已报名",
+          "notEnroll": "未报名"
+        },
+        "book": {
+          "continue": "继续",
+          "start": "开始"
+        }
+      },
+      "books": {
+        "detail": {
+          "loading": "加载中...",
+          "backToBooks": "返回教材列表",
+          "startLearning": "开始学习",
+          "enrollNow": "立即报名"
+        },
+        "messages": {
+          "enrollSuccess": "课程报名成功！",
+          "enrollError": "报名失败，请重试。"
+        }
+      },
+      "learning": {
+        "unit": "单元",
+        "nextLesson": "下一课",
+        "previousLesson": "上一课",
+        "complete": "完成",
+        "vocabulary": {
+          "title": "词汇",
+          "meaning": "释义：",
+          "example": "例句：",
+          "noVocabulary": "此单元暂无词汇内容。",
+          "navigation": {
+            "previous": "上一个",
+            "next": "下一个"
+          }
+        },
+        "grammar": {
+          "title": "语法",
+          "noGrammar": "此单元暂无语法课程。"
+        },
+        "exercise": {
+          "title": "练习",
+          "noExercises": "此单元暂无练习题。"
+        },
+        "flashcard": {
+          "title": "闪卡",
+          "card": "卡片",
+          "of": "/"
+        },
+        "flashcardList": {
+          "title": "闪卡",
+          "loading": "加载中...",
+          "noSets": "暂无可用教材"
+        },
+        "bookLearn": {
+          "progress": "学习进度"
+        },
+        "itemCount": {
+          "words": "{{count}}个单词",
+          "topics": "{{count}}个主题",
+          "questions": "{{count}}道题",
+          "interactive": "互动式"
+        }
+      },
+      "games": {
+        "title": "学习游戏",
+        "subtitle": "寓教于乐！通过游戏提升语言能力",
+        "backToDashboard": "返回仪表板",
+        "loading": "加载游戏中...",
+        "noGamesForDifficulty": "该难度级别暂无游戏",
+        "list": {
+          "vocabularyMatch": {
+            "title": "词汇配对",
+            "description": "在快节奏的记忆游戏中将单词与释义配对",
+            "time": "5-10分钟"
+          },
+          "wordScramble": {
+            "title": "单词拼图",
+            "description": "重新排列字母组成正确的词汇",
+            "time": "10-15分钟"
+          },
+          "grammarQuest": {
+            "title": "语法任务",
+            "description": "通过语法挑战解锁成就",
+            "time": "15-20分钟"
+          },
+          "listeningChallenge": {
+            "title": "听力挑战",
+            "description": "在各种语境中听辨正确的单词",
+            "time": "10-15分钟"
+          },
+          "speedQuiz": {
+            "title": "速答题",
+            "description": "在限定时间内尽可能多地回答问题",
+            "time": "5分钟"
+          },
+          "sentenceBuilder": {
+            "title": "造句游戏",
+            "description": "用打乱的单词和短语构建正确的句子",
+            "time": "10-15分钟"
+          }
+        }
+      },
+      "profile": {
+        "actions": {
+          "changePhoto": "更换照片",
+          "saveChanges": "保存更改"
+        },
+        "personalInfo": {
+          "fullName": "姓名",
+          "fullNamePlaceholder": "例如：张三",
+          "email": "电子邮箱",
+          "bio": "个人简介",
+          "bioPlaceholder": "简单介绍一下自己..."
+        },
+        "preferences": {
+          "theme": "主题设置",
+          "themeLight": "☀️ 浅色",
+          "themeDark": "🌙 深色",
+          "themeSystem": "💻 系统"
+        },
+        "messages": {
+          "success": "个人资料更新成功！",
+          "error": "个人资料更新失败",
+          "themeChanged": "主题已更新！",
+          "themeError": "主题更换失败",
+          "photoComingSoon": "照片上传功能即将推出！"
+        }
+      }
+    }
+  },
+  "student": {
+    "bookList": {
+      "title": "图书馆",
+      "search": {
+        "placeholder": "搜索教材..."
+      },
+      "startLearning": "开始学习"
+    }
+  }
+}

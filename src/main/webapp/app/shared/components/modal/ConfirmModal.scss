@@ -90,61 +90,66 @@
   justify-content: center;
 }
 
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  font-size: 0.95rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-
-.btn-cancel {
-  background: var(--bg-secondary, #f5f5f5);
-  color: var(--text-primary, #1a1a1a);
-
-  &:hover {
-    background: var(--bg-tertiary, #e0e0e0);
-  }
-}
-
-.btn-confirm {
-  color: white;
-  font-weight: 600;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+// ============================================
+// Scoped Button Styles - Only apply within .confirm-modal
+// ============================================
+.confirm-modal {
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
   }
 
-  &:active {
-    transform: translateY(0);
+  .btn-cancel {
+    background: var(--bg-secondary, #f5f5f5);
+    color: var(--text-primary, #1a1a1a);
+
+    &:hover {
+      background: var(--bg-tertiary, #e0e0e0);
+    }
   }
-}
 
-.btn-danger {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  .btn-confirm {
+    color: white;
+    font-weight: 600;
 
-  &:hover {
-    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
-}
 
-.btn-warning {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  .btn-danger {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 
-  &:hover {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    &:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    }
   }
-}
 
-.btn-info {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  .btn-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 
-  &:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    &:hover {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+  }
+
+  .btn-info {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+
+    &:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
   }
 }
 
@@ -152,14 +157,14 @@
 body.theme-dark {
   .confirm-modal {
     background: var(--bg-secondary, #2d2d2d);
-  }
 
-  .btn-cancel {
-    background: var(--bg-tertiary, #404040);
-    color: var(--text-primary, #ffffff);
+    .btn-cancel {
+      background: var(--bg-tertiary, #404040);
+      color: var(--text-primary, #ffffff);
 
-    &:hover {
-      background: #4a4a4a;
+      &:hover {
+        background: #4a4a4a;
+      }
     }
   }
 }
@@ -179,4 +184,3 @@ body.theme-dark {
     }
   }
 }
-

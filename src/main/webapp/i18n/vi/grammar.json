@@ -1,0 +1,28 @@
+{
+  "langleagueApp": {
+    "grammar": {
+      "home": {
+        "title": "Grammars",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Grammar",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Grammar",
+        "notFound": "No Grammars found"
+      },
+      "created": "Một Grammar mới được tạo với định danh {{ param }}",
+      "updated": "Một Grammar cập nhật với định danh {{ param }}",
+      "deleted": "Một Grammar đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Grammar {{ id }}?"
+      },
+      "detail": {
+        "title": "Grammar"
+      },
+      "id": "ID",
+      "title": "Title",
+      "contentMarkdown": "Content Markdown",
+      "exampleUsage": "Example Usage",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

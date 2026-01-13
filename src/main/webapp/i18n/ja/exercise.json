@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "exercise": {
+      "home": {
+        "title": "Exercises",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Exercise の作成",
+        "createOrEditLabel": "Exerciseの作成または編集",
+        "notFound": "Exercises が見つかりません。"
+      },
+      "created": "新しい Exercise がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Exercise が更新されました。",
+      "deleted": "ID {{ param }} の Exercise が削除されました。",
+      "delete": {
+        "question": "Exercise {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Exercise"
+      },
+      "id": "ID",
+      "exerciseText": "Exercise Text",
+      "exerciseType": "Exercise Type",
+      "correctAnswerRaw": "Correct Answer Raw",
+      "audioUrl": "Audio Url",
+      "imageUrl": "Image Url",
+      "orderIndex": "Order Index",
+      "options": "Options",
+      "unit": "Unit"
+    }
+  }
+}

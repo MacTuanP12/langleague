@@ -1,0 +1,61 @@
+{
+  "annotations": {
+    "changelogDate": "20260108164533"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "streakCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lastLearningDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "bio",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "theme",
+      "fieldType": "ThemeMode",
+      "fieldValues": "LIGHT,DARK,SYSTEM"
+    }
+  ],
+  "name": "UserProfile",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "book",
+      "otherEntityRelationshipName": "teacherProfile",
+      "relationshipName": "books",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "enrollment",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "enrollments",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "progress",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "progresses",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

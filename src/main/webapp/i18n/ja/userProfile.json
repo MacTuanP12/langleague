@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "userProfile": {
+      "home": {
+        "title": "UserProfiles",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "User Profile の作成",
+        "createOrEditLabel": "User Profileの作成または編集",
+        "notFound": "User Profiles が見つかりません。"
+      },
+      "created": "新しい User Profile がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の User Profile が更新されました。",
+      "deleted": "ID {{ param }} の User Profile が削除されました。",
+      "delete": {
+        "question": "User Profile {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "User Profile"
+      },
+      "id": "ID",
+      "streakCount": "Streak Count",
+      "lastLearningDate": "Last Learning Date",
+      "bio": "Bio",
+      "theme": "Theme",
+      "user": "User",
+      "books": "Books",
+      "enrollments": "Enrollments",
+      "progresses": "Progresses"
+    }
+  }
+}

@@ -120,12 +120,7 @@ export const getInitials = (name: string, maxInitials = 2): string => {
  * formatFullName('John', 'Doe') // => 'John Doe'
  * formatFullName('', '', 'Anonymous') // => 'Anonymous'
  */
-export const formatFullName = (
-  firstName?: string | null,
-  lastName?: string | null,
-  fallback = 'Anonymous',
-): string => {
+export const formatFullName = (firstName?: string | null, lastName?: string | null, fallback = 'Anonymous'): string => {
   const fullName = `${firstName || ''} ${lastName || ''}`.trim();
   return fullName || fallback;
 };
-

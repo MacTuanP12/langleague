@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "enrollment": {
+      "home": {
+        "title": "Enrollments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Enrollment",
+        "createOrEditLabel": "Create or edit a Enrollment",
+        "notFound": "No Enrollments found"
+      },
+      "created": "A new Enrollment is created with identifier {{ param }}",
+      "updated": "A Enrollment is updated with identifier {{ param }}",
+      "deleted": "A Enrollment is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Enrollment {{ id }}?"
+      },
+      "detail": {
+        "title": "Enrollment"
+      },
+      "id": "ID",
+      "enrolledAt": "Enrolled At",
+      "status": "Status",
+      "userProfile": "User Profile",
+      "book": "Book"
+    }
+  }
+}

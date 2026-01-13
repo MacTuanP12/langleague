@@ -1,0 +1,30 @@
+{
+  "langleagueApp": {
+    "vocabulary": {
+      "home": {
+        "title": "Vocabularies",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "创建新 Vocabulary",
+        "createOrEditLabel": "创建或编辑 Vocabulary",
+        "notFound": "No Vocabularies found"
+      },
+      "created": "Vocabulary {{ param }} 创建成功",
+      "updated": "Vocabulary {{ param }} 更新成功",
+      "deleted": "Vocabulary {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Vocabulary {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Vocabulary"
+      },
+      "id": "ID",
+      "word": "Word",
+      "phonetic": "Phonetic",
+      "meaning": "Meaning",
+      "example": "Example",
+      "imageUrl": "Image Url",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

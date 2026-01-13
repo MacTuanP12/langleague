@@ -1,48 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { translate, Translate } from 'react-jhipster';
+import { translate, Translate, TextFormat } from 'react-jhipster';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
-import { IUnit } from 'app/shared/model/unit.model';
-import { formatDate } from 'app/shared/util';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBookById } from 'app/shared/reducers/book.reducer';
+import { fetchUnitsByBookId, deleteUnit, reorderUnits } from 'app/shared/reducers/unit.reducer';
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
 import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
 import './book-detail.scss';
 
 export const BookDetail = () => {
-  const [book, setBook] = useState<IBook | null>(null);
-  const [units, setUnits] = useState<IUnit[]>([]);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+
+  const book = useAppSelector(state => state.book.selectedBook);
+  const units = useAppSelector(state => state.unit.units);
+  const bookLoading = useAppSelector(state => state.book.loading);
+  const unitsLoading = useAppSelector(state => state.unit.loading);
+
   const [draggedUnitIndex, setDraggedUnitIndex] = useState<number | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [unitToDelete, setUnitToDelete] = useState<number | null>(null);
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  // Local state for optimistic UI updates during drag and drop
+  const [localUnits, setLocalUnits] = useState(units);
 
   useEffect(() => {
     if (id) {
-      loadBook();
-      loadUnits();
+      dispatch(fetchBookById(Number(id)));
+      dispatch(fetchUnitsByBookId(Number(id)));
     }
-  }, [id]);
+  }, [dispatch, id]);
 
-  const loadBook = async () => {
-    try {
-      const response = await axios.get<IBook>(`/api/books/${id}`);
-      setBook(response.data);
-    } catch (error) {
-      console.error('Error loading book:', error);
-    }
-  };
-
-  const loadUnits = async () => {
-    try {
-      const response = await axios.get<IUnit[]>(`/api/books/${id}/units`);
-      setUnits(response.data);
-    } catch (error) {
-      console.error('Error loading units:', error);
-    }
-  };
+  useEffect(() => {
+    setLocalUnits(units);
+  }, [units]);
 
   const handleDragStart = (index: number) => {
     setDraggedUnitIndex(index);
@@ -52,33 +45,40 @@ export const BookDetail = () => {
     e.preventDefault();
     if (draggedUnitIndex === null || draggedUnitIndex === index) return;
 
-    const items = [...units];
+    const items = [...localUnits];
     const draggedItem = items[draggedUnitIndex];
     items.splice(draggedUnitIndex, 1);
     items.splice(index, 0, draggedItem);
 
-    setUnits(items);
+    setLocalUnits(items);
     setDraggedUnitIndex(index);
   };
 
   const handleDragEnd = async () => {
     setDraggedUnitIndex(null);
 
+    if (!id) return;
+
     // Update orderIndex for all units
-    const updatedUnits = units.map((unit, idx) => ({
+    const updatedUnits = localUnits.map((unit, idx) => ({
       ...unit,
       orderIndex: idx + 1,
     }));
 
-    setUnits(updatedUnits);
+    setLocalUnits(updatedUnits);
 
     // Save the new order to backend
     try {
-      await axios.put(`/api/books/${id}/units/reorder`, {
-        unitIds: updatedUnits.map(u => u.id),
-      });
+      await dispatch(
+        reorderUnits({
+          bookId: id,
+          unitIds: updatedUnits.map(u => u.id),
+        }),
+      ).unwrap();
     } catch (error) {
       console.error('Error saving unit order:', error);
+      // Revert to original order from Redux store on error
+      setLocalUnits(units);
     }
   };
 
@@ -90,9 +90,8 @@ export const BookDetail = () => {
   const handleDeleteUnitConfirm = async () => {
     if (unitToDelete) {
       try {
-        await axios.delete(`/api/units/${unitToDelete}`);
+        await dispatch(deleteUnit(unitToDelete)).unwrap();
         toast.success(translate('langleague.teacher.books.unit.deleteSuccess'));
-        loadUnits();
       } catch (error) {
         console.error('Error deleting unit:', error);
         toast.error(translate('langleague.teacher.books.unit.deleteFailed'));
@@ -107,7 +106,7 @@ export const BookDetail = () => {
     setUnitToDelete(null);
   };
 
-  if (!book) {
+  if (bookLoading || !book) {
     return (
       <TeacherLayout>
         <LoadingSpinner message="langleague.teacher.books.detail.loading" isI18nKey />
@@ -141,11 +140,13 @@ export const BookDetail = () => {
           <div className="book-meta">
             <div className="meta-item">
               <span className="label">Total Units:</span>
-              <span className="value">{units.length}</span>
+              <span className="value">{localUnits.length}</span>
             </div>
             <div className="meta-item">
               <span className="label">Created:</span>
-              <span className="value">{formatDate(book.createdDate)}</span>
+              <span className="value">
+                {book.createdAt ? <TextFormat value={book.createdAt.toDate()} type="date" format={APP_DATE_FORMAT} /> : 'N/A'}
+              </span>
             </div>
             <div className="meta-item">
               <span className="label">Public:</span>
@@ -165,7 +166,7 @@ export const BookDetail = () => {
           </div>
 
           <div className="units-list">
-            {units.length === 0 ? (
+            {localUnits.length === 0 ? (
               <div className="empty-state">
                 <i className="bi bi-inbox"></i>
                 <h3>No units yet</h3>
@@ -175,7 +176,7 @@ export const BookDetail = () => {
                 </Link>
               </div>
             ) : (
-              units.map((unit, index) => (
+              localUnits.map((unit, index) => (
                 <div
                   key={unit.id}
                   className={`unit-card ${draggedUnitIndex === index ? 'dragging' : ''}`}
@@ -195,22 +196,29 @@ export const BookDetail = () => {
                       <span>
                         <i className="bi bi-book"></i>{' '}
                         <Translate contentKey="langleague.teacher.books.detail.units.stats.vocabulary">Vocabulary:</Translate>{' '}
-                        {unit.vocabularyCount || 0}
+                        {unit.vocabularies?.length || 0}
                       </span>
                       <span>
                         <i className="bi bi-journal-text"></i>{' '}
                         <Translate contentKey="langleague.teacher.books.detail.units.stats.grammar">Grammar:</Translate>{' '}
-                        {unit.grammarCount || 0}
+                        {unit.grammars?.length || 0}
                       </span>
                       <span>
                         <i className="bi bi-question-circle"></i>{' '}
                         <Translate contentKey="langleague.teacher.books.detail.units.stats.exercises">Exercises:</Translate>{' '}
-                        {unit.exerciseCount || 0}
+                        {unit.exercises?.length || 0}
                       </span>
                     </div>
                   </div>
                   <div className="unit-actions">
-                    <Link to={`/teacher/units/${unit.id}/edit`} className="btn-icon" title={translate('langleague.teacher.books.detail.units.actions.edit')}>
+                    <Link to={`/teacher/units/${unit.id}/content`} className="btn-icon" title="Manage Content">
+                      <i className="bi bi-folder2-open"></i>
+                    </Link>
+                    <Link
+                      to={`/teacher/units/${unit.id}/edit`}
+                      className="btn-icon"
+                      title={translate('langleague.teacher.books.detail.units.actions.edit')}
+                    >
                       <i className="bi bi-pencil"></i>
                     </Link>
                     <button

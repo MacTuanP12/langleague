@@ -18,7 +18,7 @@ const initialState: GrammarState = {
 
 // Async thunks
 export const fetchGrammarsByUnitId = createAsyncThunk('grammar/fetchByUnitId', async (unitId: number | string) => {
-  const response = await axios.get<IGrammar[]>(`/api/units/${unitId}/grammars`);
+  const response = await axios.get<IGrammar[]>(`/api/grammars/by-unit/${unitId}`);
   return response.data;
 });
 
@@ -54,7 +54,7 @@ const grammarSlice = createSlice({
   reducers: {
     reset: () => initialState,
   },
-  extraReducers: builder => {
+  extraReducers(builder) {
     builder
       // fetchGrammarsByUnitId
       .addCase(fetchGrammarsByUnitId.pending, state => {
@@ -143,4 +143,3 @@ const grammarSlice = createSlice({
 export const { reset } = grammarSlice.actions;
 
 export default grammarSlice.reducer;
-

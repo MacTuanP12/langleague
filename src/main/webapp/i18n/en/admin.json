@@ -1,74 +1,90 @@
 {
-}
-  }
-    }
-      }
-        }
-          "results": "results"
-          "of": "of",
-          "to": "to",
-          "showing": "Showing",
-        "pagination": {
-        },
-          "suspended": "Suspended"
-          "active": "Active",
-        "status": {
-        },
-          "librarian": "Librarian"
-          "student": "Student",
-          "teacher": "Teacher",
-          "admin": "Admin",
-        "role": {
-        },
-          "confirmDelete": "Are you sure you want to delete this user?"
-          "view": "View",
-          "delete": "Delete",
-          "edit": "Edit",
-          "addNew": "Add New User",
-        "actions": {
-        },
-          "actions": "Actions"
-          "status": "Status",
-          "role": "Role",
-          "email": "Email",
-          "name": "Name",
-        "table": {
-        },
-          }
-            "suspended": "Suspended"
-            "active": "Active",
-            "all": "All Status",
-          "status": {
-          },
-            "student": "Student"
-            "teacher": "Teacher",
-            "admin": "Admin",
-            "all": "All Roles",
-          "role": {
-        "filters": {
-        },
-          "placeholder": "Search by name, email, or username..."
-        "search": {
-        "loading": "Loading...",
-        "subtitle": "Manage student, teacher, and staff accounts.",
-        "title": "User Management",
-      "userManagement": {
-      },
-        }
-          "systemSettings": "System Settings"
-          "manageCourses": "Manage Courses",
-          "addUser": "Add User",
-          "title": "Quick Actions",
-        "quickActions": {
-        },
-          "recentActivities": "Recent Activities"
-          "activeSessions": "Active Sessions",
-          "totalCourses": "Total Courses",
-          "totalUsers": "Total Users",
-        "stats": {
-        "welcome": "Welcome back, {name}!",
-        "title": "Admin Dashboard",
-      "dashboard": {
-    "admin": {
   "langleague": {
-
+    "admin": {
+      "dashboard": {
+        "title": "Admin Dashboard",
+        "welcome": "Welcome back, {name}!",
+        "stats": {
+          "totalUsers": "Total Users",
+          "totalBooks": "Total Books",
+          "activeSessions": "Active Sessions",
+          "recentActivities": "Recent Activities"
+        },
+        "quickActions": {
+          "title": "Quick Actions",
+          "addUser": "Add User",
+          "manageBooks": "Manage Books",
+          "systemSettings": "System Settings"
+        }
+      },
+      "userManagement": {
+        "title": "User Management",
+        "subtitle": "Manage student, teacher, and staff accounts.",
+        "loading": "Loading...",
+        "search": {
+          "placeholder": "Search users by name or email..."
+        },
+        "filters": {
+          "role": {
+            "all": "All Roles",
+            "admin": "Admin",
+            "teacher": "Teacher",
+            "student": "Student"
+          },
+          "status": {
+            "all": "All Statuses",
+            "active": "Active",
+            "suspended": "Suspended",
+            "pending": "Pending"
+          }
+        },
+        "table": {
+          "name": "USER NAME",
+          "role": "ROLE",
+          "status": "STATUS",
+          "registrationDate": "REGISTRATION DATE",
+          "actions": "ACTIONS"
+        },
+        "role": {
+          "admin": "Admin",
+          "teacher": "Teacher",
+          "student": "Student"
+        },
+        "status": {
+          "active": "Active",
+          "suspended": "Suspended"
+        },
+        "actions": {
+          "addNew": "Add New User",
+          "edit": "Edit",
+          "delete": "Delete",
+          "view": "View",
+          "confirmDelete": "Are you sure you want to delete this user?",
+          "editTitle": "Edit User",
+          "lockTitle": "Lock User Account",
+          "deleteTitle": "Delete User"
+        },
+        "pagination": {
+          "showing": "Showing",
+          "to": "to",
+          "of": "of",
+          "results": "results"
+        },
+        "deleteSuccess": "User deleted successfully",
+        "deleteFailed": "Failed to delete user",
+        "confirmDeleteTitle": "Delete User?",
+        "confirmDelete": "Are you sure you want to delete this user? This action cannot be undone."
+      }
+    },
+    "common": {
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "close": "Close",
+      "edit": "Edit",
+      "view": "View",
+      "actions": "Actions"
+    }
+  }
+}

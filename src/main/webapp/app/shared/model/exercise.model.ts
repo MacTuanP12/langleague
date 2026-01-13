@@ -1,31 +1,29 @@
-import { IUnit } from './unit.model';
-import { IExerciseOption } from './exercise-option.model';
-import { ExerciseType } from './enumerations/enums.model';
+import { IUnit } from 'app/shared/model/unit.model';
+import { ExerciseType } from 'app/shared/model/enumerations/exercise-type.model';
+import { IExerciseOption } from 'app/shared/model/exercise-option.model';
 
 export interface IExercise {
   id?: number;
   exerciseText?: string;
   exerciseType?: ExerciseType;
-  correctAnswerRaw?: string;
-  audioUrl?: string;
-  imageUrl?: string;
+  correctAnswerRaw?: string | null;
+  audioUrl?: string | null;
+  imageUrl?: string | null;
   orderIndex?: number;
   unit?: IUnit;
-  unitId?: number;
   options?: IExerciseOption[];
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
 }
 
 export const defaultExerciseValue: Readonly<IExercise> = {
-  id: 0,
+  id: undefined,
   exerciseText: '',
   exerciseType: ExerciseType.SINGLE_CHOICE,
   correctAnswerRaw: '',
   audioUrl: '',
   imageUrl: '',
   orderIndex: 0,
-  unitId: 0,
-  createdDate: null,
-  lastModifiedDate: null,
+  unit: undefined,
+  options: [],
 };
+
+export const defaultValue = defaultExerciseValue;

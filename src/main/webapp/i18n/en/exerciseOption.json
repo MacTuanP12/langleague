@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "exerciseOption": {
+      "home": {
+        "title": "Exercise Options",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Exercise Option",
+        "createOrEditLabel": "Create or edit a Exercise Option",
+        "notFound": "No Exercise Options found"
+      },
+      "created": "A new Exercise Option is created with identifier {{ param }}",
+      "updated": "A Exercise Option is updated with identifier {{ param }}",
+      "deleted": "A Exercise Option is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Exercise Option {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise Option"
+      },
+      "id": "ID",
+      "optionText": "Option Text",
+      "isCorrect": "Is Correct",
+      "orderIndex": "Order Index",
+      "exercise": "Exercise"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "enrollment": {
+      "home": {
+        "title": "Enrollments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 Enrollment",
+        "createOrEditLabel": "建立或編輯 Enrollment",
+        "notFound": "No Enrollments found"
+      },
+      "created": "新的 Enrollment 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 Enrollment 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 Enrollment 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 Enrollment {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "Enrollment"
+      },
+      "id": "ID",
+      "enrolledAt": "Enrolled At",
+      "status": "Status",
+      "userProfile": "User Profile",
+      "book": "Book"
+    }
+  }
+}

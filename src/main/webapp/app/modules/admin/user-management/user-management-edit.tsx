@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { Translate, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
+import { useUserManagement } from 'app/shared/reducers/user-management.hook';
 import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import { IUser } from 'app/shared/model/user.model';
 import './user-management-edit.scss';
 
 export const UserManagementEdit = () => {
+  const { getUserById, updateUser } = useUserManagement();
   const [user, setUser] = useState<IUser | null>(null);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -16,7 +18,7 @@ export const UserManagementEdit = () => {
     bio: '',
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login } = useParams<{ login: string }>();
 
@@ -28,19 +30,19 @@ export const UserManagementEdit = () => {
 
   const loadUser = async () => {
     try {
-      const response = await axios.get(`/api/admin/users/${login}`);
-      const userData = response.data;
-      setUser(userData);
+      const userResult = await getUserById(login);
+      setUser(userResult);
       setFormData({
-        fullName: `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
-        email: userData.email || '',
-        role: userData.authorities?.[0] || '',
-        status: userData.activated ? 'active' : 'inactive',
-        bio: userData.bio || '',
+        fullName: `${userResult.firstName || ''} ${userResult.lastName || ''}`.trim(),
+        email: userResult.email || '',
+        role: userResult.authorities?.[0] || '',
+        status: userResult.activated ? 'active' : 'inactive',
+        bio: userResult.bio || '',
       });
       setLoading(false);
-    } catch (error) {
-      console.error('Error loading user:', error);
+    } catch (loadErr) {
+      console.error('Error loading user:', loadErr);
+      toast.error(translate('langleague.admin.userManagement.messages.loadError'));
       setLoading(false);
     }
   };
@@ -67,10 +69,12 @@ export const UserManagementEdit = () => {
         bio: formData.bio,
       };
 
-      await axios.put(`/api/admin/users`, updatedUser);
+      await updateUser(updatedUser);
+      toast.success(translate('langleague.admin.userManagement.messages.updateSuccess'));
       navigate('/admin/user-management');
-    } catch (error) {
-      console.error('Error updating user:', error);
+    } catch (err) {
+      console.error('Error updating user:', err);
+      toast.error(translate('langleague.admin.userManagement.messages.updateError'));
     }
   };
 
@@ -79,22 +83,11 @@ export const UserManagementEdit = () => {
   }
 
   if (error) {
-    return (
-      <ErrorDisplay
-        message={error}
-        onRetry={loadUser}
-      />
-    );
+    return <ErrorDisplay message={error} onRetry={loadUser} />;
   }
 
   if (!user) {
-    return (
-      <ErrorDisplay
-        message="userManagement.edit.notFound"
-        isI18nKey
-        iconClass="bi-person-x"
-      />
-    );
+    return <ErrorDisplay message="userManagement.edit.notFound" isI18nKey iconClass="bi-person-x" />;
   }
 
   return (
@@ -136,7 +129,10 @@ export const UserManagementEdit = () => {
               {user.createdDate ? new Date(user.createdDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A'}
             </p>
             <p className="info-note">
-              <i className="fa fa-info-circle"></i> <Translate contentKey="userManagement.edit.avatarNote">Avatar is managed by user through their profile settings, not by admin</Translate>
+              <i className="fa fa-info-circle"></i>{' '}
+              <Translate contentKey="userManagement.edit.avatarNote">
+                Avatar is managed by user through their profile settings, not by admin
+              </Translate>
             </p>
           </div>
         </div>
@@ -179,7 +175,6 @@ export const UserManagementEdit = () => {
                 <option value="ROLE_STUDENT">{translate('userManagement.edit.roles.student')}</option>
                 <option value="ROLE_TEACHER">{translate('userManagement.edit.roles.teacher')}</option>
                 <option value="ROLE_ADMIN">{translate('userManagement.edit.roles.admin')}</option>
-                <option value="ROLE_LIBRARIAN">{translate('userManagement.edit.roles.librarian')}</option>
               </select>
             </div>
 
@@ -190,7 +185,9 @@ export const UserManagementEdit = () => {
               <div className="status-display">
                 <span className={`status-badge ${formData.status === 'active' ? 'status-active' : 'status-inactive'}`}>
                   <span className="status-dot"></span>
-                  {formData.status === 'active' ? translate('userManagement.edit.status.active') : translate('userManagement.edit.status.inactive')}
+                  {formData.status === 'active'
+                    ? translate('userManagement.edit.status.active')
+                    : translate('userManagement.edit.status.inactive')}
                 </span>
               </div>
             </div>
@@ -231,7 +228,8 @@ export const UserManagementEdit = () => {
             </strong>
             <p>
               <Translate contentKey="userManagement.edit.infoBox.content">
-                Changing a user&apos;s role to Administrator will grant them full access to the system settings and user management panels. Proceed with caution.
+                Changing a user&apos;s role to Administrator will grant them full access to the system settings and user management panels.
+                Proceed with caution.
               </Translate>
             </p>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { translate } from 'react-jhipster';
+import { translate, Translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { handlePasswordResetInit, reset } from '../password-reset.reducer';
@@ -29,7 +29,7 @@ export const PasswordResetInit = () => {
 
   useEffect(() => {
     if (resetPasswordFailure) {
-      toast.error('Failed to send reset email. Please try again.');
+      toast.error(translate('reset.request.messages.error', 'Failed to send reset email. Please try again.'));
     }
   }, [resetPasswordFailure]);
 
@@ -53,19 +53,23 @@ export const PasswordResetInit = () => {
             <div className="icon-circle success">
               <i className="bi bi-envelope-check"></i>
             </div>
-            <h2>Check Your Email</h2>
+            <h2>
+              <Translate contentKey="reset.request.messages.checkEmail">Check Your Email</Translate>
+            </h2>
             <p>
-              We&apos;ve sent a password reset link to <strong>{email}</strong>. Please check your email and follow the instructions to
-              reset your password.
+              <Translate contentKey="reset.request.messages.emailSent" interpolate={{ email: <strong>{email}</strong> }}>
+                We&apos;ve sent a password reset link to your email. Please check your email and follow the instructions to reset your
+                password.
+              </Translate>
             </p>
 
             <div className="info-box">
               <i className="bi bi-info-circle"></i>
-              Can&apos;t find it? Check your spam or junk folder.
+              <Translate contentKey="reset.request.messages.checkSpam">Can&apos;t find it? Check your spam or junk folder.</Translate>
             </div>
 
             <Link to="/login" className="btn-primary">
-              <i className="bi bi-arrow-left"></i> Back to Login
+              <i className="bi bi-arrow-left"></i> <Translate contentKey="reset.request.actions.backToLogin">Back to Login</Translate>
             </Link>
 
             <button
@@ -75,7 +79,7 @@ export const PasswordResetInit = () => {
                 dispatch(reset());
               }}
             >
-              Try a different email
+              <Translate contentKey="reset.request.actions.tryDifferent">Try a different email</Translate>
             </button>
           </div>
 
@@ -97,24 +101,35 @@ export const PasswordResetInit = () => {
           <div className="icon-circle">
             <i className="bi bi-key"></i>
           </div>
-          <h2>Forgot Password?</h2>
-          <p>Please enter your email address to receive a verification code.</p>
+          <h2>
+            <Translate contentKey="reset.request.title">Forgot Password?</Translate>
+          </h2>
+          <p>
+            <Translate contentKey="reset.request.messages.info">Please enter your email address to receive a verification code.</Translate>
+          </p>
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <div className="input-wrapper">
                 <i className="bi bi-envelope"></i>
-                <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required autoFocus />
+                <input
+                  type="email"
+                  placeholder={translate('global.form.email.placeholder', 'Email')}
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  autoFocus
+                />
               </div>
             </div>
 
             <button type="submit" className="btn-primary">
-              Send Code
+              <Translate contentKey="reset.request.form.button">Send Code</Translate>
             </button>
           </form>
 
           <Link to="/login" className="btn-link">
-            <i className="bi bi-arrow-left"></i> Back to Login
+            <i className="bi bi-arrow-left"></i> <Translate contentKey="reset.request.actions.backToLogin">Back to Login</Translate>
           </Link>
         </div>
 

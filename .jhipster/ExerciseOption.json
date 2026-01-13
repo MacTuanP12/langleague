@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20260108164540"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "optionText",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isCorrect",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orderIndex",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "ExerciseOption",
+  "relationships": [
+    {
+      "otherEntityName": "exercise",
+      "otherEntityRelationshipName": "options",
+      "relationshipName": "exercise",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

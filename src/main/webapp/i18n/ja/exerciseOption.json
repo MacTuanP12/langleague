@@ -1,0 +1,27 @@
+{
+  "langleagueApp": {
+    "exerciseOption": {
+      "home": {
+        "title": "ExerciseOptions",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Exercise Option の作成",
+        "createOrEditLabel": "Exercise Optionの作成または編集",
+        "notFound": "Exercise Options が見つかりません。"
+      },
+      "created": "新しい Exercise Option がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Exercise Option が更新されました。",
+      "deleted": "ID {{ param }} の Exercise Option が削除されました。",
+      "delete": {
+        "question": "Exercise Option {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Exercise Option"
+      },
+      "id": "ID",
+      "optionText": "Option Text",
+      "isCorrect": "Is Correct",
+      "orderIndex": "Order Index",
+      "exercise": "Exercise"
+    }
+  }
+}

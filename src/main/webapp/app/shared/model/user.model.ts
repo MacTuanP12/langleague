@@ -13,6 +13,7 @@ export interface IUser {
   lastModifiedDate?: Date | null;
   password?: string;
   imageUrl?: string; // Avatar URL from backend (User entity)
+  bio?: string; // Bio from UserProfile (if merged) or User entity extension
 }
 
 export const defaultUserValue: Readonly<IUser> = {
@@ -30,4 +31,5 @@ export const defaultUserValue: Readonly<IUser> = {
   lastModifiedDate: null,
   password: '',
   imageUrl: '',
+  bio: '',
 };

@@ -18,6 +18,10 @@ public class LoginVM {
 
     private boolean rememberMe;
 
+    private String captchaId;
+
+    private String captchaAnswer;
+
     public String getUsername() {
         return username;
     }
@@ -40,6 +44,22 @@ public class LoginVM {
 
     public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
+    }
+
+    public String getCaptchaId() {
+        return captchaId;
+    }
+
+    public void setCaptchaId(String captchaId) {
+        this.captchaId = captchaId;
+    }
+
+    public String getCaptchaAnswer() {
+        return captchaAnswer;
+    }
+
+    public void setCaptchaAnswer(String captchaAnswer) {
+        this.captchaAnswer = captchaAnswer;
     }
 
     // prettier-ignore

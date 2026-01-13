@@ -1,0 +1,10 @@
+{
+  "langleagueApp": {
+    "ThemeMode": {
+      "null": "",
+      "LIGHT": "LIGHT",
+      "DARK": "DARK",
+      "SYSTEM": "SYSTEM"
+    }
+  }
+}

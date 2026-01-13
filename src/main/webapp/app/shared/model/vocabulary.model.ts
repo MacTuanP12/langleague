@@ -1,28 +1,25 @@
-import { IUnit } from './unit.model';
+import { IUnit } from 'app/shared/model/unit.model';
 
 export interface IVocabulary {
   id?: number;
   word?: string;
-  phonetic?: string;
+  phonetic?: string | null;
   meaning?: string;
-  example?: string;
-  imageUrl?: string;
+  example?: string | null;
+  imageUrl?: string | null;
   orderIndex?: number;
   unit?: IUnit;
-  unitId?: number;
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
 }
 
 export const defaultVocabularyValue: Readonly<IVocabulary> = {
-  id: 0,
+  id: undefined,
   word: '',
   phonetic: '',
   meaning: '',
   example: '',
   imageUrl: '',
   orderIndex: 0,
-  unitId: 0,
-  createdDate: null,
-  lastModifiedDate: null,
+  unit: undefined,
 };
+
+export const defaultValue = defaultVocabularyValue;

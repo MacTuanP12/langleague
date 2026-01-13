@@ -37,8 +37,12 @@ export const ActivateVerify = () => {
             <div className="icon-circle">
               <i className="bi bi-hourglass-split"></i>
             </div>
-            <h2>Verifying your account...</h2>
-            <p>Please wait while we verify your email address.</p>
+            <h2>
+              <Translate contentKey="activate.messages.verifying.title">Verifying your account...</Translate>
+            </h2>
+            <p>
+              <Translate contentKey="activate.messages.verifying.description">Please wait while we verify your email address.</Translate>
+            </p>
           </div>
 
           <div className="footer-text">© {new Date().getFullYear()} LangLeague. All rights reserved.</div>
@@ -60,20 +64,29 @@ export const ActivateVerify = () => {
             <div className="icon-circle success">
               <i className="bi bi-check-circle"></i>
             </div>
-            <h2>Your Account is Activated!</h2>
-            <p>You are now ready to begin your learning journey with BookFlow. Log in now to explore our vast library and tools.</p>
+            <h2>
+              <Translate contentKey="activate.messages.success.title">Your Account is Activated!</Translate>
+            </h2>
+            <p>
+              <Translate contentKey="activate.messages.success.description">
+                You are now ready to begin your learning journey with LangLeague. Log in now to explore our vast library and tools.
+              </Translate>
+            </p>
 
             <Link to="/login" className="btn-primary">
-              Log In Now
+              <Translate contentKey="activate.actions.loginNow">Log In Now</Translate>
             </Link>
 
             <Link to="/" className="btn-secondary">
-              Go to Homepage
+              <Translate contentKey="activate.actions.goHome">Go to Homepage</Translate>
             </Link>
           </div>
 
           <div className="footer-link">
-            Need help? <Link to="/contact">Contact Support</Link>
+            <Translate contentKey="activate.footer.needHelp">Need help?</Translate>{' '}
+            <Link to="/contact">
+              <Translate contentKey="activate.footer.contactSupport">Contact Support</Translate>
+            </Link>
           </div>
 
           <div className="footer-text">© {new Date().getFullYear()} LangLeague. All rights reserved.</div>
@@ -95,26 +108,34 @@ export const ActivateVerify = () => {
           <div className="icon-circle">
             <i className="bi bi-envelope-check"></i>
           </div>
-          <h2>Verify your email address</h2>
+          <h2>
+            <Translate contentKey="activate.messages.failure.title">Verify your email address</Translate>
+          </h2>
           <p>
-            We have sent a verification link to <strong>student@university.edu</strong>. Please click the link in that email to secure your
-            account.
+            <Translate contentKey="activate.messages.failure.description">
+              We have sent a verification link to your email. Please click the link in that email to secure your account.
+            </Translate>
           </p>
 
           <div className="info-box">
             <i className="bi bi-info-circle"></i>
-            Can&apos;t find it? Check your spam or junk folder.
+            <Translate contentKey="activate.messages.failure.checkSpam">Can&apos;t find it? Check your spam or junk folder.</Translate>
           </div>
 
           <Link to="/login" className="btn-primary">
-            Log In
+            <Translate contentKey="activate.actions.login">Log In</Translate>
           </Link>
 
-          <button className="btn-link">Resend confirmation email</button>
+          <button className="btn-link">
+            <Translate contentKey="activate.actions.resend">Resend confirmation email</Translate>
+          </button>
         </div>
 
         <div className="footer-link">
-          Need help? <Link to="/contact">Contact Support</Link>
+          <Translate contentKey="activate.footer.needHelp">Need help?</Translate>{' '}
+          <Link to="/contact">
+            <Translate contentKey="activate.footer.contactSupport">Contact Support</Translate>
+          </Link>
         </div>
 
         <div className="footer-text">© {new Date().getFullYear()} LangLeague. All rights reserved.</div>

@@ -3,7 +3,30 @@
     "title": "Activation",
     "messages": {
       "success": "<strong>Your user account has been activated.</strong> Please ",
-      "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+      "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up.",
+      "verifying": {
+        "title": "Verifying your account...",
+        "description": "Please wait while we verify your email address."
+      },
+      "success": {
+        "title": "Your Account is Activated!",
+        "description": "You are now ready to begin your learning journey with LangLeague. Log in now to explore our vast library and tools."
+      },
+      "failure": {
+        "title": "Verify your email address",
+        "description": "We have sent a verification link to your email. Please click the link in that email to secure your account.",
+        "checkSpam": "Can't find it? Check your spam or junk folder."
+      }
+    },
+    "actions": {
+      "loginNow": "Log In Now",
+      "goHome": "Go to Homepage",
+      "login": "Log In",
+      "resend": "Resend confirmation email"
+    },
+    "footer": {
+      "needHelp": "Need help?",
+      "contactSupport": "Contact Support"
     }
   }
 }

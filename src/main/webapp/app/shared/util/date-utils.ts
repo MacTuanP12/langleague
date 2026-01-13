@@ -114,4 +114,3 @@ export const getDuration = (startDate: Date | string, endDate: Date | string = n
   const diffInDays = end.diff(start, 'day');
   return `${diffInDays} days`;
 };
-

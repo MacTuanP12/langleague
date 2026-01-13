@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchUnitById } from 'app/shared/reducers/unit.reducer';
 import { fetchVocabulariesByUnitId } from 'app/shared/reducers/vocabulary.reducer';
 import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
-import './flashcard.scss';
-import {Translate} from "react-jhipster";
+import { Translate } from 'react-jhipster';
+import './flashcard.module.scss';
+import FloatingNoteWidget from './floating-note-widget';
 
 export const Flashcard = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ export const Flashcard = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isStudyMode, setIsStudyMode] = useState(false);
+  const [showNotes, setShowNotes] = useState(false); // State để bật tắt Notes
   const { unitId } = useParams<{ unitId: string }>();
   const navigate = useNavigate();
 
@@ -68,7 +70,7 @@ export const Flashcard = () => {
     );
   }
 
-  if (!vocabularies.length) {
+  if (!vocabularies || vocabularies.length === 0) {
     return (
       <div className="flashcard-container">
         <div className="flashcard-header">
@@ -97,7 +99,9 @@ export const Flashcard = () => {
           <div className="breadcrumb">
             <span>Learning</span>
             <i className="bi bi-chevron-right"></i>
-            <span><Translate contentKey="langleague.student.learning.flashcard.title">Flashcards</Translate></span>
+            <span>
+              <Translate contentKey="langleague.student.learning.flashcard.title">Flashcards</Translate>
+            </span>
             {selectedUnit && (
               <>
                 <i className="bi bi-chevron-right"></i>
@@ -112,6 +116,14 @@ export const Flashcard = () => {
           </button>
           <button onClick={() => setIsStudyMode(!isStudyMode)} className={`mode-btn ${isStudyMode ? 'active' : ''}`}>
             <i className="bi bi-star"></i> Study Mode
+          </button>
+          {/* Nút mở Notes */}
+          <button
+            onClick={() => setShowNotes(!showNotes)}
+            className={`mode-btn ${showNotes ? 'active' : ''}`}
+            style={{ marginLeft: '10px' }}
+          >
+            <i className="bi bi-journal-text"></i> Notes
           </button>
         </div>
       </div>
@@ -202,6 +214,9 @@ export const Flashcard = () => {
           ))}
         </div>
       </div>
+
+      {/* Widget Notes Draggable */}
+      {unitId && <FloatingNoteWidget unitId={parseInt(unitId, 10)} isOpen={showNotes} onClose={() => setShowNotes(false)} />}
     </div>
   );
 };

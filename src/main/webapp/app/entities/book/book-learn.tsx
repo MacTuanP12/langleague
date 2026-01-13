@@ -1,85 +1,86 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { IBook } from 'app/shared/model/book.model';
-import { IUnit } from 'app/shared/model/unit.model';
+import { useParams, Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { fetchBookById } from 'app/shared/reducers/book.reducer';
+import { fetchUnitsByBookId } from 'app/shared/reducers/unit.reducer';
 import { LoadingSpinner } from 'app/shared/components';
+import styles from 'app/modules/student/learning/book-learn.module.scss';
 
 export const BookLearn = () => {
-  const [book, setBook] = useState<IBook | null>(null);
-  const [units, setUnits] = useState<IUnit[]>([]);
-  const [expandedUnit, setExpandedUnit] = useState<number | null>(null);
+  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+
+  // Redux state
+  const { selectedBook, loading: bookLoading } = useAppSelector(state => state.book);
+  const { units, loading: unitsLoading } = useAppSelector(state => state.unit);
+
+  // Local UI state
+  const [expandedUnit, setExpandedUnit] = useState<number | null>(null);
 
   useEffect(() => {
     if (id) {
-      loadBook();
-      loadUnits();
+      dispatch(fetchBookById(Number(id)));
+      dispatch(fetchUnitsByBookId(Number(id)));
     }
-  }, [id]);
+  }, [dispatch, id]);
 
-  const loadBook = async () => {
-    try {
-      const response = await axios.get(`/api/books/${id}`);
-      setBook(response.data);
-    } catch (error) {
-      console.error('Error loading book:', error);
-      toast.error('Failed to load book. Please try again.');
-    }
-  };
-
-  const loadUnits = async () => {
-    try {
-      const response = await axios.get(`/api/books/${id}/units`);
-      setUnits(response.data);
-    } catch (error) {
-      console.error('Error loading units:', error);
-      toast.error('Failed to load units. Please try again.');
-    }
-  };
-
-  if (!book) {
+  if (bookLoading || unitsLoading) {
     return <LoadingSpinner message="Loading book..." />;
   }
 
+  if (!selectedBook) {
+    return null;
+  }
+
   return (
-    <div className="book-learn">
-      <div className="learn-header">
-        <Link to={`/books/${id}`} className="back-link">
+    <div className={styles.bookLearn}>
+      <div className={styles.learnHeader}>
+        <Link to={`/books/${id}`} className={styles.backLink}>
           ← Back to Book List
         </Link>
-        <h2>{book.title}</h2>
+        <h2>{selectedBook.title}</h2>
       </div>
 
-      <div className="learn-content">
-        <div className="units-sidebar">
-          <div className="sidebar-header">
+      <div className={styles.learnContent}>
+        <div className={styles.unitsSidebar}>
+          <div className={styles.sidebarHeader}>
             <h3>COURSE CONTENT</h3>
           </div>
 
-          <div className="units-list">
+          <div className={styles.unitsList}>
             {units.map(unit => (
-              <div key={unit.id} className="unit-item">
-                <div className="unit-header" onClick={() => setExpandedUnit(expandedUnit === unit.id ? null : unit.id)}>
-                  <span className="unit-icon"><i className="bi bi-play-fill"></i></span>
-                  <span className="unit-title">{unit.title}</span>
-                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}><i className="bi bi-chevron-right"></i></span>
+              <div key={unit.id} className={styles.unitItem}>
+                <div
+                  className={`${styles.unitHeader} ${expandedUnit === unit.id ? styles.active : ''}`}
+                  onClick={() => setExpandedUnit(expandedUnit === unit.id ? null : unit.id)}
+                >
+                  <span className={styles.unitIcon}>
+                    <i className="bi bi-play-fill"></i>
+                  </span>
+                  <span className={styles.unitTitle}>{unit.title}</span>
+                  <span className={`${styles.expandIcon} ${expandedUnit === unit.id ? styles.expanded : ''}`}>
+                    <i className="bi bi-chevron-right"></i>
+                  </span>
                 </div>
 
                 {expandedUnit === unit.id && (
-                  <div className="unit-sections">
-                    <Link to={`/units/${unit.id}/vocabulary`} className="section-link">
-                      <span className="section-icon"><i className="bi bi-book"></i></span>
+                  <div className={styles.unitSections}>
+                    <Link to={`/units/${unit.id}/vocabulary`} className={styles.sectionLink}>
+                      <span className={styles.sectionIcon}>
+                        <i className="bi bi-book"></i>
+                      </span>
                       Vocabulary
                     </Link>
-                    <Link to={`/units/${unit.id}/grammar`} className="section-link">
-                      <span className="section-icon"><i className="bi bi-journal-text"></i></span>
+                    <Link to={`/units/${unit.id}/grammar`} className={styles.sectionLink}>
+                      <span className={styles.sectionIcon}>
+                        <i className="bi bi-journal-text"></i>
+                      </span>
                       Grammar
                     </Link>
-                    <Link to={`/units/${unit.id}/exercise`} className="section-link">
-                      <span className="section-icon"><i className="bi bi-pencil-square"></i></span>
+                    <Link to={`/units/${unit.id}/exercise`} className={styles.sectionLink}>
+                      <span className={styles.sectionIcon}>
+                        <i className="bi bi-pencil-square"></i>
+                      </span>
                       Exercise
                     </Link>
                   </div>
@@ -89,9 +90,9 @@ export const BookLearn = () => {
           </div>
         </div>
 
-        <div className="learn-main">
-          <div className="empty-state">
-            <div className="empty-icon">🎓</div>
+        <div className={styles.learnMain}>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>🎓</div>
             <h3>Ready to learn?</h3>
             <p>Select a section from the sidebar to start learning.</p>
             <p>Your progress will be saved automatically.</p>

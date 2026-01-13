@@ -1,36 +1,32 @@
-import { IBook } from './book.model';
-import { IVocabulary } from './vocabulary.model';
-import { IGrammar } from './grammar.model';
-import { IExercise } from './exercise.model';
-import { IProgress } from './progress.model';
+import { IBook } from 'app/shared/model/book.model';
+import { IVocabulary } from 'app/shared/model/vocabulary.model';
+import { IGrammar } from 'app/shared/model/grammar.model';
+import { IExercise } from 'app/shared/model/exercise.model';
+import { IProgress } from 'app/shared/model/progress.model';
 
 export interface IUnit {
   id?: number;
   title?: string;
   orderIndex?: number;
-  summary?: string;
+  summary?: string | null;
   book?: IBook;
-  bookId?: number;
+  bookId?: number; // Added for reducer compatibility
   vocabularies?: IVocabulary[];
   grammars?: IGrammar[];
   exercises?: IExercise[];
   progresses?: IProgress[];
-  vocabularyCount?: number;
-  grammarCount?: number;
-  exerciseCount?: number;
-  createdDate?: Date | null;
-  lastModifiedDate?: Date | null;
 }
 
 export const defaultUnitValue: Readonly<IUnit> = {
-  id: 0,
+  id: undefined,
   title: '',
   orderIndex: 0,
   summary: '',
-  bookId: 0,
-  vocabularyCount: 0,
-  grammarCount: 0,
-  exerciseCount: 0,
-  createdDate: null,
-  lastModifiedDate: null,
+  book: undefined,
+  vocabularies: [],
+  grammars: [],
+  exercises: [],
+  progresses: [],
 };
+
+export const defaultValue = defaultUnitValue;

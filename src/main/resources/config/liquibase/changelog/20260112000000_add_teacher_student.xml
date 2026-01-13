@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20260112000000-1" author="jhipster">
+        <insert tableName="jhi_user">
+            <column name="id" valueNumeric="3"/>
+            <column name="login" value="teacher"/>
+            <column name="password_hash" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
+            <column name="first_name" value="Teacher"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value="teacher@localhost"/>
+            <column name="activated" valueBoolean="true"/>
+            <column name="lang_key" value="en"/>
+            <column name="created_by" value="system"/>
+            <column name="created_date" valueDate="2024-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="jhi_user_authority">
+            <column name="user_id" valueNumeric="3"/>
+            <column name="authority_name" value="ROLE_TEACHER"/>
+        </insert>
+
+        <!-- Create UserProfile for Teacher -->
+        <insert tableName="user_profile">
+            <column name="id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="3"/>
+            <column name="streak_count" valueNumeric="0"/>
+            <column name="theme" value="SYSTEM"/>
+        </insert>
+
+        <insert tableName="jhi_user">
+            <column name="id" valueNumeric="4"/>
+            <column name="login" value="student"/>
+            <column name="password_hash" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
+            <column name="first_name" value="Student"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value="student@localhost"/>
+            <column name="activated" valueBoolean="true"/>
+            <column name="lang_key" value="en"/>
+            <column name="created_by" value="system"/>
+            <column name="created_date" valueDate="2024-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="jhi_user_authority">
+            <column name="user_id" valueNumeric="4"/>
+            <column name="authority_name" value="ROLE_STUDENT"/>
+        </insert>
+
+        <!-- Create UserProfile for Student -->
+        <insert tableName="user_profile">
+            <column name="id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="4"/>
+            <column name="streak_count" valueNumeric="0"/>
+            <column name="theme" value="SYSTEM"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

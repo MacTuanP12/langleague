@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "book": {
+      "home": {
+        "title": "Books",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Book の作成",
+        "createOrEditLabel": "Bookの作成または編集",
+        "notFound": "Books が見つかりません。"
+      },
+      "created": "新しい Book がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Book が更新されました。",
+      "deleted": "ID {{ param }} の Book が削除されました。",
+      "delete": {
+        "question": "Book {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Book"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "coverImageUrl": "Cover Image Url",
+      "isPublic": "Is Public",
+      "createdAt": "Created At",
+      "enrollments": "Enrollments",
+      "units": "Units",
+      "teacherProfile": "Teacher Profile"
+    }
+  }
+}

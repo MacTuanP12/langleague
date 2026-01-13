@@ -1,0 +1,28 @@
+{
+  "langleagueApp": {
+    "grammar": {
+      "home": {
+        "title": "Grammars",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Grammar",
+        "createOrEditLabel": "Create or edit a Grammar",
+        "notFound": "No Grammars found"
+      },
+      "created": "A new Grammar is created with identifier {{ param }}",
+      "updated": "A Grammar is updated with identifier {{ param }}",
+      "deleted": "A Grammar is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Grammar {{ id }}?"
+      },
+      "detail": {
+        "title": "Grammar"
+      },
+      "id": "ID",
+      "title": "Title",
+      "contentMarkdown": "Content Markdown",
+      "exampleUsage": "Example Usage",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

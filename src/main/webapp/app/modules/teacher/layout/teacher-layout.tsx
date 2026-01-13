@@ -4,8 +4,8 @@ import './teacher-layout.scss';
 
 interface TeacherLayoutProps {
   children: React.ReactNode;
-  title?: string;
-  subtitle?: string;
+  title?: React.ReactNode; // Changed from string to React.ReactNode
+  subtitle?: React.ReactNode; // Changed from string to React.ReactNode
   showBackButton?: boolean;
   backTo?: string;
   headerActions?: React.ReactNode;

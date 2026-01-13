@@ -53,12 +53,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           style={{ width: `${clampedProgress}%` }}
         />
       </div>
-      {showPercentage && (
-        <span className="progress-bar-text">{clampedProgress}%</span>
-      )}
+      {showPercentage && <span className="progress-bar-text">{clampedProgress}%</span>}
     </div>
   );
 };
 
 export default ProgressBar;
-

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchBookById, createBook, updateBook } from 'app/shared/reducers/book.reducer';
+import { useBooks } from 'app/shared/reducers/hooks';
 import { IBook, defaultBookValue } from 'app/shared/model/book.model';
 import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
 import './book-update.scss';
-import {translate, Translate} from "react-jhipster";
+import { translate, Translate } from 'react-jhipster';
 
 export const BookUpdate = () => {
-  const dispatch = useAppDispatch();
-  const { selectedBook, updating } = useAppSelector(state => state.book);
+  const { selectedBook, loadBook, addBook, editBook } = useBooks();
+  const [updating, setUpdating] = useState(false);
   const {
     control,
     handleSubmit,
@@ -28,9 +27,9 @@ export const BookUpdate = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchBookById(Number(id)));
+      loadBook(Number(id));
     }
-  }, [dispatch, id]);
+  }, [id, loadBook]);
 
   useEffect(() => {
     if (selectedBook && id) {
@@ -39,7 +38,6 @@ export const BookUpdate = () => {
       setValue('description', selectedBook.description);
       setValue('coverImageUrl', selectedBook.coverImageUrl);
       setValue('isPublic', selectedBook.isPublic);
-      setValue('uploadedBy', selectedBook.uploadedBy);
       setCoverPreview(selectedBook.coverImageUrl || '');
     }
   }, [selectedBook, id, setValue]);
@@ -93,14 +91,17 @@ export const BookUpdate = () => {
 
   const onSubmit = async (formData: IBook) => {
     try {
+      setUpdating(true);
       if (id) {
-        await dispatch(updateBook(formData));
+        await editBook(formData);
       } else {
-        await dispatch(createBook(formData));
+        await addBook(formData);
       }
       navigate('/teacher/books');
     } catch (error) {
       console.error('Error saving book:', error);
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -188,6 +189,36 @@ export const BookUpdate = () => {
                       />
                     )}
                   />
+
+                  <div className="form-group-inline">
+                    <label>
+                      <Translate contentKey="langleague.teacher.books.form.fields.isPublicLabel">Make Public</Translate>
+                    </label>
+                    <Controller
+                      name="isPublic"
+                      control={control}
+                      render={({ field }) => (
+                        <div className="toggle-switch">
+                          <input type="checkbox" id="isPublic" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                          <label htmlFor="isPublic" className="toggle-label">
+                            <span className="toggle-slider"></span>
+                          </label>
+                          <span className="toggle-text">
+                            {field.value ? (
+                              <Translate contentKey="langleague.teacher.books.form.fields.publicStatus">Public</Translate>
+                            ) : (
+                              <Translate contentKey="langleague.teacher.books.form.fields.privateStatus">Private</Translate>
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    />
+                    <p className="field-hint">
+                      <Translate contentKey="langleague.teacher.books.form.fields.isPublicHint">
+                        Public books can be discovered and enrolled by all students
+                      </Translate>
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -200,7 +231,9 @@ export const BookUpdate = () => {
                     <Translate contentKey="langleague.teacher.books.form.footer.cancel">Cancel</Translate>
                   </button>
                   <button type="submit" className="btn-primary" disabled={updating}>
-                    <Translate contentKey={updating ? 'langleague.teacher.books.form.footer.saving' : 'langleague.teacher.books.form.footer.save'}>
+                    <Translate
+                      contentKey={updating ? 'langleague.teacher.books.form.footer.saving' : 'langleague.teacher.books.form.footer.save'}
+                    >
                       {updating ? 'Saving...' : 'Save Book'}
                     </Translate>
                   </button>

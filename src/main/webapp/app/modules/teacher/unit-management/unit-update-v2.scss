@@ -145,6 +145,308 @@
     }
   }
 
+  // Global Controls for Expand/Collapse All
+  .global-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .control-btn {
+      background: white;
+      border: 1px solid #dadce0;
+      color: #5f6368;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        border-color: #673ab7;
+        color: #673ab7;
+        background: #f3e5f5;
+      }
+
+      i {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // Collapsible Card System
+  .collapsible-card {
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      border-color: #673ab7;
+      box-shadow: 0 2px 8px rgba(103, 58, 183, 0.1);
+    }
+
+    &.expanded {
+      border-left: 4px solid #673ab7;
+      box-shadow: 0 2px 8px rgba(103, 58, 183, 0.15);
+    }
+
+    &.dragging {
+      opacity: 0.5;
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .collapsible-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: #f8f9fa;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #f3e5f5;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex: 1;
+        min-width: 0;
+
+        .drag-handle {
+          color: #9aa0a6;
+          font-size: 1.25rem;
+          cursor: grab;
+          transition: color 0.2s ease;
+          flex-shrink: 0;
+
+          &:active {
+            cursor: grabbing;
+          }
+
+          &:hover {
+            color: #673ab7;
+          }
+        }
+
+        .card-number {
+          background: #673ab7;
+          color: white;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 500;
+          font-size: 0.875rem;
+          flex-shrink: 0;
+        }
+
+        .card-icon {
+          color: #673ab7;
+          font-size: 1.125rem;
+          flex-shrink: 0;
+        }
+
+        .card-summary {
+          font-weight: 500;
+          color: #202124;
+          font-size: 1rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+
+        .action-btn {
+          background: transparent;
+          border: none;
+          color: #5f6368;
+          cursor: pointer;
+          padding: 0.375rem;
+          border-radius: 50%;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background: rgba(0, 0, 0, 0.05);
+          }
+
+          &.delete:hover {
+            background: #fce8e6;
+            color: #d93025;
+          }
+
+          i {
+            font-size: 1.125rem;
+          }
+        }
+
+        .toggle-btn {
+          background: transparent;
+          border: none;
+          color: #673ab7;
+          cursor: pointer;
+          padding: 0.375rem;
+          border-radius: 50%;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background: rgba(103, 58, 183, 0.1);
+          }
+
+          i {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+          }
+        }
+      }
+    }
+
+    .collapsible-card-body {
+      padding: 1.5rem 1.25rem;
+      animation: slideDown 0.3s ease-out;
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          max-height: 0;
+        }
+        to {
+          opacity: 1;
+          max-height: 2000px;
+        }
+      }
+
+      .form-field {
+        margin-bottom: 1.5rem;
+        position: relative;
+
+        .field-input,
+        .field-textarea {
+          width: 100%;
+          border: none;
+          border-bottom: 1px solid #dadce0;
+          font-size: 1rem;
+          color: #202124;
+          padding: 0.75rem 0;
+          background: transparent;
+          transition: border-color 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-bottom-color: #673ab7;
+
+            ~ .field-underline {
+              transform: scaleX(1);
+            }
+          }
+
+          &::placeholder {
+            color: #9aa0a6;
+          }
+
+          &.small {
+            font-size: 0.875rem;
+          }
+        }
+
+        .field-textarea {
+          resize: vertical;
+          min-height: 60px;
+          font-family: inherit;
+        }
+
+        .field-underline {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: #673ab7;
+          transform: scaleX(0);
+          transition: transform 0.2s ease;
+        }
+
+        .field-hint {
+          display: block;
+          font-size: 0.75rem;
+          color: #5f6368;
+          margin-top: 0.5rem;
+        }
+      }
+
+      .form-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding-top: 1rem;
+        margin-top: 1rem;
+        border-top: 1px solid #f1f3f4;
+
+        .action-btn {
+          background: transparent;
+          border: 1px solid #dadce0;
+          color: #5f6368;
+          cursor: pointer;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+          font-size: 0.875rem;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &:hover {
+            border-color: #673ab7;
+            color: #673ab7;
+            background: #f3e5f5;
+          }
+
+          i {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    &.collapsed {
+      .collapsible-card-body {
+        display: none;
+      }
+    }
+  }
+
   // Form Card - Google Form style
   .form-card {
     background: white;

@@ -1,7 +1,11 @@
 {
   "home": {
-    "title": "欢迎, Java Hipster!",
-    "subtitle": "这里是首页",
+    "title": "探索知识",
+    "subtitle": "探索我们丰富的教育资源库",
+    "search": {
+      "placeholder": "搜索教材、课程或主题...",
+      "button": "搜索"
+    },
     "logged": {
       "message": "您目前是以 \"{{username}}\" 账号登录."
     },

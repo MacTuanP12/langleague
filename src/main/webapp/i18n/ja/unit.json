@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "unit": {
+      "home": {
+        "title": "Units",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Unit の作成",
+        "createOrEditLabel": "Unitの作成または編集",
+        "notFound": "Units が見つかりません。"
+      },
+      "created": "新しい Unit がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Unit が更新されました。",
+      "deleted": "ID {{ param }} の Unit が削除されました。",
+      "delete": {
+        "question": "Unit {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Unit"
+      },
+      "id": "ID",
+      "title": "Title",
+      "orderIndex": "Order Index",
+      "summary": "Summary",
+      "vocabularies": "Vocabularies",
+      "grammars": "Grammars",
+      "exercises": "Exercises",
+      "progresses": "Progresses",
+      "book": "Book"
+    }
+  }
+}

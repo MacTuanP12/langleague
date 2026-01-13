@@ -1,0 +1,28 @@
+{
+  "langleagueApp": {
+    "grammar": {
+      "home": {
+        "title": "Grammars",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Grammar の作成",
+        "createOrEditLabel": "Grammarの作成または編集",
+        "notFound": "Grammars が見つかりません。"
+      },
+      "created": "新しい Grammar がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Grammar が更新されました。",
+      "deleted": "ID {{ param }} の Grammar が削除されました。",
+      "delete": {
+        "question": "Grammar {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Grammar"
+      },
+      "id": "ID",
+      "title": "Title",
+      "contentMarkdown": "Content Markdown",
+      "exampleUsage": "Example Usage",
+      "orderIndex": "Order Index",
+      "unit": "Unit"
+    }
+  }
+}

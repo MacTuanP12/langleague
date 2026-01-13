@@ -34,15 +34,7 @@ export {
 } from './date-utils';
 
 // Text utilities
-export {
-  capitalize,
-  capitalizeWords,
-  normalizeSearch,
-  truncate,
-  slugify,
-  pluralize,
-  getInitials,
-  formatFullName,
-} from './text-utils';
+export { capitalize, capitalizeWords, normalizeSearch, truncate, slugify, pluralize, getInitials, formatFullName } from './text-utils';
 
-
+// File text extraction utilities
+export { extractTextFromFile, isFileTypeSupported, getSupportedExtensions, getAcceptAttribute } from './file-text-extractor';

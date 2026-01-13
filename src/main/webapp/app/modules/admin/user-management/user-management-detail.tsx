@@ -24,8 +24,8 @@ export const UserManagementDetail = () => {
       const response = await axios.get(`/api/admin/users/${login}`);
       setUser(response.data);
       setLoading(false);
-    } catch (error) {
-      console.error('Error loading user:', error);
+    } catch (err) {
+      console.error('Error loading user:', err);
       setLoading(false);
     }
   };
@@ -34,7 +34,6 @@ export const UserManagementDetail = () => {
     if (role === 'ROLE_STUDENT') return translate('userManagement.detail.roles.student');
     if (role === 'ROLE_TEACHER') return translate('userManagement.detail.roles.teacher');
     if (role === 'ROLE_ADMIN') return translate('userManagement.detail.roles.admin');
-    if (role === 'ROLE_LIBRARIAN') return translate('userManagement.detail.roles.librarian');
     return role;
   };
 
@@ -55,22 +54,11 @@ export const UserManagementDetail = () => {
   }
 
   if (error) {
-    return (
-      <ErrorDisplay
-        message={error}
-        onRetry={loadUser}
-      />
-    );
+    return <ErrorDisplay message={error} onRetry={loadUser} />;
   }
 
   if (!user) {
-    return (
-      <ErrorDisplay
-        message="userManagement.detail.notFound"
-        isI18nKey
-        iconClass="bi-person-x"
-      />
-    );
+    return <ErrorDisplay message="userManagement.detail.notFound" isI18nKey iconClass="bi-person-x" />;
   }
 
   return (

@@ -1,21 +1,21 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router';
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
-import { UnitUpdate } from './unit-update';
-import { UnitVocabulary } from './unit-vocabulary';
-import { UnitGrammar } from './unit-grammar';
-import { UnitExercise } from './unit-exercise';
+import Unit from './unit';
+import UnitDetail from './unit-detail';
+import UnitUpdate from './unit-update';
+import UnitDeleteDialog from './unit-delete-dialog';
 
 const UnitRoutes = () => (
   <ErrorBoundaryRoutes>
+    <Route index element={<Unit />} />
     <Route path="new" element={<UnitUpdate />} />
-    <Route path=":unitId">
+    <Route path=":id">
+      <Route index element={<UnitDetail />} />
       <Route path="edit" element={<UnitUpdate />} />
-      <Route path="vocabulary" element={<UnitVocabulary />} />
-      <Route path="grammar" element={<UnitGrammar />} />
-      <Route path="exercise" element={<UnitExercise />} />
+      <Route path="delete" element={<UnitDeleteDialog />} />
     </Route>
   </ErrorBoundaryRoutes>
 );

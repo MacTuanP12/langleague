@@ -162,7 +162,7 @@ describe('User management reducer tests', () => {
         loading: false,
         errorMessage: null,
         users: [],
-        authorities: [] as any[],
+        authorities: [] as string[],
         user: defaultUserValue,
         updating: false,
         updateSuccess: false,

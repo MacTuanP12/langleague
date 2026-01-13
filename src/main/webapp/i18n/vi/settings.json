@@ -1,30 +1,55 @@
 {
   "settings": {
-    "title": "Cài đặt người dùng của [<strong>{{username}}</strong>]",
+    "title": "Cài đặt người dùng cho [<strong>{{username}}</strong>]",
+    "page": {
+      "profile": "Hồ sơ",
+      "account": "Tài khoản"
+    },
+    "sidebar": {
+      "home": "Trang chủ",
+      "flashcard": "Thẻ ghi nhớ",
+      "games": "Trò chơi"
+    },
+    "header": {
+      "changePhoto": "Đổi ảnh"
+    },
     "form": {
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "emailAddress": "Địa chỉ Email",
+      "emailPlaceholder": "nguyen.van.a@university.edu",
+      "bio": "Tiểu sử / Giới thiệu",
+      "bioPlaceholder": "Sinh viên khoa học máy tính đam mê thuật toán và phần mềm mã nguồn mở. Học từng thẻ ghi nhớ một.",
       "firstname": "Tên",
-      "firstname.placeholder": "Nhập tên của bạn",
+      "firstname.placeholder": "Tên của bạn",
       "lastname": "Họ",
-      "lastname.placeholder": "Nhập họ của bạn",
+      "lastname.placeholder": "Họ của bạn",
       "language": "Ngôn ngữ",
-      "button": "Lưu"
+      "button": "Lưu",
+      "changePassword": "Đổi mật khẩu",
+      "saveChanges": "Lưu thay đổi"
     },
     "messages": {
       "error": {
-        "fail": "<strong>Có lỗi xảy ra!</strong> Không thể lưu cài đặt.",
-        "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng nhập email khác."
+        "fail": "<strong>Đã xảy ra lỗi!</strong> Không thể lưu cài đặt.",
+        "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng chọn email khác."
       },
       "success": "<strong>Đã lưu cài đặt!</strong>",
+      "profileUpdateSuccess": "Cập nhật hồ sơ thành công!",
+      "avatarUploadSuccess": "Tải ảnh đại diện thành công!",
+      "avatarUploadError": "Tải ảnh đại diện thất bại. Vui lòng thử lại.",
+      "invalidImageType": "Vui lòng chọn file ảnh hợp lệ (JPG, PNG, GIF, v.v.)",
+      "imageTooLarge": "Kích thước ảnh phải nhỏ hơn 5MB",
       "validate": {
         "firstname": {
-          "required": "Bạn phải nhập tên.",
+          "required": "Tên là bắt buộc.",
           "minlength": "Tên phải có ít nhất 1 ký tự",
-          "maxlength": "Tên không được vượt quá 50 ký tự"
+          "maxlength": "Tên không được dài quá 50 ký tự"
         },
         "lastname": {
-          "required": "Bạn phải nhập họ tên.",
-          "minlength": "Họ tên phải có ít nhất 1 ký tự",
-          "maxlength": "Họ tên không được vượt quá 50 ký tự"
+          "required": "Họ là bắt buộc.",
+          "minlength": "Họ phải có ít nhất 1 ký tự",
+          "maxlength": "Họ không được dài quá 50 ký tự"
         }
       }
     }

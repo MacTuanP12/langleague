@@ -1,0 +1,31 @@
+{
+  "langleagueApp": {
+    "userProfile": {
+      "home": {
+        "title": "User Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "建立一筆新的 User Profile",
+        "createOrEditLabel": "建立或編輯 User Profile",
+        "notFound": "No User Profiles found"
+      },
+      "created": "新的 User Profile 建立成功，識別碼為 {{ param }}",
+      "updated": "識別碼為 {{ param }} 的 User Profile 更新成功",
+      "deleted": "識別碼為 {{ param }} 的 User Profile 刪除成功",
+      "delete": {
+        "question": "您確定要刪除 User Profile {{ id }} 嗎?"
+      },
+      "detail": {
+        "title": "User Profile"
+      },
+      "id": "ID",
+      "streakCount": "Streak Count",
+      "lastLearningDate": "Last Learning Date",
+      "bio": "Bio",
+      "theme": "Theme",
+      "user": "User",
+      "books": "Books",
+      "enrollments": "Enrollments",
+      "progresses": "Progresses"
+    }
+  }
+}
