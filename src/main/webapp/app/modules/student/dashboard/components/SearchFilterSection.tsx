@@ -1,6 +1,9 @@
 import React from 'react';
 import { translate } from 'react-jhipster';
+import { Input } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FilterTab, FILTER_TABS } from '../dashboard.constants';
+import '../../student.scss';
 
 interface SearchFilterSectionProps {
   searchQuery: string;
@@ -10,19 +13,19 @@ interface SearchFilterSectionProps {
 }
 
 /**
- * SearchFilterSection component - Extracted search and filter UI
+ * SearchFilterSection component - Search and filter UI with global styling
  */
 export const SearchFilterSection: React.FC<SearchFilterSectionProps> = ({ searchQuery, filterTab, onSearchChange, onFilterChange }) => {
   return (
     <div className="search-filter-section">
-      <div className="search-wrapper">
-        <i className="bi bi-search" aria-hidden="true"></i>
-        <input
+      <div className="search-box">
+        <FontAwesomeIcon icon="search" className="search-icon" />
+        <Input
           type="text"
           placeholder={translate('langleague.student.dashboard.search.placeholder')}
           value={searchQuery}
           onChange={e => onSearchChange(e.target.value)}
-          aria-label="Search courses"
+          aria-label="Search books"
         />
       </div>
 

@@ -24,7 +24,9 @@ public class Grammar implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "title", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 200)
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
 
     @Lob
@@ -36,6 +38,7 @@ public class Grammar implements Serializable {
     private String exampleUsage;
 
     @NotNull
+    @Min(0)
     @Column(name = "order_index", nullable = false)
     private Integer orderIndex;
 

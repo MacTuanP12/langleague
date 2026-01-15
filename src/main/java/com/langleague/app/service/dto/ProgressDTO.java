@@ -21,11 +21,27 @@ public class ProgressDTO implements Serializable {
 
     private Boolean isBookmarked;
 
+    @Min(0)
+    @Max(100)
     private Integer score;
+
+    private Instant lastAccessedAt;
+
+    @Min(0)
+    @Max(100)
+    private Integer completionPercentage;
+
+    private Boolean isVocabularyFinished;
+
+    private Boolean isGrammarFinished;
+
+    private Boolean isExerciseFinished;
 
     private Long userProfileId;
 
     private Long unitId;
+
+    private UnitDTO unit;
 
     public Long getId() {
         return id;
@@ -67,6 +83,46 @@ public class ProgressDTO implements Serializable {
         this.score = score;
     }
 
+    public Instant getLastAccessedAt() {
+        return lastAccessedAt;
+    }
+
+    public void setLastAccessedAt(Instant lastAccessedAt) {
+        this.lastAccessedAt = lastAccessedAt;
+    }
+
+    public Integer getCompletionPercentage() {
+        return completionPercentage;
+    }
+
+    public void setCompletionPercentage(Integer completionPercentage) {
+        this.completionPercentage = completionPercentage;
+    }
+
+    public Boolean getIsVocabularyFinished() {
+        return isVocabularyFinished;
+    }
+
+    public void setIsVocabularyFinished(Boolean isVocabularyFinished) {
+        this.isVocabularyFinished = isVocabularyFinished;
+    }
+
+    public Boolean getIsGrammarFinished() {
+        return isGrammarFinished;
+    }
+
+    public void setIsGrammarFinished(Boolean isGrammarFinished) {
+        this.isGrammarFinished = isGrammarFinished;
+    }
+
+    public Boolean getIsExerciseFinished() {
+        return isExerciseFinished;
+    }
+
+    public void setIsExerciseFinished(Boolean isExerciseFinished) {
+        this.isExerciseFinished = isExerciseFinished;
+    }
+
     public Long getUserProfileId() {
         return userProfileId;
     }
@@ -81,6 +137,14 @@ public class ProgressDTO implements Serializable {
 
     public void setUnitId(Long unitId) {
         this.unitId = unitId;
+    }
+
+    public UnitDTO getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitDTO unit) {
+        this.unit = unit;
     }
 
     @Override
@@ -121,6 +185,20 @@ public class ProgressDTO implements Serializable {
             "'" +
             ", score=" +
             getScore() +
+            ", lastAccessedAt='" +
+            getLastAccessedAt() +
+            "'" +
+            ", completionPercentage=" +
+            getCompletionPercentage() +
+            ", isVocabularyFinished='" +
+            getIsVocabularyFinished() +
+            "'" +
+            ", isGrammarFinished='" +
+            getIsGrammarFinished() +
+            "'" +
+            ", isExerciseFinished='" +
+            getIsExerciseFinished() +
+            "'" +
             ", userProfileId=" +
             getUserProfileId() +
             ", unitId=" +

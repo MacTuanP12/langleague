@@ -85,6 +85,7 @@ public class VocabularyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<VocabularyDTO> createVocabulary(@Valid @RequestBody VocabularyDTO vocabularyDTO) throws URISyntaxException {
         LOG.debug("REST request to save Vocabulary : {}", vocabularyDTO);
         if (vocabularyDTO.getId() != null) {
@@ -111,7 +112,7 @@ public class VocabularyResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the list of new vocabularyDTOs.
      */
     @PostMapping("/bulk")
-    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<VocabularyDTO>> createVocabulariesBulk(@Valid @RequestBody List<VocabularyDTO> vocabularies) {
         LOG.debug("REST request to save bulk Vocabularies");
         if (vocabularies.isEmpty()) {
@@ -142,6 +143,7 @@ public class VocabularyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<VocabularyDTO> updateVocabulary(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody VocabularyDTO vocabularyDTO
@@ -181,6 +183,7 @@ public class VocabularyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<VocabularyDTO> partialUpdateVocabulary(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody VocabularyDTO vocabularyDTO
@@ -212,12 +215,13 @@ public class VocabularyResource {
 
     /**
      * {@code GET  /vocabularies} : get all the vocabularies.
+     * This endpoint is generally not used - vocabularies are fetched by unit.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vocabularies in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<VocabularyDTO>> getAllVocabularies(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Vocabularies");
         Page<VocabularyDTO> page = vocabularyService.findAll(pageable);
@@ -227,6 +231,7 @@ public class VocabularyResource {
 
     /**
      * {@code GET  /vocabularies/:id} : get the "id" vocabulary.
+     * Students and Teachers can view vocabularies.
      *
      * @param id the id of the vocabularyDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the vocabularyDTO, or with status {@code 404 (Not Found)}.
@@ -240,6 +245,7 @@ public class VocabularyResource {
 
     /**
      * {@code GET  /vocabularies/by-unit/:unitId} : get all the vocabularies by unitId.
+     * Students and Teachers can view vocabularies.
      *
      * @param unitId the id of the unit.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vocabularies in body.
@@ -257,6 +263,7 @@ public class VocabularyResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteVocabulary(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Vocabulary : {}", id);
 

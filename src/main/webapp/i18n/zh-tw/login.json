@@ -7,11 +7,29 @@
       "password": "密碼",
       "password.placeholder": "您的密碼",
       "rememberme": "自動登入",
-      "button": "登入"
+      "button": "登入",
+      "button.signing": "登入中...",
+      "captcha": {
+        "loading": "載入驗證碼...",
+        "placeholder": "輸入驗證碼",
+        "error": "載入失敗，點擊重試。"
+      }
     },
     "messages": {
       "error": {
-        "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。"
+        "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。",
+        "captcha": "驗證碼錯誤，請重試。"
+      },
+      "validate": {
+        "username": {
+          "required": "使用者名稱是必填欄位。"
+        },
+        "password": {
+          "required": "密碼是必填欄位。"
+        },
+        "captcha": {
+          "required": "驗證碼是必填欄位。"
+        }
       },
       "info": {
         "authenticated": {

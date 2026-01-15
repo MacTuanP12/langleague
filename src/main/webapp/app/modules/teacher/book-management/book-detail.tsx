@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { translate, Translate, TextFormat } from 'react-jhipster';
 import { toast } from 'react-toastify';
+import { Container, Row, Col, Card, CardBody, Button, Badge } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchBookById } from 'app/shared/reducers/book.reducer';
 import { fetchUnitsByBookId, deleteUnit, reorderUnits } from 'app/shared/reducers/unit.reducer';
 import { APP_DATE_FORMAT } from 'app/config/constants';
-import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
+import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
+import '../teacher.scss';
 import './book-detail.scss';
 
 export const BookDetail = () => {
@@ -18,7 +21,6 @@ export const BookDetail = () => {
   const book = useAppSelector(state => state.book.selectedBook);
   const units = useAppSelector(state => state.unit.units);
   const bookLoading = useAppSelector(state => state.book.loading);
-  const unitsLoading = useAppSelector(state => state.unit.loading);
 
   const [draggedUnitIndex, setDraggedUnitIndex] = useState<number | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -115,133 +117,211 @@ export const BookDetail = () => {
   }
 
   return (
-    <TeacherLayout>
-      <div className="teacher-book-detail">
-        <div className="detail-header">
-          <button onClick={() => navigate('/teacher/books')} className="back-btn">
-            <i className="bi bi-arrow-left"></i> Back to Books
-          </button>
-          <div className="header-info">
-            <h1>{book.title}</h1>
-            <p>{book.description}</p>
+    <TeacherLayout title={book.title} subtitle={book.description} showBackButton={false}>
+      <Container fluid className="teacher-page-container">
+        {/* Page Header */}
+        <div className="teacher-header mb-4">
+          <div className="header-content">
+            <Button color="link" className="p-0 mb-3 text-decoration-none" onClick={() => navigate('/teacher/books')}>
+              <FontAwesomeIcon icon="arrow-left" className="me-2" />
+              <Translate contentKey="langleague.teacher.books.detail.backToBooks">Back to Books</Translate>
+            </Button>
           </div>
           <div className="header-actions">
-            <Link to={`/teacher/books/${id}/edit`} className="btn-secondary">
-              <i className="bi bi-pencil"></i> Edit Book
-            </Link>
-            <Link to={`/teacher/units/${id}/new`} className="btn-primary">
-              <i className="bi bi-plus-circle"></i> Add Unit
-            </Link>
+            <Button tag={Link} to={`/teacher/books/${id}/edit`} color="secondary" outline className="me-2">
+              <FontAwesomeIcon icon="pencil-alt" className="me-2" />
+              <Translate contentKey="langleague.teacher.books.detail.editBook">Edit Book</Translate>
+            </Button>
+            <Button tag={Link} to={`/teacher/units/${id}/new`} color="primary">
+              <FontAwesomeIcon icon="plus-circle" className="me-2" />
+              <Translate contentKey="langleague.teacher.books.detail.addUnit">Add Unit</Translate>
+            </Button>
           </div>
         </div>
 
-        <div className="book-info-card">
-          <img src={book.coverImageUrl || '/content/images/default-book.png'} alt={book.title} className="book-cover" />
-          <div className="book-meta">
-            <div className="meta-item">
-              <span className="label">Total Units:</span>
-              <span className="value">{localUnits.length}</span>
-            </div>
-            <div className="meta-item">
-              <span className="label">Created:</span>
-              <span className="value">
-                {book.createdAt ? <TextFormat value={book.createdAt.toDate()} type="date" format={APP_DATE_FORMAT} /> : 'N/A'}
-              </span>
-            </div>
-            <div className="meta-item">
-              <span className="label">Public:</span>
-              <span className="value">{book.isPublic ? 'Yes' : 'No'}</span>
-            </div>
-          </div>
-        </div>
+        {/* Book Info Card */}
+        <Row className="mb-4">
+          <Col md="12">
+            <Card className="stat-card">
+              <CardBody>
+                <Row>
+                  <Col md="3" className="text-center">
+                    <img
+                      src={book.coverImageUrl || '/content/images/default-book.png'}
+                      alt={book.title}
+                      className="img-fluid rounded"
+                      style={{ maxHeight: '200px', objectFit: 'cover' }}
+                    />
+                  </Col>
+                  <Col md="9">
+                    <Row>
+                      <Col md="4">
+                        <div className="stat-item mb-3">
+                          <small className="text-muted">
+                            <Translate contentKey="langleague.teacher.books.detail.meta.totalUnits">Total Units:</Translate>
+                          </small>
+                          <h4>{localUnits.length}</h4>
+                        </div>
+                      </Col>
+                      <Col md="4">
+                        <div className="stat-item mb-3">
+                          <small className="text-muted">
+                            <Translate contentKey="langleague.teacher.books.detail.meta.created">Created:</Translate>
+                          </small>
+                          <h6>{book.createdAt ? <TextFormat value={book.createdAt} type="date" format={APP_DATE_FORMAT} /> : 'N/A'}</h6>
+                        </div>
+                      </Col>
+                      <Col md="4">
+                        <div className="stat-item mb-3">
+                          <small className="text-muted">
+                            <Translate contentKey="langleague.teacher.books.detail.meta.public">Public:</Translate>
+                          </small>
+                          <h6>
+                            <Badge color={book.isPublic ? 'success' : 'secondary'}>
+                              {book.isPublic ? (
+                                <Translate contentKey="langleague.teacher.books.detail.meta.yes">Yes</Translate>
+                              ) : (
+                                <Translate contentKey="langleague.teacher.books.detail.meta.no">No</Translate>
+                              )}
+                            </Badge>
+                          </h6>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
 
-        <div className="units-section">
-          <div className="section-header">
-            <h2>
-              <i className="bi bi-list-ol"></i> Units
-            </h2>
-            <p className="hint">
-              <i className="bi bi-grip-vertical"></i> Drag and drop to reorder units
-            </p>
-          </div>
+        {/* Units Section */}
+        <Card className="content-section">
+          <CardBody>
+            <div className="section-header">
+              <h2>
+                <FontAwesomeIcon icon="list-ol" className="me-2" />
+                <Translate contentKey="langleague.teacher.books.detail.units.title">Units</Translate>
+              </h2>
+              <p className="text-muted mb-0">
+                <FontAwesomeIcon icon="grip-vertical" className="me-2" />
+                <Translate contentKey="langleague.teacher.books.detail.units.hint">Drag and drop to reorder units</Translate>
+              </p>
+            </div>
 
-          <div className="units-list">
             {localUnits.length === 0 ? (
-              <div className="empty-state">
-                <i className="bi bi-inbox"></i>
-                <h3>No units yet</h3>
-                <p>Start by adding your first unit to this book</p>
-                <Link to={`/teacher/units/${id}/new`} className="btn-primary">
-                  <i className="bi bi-plus-circle"></i> Add First Unit
-                </Link>
+              <div className="text-center py-5">
+                <FontAwesomeIcon icon="inbox" size="3x" className="text-muted mb-3" />
+                <h3 className="text-muted">
+                  <Translate contentKey="langleague.teacher.books.detail.units.empty.title">No units yet</Translate>
+                </h3>
+                <p className="text-muted mb-4">
+                  <Translate contentKey="langleague.teacher.books.detail.units.empty.description">
+                    Start by adding your first unit to this book
+                  </Translate>
+                </p>
+                <Button tag={Link} to={`/teacher/units/${id}/new`} color="primary">
+                  <FontAwesomeIcon icon="plus-circle" className="me-2" />
+                  <Translate contentKey="langleague.teacher.books.detail.units.empty.addFirst">Add First Unit</Translate>
+                </Button>
               </div>
             ) : (
-              localUnits.map((unit, index) => (
-                <div
-                  key={unit.id}
-                  className={`unit-card ${draggedUnitIndex === index ? 'dragging' : ''}`}
-                  draggable
-                  onDragStart={() => handleDragStart(index)}
-                  onDragOver={e => handleDragOver(e, index)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <div className="drag-handle">
-                    <i className="bi bi-grip-vertical"></i>
-                  </div>
-                  <div className="unit-number">{index + 1}</div>
-                  <div className="unit-content">
-                    <h3>{unit.title}</h3>
-                    <p>{unit.summary}</p>
-                    <div className="unit-stats">
-                      <span>
-                        <i className="bi bi-book"></i>{' '}
-                        <Translate contentKey="langleague.teacher.books.detail.units.stats.vocabulary">Vocabulary:</Translate>{' '}
-                        {unit.vocabularies?.length || 0}
-                      </span>
-                      <span>
-                        <i className="bi bi-journal-text"></i>{' '}
-                        <Translate contentKey="langleague.teacher.books.detail.units.stats.grammar">Grammar:</Translate>{' '}
-                        {unit.grammars?.length || 0}
-                      </span>
-                      <span>
-                        <i className="bi bi-question-circle"></i>{' '}
-                        <Translate contentKey="langleague.teacher.books.detail.units.stats.exercises">Exercises:</Translate>{' '}
-                        {unit.exercises?.length || 0}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="unit-actions">
-                    <Link to={`/teacher/units/${unit.id}/content`} className="btn-icon" title="Manage Content">
-                      <i className="bi bi-folder2-open"></i>
-                    </Link>
-                    <Link
-                      to={`/teacher/units/${unit.id}/edit`}
-                      className="btn-icon"
-                      title={translate('langleague.teacher.books.detail.units.actions.edit')}
-                    >
-                      <i className="bi bi-pencil"></i>
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteUnitClick(unit.id)}
-                      className="btn-icon btn-danger"
-                      title={translate('langleague.teacher.books.detail.units.actions.delete')}
-                    >
-                      <i className="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              ))
+              <div className="units-list mt-4">
+                {localUnits.map((unit, index) => (
+                  <Card
+                    key={unit.id}
+                    className={`mb-3 unit-card ${draggedUnitIndex === index ? 'dragging' : ''}`}
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={e => handleDragOver(e, index)}
+                    onDragEnd={handleDragEnd}
+                    style={{
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      cursor: draggedUnitIndex === index ? 'grabbing' : 'grab',
+                    }}
+                  >
+                    <CardBody>
+                      <Row className="align-items-center">
+                        <Col xs="auto">
+                          <div className="drag-handle" style={{ cursor: 'grab' }}>
+                            <FontAwesomeIcon icon="grip-vertical" size="lg" className="text-muted" />
+                          </div>
+                        </Col>
+                        <Col xs="auto">
+                          <Badge color="primary" pill className="px-3 py-2">
+                            {index + 1}
+                          </Badge>
+                        </Col>
+                        <Col>
+                          <h5 className="mb-1">{unit.title}</h5>
+                          <p className="text-muted mb-2">{unit.summary}</p>
+                          <div className="d-flex gap-3">
+                            <small className="text-muted">
+                              <FontAwesomeIcon icon="book" className="me-1" />
+                              <Translate contentKey="langleague.teacher.books.detail.units.stats.vocabulary">Vocabulary:</Translate>{' '}
+                              <strong>{unit.vocabularies?.length || 0}</strong>
+                            </small>
+                            <small className="text-muted">
+                              <FontAwesomeIcon icon="book-open" className="me-1" />
+                              <Translate contentKey="langleague.teacher.books.detail.units.stats.grammar">Grammar:</Translate>{' '}
+                              <strong>{unit.grammars?.length || 0}</strong>
+                            </small>
+                            <small className="text-muted">
+                              <FontAwesomeIcon icon="question-circle" className="me-1" />
+                              <Translate contentKey="langleague.teacher.books.detail.units.stats.exercises">Exercises:</Translate>{' '}
+                              <strong>{unit.exercises?.length || 0}</strong>
+                            </small>
+                          </div>
+                        </Col>
+                        <Col xs="auto">
+                          <div className="d-flex gap-2">
+                            <Button
+                              tag={Link}
+                              to={`/teacher/units/${unit.id}/content`}
+                              color="primary"
+                              size="sm"
+                              title={translate('langleague.teacher.books.detail.units.actions.manageContent')}
+                            >
+                              <FontAwesomeIcon icon="folder-open" className="me-1" />
+                              <Translate contentKey="langleague.teacher.books.detail.units.actions.manageContent">Manage Content</Translate>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`/teacher/units/${unit.id}/edit`}
+                              color="secondary"
+                              size="sm"
+                              outline
+                              title={translate('langleague.teacher.books.detail.units.actions.edit')}
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />
+                            </Button>
+                            <Button
+                              onClick={() => handleDeleteUnitClick(unit.id)}
+                              color="danger"
+                              size="sm"
+                              outline
+                              title={translate('langleague.teacher.books.detail.units.actions.delete')}
+                            >
+                              <FontAwesomeIcon icon="trash" />
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </CardBody>
+                  </Card>
+                ))}
+              </div>
             )}
-          </div>
-        </div>
-      </div>
+          </CardBody>
+        </Card>
+      </Container>
 
       <ConfirmModal
         isOpen={deleteModalOpen}
         title="langleague.teacher.books.unit.confirmDeleteTitle"
         message="langleague.teacher.books.unit.confirmDelete"
-        confirmText="langleague.common.delete"
-        cancelText="langleague.common.cancel"
+        confirmText="langleague.teacher.common.delete"
+        cancelText="langleague.teacher.common.cancel"
         onConfirm={handleDeleteUnitConfirm}
         onCancel={handleDeleteUnitCancel}
         isI18nKey

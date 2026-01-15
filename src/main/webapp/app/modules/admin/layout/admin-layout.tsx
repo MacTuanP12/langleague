@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 import { useAppDispatch } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
 import { ModernHeader } from 'app/shared/layout/header/modern-header';
@@ -38,22 +39,29 @@ export const AdminLayout = () => {
         <nav className="nav-menu">
           <Link to="/admin/dashboard" className={`nav-item ${isActive('/admin/dashboard') ? 'active' : ''}`}>
             <i className="bi bi-speedometer2"></i>
-            {isSidebarOpen && <span>Dashboard</span>}
-          </Link>
-
-          <Link to="/admin/books" className={`nav-item ${isActive('/admin/books') ? 'active' : ''}`}>
-            <i className="bi bi-book"></i>
-            {isSidebarOpen && <span>Books</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.admin.dashboard">Dashboard</Translate>
+              </span>
+            )}
           </Link>
 
           <Link to="/admin/user-management" className={`nav-item ${isActive('/admin/user-management') ? 'active' : ''}`}>
             <i className="bi bi-people"></i>
-            {isSidebarOpen && <span>Users</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.admin.users">Users</Translate>
+              </span>
+            )}
           </Link>
 
-          <Link to="/admin/settings" className={`nav-item ${isActive('/admin/settings') ? 'active' : ''}`}>
-            <i className="bi bi-gear"></i>
-            {isSidebarOpen && <span>Settings</span>}
+          <Link to="/admin/docs" className={`nav-item ${isActive('/admin/docs') ? 'active' : ''}`}>
+            <i className="bi bi-file-earmark-text"></i>
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.menu.admin.apidocs">API Docs</Translate>
+              </span>
+            )}
           </Link>
         </nav>
 
@@ -62,7 +70,11 @@ export const AdminLayout = () => {
 
           <button className={`logout-btn ${!isSidebarOpen ? 'collapsed' : ''}`} onClick={handleLogout}>
             <i className="bi bi-box-arrow-right"></i>
-            {isSidebarOpen && <span>Log Out</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.admin.logout">Log Out</Translate>
+              </span>
+            )}
           </button>
         </div>
       </aside>

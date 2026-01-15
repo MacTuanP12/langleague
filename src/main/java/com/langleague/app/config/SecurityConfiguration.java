@@ -79,8 +79,11 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                     .requestMatchers(mvc.pattern("/api/captcha")).permitAll()
 
-                    // 4. Secured APIs
+                    // 4. Secured APIs - Role-based access
+                    // Admin: chỉ quản lí người dùng
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    // Teacher: quản lí sách (không có enrollment và progress)
+                    // Student: xem sách/chương/bài tập, quản lí notes, streak, progress, enrollment
                     .requestMatchers(mvc.pattern("/api/**")).authenticated() // Các API khác bắt buộc đăng nhập
 
                     // 5. Management Endpoints

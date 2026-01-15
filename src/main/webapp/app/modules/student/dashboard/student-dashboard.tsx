@@ -1,23 +1,26 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Translate } from 'react-jhipster';
+import { Container } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LoadingSpinner } from 'app/shared/components';
+import { BookCard } from 'app/shared/components/cards/BookCard';
 import { IProgress } from 'app/shared/model/progress.model';
 import { FilterTab } from './dashboard.constants';
 import { useBookFilters } from './hooks/useBookFilters';
-import { BookCard } from './components/BookCard';
 import { SearchFilterSection } from './components/SearchFilterSection';
 import { StreakWidget } from './components/StreakWidget';
 import { useEnrollments, useProgress, useUserProfile } from 'app/shared/reducers/hooks';
-import styles from './student-dashboard.module.scss';
+import '../student.scss';
 
 /**
- * StudentDashboard Component - Using Redux for real data
+ * StudentDashboard Component - Main learning dashboard with Redux integration
  *
  * Features:
  * - Fetch user enrollments from API
  * - Track learning progress
  * - Filter and search books
  * - Display user statistics
+ * - Gamification elements (streak, progress)
  */
 
 // Helper function to calculate progress (moved outside component for performance)
@@ -78,14 +81,14 @@ export const StudentDashboard = () => {
   // Loading state
   if (loading) {
     return (
-      <div className={styles?.dashboardContentWrapper || 'dashboard-content-wrapper'}>
-        <LoadingSpinner message="Loading your books..." />
-      </div>
+      <Container fluid className="student-page-container">
+        <LoadingSpinner message="langleague.student.dashboard.loading" isI18nKey />
+      </Container>
     );
   }
 
   return (
-    <div className={styles?.dashboardContentWrapper || 'dashboard-content-wrapper'}>
+    <Container fluid className="student-page-container">
       {/* Streak Widget */}
       <StreakWidget />
 
@@ -98,31 +101,29 @@ export const StudentDashboard = () => {
       />
 
       {/* Books Grid */}
-      <div className={styles?.booksGrid || 'books-grid'}>
+      <div className="books-grid">
         {(filteredBooks || []).map(book => (
-          <BookCard key={book.id} book={book} />
+          <BookCard key={book.id} book={book} mode="student" progress={book.progress} status={book.status} />
         ))}
       </div>
 
       {/* Empty State */}
       {(!filteredBooks || filteredBooks.length === 0) && (
-        <div className={styles?.noResults || 'no-results'}>
-          <i className="bi bi-search"></i>
+        <div className="empty-state-student">
+          <div className="empty-icon">
+            <FontAwesomeIcon icon="search" />
+          </div>
+          <h3>
+            <Translate contentKey="langleague.student.dashboard.noBooks">No books found</Translate>
+          </h3>
           <p>
-            <Translate contentKey="langleague.student.dashboard.noBooks">No books found matching your search.</Translate>
+            <Translate contentKey="langleague.student.dashboard.noBooksDescription">
+              Try adjusting your search or filter to find what you're looking for.
+            </Translate>
           </p>
         </div>
       )}
-
-      {/* Load More */}
-      {filteredBooks && filteredBooks.length > 0 && (
-        <div className={styles?.loadMoreSection || 'load-more-section'}>
-          <button className={styles?.loadMoreBtn || 'load-more-btn'} aria-label="Load more books">
-            <Translate contentKey="langleague.student.dashboard.loadMore">Load more books</Translate> <i className="bi bi-arrow-down"></i>
-          </button>
-        </div>
-      )}
-    </div>
+    </Container>
   );
 };
 

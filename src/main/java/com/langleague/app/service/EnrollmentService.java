@@ -78,7 +78,7 @@ public class EnrollmentService {
         // 2. Check if already enrolled
         Optional<Enrollment> existingEnrollment = enrollmentRepository.findOneByUserIsCurrentUserAndBookId(bookId);
         if (existingEnrollment.isPresent()) {
-            return enrollmentMapper.toDto(existingEnrollment.get());
+            return enrollmentMapper.toDto(existingEnrollment.orElseThrow());
         }
 
         // 3. Get book

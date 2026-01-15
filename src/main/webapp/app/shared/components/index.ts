@@ -3,7 +3,7 @@ export { LoadingSpinner, InlineSpinner } from './loading/LoadingSpinner';
 export type { LoadingSpinnerProps } from './loading/LoadingSpinner';
 export {
   Skeleton,
-  CourseSkeleton,
+  BookSkeleton, // ✅ Fixed: Renamed from CourseSkeleton
   LessonSkeleton,
   DashboardSkeleton,
   TextLineSkeleton,
@@ -20,5 +20,8 @@ export type { ErrorDisplayProps } from './error/ErrorDisplay';
 export { ConfirmModal } from './modal/ConfirmModal';
 export type { ConfirmModalProps } from './modal/ConfirmModal';
 
-// Learning Components (for course content navigation)
+// Learning Components (for book content navigation)
 export { ContentSidebar, UnitList } from './learning';
+
+// Empty State Component
+export { EmptyState } from './EmptyState';

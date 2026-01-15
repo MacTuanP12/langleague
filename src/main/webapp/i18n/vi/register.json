@@ -2,7 +2,11 @@
   "register": {
     "title": "Đăng ký",
     "form": {
-      "button": "Đăng ký"
+      "button": "Đăng ký",
+      "button.registering": "Đang đăng ký...",
+      "email": {
+        "placeholder": "Nhập email của bạn"
+      }
     },
     "messages": {
       "validate": {
@@ -10,14 +14,26 @@
           "required": "Bạn phải nhập tên tài khoản.",
           "minlength": "Tên tài khoản phải có ít nhất 1 ký tự.",
           "maxlength": "Tên tài khoản không được vượt quá 50 ký tự.",
-          "pattern": "Your username is invalid."
+          "pattern": "Tên tài khoản không hợp lệ."
+        },
+        "email": {
+          "required": "Vui lòng nhập email.",
+          "invalid": "Địa chỉ email không hợp lệ."
+        },
+        "newpassword": {
+          "required": "Vui lòng nhập mật khẩu.",
+          "minlength": "Mật khẩu phải có ít nhất 4 ký tự."
+        },
+        "confirmpassword": {
+          "required": "Vui lòng xác nhận mật khẩu."
         }
       },
-      "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng kiểm tra hộp thư để xác nhận tài khoản.",
+      "success": "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.",
       "error": {
-        "fail": "<strong>Đăng ký thất bại!</strong> Vui lòng thử lại sau.",
-        "userexists": "<strong>Tên tài khoản này đã được sử dụng!</strong> Bạn vui lòng chọn tên tài khoản khác.",
-        "emailexists": "<strong>Email này đã được sử dụng!</strong> Bạn vui lòng nhập email khác."
+        "fail": "Đăng ký thất bại! Vui lòng thử lại sau.",
+        "userexists": "Tên tài khoản này đã được sử dụng. Vui lòng chọn tên khác.",
+        "emailexists": "Email này đã được sử dụng. Vui lòng nhập email khác.",
+        "dontmatch": "Mật khẩu xác nhận không khớp."
       }
     }
   }

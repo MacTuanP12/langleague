@@ -24,11 +24,14 @@ public class ExerciseDTO implements Serializable {
     @Lob
     private String correctAnswerRaw;
 
+    @Size(max = 500)
     private String audioUrl;
 
+    @Size(max = 500)
     private String imageUrl;
 
     @NotNull
+    @Min(0)
     private Integer orderIndex;
 
     @NotNull

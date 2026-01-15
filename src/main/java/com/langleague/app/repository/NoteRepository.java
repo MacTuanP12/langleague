@@ -2,6 +2,8 @@ package com.langleague.app.repository;
 
 import com.langleague.app.domain.Note;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findAllByUserProfileIdAndUnitId(Long userProfileId, Long unitId);
+
+    Page<Note> findAllByUserProfileId(Long userProfileId, Pageable pageable);
+
+    Page<Note> findAllByUserProfileIdAndUnitId(Long userProfileId, Long unitId, Pageable pageable);
 }

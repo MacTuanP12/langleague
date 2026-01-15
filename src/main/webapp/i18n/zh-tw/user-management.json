@@ -6,26 +6,136 @@
       "createLabel": "建立新使用者",
       "createOrEditLabel": "建立或編輯使用者"
     },
-    "created": "新使用者 {{ param }} 建立成功",
+    "created": "使用者 {{ param }} 建立成功",
     "updated": "使用者 {{ param }} 更新成功",
     "deleted": "使用者 {{ param }} 刪除成功",
     "delete": {
-      "question": "確定要刪除使用者 {{ login }}?"
+      "question": "您確定要刪除使用者 {{ login }} ?"
     },
     "detail": {
-      "title": "使用者"
+      "title": "使用者",
+      "breadcrumb": "使用者管理",
+      "editUser": "編輯使用者",
+      "backToList": "返回清單",
+      "userIdLabel": "使用者ID",
+      "joinedLabel": "加入時間",
+      "loading": "載入中...",
+      "notFound": "未找到使用者",
+      "fields": {
+        "login": "登入名稱",
+        "email": "電子郵件地址",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "role": "角色",
+        "status": "狀態",
+        "language": "語言",
+        "createdBy": "建立人",
+        "createdDate": "建立時間",
+        "lastModifiedBy": "最近修改人",
+        "lastModifiedDate": "最近修改時間"
+      },
+      "roles": {
+        "student": "學生",
+        "teacher": "教師",
+        "admin": "管理員"
+      },
+      "status": {
+        "active": "已啟用",
+        "inactive": "未啟用"
+      },
+      "system": "系統"
     },
-    "login": "登入帳號",
+    "edit": {
+      "title": "編輯使用者詳情",
+      "breadcrumb": "編輯詳情",
+      "subtitle": "更新個人資訊、角色設定和帳戶狀態。",
+      "loading": "載入中...",
+      "notFound": "未找到使用者",
+      "userIdLabel": "使用者ID",
+      "joinedLabel": "加入時間",
+      "avatarNote": "頭像由使用者透過個人資料設定管理，管理員無法修改",
+      "fields": {
+        "fullName": "全名",
+        "fullNamePlaceholder": "輸入全名",
+        "email": "電子郵件地址",
+        "emailReadOnly": "(唯讀)",
+        "role": "角色",
+        "status": "帳戶狀態",
+        "bio": "個人簡介",
+        "bioPlaceholder": "輸入簡短描述..."
+      },
+      "roles": {
+        "student": "學生",
+        "teacher": "教師",
+        "admin": "管理員"
+      },
+      "status": {
+        "active": "已啟用",
+        "inactive": "未啟用"
+      },
+      "characterCount": "{{ count }}/500 字元",
+      "buttons": {
+        "cancel": "取消",
+        "save": "儲存變更"
+      },
+      "infoBox": {
+        "title": "編輯使用者權限",
+        "content": "將使用者角色更改為管理員將授予他們對系統設定和使用者管理面板的完全存取權限。請謹慎操作。"
+      }
+    },
+    "create": {
+      "title": "新增使用者",
+      "breadcrumb": "新增使用者",
+      "subtitle": "在下面輸入使用者詳細資訊以建立新帳戶。",
+      "fields": {
+        "email": "電子郵件",
+        "emailPlaceholder": "輸入電子郵件",
+        "fullName": "全名",
+        "fullNamePlaceholder": "例如: 張三",
+        "role": "角色",
+        "roleSelect": "選擇角色",
+        "status": "狀態",
+        "password": "密碼",
+        "passwordPlaceholder": "••••••••",
+        "confirmPassword": "確認密碼"
+      },
+      "roles": {
+        "student": "學生",
+        "teacher": "教師",
+        "admin": "管理員"
+      },
+      "status": {
+        "active": "已啟用",
+        "inactive": "未啟用",
+        "pending": "待處理"
+      },
+      "required": "*",
+      "validation": {
+        "emailRequired": "電子郵件為必填項",
+        "emailInvalid": "電子郵件格式無效",
+        "fullNameRequired": "全名為必填項",
+        "roleRequired": "角色為必填項",
+        "passwordRequired": "密碼為必填項",
+        "passwordMinLength": "密碼至少8個字元",
+        "passwordMismatch": "密碼不匹配",
+        "submitError": "建立使用者失敗。請重試。"
+      },
+      "buttons": {
+        "cancel": "取消",
+        "addUser": "新增使用者"
+      }
+    },
+    "login": "登入名稱",
     "firstName": "名字",
     "lastName": "姓氏",
-    "email": "電子郵件",
+    "email": "郵箱",
     "activated": "已啟用",
-    "deactivated": "已停用",
-    "profiles": "設定檔",
+    "deactivated": "失效",
+    "profiles": "角色",
     "langKey": "語言",
-    "createdBy": "建立者",
-    "createdDate": "建立日期",
-    "lastModifiedBy": "最近修改者",
-    "lastModifiedDate": "最近修改日期"
+    "createdBy": "建立人",
+    "createdDate": "建立時間",
+    "lastModifiedBy": "最近修改人",
+    "lastModifiedDate": "最近修改時間"
   }
 }

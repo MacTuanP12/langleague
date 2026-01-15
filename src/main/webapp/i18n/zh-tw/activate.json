@@ -1,9 +1,32 @@
 {
   "activate": {
-    "title": "啟用",
+    "title": "帳戶啟用",
     "messages": {
       "success": "<strong>您的帳號已啟用。</strong> 請 ",
-      "error": "<strong>您的帳號無法啟用。</strong> 請重新註冊。"
+      "error": "<strong>您的帳號無法啟用。</strong> 請使用註冊表單重新註冊。",
+      "verifying": {
+        "title": "正在驗證您的帳戶...",
+        "description": "請稍候，我們正在驗證您的電子郵件地址。"
+      },
+      "success": {
+        "title": "您的帳戶已啟用！",
+        "description": "您現在可以開始在 LangLeague 的學習旅程了。立即登入以探索我們豐富的資源庫和工具。"
+      },
+      "failure": {
+        "title": "驗證您的電子郵件地址",
+        "description": "我們已向您的電子郵件發送了驗證連結。請點擊郵件中的連結以保護您的帳戶。",
+        "checkSpam": "找不到？請檢查您的垃圾郵件或垃圾資料夾。"
+      }
+    },
+    "actions": {
+      "loginNow": "立即登入",
+      "goHome": "前往首頁",
+      "login": "登入",
+      "resend": "重新發送確認郵件"
+    },
+    "footer": {
+      "needHelp": "需要幫助？",
+      "contactSupport": "聯絡支援"
     }
   }
 }

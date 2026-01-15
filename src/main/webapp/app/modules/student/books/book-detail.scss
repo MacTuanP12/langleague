@@ -288,9 +288,102 @@
   }
 }
 
-/* Dark Mode Support */
+/* Dark Mode Support - Using data-theme attribute for theme switching */
+[data-theme='dark'] .book-detail {
+  background: #111827;
+
+  .book-detail-header {
+    h2 {
+      color: #f9fafb;
+    }
+
+    .back-link {
+      color: #60a5fa;
+
+      &:hover {
+        color: #3b82f6;
+      }
+    }
+  }
+
+  .book-detail-content {
+    .book-info-panel {
+      background: #1f2937;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      .book-cover-large {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .book-description {
+        h3 {
+          color: #f9fafb;
+        }
+
+        .description {
+          color: #9ca3af;
+        }
+
+        .learning-objectives {
+          h4 {
+            color: #9ca3af;
+          }
+
+          .units-list {
+            .unit-item {
+              background: #111827;
+              border-color: #374151;
+
+              &:hover {
+                background: #1f2937;
+                border-color: #4b5563;
+              }
+
+              .unit-title {
+                color: #e5e7eb;
+              }
+            }
+
+            .no-units {
+              color: #6b7280;
+            }
+          }
+        }
+      }
+    }
+
+    .related-books {
+      h4 {
+        color: #f9fafb;
+      }
+
+      .related-books-grid {
+        .related-book-card {
+          background: #1f2937;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+          &:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+          }
+
+          .related-book-info {
+            h5 {
+              color: #f9fafb;
+            }
+
+            p {
+              color: #9ca3af;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Legacy support for system preference (fallback) */
 @media (prefers-color-scheme: dark) {
-  .book-detail {
+  body:not([data-theme]) .book-detail {
     background: #111827;
 
     .book-detail-header {

@@ -14,19 +14,25 @@ public class VocabularyDTO implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
+    @Size(min = 1, max = 200)
     private String word;
 
+    @Size(max = 200)
     private String phonetic;
 
     @NotNull
+    @NotBlank
     private String meaning;
 
     @Lob
     private String example;
 
+    @Size(max = 500)
     private String imageUrl;
 
     @NotNull
+    @Min(0)
     private Integer orderIndex;
 
     @NotNull

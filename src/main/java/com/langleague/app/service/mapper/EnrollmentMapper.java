@@ -25,6 +25,10 @@ public interface EnrollmentMapper extends EntityMapper<EnrollmentDTO, Enrollment
     @Named("bookId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "coverImageUrl", source = "coverImageUrl")
+    @Mapping(target = "isPublic", source = "isPublic")
     BookDTO toDtoBookId(Book book);
 
     @Override

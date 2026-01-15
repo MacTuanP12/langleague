@@ -83,9 +83,14 @@ entity ExerciseOption {
 
 entity Progress {
   isCompleted Boolean required,
-  isBookmarked Boolean, // ADDED for UC49
+  isBookmarked Boolean, // ADDED for UC49 - Manual bookmark flag
   score Integer, // ADDED for UC53 (Quiz scores)
-  updatedAt Instant required
+  updatedAt Instant required,
+  lastAccessedAt Instant, // ADDED for UC49 - Auto-resume tracking
+  completionPercentage Integer, // ADDED for UC49 - Progress within unit (0-100)
+  isVocabularyFinished Boolean, // ADDED for UC49 - Vocabulary section completed
+  isGrammarFinished Boolean, // ADDED for UC49 - Grammar section completed
+  isExerciseFinished Boolean // ADDED for UC49 - Exercise section completed
 }
 
 // ADDED for UC57-60

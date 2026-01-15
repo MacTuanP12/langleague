@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { IGrammar } from 'app/shared/model/grammar.model';
-import styles from './book-learn.module.scss';
+import './book-learn.scss';
 
 interface GrammarViewerProps {
   grammars: IGrammar[];
@@ -9,27 +9,29 @@ interface GrammarViewerProps {
 
 export const GrammarViewer: React.FC<GrammarViewerProps> = ({ grammars }) => {
   if (!grammars || grammars.length === 0) {
-    return <div className={styles.emptyState}>No grammar lessons available.</div>;
+    return (
+      <div className="empty-state">
+        <p>No grammar lessons available.</p>
+      </div>
+    );
   }
 
   return (
-    <div className={styles.grammarViewer}>
+    <div className="grammar-list">
       {grammars.map(grammar => (
-        <div key={grammar.id} className={styles.grammarCard}>
-          <h3 className={styles.grammarTitle}>{grammar.title}</h3>
+        <div key={grammar.id} className="grammar-card">
+          <div className="grammar-title">{grammar.title}</div>
 
           {grammar.contentMarkdown && (
-            <div className={styles.grammarContent}>
+            <div className="grammar-content">
               <ReactMarkdown>{grammar.contentMarkdown}</ReactMarkdown>
             </div>
           )}
 
           {grammar.exampleUsage && (
-            <div className={styles.grammarExample}>
-              <h4>Examples:</h4>
-              <div className={styles.exampleContent}>
-                <ReactMarkdown>{grammar.exampleUsage}</ReactMarkdown>
-              </div>
+            <div className="grammar-example">
+              <strong>Example:</strong>
+              <ReactMarkdown>{grammar.exampleUsage}</ReactMarkdown>
             </div>
           )}
         </div>

@@ -14,9 +14,12 @@ public class UnitDTO implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
+    @Size(min = 1, max = 200)
     private String title;
 
     @NotNull
+    @Min(0)
     private Integer orderIndex;
 
     @Lob

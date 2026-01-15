@@ -35,8 +35,27 @@ public class Progress implements Serializable {
     @Column(name = "is_bookmarked")
     private Boolean isBookmarked;
 
+    @Min(0)
+    @Max(100)
     @Column(name = "score")
     private Integer score;
+
+    @Column(name = "last_accessed_at")
+    private Instant lastAccessedAt;
+
+    @Min(0)
+    @Max(100)
+    @Column(name = "completion_percentage")
+    private Integer completionPercentage;
+
+    @Column(name = "is_vocabulary_finished")
+    private Boolean isVocabularyFinished;
+
+    @Column(name = "is_grammar_finished")
+    private Boolean isGrammarFinished;
+
+    @Column(name = "is_exercise_finished")
+    private Boolean isExerciseFinished;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -115,6 +134,71 @@ public class Progress implements Serializable {
         this.score = score;
     }
 
+    public Instant getLastAccessedAt() {
+        return this.lastAccessedAt;
+    }
+
+    public Progress lastAccessedAt(Instant lastAccessedAt) {
+        this.setLastAccessedAt(lastAccessedAt);
+        return this;
+    }
+
+    public void setLastAccessedAt(Instant lastAccessedAt) {
+        this.lastAccessedAt = lastAccessedAt;
+    }
+
+    public Integer getCompletionPercentage() {
+        return this.completionPercentage;
+    }
+
+    public Progress completionPercentage(Integer completionPercentage) {
+        this.setCompletionPercentage(completionPercentage);
+        return this;
+    }
+
+    public void setCompletionPercentage(Integer completionPercentage) {
+        this.completionPercentage = completionPercentage;
+    }
+
+    public Boolean getIsVocabularyFinished() {
+        return this.isVocabularyFinished;
+    }
+
+    public Progress isVocabularyFinished(Boolean isVocabularyFinished) {
+        this.setIsVocabularyFinished(isVocabularyFinished);
+        return this;
+    }
+
+    public void setIsVocabularyFinished(Boolean isVocabularyFinished) {
+        this.isVocabularyFinished = isVocabularyFinished;
+    }
+
+    public Boolean getIsGrammarFinished() {
+        return this.isGrammarFinished;
+    }
+
+    public Progress isGrammarFinished(Boolean isGrammarFinished) {
+        this.setIsGrammarFinished(isGrammarFinished);
+        return this;
+    }
+
+    public void setIsGrammarFinished(Boolean isGrammarFinished) {
+        this.isGrammarFinished = isGrammarFinished;
+    }
+
+    public Boolean getIsExerciseFinished() {
+        return this.isExerciseFinished;
+    }
+
+    public Progress isExerciseFinished(Boolean isExerciseFinished) {
+        this.setIsExerciseFinished(isExerciseFinished);
+        return this;
+    }
+
+    public void setIsExerciseFinished(Boolean isExerciseFinished) {
+        this.isExerciseFinished = isExerciseFinished;
+    }
+
     public UserProfile getUserProfile() {
         return this.userProfile;
     }
@@ -169,6 +253,11 @@ public class Progress implements Serializable {
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", isBookmarked='" + getIsBookmarked() + "'" +
             ", score=" + getScore() +
+            ", lastAccessedAt='" + getLastAccessedAt() + "'" +
+            ", completionPercentage=" + getCompletionPercentage() +
+            ", isVocabularyFinished='" + getIsVocabularyFinished() + "'" +
+            ", isGrammarFinished='" + getIsGrammarFinished() + "'" +
+            ", isExerciseFinished='" + getIsExerciseFinished() + "'" +
             "}";
     }
 }

@@ -6,6 +6,11 @@
       "placeholder": "搜尋教材、課程或主題...",
       "button": "搜尋"
     },
+    "featured": {
+      "title": "精選書籍",
+      "viewAll": "檢視全部",
+      "details": "詳情"
+    },
     "logged": {
       "message": "您目前是用 \"{{username}}\" 帳號登入。"
     },

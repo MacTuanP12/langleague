@@ -1,11 +1,49 @@
 id;option_text;is_correct;order_index;exercise_id
-1;sate ew incidentally;false;23680;1
-2;roger shallow mould;true;7120;2
-3;grizzled yahoo;true;11185;3
-4;scarper up yum;false;9439;4
-5;ouch pick;false;6205;5
-6;grown pave;true;31717;6
-7;pro;true;7712;7
-8;badly ack;false;20507;8
-9;mountain;true;26038;9
-10;finally obtrude scary;false;26689;10
+1;Good morning;true;1;1
+2;Good night;false;2;1
+3;Goodbye;false;3;1
+4;See you later;false;4;1
+5;Goodbye;true;1;3
+6;See you later;true;2;3
+7;Take care;true;3;3
+8;Good morning;false;4;3
+9;Ten;true;1;4
+10;Eleven;false;2;4
+11;Nine;false;3;4
+12;Eight;false;4;4
+13;Tuesday;true;1;6
+14;Wednesday;false;2;6
+15;Sunday;false;3;6
+16;Monday;false;4;6
+17;goes;true;1;8
+18;go;false;2;8
+19;going;false;3;8
+20;went;false;4;8
+21;He work at a bank.;false;1;9
+22;He works at a bank.;true;2;9
+23;He working at a bank.;false;3;9
+24;He is work at a bank.;false;4;9
+25;She is reading a book.;true;1;11
+26;She reads a book.;false;2;11
+27;She read a book.;false;3;11
+28;She will read a book.;false;4;11
+29;Present Simple;true;1;13
+30;Present Continuous;false;2;13
+31;Past Simple;false;3;13
+32;Future Simple;false;4;13
+33;went;true;1;14
+34;goed;false;2;14
+35;go;false;3;14
+36;gone;false;4;14
+37;saw;true;1;16
+38;seed;false;2;16
+39;seen;false;3;16
+40;see;false;4;16
+41;Dear Mr. Smith,;true;1;17
+42;Hey dude!;false;2;17
+43;Yo!;false;3;17
+44;What's up?;false;4;17
+45;Let's get started.;true;1;19
+46;Shall we begin?;true;2;19
+47;Thanks for coming.;true;3;19
+48;Goodbye everyone!;false;4;19

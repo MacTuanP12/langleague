@@ -81,6 +81,7 @@ public class GrammarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<GrammarDTO> createGrammar(@Valid @RequestBody GrammarDTO grammarDTO) throws URISyntaxException {
         LOG.debug("REST request to save Grammar : {}", grammarDTO);
         if (grammarDTO.getId() != null) {
@@ -107,7 +108,7 @@ public class GrammarResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the list of new grammarDTOs.
      */
     @PostMapping("/bulk")
-    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<GrammarDTO>> createGrammarsBulk(@Valid @RequestBody List<GrammarDTO> grammars) {
         LOG.debug("REST request to save bulk Grammars");
         if (grammars.isEmpty()) {
@@ -135,6 +136,7 @@ public class GrammarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<GrammarDTO> updateGrammar(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody GrammarDTO grammarDTO
@@ -174,6 +176,7 @@ public class GrammarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<GrammarDTO> partialUpdateGrammar(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody GrammarDTO grammarDTO
@@ -205,12 +208,13 @@ public class GrammarResource {
 
     /**
      * {@code GET  /grammars} : get all the grammars.
+     * This endpoint is generally not used - grammars are fetched by unit.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of grammars in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<GrammarDTO>> getAllGrammars(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Grammars");
         Page<GrammarDTO> page = grammarService.findAll(pageable);
@@ -220,6 +224,7 @@ public class GrammarResource {
 
     /**
      * {@code GET  /grammars/:id} : get the "id" grammar.
+     * Students and Teachers can view grammars.
      *
      * @param id the id of the grammarDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the grammarDTO, or with status {@code 404 (Not Found)}.
@@ -233,6 +238,7 @@ public class GrammarResource {
 
     /**
      * {@code GET  /grammars/by-unit/:unitId} : get all the grammars by unitId.
+     * Students and Teachers can view grammars.
      *
      * @param unitId the id of the unit.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of grammars in body.
@@ -250,6 +256,7 @@ public class GrammarResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteGrammar(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Grammar : {}", id);
 

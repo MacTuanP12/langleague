@@ -26,12 +26,18 @@ module.exports = async options =>
     module: {
       rules: [
         {
-          test: /\.(sa|sc|c)ss$/,
+          test: /\.module\.(sa|sc|c)ss$/,
           use: [
             'style-loader',
             {
               loader: 'css-loader',
-              options: { url: true }, // Changed to true to allow font files
+              options: {
+                url: true,
+                modules: {
+                  localIdentName: '[local]',
+                  exportLocalsConvention: 'camelCaseOnly',
+                },
+              },
             },
             {
               loader: 'postcss-loader',
@@ -39,6 +45,38 @@ module.exports = async options =>
             {
               loader: 'sass-loader',
               options: { implementation: sass },
+            },
+          ],
+        },
+        {
+          test: /\.(sa|sc|c)ss$/,
+          exclude: /\.module\.(sa|sc|c)ss$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                url: true,
+                importLoaders: 2,
+                // Enable CSS Modules for files ending in .module.css/scss
+                modules: {
+                  auto: true,
+                  localIdentName: '[name]__[local]__[hash:base64:5]',
+                },
+              },
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: sass,
+                sourceMap: true,
+                sassOptions: {
+                  includePaths: [utils.root('node_modules')],
+                },
+              },
             },
           ],
         },

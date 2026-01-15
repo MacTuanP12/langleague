@@ -83,7 +83,9 @@ export const BookUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
-            <p>Loading...</p>
+            <p>
+              <Translate contentKey="global.loading">Loading...</Translate>
+            </p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? (

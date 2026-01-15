@@ -7,11 +7,29 @@
       "password": "Password",
       "password.placeholder": "Your password",
       "rememberme": "Remember me",
-      "button": "Sign in"
+      "button": "Sign in",
+      "button.signing": "Signing in...",
+      "captcha": {
+        "loading": "Loading captcha...",
+        "placeholder": "Enter captcha",
+        "error": "Failed to load. Click to retry."
+      }
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again.",
+        "captcha": "Invalid captcha. Please try again."
+      },
+      "validate": {
+        "username": {
+          "required": "Username is required."
+        },
+        "password": {
+          "required": "Password is required."
+        },
+        "captcha": {
+          "required": "Captcha is required."
+        }
       },
       "info": {
         "authenticated": {

@@ -24,13 +24,15 @@ public class ExerciseOption implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "option_text", nullable = false)
+    @NotBlank
+    @Column(name = "option_text", nullable = false, columnDefinition = "TEXT")
     private String optionText;
 
     @NotNull
     @Column(name = "is_correct", nullable = false)
     private Boolean isCorrect;
 
+    @Min(0)
     @Column(name = "order_index")
     private Integer orderIndex;
 

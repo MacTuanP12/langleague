@@ -1,9 +1,32 @@
 {
   "activate": {
-    "title": "启用",
+    "title": "账户激活",
     "messages": {
-      "success": "<strong>您的账号已启用.</strong> 请 ",
-      "error": "<strong>您的账号无法启用.</strong> 请重新注册."
+      "success": "<strong>您的账号已激活。</strong> 请 ",
+      "error": "<strong>您的账号无法激活。</strong> 请使用注册表单重新注册。",
+      "verifying": {
+        "title": "正在验证您的账户...",
+        "description": "请稍候，我们正在验证您的电子邮件地址。"
+      },
+      "success": {
+        "title": "您的账户已激活！",
+        "description": "您现在可以开始在 LangLeague 的学习旅程了。立即登录以探索我们丰富的资源库和工具。"
+      },
+      "failure": {
+        "title": "验证您的电子邮件地址",
+        "description": "我们已向您的电子邮件发送了验证链接。请点击邮件中的链接以保护您的账户。",
+        "checkSpam": "找不到？请检查您的垃圾邮件或垃圾文件夹。"
+      }
+    },
+    "actions": {
+      "loginNow": "立即登录",
+      "goHome": "前往首页",
+      "login": "登录",
+      "resend": "重新发送确认邮件"
+    },
+    "footer": {
+      "needHelp": "需要帮助？",
+      "contactSupport": "联系支持"
     }
   }
 }

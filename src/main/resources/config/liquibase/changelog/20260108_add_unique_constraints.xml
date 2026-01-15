@@ -16,8 +16,8 @@
   <changeSet id="20260108-2" author="you">
     <addUniqueConstraint
       tableName="progress"
-      columnNames="user_profile_id, chapter_id"
-      constraintName="ux_progress_user_chapter"/>
+      columnNames="user_profile_id, unit_id"
+      constraintName="ux_progress_user_unit"/>
   </changeSet>
 
 </databaseChangeLog>

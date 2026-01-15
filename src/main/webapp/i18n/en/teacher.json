@@ -1,8 +1,12 @@
 {
   "langleague": {
     "teacher": {
+      "sidebar": {
+        "title": "Teacher CMS"
+      },
       "dashboard": {
         "title": "Teacher Dashboard",
+        "loading": "Loading dashboard...",
         "welcome": "Welcome back, {name}!",
         "stats": {
           "myBooks": "My Books",
@@ -14,18 +18,21 @@
           "title": "Quick Actions",
           "manageBooks": "Manage Books",
           "createBook": "Create New Book",
-          "viewStudents": "View Students"
+          "viewStudents": "View Students",
+          "manageContent": "Manage Content"
         },
         "recentActivity": {
           "title": "Recent Activity",
           "noData": "No recent activities"
-        }
+        },
+        "enrollments": "Enrollments per Book",
+        "noEnrollmentData": "No enrollment data available yet."
       },
       "books": {
         "management": {
           "title": "Book Management",
           "description": "Manage your library inventory, track issued books, and update catalog details.",
-          "loading": "Loading...",
+          "loading": "Loading books...",
           "noBooks": "No books found"
         },
         "stats": {
@@ -58,7 +65,7 @@
           "next": "Next"
         },
         "detail": {
-          "loading": "Loading...",
+          "loading": "Loading book details...",
           "backToBooks": "Back to Books",
           "editBook": "Edit Book",
           "addUnit": "Add Unit",
@@ -85,8 +92,13 @@
             "actions": {
               "edit": "Edit",
               "delete": "Delete",
+              "manageContent": "Manage Content",
               "confirmDelete": "Are you sure you want to delete this unit?"
             }
+          },
+          "syllabus": {
+            "title": "Book Syllabus",
+            "backToBooks": "Back to Books"
           }
         },
         "form": {
@@ -125,6 +137,60 @@
           "confirmDeleteTitle": "Delete Unit",
           "confirmDelete": "Are you sure you want to delete this unit?"
         }
+      },
+      "editor": {
+        "title": "Unit Content Editor",
+        "backToSyllabus": "Back to Syllabus",
+        "backToBook": "Back to Book",
+        "subtitle": "Manage vocabulary, grammar, and exercises",
+        "tabs": {
+          "vocabulary": "Vocabulary",
+          "grammar": "Grammar",
+          "exercises": "Exercises"
+        },
+        "vocabulary": {
+          "title": "Vocabulary List",
+          "addWord": "Add Word",
+          "aiGenerate": "✨ AI Generate",
+          "empty": "No vocabulary added yet.",
+          "emptyHint": "Use the AI Assistant to generate words from a topic!"
+        },
+        "grammar": {
+          "title": "Grammar Rules",
+          "addRule": "Add Rule",
+          "aiGenerate": "✨ AI Generate",
+          "empty": "No grammar rules added yet."
+        },
+        "exercises": {
+          "title": "Exercises",
+          "addQuestion": "Add Question",
+          "aiGenerate": "✨ AI Generate",
+          "empty": "No exercises added yet.",
+          "question": "Question"
+        },
+        "confirmDelete": {
+          "vocabulary": "Are you sure you want to delete this vocabulary?",
+          "grammar": "Are you sure you want to delete this grammar rule?",
+          "exercise": "Are you sure you want to delete this exercise?"
+        },
+        "success": {
+          "vocabularyDeleted": "Vocabulary deleted successfully",
+          "grammarDeleted": "Grammar rule deleted successfully",
+          "exerciseDeleted": "Exercise deleted successfully"
+        }
+      },
+      "students": {
+        "title": "My Students",
+        "subtitle": "Track student progress and enrollments",
+        "search": "Search by name or book...",
+        "totalStudents": "Total Students:",
+        "table": {
+          "student": "Student",
+          "enrolledBook": "Enrolled Book",
+          "enrolledDate": "Enrolled Date",
+          "status": "Status"
+        },
+        "empty": "No students found enrolled in your books."
       },
       "units": {
         "labels": {
@@ -223,7 +289,44 @@
             "multiChoice": "Multi Choice",
             "fillInBlank": "Fill in Blank"
           }
+        },
+        "menu": {
+          "addContent": "Add Content",
+          "vocabulary": "Vocabulary",
+          "vocabularyDesc": "Add words with meanings and examples",
+          "grammar": "Grammar",
+          "grammarDesc": "Add grammar rules and explanations",
+          "exercise": "Exercise",
+          "exerciseDesc": "Create practice questions",
+          "singleChoice": "Single Choice",
+          "multiChoice": "Multiple Choice",
+          "fillInBlank": "Fill in the Blank"
+        },
+        "zoom": {
+          "in": "Zoom In",
+          "out": "Zoom Out",
+          "reset": "Reset Zoom",
+          "shortcuts": {
+            "in": "Ctrl + +",
+            "out": "Ctrl + -",
+            "reset": "Ctrl + 0"
+          }
         }
+      },
+      "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "back": "Back",
+        "edit": "Edit",
+        "view": "View",
+        "add": "Add",
+        "create": "Create",
+        "update": "Update",
+        "loading": "Loading...",
+        "search": "Search",
+        "filter": "Filter",
+        "actions": "Actions"
       }
     }
   }

@@ -43,6 +43,30 @@
       },
       "language": "言語"
     },
+    "sidebar": {
+      "student": {
+        "home": "ホーム",
+        "myBooks": "私の本",
+        "flashCard": "フラッシュカード",
+        "games": "ゲーム",
+        "profile": "プロフィール",
+        "logout": "ログアウト"
+      },
+      "teacher": {
+        "dashboard": "ダッシュボード",
+        "books": "本",
+        "units": "ユニット",
+        "students": "学生",
+        "logout": "ログアウト"
+      },
+      "admin": {
+        "dashboard": "ダッシュボード",
+        "books": "本",
+        "users": "ユーザー",
+        "settings": "設定",
+        "logout": "ログアウト"
+      }
+    },
     "form": {
       "username.label": "ユーザー名",
       "username.placeholder": "ユーザー名",

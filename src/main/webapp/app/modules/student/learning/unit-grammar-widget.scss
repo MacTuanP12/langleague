@@ -1,0 +1,333 @@
+// Unit Grammar Widget - Clean Embedded Component
+// Date: 2026-01-15
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+// ============================================
+// GRAMMAR WIDGET CONTAINER
+// ============================================
+.grammar-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+// ============================================
+// GRAMMAR CARD
+// ============================================
+.grammar-card {
+  background: #ffffff;
+  border-left: 4px solid #10b981;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  // Grammar Header
+  .grammar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0fdf4;
+  }
+
+  .grammar-number {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  .grammar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #059669;
+    margin: 0;
+    flex: 1;
+  }
+
+  // Grammar Content (Markdown)
+  .grammar-content {
+    font-size: 1rem;
+    color: #334155;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+
+    // Markdown styling
+    p {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #059669;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    h1 {
+      font-size: 1.875rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    h3 {
+      font-size: 1.25rem;
+    }
+    h4 {
+      font-size: 1.125rem;
+    }
+
+    ul,
+    ol {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    strong {
+      color: #047857;
+      font-weight: 700;
+    }
+
+    em {
+      font-style: italic;
+      color: #065f46;
+    }
+
+    code {
+      background: #f0fdf4;
+      color: #065f46;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+    }
+
+    pre {
+      background: #f0fdf4;
+      border: 1px solid #d1fae5;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 1rem 0;
+
+      code {
+        background: none;
+        padding: 0;
+      }
+    }
+
+    blockquote {
+      border-left: 4px solid #10b981;
+      padding-left: 1rem;
+      margin: 1rem 0;
+      color: #475569;
+      font-style: italic;
+    }
+  }
+
+  // Example Box
+  .grammar-example {
+    background: #ecfdf5;
+    color: #064e3b;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 3px solid #10b981;
+    margin-top: 1rem;
+
+    strong {
+      display: block;
+      font-weight: 700;
+      color: #047857;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin: 0;
+      font-style: italic;
+      line-height: 1.6;
+    }
+  }
+}
+
+// ============================================
+// EMPTY STATE
+// ============================================
+.grammar-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #64748b;
+  font-size: 1.125rem;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+// ============================================
+// DARK MODE SUPPORT
+// ============================================
+[data-theme='dark'] {
+  .grammar-card {
+    background: #1e293b;
+    border-left-color: #10b981;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .grammar-header {
+      border-bottom-color: #334155;
+    }
+
+    .grammar-number {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .grammar-title {
+      color: #34d399;
+    }
+
+    .grammar-content {
+      color: #e2e8f0;
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: #34d399;
+      }
+
+      strong {
+        color: #6ee7b7;
+      }
+
+      em {
+        color: #a7f3d0;
+      }
+
+      code {
+        background: #0f172a;
+        color: #6ee7b7;
+        border: 1px solid #334155;
+      }
+
+      pre {
+        background: #0f172a;
+        border-color: #334155;
+
+        code {
+          border: none;
+        }
+      }
+
+      blockquote {
+        border-left-color: #34d399;
+        color: #cbd5e1;
+      }
+    }
+
+    .grammar-example {
+      background: #064e3b;
+      color: #d1fae5;
+      border-left-color: #34d399;
+
+      strong {
+        color: #6ee7b7;
+      }
+    }
+  }
+
+  .grammar-empty {
+    color: #94a3b8;
+  }
+}
+
+// ============================================
+// RESPONSIVE DESIGN
+// ============================================
+@media (max-width: 768px) {
+  .grammar-widget {
+    gap: 1.5rem;
+  }
+
+  .grammar-card {
+    padding: 1.5rem;
+
+    .grammar-header {
+      margin-bottom: 1rem;
+    }
+
+    .grammar-title {
+      font-size: 1.125rem;
+    }
+
+    .grammar-content {
+      font-size: 0.9375rem;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+      h3 {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .grammar-widget {
+    gap: 1rem;
+  }
+
+  .grammar-card {
+    padding: 1.25rem;
+
+    .grammar-number {
+      width: 28px;
+      height: 28px;
+      font-size: 0.75rem;
+    }
+
+    .grammar-title {
+      font-size: 1rem;
+    }
+
+    .grammar-example {
+      padding: 0.875rem;
+    }
+  }
+}
+

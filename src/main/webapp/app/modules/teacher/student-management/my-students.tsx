@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Translate, TextFormat } from 'react-jhipster';
+import { Translate, TextFormat, translate } from 'react-jhipster';
+import { Container, Input, Card, CardBody, Badge } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchMyStudents, StudentDTO } from 'app/shared/reducers/teacher.reducer';
 import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import { LoadingSpinner } from 'app/shared/components';
 import { DataTable, Column } from 'app/shared/components/data-table';
 import { APP_DATE_FORMAT } from 'app/config/constants';
+import '../teacher.scss';
 import './my-students.scss';
 
 export const MyStudents = () => {
   const dispatch = useAppDispatch();
-  const { students, loading } = useAppSelector(state => state.teacher);
+  const { students, loading, errorMessage } = useAppSelector(state => state.teacher);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -28,34 +31,47 @@ export const MyStudents = () => {
   const columns: Column<StudentDTO>[] = [
     {
       key: 'student',
-      header: 'Student',
+      header: translate('langleague.teacher.students.table.student'),
       render: student => (
-        <div className="student-info">
-          <img src={student.imageUrl || '/content/images/jhipster_family_member_0.svg'} alt="Avatar" className="student-avatar" />
-          <div className="student-details">
-            <span className="student-name">
+        <div className="d-flex align-items-center">
+          <FontAwesomeIcon icon="user-circle" size="2x" className="text-muted me-3" />
+          <div>
+            <div className="fw-bold">
               {student.firstName} {student.lastName}
-            </span>
-            <span className="student-login">@{student.login}</span>
+            </div>
+            <small className="text-muted">@{student.login}</small>
           </div>
         </div>
       ),
     },
     {
       key: 'book',
-      header: 'Enrolled Course',
-      render: student => <span className="book-name">{student.bookTitle}</span>,
+      header: translate('langleague.teacher.students.table.enrolledBook'),
+      render: student => (
+        <div className="d-flex align-items-center">
+          <FontAwesomeIcon icon="book" className="text-primary me-2" />
+          <span>{student.bookTitle}</span>
+        </div>
+      ),
     },
     {
       key: 'date',
-      header: 'Enrolled Date',
+      header: translate('langleague.teacher.students.table.enrolledDate'),
       render: student =>
         student.enrollmentDate ? <TextFormat value={student.enrollmentDate} type="date" format={APP_DATE_FORMAT} /> : 'N/A',
     },
     {
       key: 'status',
-      header: 'Status',
-      render: student => <span className={`status-badge ${student.status.toLowerCase()}`}>{student.status}</span>,
+      header: translate('langleague.teacher.students.table.status'),
+      render: student => (
+        <Badge
+          color={
+            student.status.toLowerCase() === 'active' ? 'success' : student.status.toLowerCase() === 'pending' ? 'warning' : 'secondary'
+          }
+        >
+          {student.status}
+        </Badge>
+      ),
     },
   ];
 
@@ -68,29 +84,46 @@ export const MyStudents = () => {
   }
 
   return (
-    <TeacherLayout title="My Students" subtitle="Track student progress and enrollments" showBackButton={false}>
-      <div className="my-students-page">
-        <div className="actions-bar">
-          <div className="search-box">
-            <i className="bi bi-search"></i>
-            <input type="text" placeholder="Search by name or course..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+    <TeacherLayout
+      title={<Translate contentKey="langleague.teacher.students.title">My Students</Translate>}
+      subtitle={<Translate contentKey="langleague.teacher.students.subtitle">Track student progress and enrollments</Translate>}
+      showBackButton={false}
+    >
+      <Container fluid className="teacher-page-container">
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            <FontAwesomeIcon icon="exclamation-triangle" className="me-2" />
+            {errorMessage}
           </div>
-          <div className="stats-summary">
-            <span>
-              Total Students: <strong>{students.length}</strong>
-            </span>
+        )}
+
+        {/* Search Bar */}
+        <div className="search-filter-bar mb-4">
+          <div className="search-box">
+            <Input type="text" placeholder="Search by name or book..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+          </div>
+          <div className="d-flex align-items-center">
+            <Badge color="primary" pill className="px-3 py-2">
+              <Translate contentKey="langleague.teacher.students.totalStudents">Total Students:</Translate>{' '}
+              <strong>{students.length}</strong>
+            </Badge>
           </div>
         </div>
 
-        <div className="students-table-container">
-          <DataTable
-            data={filteredStudents}
-            columns={columns}
-            keyExtractor={s => `${s.id}-${s.bookTitle}`} // Composite key as student can be in multiple books
-            emptyMessage="No students found enrolled in your books."
-          />
-        </div>
-      </div>
+        {/* Students Table */}
+        <Card className="stat-card">
+          <CardBody>
+            <DataTable
+              data={filteredStudents}
+              columns={columns}
+              keyExtractor={s => `${s.id}-${s.bookTitle}`}
+              emptyMessage="No students found enrolled in your books."
+              className="teacher-table"
+            />
+          </CardBody>
+        </Card>
+      </Container>
     </TeacherLayout>
   );
 };

@@ -34,7 +34,7 @@ public class AnalyticsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the stats in body.
      */
     @GetMapping("/dashboard")
-    @PreAuthorize("hasRole('" + AuthoritiesConstants.TEACHER + "')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<TeacherDashboardDTO> getDashboardStats() {
         LOG.debug("REST request to get Teacher Dashboard Stats");
         TeacherDashboardDTO stats = analyticsService.getTeacherDashboardStats();
@@ -47,7 +47,7 @@ public class AnalyticsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of students in body.
      */
     @GetMapping("/students")
-    @PreAuthorize("hasRole('" + AuthoritiesConstants.TEACHER + "')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<StudentDTO>> getMyStudents() {
         LOG.debug("REST request to get My Students");
         List<StudentDTO> students = analyticsService.getMyStudents();

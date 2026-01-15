@@ -92,6 +92,7 @@ public class ExerciseResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<ExerciseDTO> createExercise(@Valid @RequestBody ExerciseDTO exerciseDTO) throws URISyntaxException {
         LOG.debug("REST request to save Exercise : {}", exerciseDTO);
         if (exerciseDTO.getId() != null) {
@@ -118,7 +119,7 @@ public class ExerciseResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the list of new exerciseDTOs.
      */
     @PostMapping("/bulk")
-    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<ExerciseDTO>> createExercisesBulk(@Valid @RequestBody List<ExerciseDTO> exercises) {
         LOG.debug("REST request to save bulk Exercises");
         if (exercises.isEmpty()) {
@@ -146,6 +147,7 @@ public class ExerciseResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<ExerciseDTO> updateExercise(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ExerciseDTO exerciseDTO
@@ -158,10 +160,7 @@ public class ExerciseResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!exerciseRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        // Single findById call instead of existsById + findById (Performance fix)
         Exercise exercise = exerciseRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
@@ -171,6 +170,44 @@ public class ExerciseResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseDTO.getId().toString()))
             .body(exerciseDTO);
+    }
+
+    /**
+     * {@code PUT  /exercises/bulk} : Update multiple exercises.
+     * This endpoint allows teachers to update multiple exercises at once for better performance.
+     *
+     * @param exercises the list of exercises to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of updated exerciseDTOs.
+     */
+    @PutMapping("/bulk")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
+    public ResponseEntity<List<ExerciseDTO>> updateExercisesBulk(@Valid @RequestBody List<ExerciseDTO> exercises) {
+        LOG.debug("REST request to bulk update Exercises, count: {}", exercises.size());
+
+        if (exercises.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        // Verify ownership for the first exercise (assuming all belong to same book/unit)
+        Long firstExerciseId = exercises.get(0).getId();
+        if (firstExerciseId == null) {
+            throw new BadRequestAlertException("Exercise ID cannot be null", ENTITY_NAME, "idnull");
+        }
+
+        Exercise firstExercise = exerciseRepository
+            .findById(firstExerciseId)
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        checkOwnership(firstExercise.getUnit().getBook());
+
+        // Verify all exercises have IDs
+        for (ExerciseDTO exerciseDTO : exercises) {
+            if (exerciseDTO.getId() == null) {
+                throw new BadRequestAlertException("All exercises must have an ID for bulk update", ENTITY_NAME, "idnull");
+            }
+        }
+
+        List<ExerciseDTO> result = exerciseService.bulkUpdate(exercises);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, "bulk")).body(result);
     }
 
     /**
@@ -185,6 +222,7 @@ public class ExerciseResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<ExerciseDTO> partialUpdateExercise(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ExerciseDTO exerciseDTO
@@ -197,10 +235,7 @@ public class ExerciseResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!exerciseRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        // Single findById call instead of existsById + findById (Performance fix)
         Exercise exercise = exerciseRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
@@ -216,12 +251,13 @@ public class ExerciseResource {
 
     /**
      * {@code GET  /exercises} : get all the exercises.
+     * This endpoint is generally not used - exercises are fetched by unit.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exercises in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.TEACHER + "\")")
     public ResponseEntity<List<ExerciseDTO>> getAllExercises(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Exercises");
         Page<ExerciseDTO> page = exerciseService.findAll(pageable);
@@ -231,6 +267,7 @@ public class ExerciseResource {
 
     /**
      * {@code GET  /exercises/:id} : get the "id" exercise.
+     * Students and Teachers can view exercises.
      *
      * @param id the id of the exerciseDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseDTO, or with status {@code 404 (Not Found)}.
@@ -247,6 +284,7 @@ public class ExerciseResource {
      * This endpoint is designed for self-study mode where the frontend needs all questions
      * and answer options (including isCorrect field) for client-side answer checking.
      * This avoids N+1 query problem by eagerly fetching options.
+     * Students and Teachers can view exercises.
      *
      * @param unitId the id of the unit.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exercises with options in body.
@@ -296,6 +334,7 @@ public class ExerciseResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteExercise(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Exercise : {}", id);
 

@@ -83,6 +83,22 @@ const progressSlice = createSlice({
     clearProgresses(state) {
       state.progresses = [];
     },
+    // Optimistic update for better UX - updates UI immediately
+    updateProgressOptimistic(state, action: PayloadAction<Partial<IProgress> & { id: number }>) {
+      const { id, ...updates } = action.payload;
+
+      // Update in progresses array
+      const index = state.progresses.findIndex(p => p.id === id);
+      if (index !== -1) {
+        state.progresses[index] = { ...state.progresses[index], ...updates };
+      }
+
+      // Update in userProgresses array
+      const userIndex = state.userProgresses.findIndex(p => p.id === id);
+      if (userIndex !== -1) {
+        state.userProgresses[userIndex] = { ...state.userProgresses[userIndex], ...updates };
+      }
+    },
   },
   extraReducers(builder) {
     builder
@@ -236,6 +252,6 @@ const progressSlice = createSlice({
   },
 });
 
-export const { reset, clearProgresses } = progressSlice.actions;
+export const { reset, clearProgresses, updateProgressOptimistic } = progressSlice.actions;
 
 export default progressSlice.reducer;

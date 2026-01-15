@@ -3,7 +3,7 @@ import { Translate, translate } from 'react-jhipster';
 import { IUnit } from 'app/shared/model/unit.model';
 import { ProgressBar } from 'app/shared/components/progress';
 import { UnitContentCard } from './UnitContentCard';
-import styles from '../book-learn.module.scss';
+import '../book-learn.scss';
 
 interface BookLearnContentProps {
   selectedUnit: IUnit | null;
@@ -12,9 +12,9 @@ interface BookLearnContentProps {
 export const BookLearnContent: React.FC<BookLearnContentProps> = ({ selectedUnit }) => {
   if (!selectedUnit) {
     return (
-      <div className={styles.learnMain}>
-        <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>🎓</div>
+      <div className="learn-main">
+        <div className="empty-state">
+          <div className="empty-icon">🎓</div>
           <h3>Ready to learn?</h3>
           <p>Select a unit from the sidebar to start learning.</p>
           <p>Your progress will be saved automatically.</p>
@@ -24,14 +24,14 @@ export const BookLearnContent: React.FC<BookLearnContentProps> = ({ selectedUnit
   }
 
   return (
-    <div className={styles.learnMain}>
-      <div className={styles.unitContent}>
-        <div className={styles.unitHeaderInfo}>
+    <div className="learn-main">
+      <div className="unit-content">
+        <div className="unit-header-info">
           <h2>{selectedUnit.title}</h2>
-          <p className={styles.unitSummary}>{selectedUnit.summary}</p>
+          <p className="unit-summary">{selectedUnit.summary}</p>
         </div>
 
-        <div className={styles.contentSections}>
+        <div className="content-sections">
           <UnitContentCard
             icon="bi-book"
             title="Vocabulary"
@@ -73,7 +73,7 @@ export const BookLearnContent: React.FC<BookLearnContentProps> = ({ selectedUnit
           />
         </div>
 
-        <div className={styles.unitProgress}>
+        <div className="unit-progress">
           <h4>
             <Translate contentKey="langleague.student.learning.bookLearn.progress">Your Progress</Translate>
           </h4>

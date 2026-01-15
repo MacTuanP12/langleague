@@ -15,20 +15,21 @@ public class BookDTO implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
+    @Size(min = 1, max = 200)
     private String title;
 
     @Lob
     private String description;
 
+    @Size(max = 500)
     private String coverImageUrl;
 
     @NotNull
     private Boolean isPublic;
 
-    @NotNull
     private Instant createdAt;
 
-    @NotNull
     private UserProfileDTO teacherProfile;
 
     public Long getId() {

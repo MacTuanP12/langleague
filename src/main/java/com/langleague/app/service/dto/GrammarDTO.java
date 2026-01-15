@@ -14,6 +14,8 @@ public class GrammarDTO implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
+    @Size(min = 1, max = 200)
     private String title;
 
     @Lob
@@ -23,6 +25,7 @@ public class GrammarDTO implements Serializable {
     private String exampleUsage;
 
     @NotNull
+    @Min(0)
     private Integer orderIndex;
 
     @NotNull

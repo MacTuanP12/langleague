@@ -173,7 +173,44 @@
             "multiChoice": "다중 선택",
             "fillInBlank": "빈칸 채우기"
           }
+        },
+        "menu": {
+          "addContent": "콘텐츠 추가",
+          "vocabulary": "어휘",
+          "vocabularyDesc": "단어와 의미, 예문 추가",
+          "grammar": "문법",
+          "grammarDesc": "문법 규칙과 설명 추가",
+          "exercise": "연습 문제",
+          "exerciseDesc": "연습 문제 만들기",
+          "singleChoice": "단일 선택",
+          "multiChoice": "다중 선택",
+          "fillInBlank": "빈칸 채우기"
+        },
+        "zoom": {
+          "in": "확대",
+          "out": "축소",
+          "reset": "확대/축소 재설정",
+          "shortcuts": {
+            "in": "Ctrl + +",
+            "out": "Ctrl + -",
+            "reset": "Ctrl + 0"
+          }
         }
+      },
+      "common": {
+        "save": "저장",
+        "cancel": "취소",
+        "delete": "삭제",
+        "back": "뒤로",
+        "edit": "수정",
+        "view": "보기",
+        "add": "추가",
+        "create": "만들기",
+        "update": "업데이트",
+        "loading": "로딩 중...",
+        "search": "검색",
+        "filter": "필터",
+        "actions": "작업"
       }
     }
   }

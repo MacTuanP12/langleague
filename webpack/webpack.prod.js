@@ -26,7 +26,36 @@ module.exports = async () =>
     module: {
       rules: [
         {
+          test: /\.module\.(sa|sc|c)ss$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: '../',
+              },
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                url: true,
+                modules: {
+                  localIdentName: '[local]',
+                  exportLocalsConvention: 'camelCaseOnly',
+                },
+              },
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: { implementation: sass },
+            },
+          ],
+        },
+        {
           test: /\.(sa|sc|c)ss$/,
+          exclude: /\.module\.(sa|sc|c)ss$/,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,

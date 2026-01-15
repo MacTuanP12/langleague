@@ -8,7 +8,7 @@ interface ContentSidebarProps {
 
 /**
  * Reusable sidebar component for content navigation
- * Can be used for course units, chapters, or any hierarchical content
+ * Can be used for book units, chapters, or any hierarchical content
  */
 export const ContentSidebar: React.FC<ContentSidebarProps> = ({ title, children, className = '' }) => {
   return (

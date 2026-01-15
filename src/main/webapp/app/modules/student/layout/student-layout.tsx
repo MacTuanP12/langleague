@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 import { useAppDispatch } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
 import { ModernHeader } from 'app/shared/layout/header/modern-header';
@@ -38,27 +39,47 @@ export const StudentLayout = () => {
         <nav className="nav-menu">
           <Link to="/student/dashboard" className={`student-nav-item ${isActive('/student/dashboard') ? 'active' : ''}`}>
             <i className="bi bi-house-door"></i>
-            {isSidebarOpen && <span>Home</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.home">Home</Translate>
+              </span>
+            )}
           </Link>
 
           <Link to="/student/books" className={`student-nav-item ${isActive('/student/books') ? 'active' : ''}`}>
             <i className="bi bi-book"></i>
-            {isSidebarOpen && <span>My Books</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.myBooks">My Books</Translate>
+              </span>
+            )}
           </Link>
 
           <Link to="/student/flashcards" className={`student-nav-item ${isActive('/student/flashcards') ? 'active' : ''}`}>
             <i className="bi bi-credit-card-2-front"></i>
-            {isSidebarOpen && <span>FlashCard</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.flashCard">FlashCard</Translate>
+              </span>
+            )}
           </Link>
 
           <Link to="/student/games" className={`student-nav-item ${isActive('/student/games') ? 'active' : ''}`}>
             <i className="bi bi-controller"></i>
-            {isSidebarOpen && <span>Games</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.games">Games</Translate>
+              </span>
+            )}
           </Link>
 
           <Link to="/student/profile" className={`student-nav-item ${isActive('/student/profile') ? 'active' : ''}`}>
             <i className="bi bi-person-circle"></i>
-            {isSidebarOpen && <span>Profile</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.profile">Profile</Translate>
+              </span>
+            )}
           </Link>
         </nav>
 
@@ -67,7 +88,11 @@ export const StudentLayout = () => {
 
           <button className={`logout-btn ${!isSidebarOpen ? 'collapsed' : ''}`} onClick={handleLogout}>
             <i className="bi bi-box-arrow-right"></i>
-            {isSidebarOpen && <span>Log Out</span>}
+            {isSidebarOpen && (
+              <span>
+                <Translate contentKey="global.sidebar.student.logout">Log Out</Translate>
+              </span>
+            )}
           </button>
         </div>
       </aside>

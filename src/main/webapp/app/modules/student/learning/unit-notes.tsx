@@ -1,25 +1,29 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getNotesByUnit, createNote, updateNote, deleteNote, reset } from 'app/shared/reducers/note.reducer';
 import { Translate } from 'react-jhipster';
 import { INote } from 'app/shared/model/note.model';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
-import styles from './unit-notes.module.scss';
+import './unit-notes.scss';
 
 interface IUnitNotesProps {
   unitId: number;
-  hideTitle?: boolean;
 }
 
-export const UnitNotes = ({ unitId, hideTitle = false }: IUnitNotesProps) => {
+export const UnitNotes = ({ unitId }: IUnitNotesProps) => {
   const dispatch = useAppDispatch();
-  const { entities: notes, loading, updating, errorMessage, updateSuccess } = useAppSelector(state => state.note);
+  const noteState = useAppSelector(state => state.note);
 
-  const [content, setContent] = useState('');
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const { entities: notes = [], loading = false, updating = false } = noteState || {};
 
-  // Load notes when unit changes
+  // Single note state
+  const [noteContent, setNoteContent] = useState('');
+  const [existingNote, setExistingNote] = useState<INote | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Load notes when component mounts or unitId changes
   useEffect(() => {
     if (unitId) {
       dispatch(getNotesByUnit(unitId));
@@ -29,161 +33,130 @@ export const UnitNotes = ({ unitId, hideTitle = false }: IUnitNotesProps) => {
     };
   }, [dispatch, unitId]);
 
-  // Reset form after successful update
+  // Update local state when notes are loaded
   useEffect(() => {
-    if (updateSuccess) {
-      setContent('');
-      setEditingId(null);
+    if (notes && notes.length > 0) {
+      // Take the first note (1-to-1 relationship)
+      const note = notes[0];
+      setExistingNote(note);
+      setNoteContent(note.content || '');
+    } else {
+      setExistingNote(null);
+      setNoteContent('');
     }
-  }, [updateSuccess]);
+  }, [notes]);
 
-  const handleSubmit = useCallback(() => {
-    const trimmedContent = content.trim();
-    if (!trimmedContent || !unitId) {
+  // Handle save button click
+  const handleSave = async () => {
+    const trimmedContent = noteContent.trim();
+
+    if (!trimmedContent) {
       return;
     }
 
-    if (editingId) {
-      // Update existing note
-      const existingNote = notes.find(n => n.id === editingId);
-      if (existingNote) {
-        const noteToUpdate: INote = {
+    setIsSaving(true);
+
+    try {
+      if (existingNote && existingNote.id) {
+        // Update existing note
+        const updatedNote: INote = {
           ...existingNote,
           content: trimmedContent,
           updatedAt: dayjs().toISOString(),
         };
-        dispatch(updateNote(noteToUpdate));
+        await dispatch(updateNote(updatedNote));
+      } else {
+        // Create new note
+        const newNote: INote = {
+          content: trimmedContent,
+          unitId,
+          createdAt: dayjs().toISOString(),
+        };
+        await dispatch(createNote(newNote));
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Handle clear/delete
+  const handleClear = () => {
+    if (existingNote && existingNote.id) {
+      if (window.confirm('Are you sure you want to delete this note?')) {
+        dispatch(deleteNote({ id: existingNote.id, unitId }));
+        setNoteContent('');
       }
     } else {
-      // Create new note
-      const newNote: INote = {
-        content: trimmedContent,
-        unitId,
-        createdAt: dayjs().toISOString(),
-        // userProfileId will be set by backend based on current user
-      };
-      dispatch(createNote(newNote));
+      setNoteContent('');
     }
-  }, [content, unitId, editingId, notes, dispatch]);
+  };
 
-  const handleEdit = useCallback((note: INote) => {
-    if (note.content) {
-      setContent(note.content);
-      setEditingId(note.id || null);
-    }
-  }, []);
-
-  const handleCancelEdit = useCallback(() => {
-    setContent('');
-    setEditingId(null);
-  }, []);
-
-  const handleDelete = useCallback(
-    (id?: number) => {
-      if (!id || !unitId) return;
-
-      if (window.confirm('Are you sure you want to delete this note?')) {
-        dispatch(deleteNote({ id, unitId }));
-      }
-    },
-    [dispatch, unitId],
-  );
+  const hasChanges = existingNote ? noteContent.trim() !== (existingNote.content || '').trim() : noteContent.trim().length > 0;
 
   return (
-    <div className={styles?.notesContainer || 'notes-container'}>
-      {!hideTitle && (
+    <div className="notes-widget-container">
+      {/* Header */}
+      <div className="notes-header">
         <h3>
-          <i className="bi bi-journal-text"></i>
-          <Translate contentKey="langleague.student.learning.notes.title">My Notes</Translate>
+          <FontAwesomeIcon icon="sticky-note" className="me-2" />
+          <Translate contentKey="langleague.student.learning.notes.title">My Personal Notes</Translate>
         </h3>
-      )}
-
-      {errorMessage && (
-        <div className="alert alert-danger" role="alert">
-          <i className="bi bi-exclamation-triangle-fill"></i> {errorMessage}
-        </div>
-      )}
-
-      <div className={styles?.noteInputArea || 'note-input-area'}>
-        <textarea
-          placeholder="Take a note..."
-          value={content}
-          onChange={e => setContent(e.target.value)}
-          disabled={updating || loading}
-          rows={3}
-        />
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className={styles?.addButton || 'add-button'} onClick={handleSubmit} disabled={!content.trim() || updating || loading}>
-            {updating ? (
-              <i className="bi bi-hourglass-split"> {editingId ? 'Updating...' : 'Saving...'}</i>
-            ) : (
-              <>{editingId ? <i className="bi bi-check-lg"> Update Note</i> : <i className="bi bi-plus-lg"> Add Note</i>}</>
-            )}
-          </button>
-
-          {editingId && (
-            <button
-              className={styles?.addButton || 'add-button'}
-              style={{ backgroundColor: '#6c757d', width: 'auto' }}
-              onClick={handleCancelEdit}
-              disabled={updating}
-            >
-              <i className="bi bi-x-lg"> Cancel</i>
-            </button>
-          )}
-        </div>
+        {existingNote && existingNote.updatedAt && (
+          <span className="last-updated">
+            <FontAwesomeIcon icon="clock" className="me-1" />
+            <Translate contentKey="langleague.student.learning.notes.lastUpdated">Last updated</Translate>:{' '}
+            {dayjs(existingNote.updatedAt).format('DD/MM/YYYY HH:mm')}
+          </span>
+        )}
       </div>
 
-      <div className={styles?.notesList || 'notes-list'}>
-        {loading && (!notes || notes.length === 0) ? (
-          <div className={styles?.loadingState || 'loading-state'}>
+      {/* Editor Area */}
+      <div className="notes-editor">
+        {loading && !existingNote ? (
+          <div className="loading-state">
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
-            <p>Loading notes...</p>
           </div>
-        ) : notes && notes.length > 0 ? (
-          (notes || []).map(note => (
-            <div key={note.id} className={styles?.noteItem || 'note-item'}>
-              <div className={styles?.noteContent || 'note-content'}>{note.content}</div>
-              <div className={styles?.noteFooter || 'note-footer'}>
-                <span className={styles?.noteDate || 'note-date'}>
-                  {note.updatedAt
-                    ? `Updated: ${dayjs(note.updatedAt).format('DD/MM/YYYY HH:mm')}`
-                    : `Created: ${dayjs(note.createdAt).format('DD/MM/YYYY HH:mm')}`}
-                </span>
-                <div className={styles?.noteActions || 'note-actions'}>
-                  <button
-                    className={styles?.editBtn || 'edit-btn'}
-                    onClick={() => handleEdit(note)}
-                    disabled={updating}
-                    title="Edit"
-                    aria-label="Edit note"
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </button>
-                  <button
-                    className={styles?.deleteBtn || 'delete-btn'}
-                    onClick={() => handleDelete(note.id)}
-                    disabled={updating}
-                    title="Delete"
-                    aria-label="Delete note"
-                  >
-                    <i className="bi bi-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))
         ) : (
-          <div className={styles?.emptyState || 'empty-state'}>
-            <i className="bi bi-journal-x"></i>
-            <p>
-              <Translate contentKey="langleague.student.learning.notes.empty">No notes yet for this unit.</Translate>
-            </p>
-            <small>Start taking notes to help you remember important points!</small>
-          </div>
+          <textarea
+            className="notes-textarea"
+            placeholder="Start typing your notes here..."
+            value={noteContent}
+            onChange={e => setNoteContent(e.target.value)}
+            disabled={updating || isSaving}
+          />
         )}
+      </div>
+
+      {/* Footer Actions */}
+      <div className="notes-footer">
+        <div className="footer-info">
+          <span className="char-count">
+            {noteContent.length} <Translate contentKey="langleague.student.learning.notes.characters">characters</Translate>
+          </span>
+        </div>
+        <div className="footer-actions">
+          {noteContent.trim().length > 0 && (
+            <button className="btn-clear" onClick={handleClear} disabled={updating || isSaving} title="Clear note">
+              <FontAwesomeIcon icon="eraser" className="me-1" />
+              <Translate contentKey="langleague.student.learning.notes.clear">Clear</Translate>
+            </button>
+          )}
+          <button className="btn-save" onClick={handleSave} disabled={!hasChanges || updating || isSaving}>
+            {isSaving || updating ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <Translate contentKey="langleague.student.learning.notes.saving">Saving...</Translate>
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon="save" className="me-1" />
+                <Translate contentKey="langleague.student.learning.notes.save">Save</Translate>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

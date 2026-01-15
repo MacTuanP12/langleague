@@ -1,0 +1,333 @@
+{
+  "langleague": {
+    "teacher": {
+      "sidebar": {
+        "title": "教师管理系统"
+      },
+      "dashboard": {
+        "title": "教师仪表板",
+        "loading": "加载仪表板中...",
+        "welcome": "欢迎回来，{name}！",
+        "stats": {
+          "myBooks": "我的书籍",
+          "totalStudents": "总学生数",
+          "pendingAssignments": "待处理任务",
+          "averageRating": "平均评分"
+        },
+        "quickActions": {
+          "title": "快速操作",
+          "manageBooks": "管理书籍",
+          "createBook": "创建新书",
+          "viewStudents": "查看学生",
+          "manageContent": "管理内容"
+        },
+        "recentActivity": {
+          "title": "最近活动",
+          "noData": "无最近活动"
+        },
+        "enrollments": "每本书的注册数",
+        "noEnrollmentData": "尚无注册数据。"
+      },
+      "books": {
+        "management": {
+          "title": "书籍管理",
+          "description": "管理您的图书馆库存，跟踪已发行的书籍，并更新目录详情。",
+          "loading": "加载书籍中...",
+          "noBooks": "未找到书籍"
+        },
+        "stats": {
+          "total": "总书籍数",
+          "available": "可用",
+          "uploaded": "已上传"
+        },
+        "search": {
+          "placeholder": "按标题、作者或ISBN搜索..."
+        },
+        "actions": {
+          "filter": "筛选",
+          "addNew": "+ 添加新书",
+          "edit": "编辑",
+          "view": "查看详情",
+          "delete": "删除",
+          "deleteSuccess": "书籍删除成功！",
+          "deleteFailed": "删除书籍失败",
+          "confirmDeleteTitle": "删除书籍",
+          "confirmDelete": "您确定要删除这本书吗？"
+        },
+        "table": {
+          "cover": "封面",
+          "details": "书籍详情",
+          "uploadedBy": "上传者",
+          "actions": "操作"
+        },
+        "pagination": {
+          "previous": "上一页",
+          "next": "下一页"
+        },
+        "detail": {
+          "loading": "加载书籍详情中...",
+          "backToBooks": "返回书籍",
+          "editBook": "编辑书籍",
+          "addUnit": "添加单元",
+          "meta": {
+            "totalUnits": "总单元数：",
+            "created": "创建时间：",
+            "public": "公开：",
+            "yes": "是",
+            "no": "否"
+          },
+          "units": {
+            "title": "单元",
+            "hint": "拖放以重新排序单元",
+            "empty": {
+              "title": "尚无单元",
+              "description": "首先为这本书添加您的第一个单元",
+              "addFirst": "添加第一个单元"
+            },
+            "stats": {
+              "vocabulary": "词汇：",
+              "grammar": "语法：",
+              "exercises": "练习："
+            },
+            "actions": {
+              "edit": "编辑",
+              "delete": "删除",
+              "manageContent": "管理内容",
+              "confirmDelete": "您确定要删除此单元吗？"
+            }
+          },
+          "syllabus": {
+            "title": "书籍大纲",
+            "backToBooks": "返回书籍"
+          }
+        },
+        "form": {
+          "header": {
+            "add": "添加新书",
+            "edit": "编辑书籍",
+            "descriptionAdd": "在下方输入详细信息以编目新资源。",
+            "descriptionEdit": "在下方输入详细信息以更新资源。"
+          },
+          "fields": {
+            "coverLabel": "书籍封面",
+            "uploadPlaceholder": "上传封面",
+            "uploadHint": "拖放或点击",
+            "fileInfo": "支持：JPG、PNG（最大2MB）",
+            "titleLabel": "书籍标题",
+            "titlePlaceholder": "例如：了不起的盖茨比",
+            "titleRequired": "书籍标题是必需的",
+            "titleMinLength": "标题必须至少2个字符",
+            "descriptionLabel": "描述",
+            "descriptionPlaceholder": "输入书籍内容的简要摘要...",
+            "isPublicLabel": "公开",
+            "isPublicHint": "公开书籍可被所有学生发现和注册",
+            "publicStatus": "公开",
+            "privateStatus": "私有"
+          },
+          "footer": {
+            "infoText": "所有字段都自动保存在本地。",
+            "cancel": "取消",
+            "save": "保存书籍",
+            "saving": "保存中..."
+          }
+        },
+        "unit": {
+          "deleteSuccess": "单元删除成功！",
+          "deleteFailed": "删除单元失败",
+          "confirmDeleteTitle": "删除单元",
+          "confirmDelete": "您确定要删除此单元吗？"
+        }
+      },
+      "editor": {
+        "title": "单元内容编辑器",
+        "backToSyllabus": "返回大纲",
+        "backToBook": "返回书籍",
+        "subtitle": "管理词汇、语法和练习",
+        "tabs": {
+          "vocabulary": "词汇",
+          "grammar": "语法",
+          "exercises": "练习"
+        },
+        "vocabulary": {
+          "title": "词汇列表",
+          "addWord": "添加单词",
+          "aiGenerate": "✨ AI生成",
+          "empty": "尚未添加词汇。",
+          "emptyHint": "使用AI助手从主题生成单词！"
+        },
+        "grammar": {
+          "title": "语法规则",
+          "addRule": "添加规则",
+          "aiGenerate": "✨ AI生成",
+          "empty": "尚未添加语法规则。"
+        },
+        "exercises": {
+          "title": "练习",
+          "addQuestion": "添加问题",
+          "aiGenerate": "✨ AI生成",
+          "empty": "尚未添加练习。",
+          "question": "问题"
+        },
+        "confirmDelete": {
+          "vocabulary": "您确定要删除此词汇吗？",
+          "grammar": "您确定要删除此语法规则吗？",
+          "exercise": "您确定要删除此练习吗？"
+        },
+        "success": {
+          "vocabularyDeleted": "词汇删除成功",
+          "grammarDeleted": "语法规则删除成功",
+          "exerciseDeleted": "练习删除成功"
+        }
+      },
+      "students": {
+        "title": "我的学生",
+        "subtitle": "跟踪学生进度和注册情况",
+        "search": "按姓名或书籍搜索...",
+        "totalStudents": "总学生数：",
+        "table": {
+          "student": "学生",
+          "enrolledBook": "注册书籍",
+          "enrolledDate": "注册日期",
+          "status": "状态"
+        },
+        "empty": "未找到注册您书籍的学生。"
+      },
+      "units": {
+        "labels": {
+          "newVocabulary": "新词汇",
+          "newGrammar": "新语法主题"
+        },
+        "form": {
+          "backButton": "返回",
+          "titlePlaceholder": "单元标题",
+          "summaryPlaceholder": "单元描述",
+          "submit": "提交",
+          "saving": "保存中...",
+          "expandAll": "全部展开",
+          "collapseAll": "全部折叠",
+          "addVocabulary": "添加词汇",
+          "addGrammar": "添加语法",
+          "validation": {
+            "titleRequired": "单元标题是必需的",
+            "titleMinLength": "标题必须至少3个字符"
+          },
+          "actions": {
+            "removeTooltip": "删除项目",
+            "duplicateTooltip": "复制项目",
+            "duplicate": "复制"
+          },
+          "controls": {
+            "expandAll": "展开",
+            "collapseAll": "折叠"
+          }
+        },
+        "vocabulary": {
+          "sectionTitle": "词汇",
+          "addButton": "添加词汇",
+          "fields": {
+            "word": "单词",
+            "phonetic": "音标",
+            "meaning": "含义",
+            "example": "例句",
+            "imageUrl": "图片URL",
+            "order": "顺序"
+          },
+          "placeholders": {
+            "word": "单词（例如，Hello）",
+            "phonetic": "音标（例如，/həˈloʊ/）",
+            "meaning": "含义",
+            "example": "例句",
+            "imageUrl": "图片URL",
+            "order": "顺序"
+          }
+        },
+        "grammar": {
+          "sectionTitle": "语法",
+          "addButton": "添加语法",
+          "fields": {
+            "title": "语法标题",
+            "content": "内容（支持Markdown）",
+            "contentHint": "支持Markdown：**粗体**，*斜体*，# 标题",
+            "example": "用法示例",
+            "exampleHint": "用法示例",
+            "order": "顺序"
+          },
+          "placeholders": {
+            "title": "语法标题",
+            "content": "内容（支持Markdown）",
+            "example": "用法示例",
+            "order": "顺序"
+          }
+        },
+        "exercises": {
+          "sectionTitle": "练习",
+          "addButton": "添加练习",
+          "types": {
+            "singleChoice": "单选",
+            "multiChoice": "多选",
+            "fillInBlank": "填空"
+          },
+          "fields": {
+            "question": "练习文本",
+            "correctAnswer": "输入正确答案...",
+            "imageUrl": "图片URL（可选）",
+            "audioUrl": "音频URL（可选）",
+            "option": "选项{number}"
+          },
+          "placeholders": {
+            "question": "练习文本",
+            "correctAnswer": "输入正确答案...",
+            "imageUrl": "图片URL（可选）",
+            "audioUrl": "音频URL（可选）"
+          },
+          "options": {
+            "addButton": "添加选项"
+          },
+          "menu": {
+            "addExercise": "添加练习",
+            "singleChoice": "单选",
+            "multiChoice": "多选",
+            "fillInBlank": "填空"
+          }
+        },
+        "menu": {
+          "addContent": "添加内容",
+          "vocabulary": "词汇",
+          "vocabularyDesc": "添加词汇及其含义和例句",
+          "grammar": "语法",
+          "grammarDesc": "添加语法规则和解释",
+          "exercise": "练习",
+          "exerciseDesc": "创建练习题",
+          "singleChoice": "单选",
+          "multiChoice": "多选",
+          "fillInBlank": "填空"
+        },
+        "zoom": {
+          "in": "放大",
+          "out": "缩小",
+          "reset": "重置缩放",
+          "shortcuts": {
+            "in": "Ctrl + +",
+            "out": "Ctrl + -",
+            "reset": "Ctrl + 0"
+          }
+        }
+      },
+      "common": {
+        "save": "保存",
+        "cancel": "取消",
+        "delete": "删除",
+        "back": "返回",
+        "edit": "编辑",
+        "view": "查看",
+        "add": "添加",
+        "create": "创建",
+        "update": "更新",
+        "loading": "加载中...",
+        "search": "搜索",
+        "filter": "筛选",
+        "actions": "操作"
+      }
+    }
+  }
+}

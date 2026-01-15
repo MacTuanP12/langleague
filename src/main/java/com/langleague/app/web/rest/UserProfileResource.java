@@ -190,13 +190,35 @@ public class UserProfileResource {
 
     /**
      * {@code POST  /user-profiles/sync-streak} : Sync streak for current user.
+     * Only students can sync streak. Streak chỉ dành cho Student.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the map of streak info.
      */
     @PostMapping("/sync-streak")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<Map<String, Object>> syncStreak() {
         LOG.debug("REST request to sync streak for current user");
         Map<String, Object> result = userProfileService.syncStreak();
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * {@code PATCH  /user-profiles/update-theme} : Update theme preference for current user.
+     *
+     * @param themeRequest the theme request containing the theme mode.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userProfileDTO.
+     */
+    @PatchMapping("/update-theme")
+    public ResponseEntity<UserProfileDTO> updateThemePreference(@RequestBody Map<String, String> themeRequest) {
+        LOG.debug("REST request to update theme preference for current user: {}", themeRequest);
+        String theme = themeRequest.get("theme");
+        if (theme == null || theme.trim().isEmpty()) {
+            throw new BadRequestAlertException("Theme is required", ENTITY_NAME, "themerequired");
+        }
+
+        UserProfileDTO result = userProfileService.updateThemePreference(theme);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 }

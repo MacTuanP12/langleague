@@ -1,11 +1,21 @@
 id;exercise_text;exercise_type;correct_answer_raw;audio_url;image_url;order_index;unit_id
-1;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;if;carefully haze unimpressively;2145;1
-2;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;heartbeat what deflect;ick;25426;2
-3;../fake-data/blob/hipster.txt;MULTI_CHOICE;../fake-data/blob/hipster.txt;yahoo obedience;per;9997;3
-4;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;shameless;enormously supplier skeleton;20911;4
-5;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;hmph lest;pricey gee of;21959;5
-6;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;for gape cutlet;provided aside;25758;6
-7;../fake-data/blob/hipster.txt;FILL_IN_BLANK;../fake-data/blob/hipster.txt;excited or never;supposing inasmuch reluctantly;14119;7
-8;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;unless;reasonable;17124;8
-9;../fake-data/blob/hipster.txt;MULTI_CHOICE;../fake-data/blob/hipster.txt;whenever settler humidity;trusting mid frilly;31441;9
-10;../fake-data/blob/hipster.txt;SINGLE_CHOICE;../fake-data/blob/hipster.txt;scarily;above institute in;4096;10
+1;What is the correct way to greet someone in the morning?;SINGLE_CHOICE;;;1;1
+2;Fill in the blank: Nice to ___ you!;FILL_IN_BLANK;meet;;2;1
+3;Which expressions are used to say goodbye? (Choose all that apply);MULTI_CHOICE;;;3;1
+4;What number comes after nine?;SINGLE_CHOICE;;;1;2
+5;Fill in the blank: There are ___ days in a week.;FILL_IN_BLANK;seven;;2;2
+6;Which day comes after Monday?;SINGLE_CHOICE;;;1;3
+7;Fill in the blank: Yesterday ___ Sunday.;FILL_IN_BLANK;was;;2;3
+8;She ___ to school every day. (go);SINGLE_CHOICE;;;1;4
+9;Choose the correct sentence:;SINGLE_CHOICE;;;2;4
+10;Fill in the blank: He ___ breakfast at 7 AM.;FILL_IN_BLANK;eats;;3;4
+11;What is she doing right now?;SINGLE_CHOICE;;;1;5
+12;Fill in the blank: They ___ (study) English at the moment.;FILL_IN_BLANK;are studying;;2;5
+13;I ___ (work) at this company for 5 years. (Simple or Continuous?);SINGLE_CHOICE;;;3;5
+14;Yesterday, I ___ (go) to the supermarket.;SINGLE_CHOICE;;;1;6
+15;Fill in the blank: She ___ (have) lunch at noon yesterday.;FILL_IN_BLANK;had;;2;6
+16;Which is the correct past tense of "see"?;SINGLE_CHOICE;;;3;6
+17;What is an appropriate email greeting for a formal business email?;SINGLE_CHOICE;;;1;7
+18;Fill in the blank: I am writing to ___ about our meeting.;FILL_IN_BLANK;inquire;;2;7
+19;Which phrases are appropriate to start a meeting? (Choose all);MULTI_CHOICE;;;1;8
+20;Fill in the blank: Let me ___ by saying thank you all for coming.;FILL_IN_BLANK;begin;;2;8

@@ -129,4 +129,36 @@ public class ExerciseOptionService {
         LOG.debug("Request to delete ExerciseOption : {}", id);
         exerciseOptionRepository.deleteById(id);
     }
+
+    /**
+     * Convert DTO to Entity (helper for bulk operations).
+     *
+     * @param dto the DTO to convert.
+     * @return the entity.
+     */
+    public ExerciseOption toEntity(ExerciseOptionDTO dto) {
+        return exerciseOptionMapper.toEntity(dto);
+    }
+
+    /**
+     * Convert Entity to DTO (helper for bulk operations).
+     *
+     * @param entity the entity to convert.
+     * @return the DTO.
+     */
+    public ExerciseOptionDTO toDto(ExerciseOption entity) {
+        return exerciseOptionMapper.toDto(entity);
+    }
+
+    /**
+     * Batch save all exercise options (helper for bulk operations to avoid N+1).
+     *
+     * @param options the list of options to save.
+     * @return the list of saved options.
+     */
+    @Transactional
+    public List<ExerciseOption> saveAllEntities(List<ExerciseOption> options) {
+        LOG.debug("Request to batch save {} ExerciseOptions", options.size());
+        return exerciseOptionRepository.saveAll(options);
+    }
 }

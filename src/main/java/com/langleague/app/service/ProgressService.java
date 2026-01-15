@@ -159,26 +159,26 @@ public class ProgressService {
     }
 
     public ProgressDTO completeUnit(Long unitId) {
-        Optional<UserProfile> userProfile = userProfileRepository.findOneByUserIsCurrentUser();
-        if (userProfile.isEmpty()) {
-            throw new RuntimeException("User profile not found");
-        }
+        UserProfile userProfileEntity = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("User profile not found"));
 
-        Optional<Progress> existingProgress = progressRepository.findByUserIsCurrentUserAndUnitId(unitId);
-        Progress progress;
-
-        if (existingProgress.isPresent()) {
-            progress = existingProgress.get();
-            progress.setIsCompleted(true);
-            progress.setUpdatedAt(Instant.now());
-        } else {
-            progress = new Progress();
-            progress.setIsCompleted(true);
-            progress.setUpdatedAt(Instant.now());
-            progress.setUserProfile(userProfile.get());
-            Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new RuntimeException("Unit not found"));
-            progress.setUnit(unit);
-        }
+        Progress progress = progressRepository
+            .findByUserIsCurrentUserAndUnitId(unitId)
+            .map(existingProgress -> {
+                existingProgress.setIsCompleted(true);
+                existingProgress.setUpdatedAt(Instant.now());
+                return existingProgress;
+            })
+            .orElseGet(() -> {
+                Progress newProgress = new Progress();
+                newProgress.setIsCompleted(true);
+                newProgress.setUpdatedAt(Instant.now());
+                newProgress.setUserProfile(userProfileEntity);
+                Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new RuntimeException("Unit not found"));
+                newProgress.setUnit(unit);
+                return newProgress;
+            });
 
         progress = progressRepository.save(progress);
         return progressMapper.toDto(progress);
@@ -192,5 +192,188 @@ public class ProgressService {
     public void delete(Long id) {
         LOG.debug("Request to delete Progress : {}", id);
         progressRepository.deleteById(id);
+    }
+
+    /**
+     * Toggle bookmark status for a unit for the current user.
+     * UC-49: Manual bookmark functionality.
+     *
+     * @param unitId the id of the unit.
+     * @return the updated progress with new bookmark status.
+     */
+    public ProgressDTO toggleBookmark(Long unitId) {
+        LOG.debug("Request to toggle bookmark for unit : {}", unitId);
+
+        UserProfile userProfileEntity = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("User profile not found"));
+
+        Progress progress = progressRepository
+            .findByUserIsCurrentUserAndUnitId(unitId)
+            .map(existingProgress -> {
+                // Toggle the bookmark status
+                existingProgress.setIsBookmarked(!Boolean.TRUE.equals(existingProgress.getIsBookmarked()));
+                existingProgress.setUpdatedAt(Instant.now());
+                return existingProgress;
+            })
+            .orElseGet(() -> {
+                // Create new progress record with bookmark
+                Progress newProgress = new Progress();
+                newProgress.setIsCompleted(false);
+                newProgress.setIsBookmarked(true);
+                newProgress.setUpdatedAt(Instant.now());
+                newProgress.setLastAccessedAt(Instant.now());
+                newProgress.setCompletionPercentage(0);
+                newProgress.setUserProfile(userProfileEntity);
+                Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new RuntimeException("Unit not found"));
+                newProgress.setUnit(unit);
+                return newProgress;
+            });
+
+        progress = progressRepository.save(progress);
+        return progressMapper.toDto(progress);
+    }
+
+    /**
+     * Track unit access for auto-resume functionality.
+     * UC-49: Automatic tracking of last accessed unit.
+     *
+     * @param unitId the id of the unit being accessed.
+     * @return the updated progress.
+     */
+    public ProgressDTO trackUnitAccess(Long unitId) {
+        LOG.debug("Request to track unit access : {}", unitId);
+
+        UserProfile userProfileEntity = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("User profile not found"));
+
+        Progress progress = progressRepository
+            .findByUserIsCurrentUserAndUnitId(unitId)
+            .map(existingProgress -> {
+                existingProgress.setLastAccessedAt(Instant.now());
+                existingProgress.setUpdatedAt(Instant.now());
+                return existingProgress;
+            })
+            .orElseGet(() -> {
+                // Create new progress record with access tracking
+                Progress newProgress = new Progress();
+                newProgress.setIsCompleted(false);
+                newProgress.setIsBookmarked(false);
+                newProgress.setUpdatedAt(Instant.now());
+                newProgress.setLastAccessedAt(Instant.now());
+                newProgress.setCompletionPercentage(0);
+                newProgress.setIsVocabularyFinished(false);
+                newProgress.setIsGrammarFinished(false);
+                newProgress.setIsExerciseFinished(false);
+                newProgress.setUserProfile(userProfileEntity);
+                Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new RuntimeException("Unit not found"));
+                newProgress.setUnit(unit);
+                return newProgress;
+            });
+
+        progress = progressRepository.save(progress);
+        return progressMapper.toDto(progress);
+    }
+
+    /**
+     * Get all bookmarked units for the current user.
+     * UC-49: Retrieve bookmarked units for review.
+     *
+     * @return the list of bookmarked progresses.
+     */
+    @Transactional(readOnly = true)
+    public List<ProgressDTO> findBookmarkedByCurrentUser() {
+        LOG.debug("Request to get all bookmarked units for current user");
+        return progressRepository
+            .findBookmarkedByCurrentUser()
+            .stream()
+            .map(progressMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get the most recently accessed unit for auto-resume functionality.
+     * UC-49: Resume learning from last accessed unit.
+     *
+     * @return the most recently accessed progress.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ProgressDTO> findMostRecentlyAccessedByCurrentUser() {
+        LOG.debug("Request to get most recently accessed unit for current user");
+        List<Progress> progresses = progressRepository.findByCurrentUserOrderByLastAccessedAtDesc();
+        if (!progresses.isEmpty()) {
+            return Optional.of(progressMapper.toDto(progresses.get(0)));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Update progress section completion and recalculate percentage.
+     * UC-49: Granular tracking of vocabulary, grammar, and exercise completion.
+     *
+     * @param unitId the id of the unit.
+     * @param sectionType the type of section completed (VOCABULARY, GRAMMAR, EXERCISE).
+     * @return the updated progress.
+     */
+    public ProgressDTO updateSectionProgress(Long unitId, String sectionType) {
+        LOG.debug("Request to update section progress for unit {} : section {}", unitId, sectionType);
+
+        UserProfile userProfileEntity = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("User profile not found"));
+
+        Progress progress = progressRepository
+            .findByUserIsCurrentUserAndUnitId(unitId)
+            .orElseGet(() -> {
+                // Create new progress if it doesn't exist
+                Progress newProgress = new Progress();
+                newProgress.setIsCompleted(false);
+                newProgress.setIsBookmarked(false);
+                newProgress.setUpdatedAt(Instant.now());
+                newProgress.setLastAccessedAt(Instant.now());
+                newProgress.setCompletionPercentage(0);
+                newProgress.setIsVocabularyFinished(false);
+                newProgress.setIsGrammarFinished(false);
+                newProgress.setIsExerciseFinished(false);
+                newProgress.setUserProfile(userProfileEntity);
+                Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new RuntimeException("Unit not found"));
+                newProgress.setUnit(unit);
+                return newProgress;
+            });
+
+        // Update section completion based on type
+        switch (sectionType.toUpperCase()) {
+            case "VOCABULARY":
+                progress.setIsVocabularyFinished(true);
+                break;
+            case "GRAMMAR":
+                progress.setIsGrammarFinished(true);
+                break;
+            case "EXERCISE":
+                progress.setIsExerciseFinished(true);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid section type: " + sectionType);
+        }
+
+        // Recalculate completion percentage
+        int completedSections = 0;
+        if (Boolean.TRUE.equals(progress.getIsVocabularyFinished())) completedSections++;
+        if (Boolean.TRUE.equals(progress.getIsGrammarFinished())) completedSections++;
+        if (Boolean.TRUE.equals(progress.getIsExerciseFinished())) completedSections++;
+
+        int totalSections = 3; // Vocabulary, Grammar, Exercise
+        int percentage = (completedSections * 100) / totalSections;
+        progress.setCompletionPercentage(percentage);
+
+        // Mark as completed if all sections are done
+        if (percentage == 100) {
+            progress.setIsCompleted(true);
+        }
+
+        progress.setUpdatedAt(Instant.now());
+        progress = progressRepository.save(progress);
+        return progressMapper.toDto(progress);
     }
 }

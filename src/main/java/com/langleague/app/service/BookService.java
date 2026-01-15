@@ -8,7 +8,9 @@ import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.dto.BookDTO;
 import com.langleague.app.service.mapper.BookMapper;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -50,9 +52,7 @@ public class BookService {
 
         // Auto-assign current user as teacher if not provided
         if (book.getTeacherProfile() == null) {
-            SecurityUtils.getCurrentUserLogin()
-                .flatMap(userProfileRepository::findOneByUserIsCurrentUser)
-                .ifPresent(book::setTeacherProfile);
+            userProfileRepository.findOneByUserIsCurrentUser().ifPresent(book::setTeacherProfile);
         }
 
         if (book.getCreatedAt() == null) {
@@ -65,17 +65,29 @@ public class BookService {
 
     /**
      * Update a book.
+     * Only the owner (teacher who created the book) can update it.
      *
      * @param bookDTO the entity to save.
      * @return the persisted entity.
      */
     public BookDTO update(BookDTO bookDTO) {
         LOG.debug("Request to update Book : {}", bookDTO);
-        Book book = bookMapper.toEntity(bookDTO);
 
-        // Preserve existing fields if necessary, but for now standard update
-        // If teacher profile is lost in DTO, we might want to recover it, but usually DTO should have it or we trust the client/mapper
-        // For security, we might want to ensure the teacher doesn't change the owner, but that's a refinement.
+        // Verify ownership before update
+        Book existingBook = bookRepository.findById(bookDTO.getId()).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        UserProfile currentUserProfile = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("Current user profile not found"));
+
+        // Check if current user is the owner (with null safety)
+        if (existingBook.getTeacherProfile() == null || !existingBook.getTeacherProfile().getId().equals(currentUserProfile.getId())) {
+            throw new SecurityException("You can only update your own books");
+        }
+
+        Book book = bookMapper.toEntity(bookDTO);
+        // Preserve the original teacher (prevent ownership change)
+        book.setTeacherProfile(existingBook.getTeacherProfile());
 
         book = bookRepository.save(book);
         return bookMapper.toDto(book);
@@ -83,6 +95,7 @@ public class BookService {
 
     /**
      * Partially update a book.
+     * Only the owner (teacher who created the book) can update it.
      *
      * @param bookDTO the entity to update partially.
      * @return the persisted entity.
@@ -93,6 +106,18 @@ public class BookService {
         return bookRepository
             .findById(bookDTO.getId())
             .map(existingBook -> {
+                // Verify ownership before update
+                UserProfile currentUserProfile = userProfileRepository
+                    .findOneByUserIsCurrentUser()
+                    .orElseThrow(() -> new RuntimeException("Current user profile not found"));
+
+                // Check if current user is the owner
+                if (
+                    existingBook.getTeacherProfile() == null || !existingBook.getTeacherProfile().getId().equals(currentUserProfile.getId())
+                ) {
+                    throw new SecurityException("You can only update your own books");
+                }
+
                 bookMapper.partialUpdate(existingBook, bookDTO);
 
                 return existingBook;
@@ -169,6 +194,23 @@ public class BookService {
     }
 
     /**
+     * Get all books that the current user (student) has enrolled in.
+     * This is a dedicated endpoint for students to get their enrolled books,
+     * avoiding the need to use TEACHER role endpoints.
+     *
+     * @param pageable the pagination information.
+     * @return the list of enrolled books.
+     */
+    @Transactional(readOnly = true)
+    public Page<BookDTO> findAllEnrolledBooks(Pageable pageable) {
+        LOG.debug("Request to get all Enrolled Books for current user");
+        return SecurityUtils.getCurrentUserLogin()
+            .map(login -> bookRepository.findAllByEnrolledUser(login, pageable))
+            .orElse(Page.empty(pageable))
+            .map(bookMapper::toDto);
+    }
+
+    /**
      * Get one book by id.
      *
      * @param id the id of the entity.
@@ -181,12 +223,38 @@ public class BookService {
     }
 
     /**
+     * Get top 4 newest books ordered by creation date.
+     * Used for featured/latest books display on homepage.
+     *
+     * @return the list of 4 newest books.
+     */
+    @Transactional(readOnly = true)
+    public List<BookDTO> findTop4Newest() {
+        LOG.debug("Request to get top 4 newest Books");
+        return bookRepository.findTop4ByOrderByCreatedAtDesc().stream().map(bookMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
      * Delete the book by id.
+     * Only the owner (teacher who created the book) can delete it.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         LOG.debug("Request to delete Book : {}", id);
+
+        // Verify ownership before delete
+        Book existingBook = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        UserProfile currentUserProfile = userProfileRepository
+            .findOneByUserIsCurrentUser()
+            .orElseThrow(() -> new RuntimeException("Current user profile not found"));
+
+        // Check if current user is the owner (with null safety)
+        if (existingBook.getTeacherProfile() == null || !existingBook.getTeacherProfile().getId().equals(currentUserProfile.getId())) {
+            throw new SecurityException("You can only delete your own books");
+        }
+
         bookRepository.deleteById(id);
     }
 }

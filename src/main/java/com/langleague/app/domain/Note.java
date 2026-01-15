@@ -24,9 +24,11 @@ public class Note implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @Size(min = 1, max = 5000)
     @Lob
     @Column(name = "content", nullable = false)
-    @NotNull
     private String content;
 
     @NotNull

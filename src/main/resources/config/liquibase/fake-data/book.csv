@@ -1,11 +1,6 @@
 id;title;description;cover_image_url;is_public;created_at;teacher_profile_id
-1;correctly;../fake-data/blob/hipster.txt;tough;false;2026-01-08T02:57:13;1
-2;seldom;../fake-data/blob/hipster.txt;demonstrate pace tomography;true;2026-01-07T21:53:40;2
-3;decryption likewise;../fake-data/blob/hipster.txt;lounge lest woot;false;2026-01-08T09:10:12;1
-4;pike;../fake-data/blob/hipster.txt;councilman;false;2026-01-08T11:22:58;2
-5;punctually;../fake-data/blob/hipster.txt;pfft boohoo yum;false;2026-01-08T03:00:08;2
-6;meh;../fake-data/blob/hipster.txt;energetically truly unethically;false;2026-01-07T23:53:46;2
-7;frightfully if furiously;../fake-data/blob/hipster.txt;since pick;false;2026-01-08T06:24:16;2
-8;foot;../fake-data/blob/hipster.txt;since eyeliner;false;2026-01-08T00:34:11;2
-9;quicker log;../fake-data/blob/hipster.txt;bulky;true;2026-01-08T02:53:21;1
-10;about;../fake-data/blob/hipster.txt;voluntarily optimistic;true;2026-01-08T04:36:53;2
+1;English for Beginners A1;Khóa học tiếng Anh cơ bản dành cho người mới bắt đầu. Học từ vựng, ngữ pháp và giao tiếp hàng ngày.;https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400;true;2026-01-05T08:00:00;3
+2;English Grammar Essentials;Nắm vững ngữ pháp tiếng Anh từ cơ bản đến nâng cao. Bao gồm thì, câu điều kiện, và cấu trúc câu.;https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=400;true;2026-01-06T09:30:00;3
+3;Business English Communication;Tiếng Anh giao tiếp trong môi trường công sở. Email, họp, thuyết trình và đàm phán.;https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400;true;2026-01-07T10:00:00;3
+4;TOEIC Preparation 450-650;Luyện thi TOEIC từ 450 đến 650 điểm. Bao gồm Listening và Reading với đề thi mẫu.;https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400;true;2026-01-08T11:00:00;3
+5;Daily English Conversations;Tiếng Anh giao tiếp hàng ngày - mua sắm, du lịch, ăn uống và các tình huống thực tế.;https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400;true;2026-01-09T08:30:00;3

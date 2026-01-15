@@ -1,10 +1,17 @@
 package com.langleague.app.service;
 
+import com.langleague.app.domain.Book;
 import com.langleague.app.domain.Unit;
+import com.langleague.app.repository.BookRepository;
 import com.langleague.app.repository.UnitRepository;
+import com.langleague.app.repository.UserProfileRepository;
+import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.dto.UnitDTO;
 import com.langleague.app.service.mapper.UnitMapper;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +33,20 @@ public class UnitService {
 
     private final UnitMapper unitMapper;
 
-    public UnitService(UnitRepository unitRepository, UnitMapper unitMapper) {
+    private final BookRepository bookRepository;
+
+    private final UserProfileRepository userProfileRepository;
+
+    public UnitService(
+        UnitRepository unitRepository,
+        UnitMapper unitMapper,
+        BookRepository bookRepository,
+        UserProfileRepository userProfileRepository
+    ) {
         this.unitRepository = unitRepository;
         this.unitMapper = unitMapper;
+        this.bookRepository = bookRepository;
+        this.userProfileRepository = userProfileRepository;
     }
 
     /**
@@ -103,22 +121,52 @@ public class UnitService {
 
     /**
      * Reorder units for a specific book.
+     * OPTIMIZED: Fixed N+1 problem by using batch save instead of individual saves.
+     * SECURITY: Added ownership verification to prevent IDOR.
      *
      * @param bookId the id of the book.
      * @param unitIds the list of unit ids in the new order.
      */
+    @Transactional
     public void reorderUnits(Long bookId, List<Long> unitIds) {
         LOG.debug("Request to reorder Units for Book : {}", bookId);
+
+        // Verify ownership before reordering (IDOR fix)
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("User not logged in"));
+
+        if (
+            book.getTeacherProfile() == null ||
+            book.getTeacherProfile().getUser() == null ||
+            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
+        ) {
+            throw new SecurityException("You are not the owner of this book");
+        }
+
+        // Fetch all units for this book
         List<Unit> units = unitRepository.findAllByBookIdOrderByOrderIndexAsc(bookId);
+
+        // Create a map for O(1) lookup instead of nested loop (Performance fix)
+        Map<Long, Unit> unitMap = new HashMap<>();
+        for (Unit unit : units) {
+            unitMap.put(unit.getId(), unit);
+        }
+
+        // Update order indices
+        List<Unit> unitsToUpdate = new ArrayList<>();
         for (int i = 0; i < unitIds.size(); i++) {
             Long unitId = unitIds.get(i);
-            for (Unit unit : units) {
-                if (unit.getId().equals(unitId)) {
-                    unit.setOrderIndex(i);
-                    unitRepository.save(unit);
-                    break;
-                }
+            Unit unit = unitMap.get(unitId);
+            if (unit != null) {
+                unit.setOrderIndex(i);
+                unitsToUpdate.add(unit);
             }
+        }
+
+        // Batch save all updated units (N+1 fix)
+        if (!unitsToUpdate.isEmpty()) {
+            unitRepository.saveAll(unitsToUpdate);
         }
     }
 

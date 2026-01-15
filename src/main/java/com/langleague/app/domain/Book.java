@@ -27,14 +27,17 @@ public class Book implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "title", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 200)
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
 
     @Lob
     @Column(name = "description")
     private String description;
 
-    @Column(name = "cover_image_url")
+    @Size(max = 500)
+    @Column(name = "cover_image_url", length = 500)
     private String coverImageUrl;
 
     @NotNull

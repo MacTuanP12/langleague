@@ -114,12 +114,19 @@ const AuthSlider = () => {
     if (loginError) {
       let msg = translate('login.messages.error.authentication');
       if (errorMessage) {
-        if (errorMessage.includes('Captcha')) {
+        const lowerMsg = errorMessage.toLowerCase();
+        if (lowerMsg.includes('captcha')) {
           msg = translate('login.messages.error.captcha');
-        } else if (errorMessage.includes('Bad credentials')) {
-          msg = translate('login.messages.error.authentication');
+        } else if (lowerMsg.includes('bad credentials') || lowerMsg.includes('unauthorized')) {
+          msg = translate('login.messages.error.badcredentials');
+        } else if (lowerMsg.includes('user not found') || lowerMsg.includes('not found')) {
+          msg = translate('login.messages.error.usernotfound');
+        } else if (lowerMsg.includes('locked')) {
+          msg = translate('login.messages.error.accountlocked');
+        } else if (lowerMsg.includes('disabled') || lowerMsg.includes('not activated')) {
+          msg = translate('login.messages.error.accountdisabled');
         } else {
-          msg = errorMessage;
+          msg = translate('login.messages.error.authentication');
         }
       }
       message.error(msg);
@@ -146,7 +153,18 @@ const AuthSlider = () => {
       }, 2000);
     } catch (error: unknown) {
       const err = error as { message?: string };
-      const errorMsg = err?.message || translate('register.messages.error.fail');
+      let errorMsg = translate('register.messages.error.fail');
+
+      if (err?.message) {
+        const lowerMsg = err.message.toLowerCase();
+        if (lowerMsg.includes('login already') || lowerMsg.includes('username already') || lowerMsg.includes('login name already')) {
+          errorMsg = translate('register.messages.error.userexists');
+        } else if (lowerMsg.includes('email already') || lowerMsg.includes('email is already')) {
+          errorMsg = translate('register.messages.error.emailexists');
+        } else {
+          errorMsg = err.message;
+        }
+      }
       message.error(errorMsg);
     } finally {
       setRegisterLoading(false);
@@ -266,7 +284,7 @@ const AuthSlider = () => {
                   <img src={captchaData.captchaImage} alt="Captcha" className="captcha-image" />
                 ) : (
                   <span className="captcha-error" onClick={loadCaptcha} style={{ cursor: 'pointer', color: 'red', fontSize: '12px' }}>
-                    Failed to load. Click to retry.
+                    {translate('login.form.captcha.error')}
                   </span>
                 )}
                 <button type="button" className="captcha-refresh" onClick={loadCaptcha} disabled={isLoadingCaptcha}>

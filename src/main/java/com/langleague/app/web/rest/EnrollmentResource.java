@@ -1,6 +1,8 @@
 package com.langleague.app.web.rest;
 
 import com.langleague.app.repository.EnrollmentRepository;
+import com.langleague.app.security.AuthoritiesConstants;
+import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.EnrollmentService;
 import com.langleague.app.service.dto.EnrollmentDTO;
 import com.langleague.app.web.rest.errors.BadRequestAlertException;
@@ -15,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -44,12 +48,14 @@ public class EnrollmentResource {
 
     /**
      * {@code POST  /enrollments} : Create a new enrollment.
+     * Only students can create enrollments.
      *
      * @param enrollmentDTO the enrollmentDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new enrollmentDTO, or with status {@code 400 (Bad Request)} if the enrollment has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<EnrollmentDTO> createEnrollment(@Valid @RequestBody EnrollmentDTO enrollmentDTO) throws URISyntaxException {
         LOG.debug("REST request to save Enrollment : {}", enrollmentDTO);
         if (enrollmentDTO.getId() != null) {
@@ -69,6 +75,7 @@ public class EnrollmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/enroll/{bookId}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<EnrollmentDTO> enrollInBook(@PathVariable Long bookId) throws URISyntaxException {
         LOG.debug("REST request to enroll in Book : {}", bookId);
         EnrollmentDTO enrollmentDTO = enrollmentService.enrollInBook(bookId);
@@ -79,6 +86,8 @@ public class EnrollmentResource {
 
     /**
      * {@code PUT  /enrollments/:id} : Updates an existing enrollment.
+     * Only admins can update enrollments directly. Students use enroll/delete endpoints.
+     * Note: Teacher không có quyền truy cập enrollment.
      *
      * @param id the id of the enrollmentDTO to save.
      * @param enrollmentDTO the enrollmentDTO to update.
@@ -88,6 +97,7 @@ public class EnrollmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<EnrollmentDTO> updateEnrollment(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody EnrollmentDTO enrollmentDTO
@@ -112,6 +122,7 @@ public class EnrollmentResource {
 
     /**
      * {@code PATCH  /enrollments/:id} : Partial updates given fields of an existing enrollment, field will ignore if it is null
+     * Note: This endpoint is restricted. Enrollments are typically created or deleted, not updated.
      *
      * @param id the id of the enrollmentDTO to save.
      * @param enrollmentDTO the enrollmentDTO to update.
@@ -122,6 +133,7 @@ public class EnrollmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<EnrollmentDTO> partialUpdateEnrollment(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody EnrollmentDTO enrollmentDTO
@@ -148,11 +160,13 @@ public class EnrollmentResource {
 
     /**
      * {@code GET  /enrollments} : get all the enrollments.
+     * Only students can view enrollments. Teacher không có quyền truy cập enrollment.
      *
      * @param filter the filter to apply (my-books).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of enrollments in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public List<EnrollmentDTO> getAllEnrollments(@RequestParam(name = "filter", required = false) String filter) {
         LOG.debug("REST request to get all Enrollments");
         if ("my-books".equals(filter)) {
@@ -163,11 +177,13 @@ public class EnrollmentResource {
 
     /**
      * {@code GET  /enrollments/:id} : get the "id" enrollment.
+     * Only students can view enrollments. Teacher không có quyền truy cập enrollment.
      *
      * @param id the id of the enrollmentDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the enrollmentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<EnrollmentDTO> getEnrollment(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Enrollment : {}", id);
         Optional<EnrollmentDTO> enrollmentDTO = enrollmentService.findOne(id);
@@ -181,6 +197,7 @@ public class EnrollmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the enrollmentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/book/{bookId}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<EnrollmentDTO> getEnrollmentByBook(@PathVariable Long bookId) {
         LOG.debug("REST request to get Enrollment for current user and book : {}", bookId);
         Optional<EnrollmentDTO> enrollmentDTO = enrollmentService.findOneByCurrentUserAndBookId(bookId);
@@ -194,6 +211,7 @@ public class EnrollmentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Enrollment : {}", id);
         enrollmentService.delete(id);

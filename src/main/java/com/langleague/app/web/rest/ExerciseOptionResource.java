@@ -52,6 +52,7 @@ public class ExerciseOptionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<ExerciseOptionDTO> createExerciseOption(@Valid @RequestBody ExerciseOptionDTO exerciseOptionDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save ExerciseOption : {}", exerciseOptionDTO);
@@ -75,6 +76,7 @@ public class ExerciseOptionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<ExerciseOptionDTO> updateExerciseOption(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ExerciseOptionDTO exerciseOptionDTO
@@ -109,6 +111,7 @@ public class ExerciseOptionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "') or hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<ExerciseOptionDTO> partialUpdateExerciseOption(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ExerciseOptionDTO exerciseOptionDTO
@@ -135,11 +138,12 @@ public class ExerciseOptionResource {
 
     /**
      * {@code GET  /exercise-options} : get all the exerciseOptions.
+     * This endpoint is generally not used - options are fetched with exercises.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exerciseOptions in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.TEACHER + "\")")
     public List<ExerciseOptionDTO> getAllExerciseOptions() {
         LOG.debug("REST request to get all ExerciseOptions");
         return exerciseOptionService.findAll();
@@ -152,6 +156,7 @@ public class ExerciseOptionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseOptionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.STUDENT + "')")
     public ResponseEntity<ExerciseOptionDTO> getExerciseOption(@PathVariable("id") Long id) {
         LOG.debug("REST request to get ExerciseOption : {}", id);
         Optional<ExerciseOptionDTO> exerciseOptionDTO = exerciseOptionService.findOne(id);
@@ -165,6 +170,7 @@ public class ExerciseOptionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteExerciseOption(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete ExerciseOption : {}", id);
         exerciseOptionService.delete(id);

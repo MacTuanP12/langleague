@@ -80,6 +80,7 @@ public class UnitResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<UnitDTO> createUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
         LOG.debug("REST request to save Unit : {}", unitDTO);
         if (unitDTO.getId() != null) {
@@ -110,6 +111,7 @@ public class UnitResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<UnitDTO> updateUnit(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody UnitDTO unitDTO
@@ -122,10 +124,7 @@ public class UnitResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!unitRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        // Single findById call instead of existsById + findById (Performance fix)
         Unit unit = unitRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
@@ -149,6 +148,7 @@ public class UnitResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<UnitDTO> partialUpdateUnit(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody UnitDTO unitDTO
@@ -161,10 +161,7 @@ public class UnitResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!unitRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        // Single findById call instead of existsById + findById (Performance fix)
         Unit unit = unitRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
@@ -180,11 +177,13 @@ public class UnitResource {
 
     /**
      * {@code GET  /units} : get all the units.
+     * This endpoint is generally not used - units are fetched by book.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of units in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<UnitDTO>> getAllUnits(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Units");
         Page<UnitDTO> page = unitService.findAll(pageable);
@@ -194,6 +193,7 @@ public class UnitResource {
 
     /**
      * {@code GET  /units/by-book/:bookId} : get all the units by bookId.
+     * Students and Teachers can view units.
      *
      * @param bookId the id of the book.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of units in body.
@@ -224,6 +224,7 @@ public class UnitResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteUnit(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Unit : {}", id);
 

@@ -31,6 +31,8 @@ import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
 import './unit-update-v2.scss';
 import { translate, Translate } from 'react-jhipster';
 import { GrammarItemCard } from 'app/modules/teacher/unit-management/GrammarItemCard';
+import { ZoomControls } from 'app/modules/teacher/unit-management/ZoomControls';
+import { AddContentMenu } from 'app/modules/teacher/unit-management/AddContentMenu';
 import { toast } from 'react-toastify';
 
 type FocusedSection = number | string | null;
@@ -38,11 +40,15 @@ type FocusedSection = number | string | null;
 export const UnitUpdateV2 = () => {
   const dispatch = useAppDispatch();
   const { selectedUnit, loading: unitLoading, errorMessage: unitError } = useAppSelector(state => state.unit);
-  const { vocabularies: reduxVocabularies, loading: vocabLoading, errorMessage: vocabError } = useAppSelector(state => state.vocabulary);
-  const { grammars: reduxGrammars, loading: grammarLoading, errorMessage: grammarError } = useAppSelector(state => state.grammar);
   const {
-    exercises: reduxExercises,
-    exerciseOptions: reduxExerciseOptions,
+    vocabularies: reduxVocabularies = [],
+    loading: vocabLoading,
+    errorMessage: vocabError,
+  } = useAppSelector(state => state.vocabulary);
+  const { grammars: reduxGrammars = [], loading: grammarLoading, errorMessage: grammarError } = useAppSelector(state => state.grammar);
+  const {
+    exercises: reduxExercises = [],
+    exerciseOptions: reduxExerciseOptions = {},
     loading: exerciseLoading,
     errorMessage: exerciseError,
   } = useAppSelector(state => state.exercise);
@@ -67,9 +73,44 @@ export const UnitUpdateV2 = () => {
   const [draggedGrammarIndex, setDraggedGrammarIndex] = useState<number | null>(null);
   const [draggedExerciseIndex, setDraggedExerciseIndex] = useState<number | null>(null);
   const [expandedGrammarItems, setExpandedGrammarItems] = useState<Set<number>>(new Set());
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
 
   const { bookId, unitId } = useParams<{ bookId: string; unitId: string }>();
   const navigate = useNavigate();
+
+  // Zoom control handlers
+  const handleZoomIn = useCallback(() => {
+    setZoomLevel(prev => Math.min(prev + 0.1, 1.5));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoomLevel(prev => Math.max(prev - 0.1, 0.5));
+  }, []);
+
+  const handleResetZoom = useCallback(() => {
+    setZoomLevel(1);
+  }, []);
+
+  // Keyboard shortcuts for zoom
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+        if (e.key === '=' || e.key === '+') {
+          e.preventDefault();
+          handleZoomIn();
+        } else if (e.key === '-') {
+          e.preventDefault();
+          handleZoomOut();
+        } else if (e.key === '0') {
+          e.preventDefault();
+          handleResetZoom();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleZoomIn, handleZoomOut, handleResetZoom]);
 
   useEffect(() => {
     if (unitId) {
@@ -91,16 +132,24 @@ export const UnitUpdateV2 = () => {
   }, [selectedUnit, unitId, setValue]);
 
   useEffect(() => {
-    setVocabularies(reduxVocabularies);
+    if (reduxVocabularies) {
+      setVocabularies(reduxVocabularies);
+    }
   }, [reduxVocabularies]);
 
   useEffect(() => {
-    setGrammars(reduxGrammars);
+    if (reduxGrammars) {
+      setGrammars(reduxGrammars);
+    }
   }, [reduxGrammars]);
 
   useEffect(() => {
-    setExercises(reduxExercises);
-    setExerciseOptions(reduxExerciseOptions);
+    if (reduxExercises) {
+      setExercises(reduxExercises);
+    }
+    if (reduxExerciseOptions) {
+      setExerciseOptions(reduxExerciseOptions);
+    }
   }, [reduxExercises, reduxExerciseOptions]);
 
   const onSubmit = useCallback(
@@ -463,7 +512,17 @@ export const UnitUpdateV2 = () => {
   }
 
   return (
-    <div className="unit-update-v2">
+    <div className="unit-update-v2" style={{ '--zoom-level': zoomLevel } as React.CSSProperties}>
+      {/* Zoom Controls */}
+      <ZoomControls
+        zoomLevel={zoomLevel}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onResetZoom={handleResetZoom}
+        minZoom={0.5}
+        maxZoom={1.5}
+      />
+
       {/* Header */}
       <div className="form-header">
         <button onClick={() => navigate(`/teacher/books/${bookId}/edit`)} className="back-btn" type="button">
@@ -514,7 +573,17 @@ export const UnitUpdateV2 = () => {
       </div>
 
       {/* Main Content */}
-      <div className="form-content">
+      <div className="form-content" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}>
+        {/* Add Content Menu */}
+        <div className="mb-4">
+          <AddContentMenu
+            onAddVocabulary={addVocabulary}
+            onAddGrammar={addGrammar}
+            onAddExercise={type => addExercise(type as ExerciseType)}
+            showExerciseTypes={true}
+          />
+        </div>
+
         {/* Vocabulary Section */}
         <div className="section-divider">
           <div className="divider-line"></div>

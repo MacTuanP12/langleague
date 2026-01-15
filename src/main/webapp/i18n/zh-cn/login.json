@@ -7,11 +7,29 @@
       "password": "密码",
       "password.placeholder": "您的密码",
       "rememberme": "自动登录",
-      "button": "登录"
+      "button": "登录",
+      "button.signing": "登录中...",
+      "captcha": {
+        "loading": "加载验证码...",
+        "placeholder": "输入验证码",
+        "error": "加载失败，点击重试。"
+      }
     },
     "messages": {
       "error": {
-        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
+        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次.",
+        "captcha": "验证码错误，请重试。"
+      },
+      "validate": {
+        "username": {
+          "required": "用户名是必填项。"
+        },
+        "password": {
+          "required": "密码是必填项。"
+        },
+        "captcha": {
+          "required": "验证码是必填项。"
+        }
       },
       "info": {
         "authenticated": {

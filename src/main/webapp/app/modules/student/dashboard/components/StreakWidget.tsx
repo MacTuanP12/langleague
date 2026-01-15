@@ -1,75 +1,77 @@
 import React from 'react';
 import { useAppSelector } from 'app/config/store';
-import { FaFire } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Translate } from 'react-jhipster';
-import styles from '../student-dashboard.module.scss';
+import '../../student.scss';
 
 export const StreakWidget = () => {
   const userProfile = useAppSelector(state => state.userProfile.userProfile);
+  const account = useAppSelector(state => state.authentication.account);
   const streakCount = userProfile?.streakCount || 0;
+
+  // Only show streak widget for students
+  const isStudent = account?.authorities?.includes('ROLE_STUDENT');
+  const isAdminOrTeacher = account?.authorities?.some(auth => auth === 'ROLE_ADMIN' || auth === 'ROLE_TEACHER');
+
+  // Don't render streak widget for admin or teacher
+  if (!isStudent || isAdminOrTeacher) {
+    return null;
+  }
 
   // Milestones logic
   const milestones = [7, 15, 30, 50, 100];
 
   let nextMilestone = milestones.find(m => m > streakCount);
-  let isLegendary = false;
 
   // Edge Case 1: High Streaks (> 100)
   if (!nextMilestone) {
     if (streakCount >= 100) {
       // Dynamic milestone: next multiple of 50
       nextMilestone = Math.ceil((streakCount + 1) / 50) * 50;
-      // Optional: Mark as legendary if needed for UI, but we use dynamic milestone here
-      isLegendary = true;
     } else {
-      // Fallback for safety, though logic above covers it
       nextMilestone = 100;
     }
   }
 
-  // Edge Case 2: Zero/Null State
-  // progress calculation: avoid NaN if nextMilestone is somehow 0 (unlikely)
-  // If streakCount is 0, progress is 0.
+  // Calculate progress
   const progress = nextMilestone > 0 ? Math.min(100, (streakCount / nextMilestone) * 100) : 0;
 
   return (
-    <div className={styles?.streakWidget || 'streak-widget'}>
-      <div className={styles?.streakIconWrapper || 'streak-icon-wrapper'}>
-        <FaFire className={`${styles?.streakIcon || 'streak-icon'} ${streakCount > 0 ? styles?.active || 'active' : ''}`} />
+    <div className="streak-widget">
+      <div className="streak-icon">
+        <FontAwesomeIcon icon="fire" className={streakCount > 0 ? 'pulse-animation' : ''} />
       </div>
-      <div className={styles?.streakContent || 'streak-content'}>
-        <div className={styles?.streakHeader || 'streak-header'}>
-          <span className={styles?.streakCount || 'streak-count'}>{streakCount}</span>
-          <span className={styles?.streakLabel || 'streak-label'}>
+      <div className="streak-content">
+        <div className="d-flex align-items-baseline gap-2">
+          <span className="streak-number">{streakCount}</span>
+          <span className="streak-label">
             <Translate contentKey="langleague.student.dashboard.streak.label">Day Streak</Translate>
           </span>
         </div>
-        <p className={styles?.streakMessage || 'streak-message'}>
+        <p className="mb-2">
           {streakCount > 0 ? (
             <Translate contentKey="langleague.student.dashboard.streak.active" interpolate={{ count: streakCount }}>
               You are on fire! {streakCount} day streak!
             </Translate>
           ) : (
-            <Translate contentKey="langleague.student.dashboard.streak.start">Start your streak today!</Translate>
+            <Translate contentKey="langleague.student.dashboard.streak.start">Start your learning streak today!</Translate>
           )}
         </p>
-        <div className={styles?.streakProgress || 'streak-progress'}>
-          <div className={styles?.progressBar || 'progress-bar'}>
-            <div
-              className={styles?.progressFill || 'progress-fill'}
-              style={{ width: `${progress}%` }}
-              role="progressbar"
-              aria-valuenow={progress}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
+
+        {/* Progress to next milestone */}
+        {nextMilestone && (
+          <div className="mt-3">
+            <div className="d-flex justify-content-between mb-1">
+              <small>
+                <Translate contentKey="langleague.student.dashboard.streak.nextMilestone">Next milestone</Translate>
+              </small>
+              <small className="fw-bold">{nextMilestone} days</small>
+            </div>
+            <div className="student-progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
+            </div>
           </div>
-          <span className={styles?.milestoneText || 'milestone-text'}>
-            <Translate contentKey="langleague.student.dashboard.streak.nextMilestone" interpolate={{ count: nextMilestone }}>
-              {`Next milestone: ${nextMilestone} days`}
-            </Translate>
-          </span>
-        </div>
+        )}
       </div>
     </div>
   );

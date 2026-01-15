@@ -85,10 +85,10 @@ export const HomeNew = () => {
       <section className="featured-section">
         <div className="section-header">
           <h2>
-            <i className="bi bi-bookmark"></i> Featured Books
+            <i className="bi bi-book"></i> <Translate contentKey="home.featured.title">Featured Books</Translate>
           </h2>
           <Link to="/books" className="view-all">
-            View all <i className="bi bi-arrow-right"></i>
+            <Translate contentKey="home.featured.viewAll">View all</Translate> <i className="bi bi-arrow-right"></i>
           </Link>
         </div>
 
@@ -102,7 +102,7 @@ export const HomeNew = () => {
                 <h3>{book.title}</h3>
                 <p className="author">{book.author}</p>
                 <Link to={`/books/${book.id}`} className="details-btn">
-                  Details
+                  <Translate contentKey="home.featured.details">Details</Translate>
                 </Link>
               </div>
             </div>

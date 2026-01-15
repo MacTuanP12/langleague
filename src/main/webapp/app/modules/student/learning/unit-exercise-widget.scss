@@ -1,0 +1,52 @@
+// Unit Exercise Widget Mode Styling
+// Scoped to prevent conflicts with standalone page
+.unit-exercise.widget-mode {
+  // Reset layout constraints from standalone page
+  max-width: 100% !important;
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+
+  // Hide page-level header (Back button, breadcrumb)
+  > .exercise-header {
+    display: none !important;
+  }
+
+  // Content area adjustments
+  .exercise-content {
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+
+    // Interactive elements remain fully functional
+    .exercise-card {
+      margin-bottom: 1.5rem;
+
+      // All buttons, inputs, radio buttons work as normal
+      button,
+      input[type='radio'],
+      input[type='checkbox'],
+      input[type='text'] {
+        pointer-events: auto;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Preserve progress bar, navigation, feedback
+  .exercise-progress,
+  .exercise-navigation,
+  .exercise-feedback,
+  .ai-tutor-button {
+    display: block !important;
+  }
+}
+
+// Dark theme support for widget mode
+[data-theme='dark'] .unit-exercise.widget-mode {
+  .exercise-card {
+    background: #1f2937;
+    border-color: #374151;
+  }
+}

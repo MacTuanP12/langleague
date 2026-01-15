@@ -1,0 +1,120 @@
+// Theme Helper Mixins and Functions
+// Use these helpers to ensure consistent theming across all components
+
+// Mixin for themed backgrounds
+@mixin themed-bg($light-color, $dark-color) {
+  background-color: $light-color;
+
+  .theme-dark &,
+  [data-theme='dark'] & {
+    background-color: $dark-color;
+  }
+}
+
+// Mixin for themed text colors
+@mixin themed-text($light-color, $dark-color) {
+  color: $light-color;
+
+  .theme-dark &,
+  [data-theme='dark'] & {
+    color: $dark-color;
+  }
+}
+
+// Mixin for themed borders
+@mixin themed-border($light-color, $dark-color, $width: 1px, $style: solid) {
+  border: $width $style $light-color;
+
+  .theme-dark &,
+  [data-theme='dark'] & {
+    border-color: $dark-color;
+  }
+}
+
+// Mixin for themed box shadows
+@mixin themed-shadow($light-shadow, $dark-shadow) {
+  box-shadow: $light-shadow;
+
+  .theme-dark &,
+  [data-theme='dark'] & {
+    box-shadow: $dark-shadow;
+  }
+}
+
+// Common themed background classes
+.themed-bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.themed-bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.themed-bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+.themed-text-primary {
+  color: var(--text-primary);
+}
+
+.themed-text-secondary {
+  color: var(--text-secondary);
+}
+
+.themed-border {
+  border-color: var(--border-color);
+}
+
+// Card with themed background
+.themed-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px var(--shadow-medium);
+  }
+}
+
+// Input with themed styling
+.themed-input {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+
+  &::placeholder {
+    color: var(--placeholder-color);
+  }
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+  }
+
+  &:disabled {
+    background-color: var(--disabled-bg);
+    color: var(--disabled-color);
+    cursor: not-allowed;
+  }
+}
+
+// Button with themed styling
+.themed-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  }
+
+  &:disabled {
+    background-color: var(--disabled-bg);
+    color: var(--disabled-color);
+    cursor: not-allowed;
+  }
+}

@@ -2,6 +2,8 @@ package com.langleague.app.service;
 
 import com.langleague.app.domain.UserProfile;
 import com.langleague.app.repository.UserProfileRepository;
+import com.langleague.app.security.AuthoritiesConstants;
+import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.dto.UserProfileDTO;
 import com.langleague.app.service.mapper.UserProfileMapper;
 import java.time.Instant;
@@ -138,11 +140,22 @@ public class UserProfileService {
     }
 
     public Map<String, Object> syncStreak() {
-        Optional<UserProfileDTO> currentUserProfileOp = findCurrentUserProfile();
-        if (currentUserProfileOp.isEmpty()) {
-            throw new RuntimeException("Current user profile not found");
+        UserProfileDTO userProfileDTO = findCurrentUserProfile().orElseThrow(() -> new RuntimeException("Current user profile not found"));
+
+        Map<String, Object> result = new HashMap<>();
+
+        // Only count streak for students - Admin and Teacher should not have streak
+        boolean isStudent = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.STUDENT);
+        boolean isAdminOrTeacher = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.TEACHER);
+
+        if (!isStudent || isAdminOrTeacher) {
+            // Admin and Teacher don't count streak, just return current values
+            result.put("streakCount", userProfileDTO.getStreakCount() != null ? userProfileDTO.getStreakCount() : 0);
+            result.put("milestoneReached", false);
+            result.put("skipped", true);
+            result.put("reason", "Streak only applies to students");
+            return result;
         }
-        UserProfileDTO userProfileDTO = currentUserProfileOp.get();
 
         LocalDate today = LocalDate.now();
         Instant lastLearningDate = userProfileDTO.getLastLearningDate();
@@ -169,9 +182,22 @@ public class UserProfileService {
 
         boolean milestoneReached = List.of(7, 15, 30, 50, 100).contains(streakCount);
 
-        Map<String, Object> result = new HashMap<>();
         result.put("streakCount", streakCount);
         result.put("milestoneReached", milestoneReached);
         return result;
+    }
+
+    /**
+     * Update theme preference for the currently authenticated user.
+     *
+     * @param theme the theme mode (LIGHT, DARK, or SYSTEM).
+     * @return the updated entity.
+     */
+    public UserProfileDTO updateThemePreference(String theme) {
+        LOG.debug("Request to update theme preference for current user: {}", theme);
+
+        UserProfileDTO userProfileDTO = findCurrentUserProfile().orElseThrow(() -> new RuntimeException("Current user profile not found"));
+        userProfileDTO.setTheme(com.langleague.app.domain.enumeration.ThemeMode.valueOf(theme.toUpperCase()));
+        return save(userProfileDTO);
     }
 }

@@ -24,24 +24,30 @@ public class Vocabulary implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "word", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 200)
+    @Column(name = "word", nullable = false, length = 200)
     private String word;
 
-    @Column(name = "phonetic")
+    @Size(max = 200)
+    @Column(name = "phonetic", length = 200)
     private String phonetic;
 
     @NotNull
-    @Column(name = "meaning", nullable = false)
+    @NotBlank
+    @Column(name = "meaning", nullable = false, columnDefinition = "TEXT")
     private String meaning;
 
     @Lob
     @Column(name = "example")
     private String example;
 
-    @Column(name = "image_url")
+    @Size(max = 500)
+    @Column(name = "image_url", length = 500)
     private String imageUrl;
 
     @NotNull
+    @Min(0)
     @Column(name = "order_index", nullable = false)
     private Integer orderIndex;
 

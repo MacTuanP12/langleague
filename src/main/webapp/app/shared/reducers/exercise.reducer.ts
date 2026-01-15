@@ -87,19 +87,16 @@ export const deleteExerciseOption = createAsyncThunk(
 export const bulkCreateExercises = createAsyncThunk(
   'exercise/bulkCreate',
   async ({ unitId, exercises }: { unitId: string | number; exercises: IExercise[] }) => {
-    const response = await axios.post<IExercise[]>(`/api/exercises/bulk/${unitId}`, exercises);
+    // Backend endpoint expects unitId in request body, not in path
+    const response = await axios.post<IExercise[]>('/api/exercises/bulk', exercises);
     return response.data;
   },
 );
 
 export const bulkUpdateExercises = createAsyncThunk('exercise/bulkUpdate', async (exercises: IExercise[]) => {
-  // WORKAROUND: BE missing bulk update
-  const updatedExercises: IExercise[] = [];
-  for (const ex of exercises) {
-    const response = await axios.put<IExercise>(`/api/exercises/${ex.id}`, ex);
-    updatedExercises.push(response.data);
-  }
-  return updatedExercises;
+  // Use the new bulk update endpoint for better performance
+  const response = await axios.put<IExercise[]>('/api/exercises/bulk', exercises);
+  return response.data;
 });
 
 export const checkAnswer = createAsyncThunk(

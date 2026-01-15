@@ -2,19 +2,44 @@
   "langleague": {
     "admin": {
       "dashboard": {
-        "title": "Bảng Điều Khiển Quản Trị",
+        "title": "Bảng Điều Khiển Hệ Thống",
+        "subtitle": "Giám sát và quản lý nền tảng LangLeague",
         "welcome": "Chào mừng trở lại, {name}!",
+        "systemHealth": {
+          "healthy": "Hệ Thống Ổn Định",
+          "warning": "Hệ Thống Cảnh Báo",
+          "critical": "Hệ Thống Nghiêm Trọng"
+        },
         "stats": {
-          "totalUsers": "Tổng Số Người Dùng",
+          "totalUsers": "Tổng Người Dùng",
           "totalBooks": "Tổng Số Sách",
+          "enrollments": "Tổng Đăng Ký",
+          "completion": "Tỷ Lệ Hoàn Thành",
           "activeSessions": "Phiên Hoạt Động",
-          "recentActivities": "Hoạt Động Gần Đây"
+          "recentActivities": "Hoạt Động Gần Đây",
+          "thisMonth": "tháng này",
+          "growth": "tăng trưởng",
+          "average": "trung bình"
         },
         "quickActions": {
           "title": "Thao Tác Nhanh",
-          "addUser": "Thêm Người Dùng",
+          "addUser": "Thêm Người Dùng Mới",
+          "createAccount": "Tạo tài khoản mới",
           "manageBooks": "Quản Lý Sách",
-          "systemSettings": "Cài Đặt Hệ Thống"
+          "addEditBooks": "Thêm hoặc chỉnh sửa sách",
+          "systemSettings": "Cài Đặt Hệ Thống",
+          "configureSystem": "Cấu hình thông số hệ thống",
+          "viewLogs": "Xem Nhật Ký Hệ Thống",
+          "monitorActivity": "Giám sát hoạt động hệ thống"
+        },
+        "recentActivity": {
+          "title": "Hoạt Động Gần Đây",
+          "newUser": "Người dùng mới đã đăng ký",
+          "bookAdded": "Sách mới được thêm vào thư viện",
+          "enrollment": "Học sinh đã đăng ký sách",
+          "unitCompleted": "Học sinh đã hoàn thành bài học",
+          "minutesAgo": "{minutes} phút trước",
+          "hoursAgo": "{hours} giờ trước"
         }
       },
       "userManagement": {

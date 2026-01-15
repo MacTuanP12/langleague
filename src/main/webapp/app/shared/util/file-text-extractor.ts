@@ -1,6 +1,7 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 import * as XLSX from 'xlsx';
+import { createWorker } from 'tesseract.js';
 
 // Type definition for PDF text content items
 interface PDFTextItem {
@@ -201,9 +202,53 @@ export const getSupportedExtensions = (): string[] => {
 };
 
 /**
+ * Extract text from image files using OCR (Tesseract.js)
+ * @param file - Image file to extract text from
+ * @param lang - Language code for OCR (default: 'eng+vie' for English and Vietnamese)
+ * @returns Promise resolving to extracted text content
+ */
+export const extractTextFromImage = async (file: File, lang: string = 'eng+vie'): Promise<string> => {
+  try {
+    const worker = await createWorker(lang, 1, {
+      logger(m) {
+        // Log OCR progress for debugging (disabled to comply with no-console rule)
+        // Use console.warn if needed for important debugging
+      },
+    });
+
+    const {
+      data: { text },
+    } = await worker.recognize(file);
+    await worker.terminate();
+
+    return text.trim();
+  } catch (error) {
+    throw new Error(`Failed to extract text from image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+};
+
+/**
+ * Check if a file is an image
+ * @param filename - Name of the file to check
+ * @returns True if the file is an image
+ */
+export const isImageFile = (filename: string): boolean => {
+  const extension = getFileExtension(filename);
+  return ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'tiff', 'webp'].includes(extension);
+};
+
+/**
  * Get accept attribute value for file input
  * @returns String value for HTML input accept attribute
  */
 export const getAcceptAttribute = (): string => {
   return '.pdf,.docx,.xlsx,.xls,.txt';
+};
+
+/**
+ * Get accept attribute value for file input including images
+ * @returns String value for HTML input accept attribute with image formats
+ */
+export const getAcceptAttributeWithImages = (): string => {
+  return '.pdf,.docx,.xlsx,.xls,.txt,.jpg,.jpeg,.png,.bmp,.gif,.tiff,.webp';
 };

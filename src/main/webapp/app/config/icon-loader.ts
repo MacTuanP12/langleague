@@ -31,6 +31,8 @@ import {
   faUserPlus,
   faUsers,
   faUsersCog,
+  faVolumeUp,
+  faVolumeHigh,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -70,6 +72,8 @@ export const loadIcons = () => {
     faUserPlus,
     faUsers,
     faUsersCog,
+    faVolumeUp,
+    faVolumeHigh,
     faWrench,
   );
 };

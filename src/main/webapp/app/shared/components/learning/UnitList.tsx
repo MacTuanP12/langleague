@@ -13,7 +13,7 @@ interface UnitListProps {
 }
 
 /**
- * Reusable unit list component for displaying course units
+ * Reusable unit list component for displaying book units
  * Supports expansion, progress indicators, and section links
  */
 export const UnitList: React.FC<UnitListProps> = ({

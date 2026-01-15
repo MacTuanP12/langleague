@@ -13,11 +13,13 @@ public class ExerciseOptionDTO implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
     private String optionText;
 
     @NotNull
     private Boolean isCorrect;
 
+    @Min(0)
     private Integer orderIndex;
 
     /**

@@ -10,15 +10,15 @@
       "entities": {
         "main": "数据",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "userProfile": "User Profile",
-        "book": "Book",
-        "enrollment": "Enrollment",
-        "unit": "Unit",
-        "vocabulary": "Vocabulary",
-        "grammar": "Grammar",
-        "exercise": "Exercise",
-        "exerciseOption": "Exercise Option",
-        "progress": "Progress"
+        "userProfile": "用户资料",
+        "book": "书籍",
+        "enrollment": "报名",
+        "unit": "单元",
+        "vocabulary": "词汇",
+        "grammar": "语法",
+        "exercise": "练习",
+        "exerciseOption": "练习选项",
+        "progress": "进度"
       },
       "account": {
         "main": "账号",
@@ -41,7 +41,40 @@
         "database": "数据库",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
-      "language": "语言"
+      "teacher": {
+        "main": "教师",
+        "dashboard": "仪表板",
+        "bookManager": "书籍管理",
+        "studentAnalytics": "学生分析"
+      },
+      "language": "语言",
+      "theme": "主题",
+      "skipToContent": "跳转到主要内容"
+    },
+    "sidebar": {
+      "hide": "隐藏",
+      "student": {
+        "home": "主页",
+        "myBooks": "我的书籍",
+        "flashCard": "闪卡",
+        "games": "游戏",
+        "profile": "个人资料",
+        "logout": "登出"
+      },
+      "teacher": {
+        "dashboard": "仪表板",
+        "books": "书籍",
+        "units": "单元",
+        "students": "学生",
+        "logout": "登出"
+      },
+      "admin": {
+        "dashboard": "仪表板",
+        "books": "书籍",
+        "users": "用户",
+        "settings": "设置",
+        "logout": "登出"
+      }
     },
     "form": {
       "username.label": "账号",
@@ -69,25 +102,25 @@
       },
       "error": {
         "dontmatch": "您输入的密码和确认密码不匹配!"
+      }
+    },
+    "validate": {
+      "newpassword": {
+        "required": "您的密码是必填项.",
+        "minlength": "您的密码长度至少要有4个字符",
+        "maxlength": "您的密码长度不能超过50个字符",
+        "strength": "密码强度:"
       },
-      "validate": {
-        "newpassword": {
-          "required": "您的密码是必填项.",
-          "minlength": "您的密码长度至少要有4个字符",
-          "maxlength": "您的密码长度不能超过50个字符",
-          "strength": "密码强度:"
-        },
-        "confirmpassword": {
-          "required": "您的确认密码是必填项.",
-          "minlength": "您的确认密码长度至少要有4个字符",
-          "maxlength": "您的确认密码长度不能超过50个字符"
-        },
-        "email": {
-          "required": "您的电子邮件是必填项.",
-          "invalid": "您的电子邮件格式格式不正确.",
-          "minlength": "您的电子邮件长度至少要有5个字符",
-          "maxlength": "您的电子邮件长度不能超过50个字符"
-        }
+      "confirmpassword": {
+        "required": "您的确认密码是必填项.",
+        "minlength": "您的确认密码长度至少要有4个字符",
+        "maxlength": "您的确认密码长度不能超过50个字符"
+      },
+      "email": {
+        "required": "您的电子邮件是必填项.",
+        "invalid": "您的电子邮件格式格式不正确.",
+        "minlength": "您的电子邮件长度至少要有5个字符",
+        "maxlength": "您的电子邮件长度不能超过50个字符"
       }
     },
     "field": {
@@ -96,7 +129,43 @@
     "ribbon": {
       "dev": "开发环境"
     },
-    "item-count": "显示第 {{first}} - {{second}} 条，共 {{total}} 条"
+    "item-count": "显示第 {{first}} - {{second}} 条，共 {{total}} 条",
+    "loading": "加载中...",
+    "selectSection": "从侧边栏选择一个部分开始学习。",
+    "progressSaved": "您的进度将自动保存。",
+    "footer": {
+      "slogan": "通过现代化、互动式的学习体验，为全球语言学习者赋能。",
+      "copyright": "版权所有",
+      "madeWithLove": "用心制作",
+      "byTeam": "LangLeague 团队",
+      "quickLinks": {
+        "title": "快速链接",
+        "home": "首页",
+        "books": "书籍",
+        "about": "关于我们",
+        "help": "帮助中心"
+      },
+      "resources": {
+        "title": "资源",
+        "faq": "常见问题"
+      },
+      "legal": {
+        "title": "法律",
+        "privacy": "隐私政策",
+        "terms": "服务条款",
+        "cookies": "Cookie 政策"
+      },
+      "connect": {
+        "title": "联系我们"
+      },
+      "social": {
+        "followUs": "关注我们的社交媒体"
+      }
+    },
+    "user": {
+      "role": "角色",
+      "status": "状态"
+    }
   },
   "entity": {
     "action": {
@@ -145,13 +214,7 @@
     "userexists": "该用户名已存在!",
     "emailexists": "该邮箱已被使用!",
     "idexists": "新建的 {{entityName}} 不能包含ID",
-    "idnull": "无效的 ID",
-    "idinvalid": "无效的 ID",
-    "idnotfound": "找不到对应的 ID",
-    "file": {
-      "could.not.extract": "无法解压缩文件",
-      "not.image": "文件应该是图片格式，但实际却是 \"{{ fileType }}\""
-    }
+    "idnull": "无效的 ID"
   },
   "footer": "这里是页脚"
 }

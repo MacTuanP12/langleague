@@ -1,0 +1,195 @@
+// ========================================
+// SHARED EMPTY STATE COMPONENT
+// ========================================
+// Reusable "no data" display component
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 1.5rem 0;
+
+  .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+
+    svg {
+      font-size: 2.5rem;
+      color: #64748b;
+      opacity: 0.6;
+    }
+  }
+
+  .empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .empty-state-description {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .empty-state-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .btn {
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  // ========================================
+  // TEACHER VARIANT
+  // ========================================
+  &.empty-state-teacher {
+    background: white;
+    border: 1px solid var(--teacher-border, #e5e7eb);
+
+    .empty-state-icon {
+      background: var(--teacher-bg-secondary, #f8fafc);
+
+      svg {
+        color: var(--teacher-primary, #673ab7);
+      }
+    }
+
+    .empty-state-title {
+      color: var(--teacher-text-primary, #1e293b);
+    }
+
+    .empty-state-description {
+      color: var(--teacher-text-secondary, #64748b);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #673ab7 0%, #5e35b1 100%);
+      border: none;
+
+      &:hover {
+        background: linear-gradient(135deg, #5e35b1 0%, #512da8 100%);
+      }
+    }
+  }
+
+  // ========================================
+  // STUDENT VARIANT
+  // ========================================
+  &.empty-state-student {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+
+    .empty-state-icon {
+      background: linear-gradient(135deg, rgba(65, 105, 225, 0.1) 0%, rgba(90, 103, 216, 0.15) 100%);
+
+      svg {
+        color: #4169e1;
+      }
+    }
+
+    .empty-state-title {
+      background: linear-gradient(135deg, #4169e1 0%, #5a67d8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .empty-state-description {
+      color: #64748b;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4169e1 0%, #5a67d8 100%);
+      border: none;
+
+      &:hover {
+        background: linear-gradient(135deg, #3b5cd8 0%, #4a58c2 100%);
+      }
+    }
+  }
+
+  // ========================================
+  // RESPONSIVE
+  // ========================================
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+
+    .empty-state-icon {
+      width: 60px;
+      height: 60px;
+
+      svg {
+        font-size: 2rem;
+      }
+    }
+
+    .empty-state-title {
+      font-size: 1.25rem;
+    }
+
+    .empty-state-description {
+      font-size: 0.9375rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .empty-state-actions {
+      flex-direction: column;
+      width: 100%;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+
+  // ========================================
+  // DARK MODE
+  // ========================================
+  @media (prefers-color-scheme: dark) {
+    background: #1f2937;
+    border-color: #374151;
+
+    .empty-state-icon {
+      background: #111827;
+
+      svg {
+        color: #9ca3af;
+      }
+    }
+
+    .empty-state-title {
+      color: #f9fafb;
+    }
+
+    .empty-state-description {
+      color: #9ca3af;
+    }
+  }
+}

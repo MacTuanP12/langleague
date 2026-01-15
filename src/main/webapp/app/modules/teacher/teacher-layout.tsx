@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
+import { ModernHeader } from 'app/shared/layout/header/modern-header';
+import { ModernFooter } from 'app/shared/layout/footer/modern-footer';
 import './teacher-layout.scss';
 
 interface TeacherLayoutProps {
@@ -36,57 +38,65 @@ export const TeacherLayout: React.FC<TeacherLayoutProps> = ({
   };
 
   return (
-    <div className="teacher-layout-container">
-      <aside className="teacher-sidebar">
-        <div className="sidebar-header">
-          <h3>Teacher CMS</h3>
-        </div>
-        <nav className="sidebar-nav">
-          <Link
-            to="/teacher/dashboard"
-            className={`nav-item ${location.pathname === '/teacher/dashboard' || location.pathname === '/teacher' ? 'active' : ''}`}
-          >
-            <i className="bi bi-speedometer2"></i>
-            <span>
-              <Translate contentKey="global.menu.teacher.dashboard">Dashboard</Translate>
-            </span>
-          </Link>
-          <Link to="/teacher/books" className={`nav-item ${isActive('/teacher/books')}`}>
-            <i className="bi bi-book"></i>
-            <span>
-              <Translate contentKey="global.menu.teacher.bookManager">Book Manager</Translate>
-            </span>
-          </Link>
-          <Link to="/teacher/students" className={`nav-item ${isActive('/teacher/students')}`}>
-            <i className="bi bi-people"></i>
-            <span>
-              <Translate contentKey="global.menu.teacher.studentAnalytics">Student Analytics</Translate>
-            </span>
-          </Link>
-        </nav>
-      </aside>
+    <div className="teacher-layout-wrapper">
+      <ModernHeader />
 
-      <main className="teacher-main-content">
-        <div className="content-wrapper">
-          {(title || showBackButton) && (
-            <div className="page-header">
-              <div className="header-left">
-                {showBackButton && (
-                  <button onClick={handleBack} className="back-btn" type="button">
-                    <i className="bi bi-arrow-left"></i>
-                  </button>
-                )}
-                <div className="header-text">
-                  {title && <h1>{title}</h1>}
-                  {subtitle && <p>{subtitle}</p>}
+      <div className="teacher-layout-container">
+        <aside className="teacher-sidebar">
+          <div className="sidebar-header">
+            <h3>
+              <Translate contentKey="langleague.teacher.sidebar.title">Teacher CMS</Translate>
+            </h3>
+          </div>
+          <nav className="sidebar-nav">
+            <Link
+              to="/teacher/dashboard"
+              className={`nav-item ${location.pathname === '/teacher/dashboard' || location.pathname === '/teacher' ? 'active' : ''}`}
+            >
+              <i className="bi bi-speedometer2"></i>
+              <span>
+                <Translate contentKey="global.menu.teacher.dashboard">Dashboard</Translate>
+              </span>
+            </Link>
+            <Link to="/teacher/books" className={`nav-item ${isActive('/teacher/books')}`}>
+              <i className="bi bi-book"></i>
+              <span>
+                <Translate contentKey="global.menu.teacher.bookManager">Book Manager</Translate>
+              </span>
+            </Link>
+            <Link to="/teacher/students" className={`nav-item ${isActive('/teacher/students')}`}>
+              <i className="bi bi-people"></i>
+              <span>
+                <Translate contentKey="global.menu.teacher.studentAnalytics">Student Analytics</Translate>
+              </span>
+            </Link>
+          </nav>
+        </aside>
+
+        <main className="teacher-main-content">
+          <div className="content-wrapper">
+            {(title || showBackButton) && (
+              <div className="page-header">
+                <div className="header-left">
+                  {showBackButton && (
+                    <button onClick={handleBack} className="back-btn" type="button">
+                      <i className="bi bi-arrow-left"></i>
+                    </button>
+                  )}
+                  <div className="header-text">
+                    {title && <h1>{title}</h1>}
+                    {subtitle && <p>{subtitle}</p>}
+                  </div>
                 </div>
+                {headerActions && <div className="header-actions">{headerActions}</div>}
               </div>
-              {headerActions && <div className="header-actions">{headerActions}</div>}
-            </div>
-          )}
-          <div className="page-content">{children}</div>
-        </div>
-      </main>
+            )}
+            <div className="page-content">{children}</div>
+          </div>
+        </main>
+      </div>
+
+      <ModernFooter variant="compact" />
     </div>
   );
 };

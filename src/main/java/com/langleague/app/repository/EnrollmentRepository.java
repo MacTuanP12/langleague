@@ -38,7 +38,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Query(
         "SELECT new com.langleague.app.service.dto.StudentDTO(" +
         "u.id, u.login, u.firstName, u.lastName, u.email, u.imageUrl, " +
-        "b.title, e.enrollmentDate, 'ACTIVE') " +
+        "b.title, e.enrolledAt, 'ACTIVE') " +
         "FROM Enrollment e " +
         "JOIN e.userProfile up " +
         "JOIN up.user u " +

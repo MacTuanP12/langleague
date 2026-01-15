@@ -29,7 +29,40 @@
         "apidocs": "API",
         "database": "Database"
       },
-      "language": "Language"
+      "teacher": {
+        "main": "Teacher",
+        "dashboard": "Dashboard",
+        "bookManager": "Book Manager",
+        "studentAnalytics": "Student Analytics"
+      },
+      "language": "Language",
+      "theme": "Theme",
+      "skipToContent": "Skip to main content"
+    },
+    "sidebar": {
+      "hide": "HIDE",
+      "student": {
+        "home": "Home",
+        "myBooks": "My Books",
+        "flashCard": "FlashCard",
+        "games": "Games",
+        "profile": "Profile",
+        "logout": "Log Out"
+      },
+      "teacher": {
+        "dashboard": "Dashboard",
+        "books": "Books",
+        "units": "Units",
+        "students": "Students",
+        "logout": "Log Out"
+      },
+      "admin": {
+        "dashboard": "Dashboard",
+        "books": "Books",
+        "users": "Users",
+        "settings": "Settings",
+        "logout": "Log Out"
+      }
     },
     "form": {
       "username.label": "Username",
@@ -85,9 +118,14 @@
       "dev": "Development"
     },
     "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
+    "loading": "Loading...",
+    "selectSection": "Select a section from the sidebar to start learning.",
+    "progressSaved": "Your progress will be saved automatically.",
     "footer": {
       "slogan": "Empowering language learners worldwide with modern, interactive learning experiences.",
       "copyright": "All rights reserved",
+      "madeWithLove": "Made with",
+      "byTeam": "by the LangLeague Team",
       "quickLinks": {
         "title": "Quick Links",
         "home": "Home",

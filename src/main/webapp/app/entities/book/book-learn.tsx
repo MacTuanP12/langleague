@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { fetchBookById } from 'app/shared/reducers/book.reducer';
 import { fetchUnitsByBookId } from 'app/shared/reducers/unit.reducer';
 import { LoadingSpinner } from 'app/shared/components';
-import styles from 'app/modules/student/learning/book-learn.module.scss';
+import { Translate } from 'react-jhipster';
+import 'app/modules/student/learning/book-learn.scss';
 
 export const BookLearn = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export const BookLearn = () => {
   }, [dispatch, id]);
 
   if (bookLoading || unitsLoading) {
-    return <LoadingSpinner message="Loading book..." />;
+    return <LoadingSpinner message="global.loading" isI18nKey />;
   }
 
   if (!selectedBook) {
@@ -33,55 +34,57 @@ export const BookLearn = () => {
   }
 
   return (
-    <div className={styles.bookLearn}>
-      <div className={styles.learnHeader}>
-        <Link to={`/books/${id}`} className={styles.backLink}>
-          ← Back to Book List
+    <div className="book-learn">
+      <div className="learn-header">
+        <Link to={`/books/${id}`} className="back-link">
+          ← <Translate contentKey="langleague.student.learning.exercise.backToBook">Back to Book List</Translate>
         </Link>
         <h2>{selectedBook.title}</h2>
       </div>
 
-      <div className={styles.learnContent}>
-        <div className={styles.unitsSidebar}>
-          <div className={styles.sidebarHeader}>
-            <h3>COURSE CONTENT</h3>
+      <div className="learn-content">
+        <div className="units-sidebar">
+          <div className="sidebar-header">
+            <h3>
+              <Translate contentKey="langleague.student.learning.bookContent">COURSE CONTENT</Translate>
+            </h3>
           </div>
 
-          <div className={styles.unitsList}>
+          <div className="units-list">
             {units.map(unit => (
-              <div key={unit.id} className={styles.unitItem}>
+              <div key={unit.id} className="unit-item">
                 <div
-                  className={`${styles.unitHeader} ${expandedUnit === unit.id ? styles.active : ''}`}
+                  className={`unit-header ${expandedUnit === unit.id ? 'active' : ''}`}
                   onClick={() => setExpandedUnit(expandedUnit === unit.id ? null : unit.id)}
                 >
-                  <span className={styles.unitIcon}>
+                  <span className="unit-icon">
                     <i className="bi bi-play-fill"></i>
                   </span>
-                  <span className={styles.unitTitle}>{unit.title}</span>
-                  <span className={`${styles.expandIcon} ${expandedUnit === unit.id ? styles.expanded : ''}`}>
+                  <span className="unit-title">{unit.title}</span>
+                  <span className={`expand-icon ${expandedUnit === unit.id ? 'expanded' : ''}`}>
                     <i className="bi bi-chevron-right"></i>
                   </span>
                 </div>
 
                 {expandedUnit === unit.id && (
-                  <div className={styles.unitSections}>
-                    <Link to={`/units/${unit.id}/vocabulary`} className={styles.sectionLink}>
-                      <span className={styles.sectionIcon}>
+                  <div className="unit-sections">
+                    <Link to={`/units/${unit.id}/vocabulary`} className="section-link">
+                      <span className="section-icon">
                         <i className="bi bi-book"></i>
                       </span>
-                      Vocabulary
+                      <Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary</Translate>
                     </Link>
-                    <Link to={`/units/${unit.id}/grammar`} className={styles.sectionLink}>
-                      <span className={styles.sectionIcon}>
+                    <Link to={`/units/${unit.id}/grammar`} className="section-link">
+                      <span className="section-icon">
                         <i className="bi bi-journal-text"></i>
                       </span>
-                      Grammar
+                      <Translate contentKey="langleague.student.learning.grammar.title">Grammar</Translate>
                     </Link>
-                    <Link to={`/units/${unit.id}/exercise`} className={styles.sectionLink}>
-                      <span className={styles.sectionIcon}>
+                    <Link to={`/units/${unit.id}/exercise`} className="section-link">
+                      <span className="section-icon">
                         <i className="bi bi-pencil-square"></i>
                       </span>
-                      Exercise
+                      <Translate contentKey="langleague.student.learning.exercise.title">Exercise</Translate>
                     </Link>
                   </div>
                 )}
@@ -90,12 +93,18 @@ export const BookLearn = () => {
           </div>
         </div>
 
-        <div className={styles.learnMain}>
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>🎓</div>
-            <h3>Ready to learn?</h3>
-            <p>Select a section from the sidebar to start learning.</p>
-            <p>Your progress will be saved automatically.</p>
+        <div className="learn-main">
+          <div className="empty-state">
+            <div className="empty-icon">🎓</div>
+            <h3>
+              <Translate contentKey="langleague.student.learning.selectUnit">Ready to learn?</Translate>
+            </h3>
+            <p>
+              <Translate contentKey="global.selectSection">Select a section from the sidebar to start learning.</Translate>
+            </p>
+            <p>
+              <Translate contentKey="global.progressSaved">Your progress will be saved automatically.</Translate>
+            </p>
           </div>
         </div>
       </div>

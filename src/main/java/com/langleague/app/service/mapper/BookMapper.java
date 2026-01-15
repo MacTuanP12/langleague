@@ -19,6 +19,12 @@ public interface BookMapper extends EntityMapper<BookDTO, Book> {
     @Mapping(target = "id", source = "id")
     UserProfileDTO toDtoUserProfileId(UserProfile userProfile);
 
+    @Named("bookBasic")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "title", source = "title")
+    BookDTO toDtoBookBasic(Book book);
+
     @Override
     @Mapping(target = "enrollments", ignore = true)
     @Mapping(target = "removeEnrollments", ignore = true)

@@ -203,7 +203,8 @@ export const ModernFooter: React.FC<ModernFooterProps> = ({ className = '', vari
               © {currentYear} LangLeague • <Translate contentKey="global.footer.copyright">All rights reserved</Translate>
             </p>
             <p className="made-with-love">
-              Made with <i className="bi bi-heart-fill"></i> by the LangLeague Team
+              <Translate contentKey="global.footer.madeWithLove">Made with</Translate> <i className="bi bi-heart-fill"></i>{' '}
+              <Translate contentKey="global.footer.byTeam">by the LangLeague Team</Translate>
             </p>
           </div>
         </div>

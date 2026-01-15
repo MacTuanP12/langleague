@@ -29,11 +29,44 @@
         "apidocs": "API",
         "database": "Cơ sở dữ liệu"
       },
+      "teacher": {
+        "main": "Giáo viên",
+        "dashboard": "Bảng điều khiển",
+        "bookManager": "Quản lý sách",
+        "studentAnalytics": "Phân tích học viên"
+      },
       "language": "Ngôn ngữ"
+    },
+    "sidebar": {
+      "hide": "ẨN",
+      "student": {
+        "home": "Trang chủ",
+        "myBooks": "Sách của tôi",
+        "flashCard": "Thẻ ghi nhớ",
+        "games": "Trò chơi",
+        "profile": "Hồ sơ",
+        "logout": "Đăng xuất"
+      },
+      "teacher": {
+        "dashboard": "Bảng điều khiển",
+        "books": "Sách",
+        "units": "Đơn vị bài học",
+        "students": "Học viên",
+        "logout": "Đăng xuất"
+      },
+      "admin": {
+        "dashboard": "Bảng điều khiển",
+        "books": "Sách",
+        "users": "Người dùng",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất"
+      }
     },
     "form": {
       "username.label": "Tên tài khoản",
       "username.placeholder": "Nhập tên tài khoản của bạn",
+      "currentpassword.label": "Mật khẩu hiện tại",
+      "currentpassword.placeholder": "Mật khẩu hiện tại",
       "newpassword.label": "Mật khẩu mới",
       "newpassword.placeholder": "Nhập mật khẩu mới",
       "confirmpassword.label": "Xác nhận mật khẩu mới",
@@ -83,9 +116,14 @@
       "dev": "Phát triển"
     },
     "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
+    "loading": "Đang tải...",
+    "selectSection": "Chọn một phần từ thanh bên để bắt đầu học.",
+    "progressSaved": "Tiến trình của bạn sẽ được lưu tự động.",
     "footer": {
       "slogan": "Trao quyền cho người học ngôn ngữ trên toàn thế giới với trải nghiệm học tập hiện đại, tương tác.",
       "copyright": "Bảo lưu mọi quyền",
+      "madeWithLove": "Được tạo với",
+      "byTeam": "bởi đội ngũ LangLeague",
       "quickLinks": {
         "title": "Liên Kết Nhanh",
         "home": "Trang Chủ",

@@ -2,19 +2,44 @@
   "langleague": {
     "admin": {
       "dashboard": {
-        "title": "Admin Dashboard",
+        "title": "System Dashboard",
+        "subtitle": "Monitor and manage the LangLeague platform",
         "welcome": "Welcome back, {name}!",
+        "systemHealth": {
+          "healthy": "System Healthy",
+          "warning": "System Warning",
+          "critical": "System Critical"
+        },
         "stats": {
           "totalUsers": "Total Users",
           "totalBooks": "Total Books",
+          "enrollments": "Total Enrollments",
+          "completion": "Completion Rate",
           "activeSessions": "Active Sessions",
-          "recentActivities": "Recent Activities"
+          "recentActivities": "Recent Activities",
+          "thisMonth": "this month",
+          "growth": "growth",
+          "average": "average"
         },
         "quickActions": {
           "title": "Quick Actions",
-          "addUser": "Add User",
+          "addUser": "Add New User",
+          "createAccount": "Create a new account",
           "manageBooks": "Manage Books",
-          "systemSettings": "System Settings"
+          "addEditBooks": "Add or edit books",
+          "systemSettings": "System Settings",
+          "configureSystem": "Configure system parameters",
+          "viewLogs": "View System Logs",
+          "monitorActivity": "Monitor system activity"
+        },
+        "recentActivity": {
+          "title": "Recent Activity",
+          "newUser": "New user registered",
+          "bookAdded": "New book added to library",
+          "enrollment": "Student enrolled in a book",
+          "unitCompleted": "Unit completed by student",
+          "minutesAgo": "{minutes} minutes ago",
+          "hoursAgo": "{hours} hours ago"
         }
       },
       "userManagement": {

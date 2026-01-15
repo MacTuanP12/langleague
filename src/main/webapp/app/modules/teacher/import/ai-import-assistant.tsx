@@ -33,7 +33,7 @@ import {
   faKey,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { extractTextFromFile, getAcceptAttribute } from 'app/shared/util/file-text-extractor';
+import { extractTextFromFile, getAcceptAttributeWithImages, extractTextFromImage, isImageFile } from 'app/shared/util/file-text-extractor';
 import { ExerciseType } from 'app/shared/model/enumerations/exercise-type.model';
 import type { IExercise } from 'app/shared/model';
 import { toast } from 'react-toastify';
@@ -48,6 +48,10 @@ const USER_GEMINI_KEY_STORAGE = 'USER_GEMINI_KEY';
 interface AIImportAssistantProps {
   unitId: string;
   onSuccess?: () => void;
+  initialContentType?: ContentType;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  showFloatingButton?: boolean;
 }
 
 interface ExerciseOption {
@@ -103,10 +107,20 @@ interface IExerciseDTO {
 
 type ContentType = 'EXERCISE' | 'VOCABULARY' | 'GRAMMAR';
 
-const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess }) => {
+const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
+  unitId,
+  onSuccess,
+  initialContentType = 'EXERCISE',
+  isOpen: externalIsOpen,
+  onToggle: externalOnToggle,
+  showFloatingButton = true,
+}) => {
   const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
+
+  // Use external control if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
   // BYOK State Management
   const [userApiKey, setUserApiKey] = useState('');
@@ -115,7 +129,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
   const [keyInputValue, setKeyInputValue] = useState('');
 
   const [selectedModel, setSelectedModel] = useState('gemini-1.5-flash');
-  const [contentType, setContentType] = useState<ContentType>('EXERCISE');
+  const [contentType, setContentType] = useState<ContentType>(initialContentType);
   const [inputText, setInputText] = useState('');
   const [isExtracting, setIsExtracting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -148,7 +162,20 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
     }
   }, []);
 
-  const toggle = () => setIsOpen(!isOpen);
+  // Update contentType when initialContentType changes
+  useEffect(() => {
+    if (isOpen && initialContentType) {
+      setContentType(initialContentType);
+    }
+  }, [isOpen, initialContentType]);
+
+  const toggle = () => {
+    if (externalOnToggle) {
+      externalOnToggle();
+    } else {
+      setInternalIsOpen(!internalIsOpen);
+    }
+  };
 
   // Handle API Key Verification
   const handleStartSession = () => {
@@ -190,9 +217,20 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
 
       setIsExtracting(true);
       try {
-        const text = await extractTextFromFile(selectedFile);
+        let text = '';
+
+        // Check if file is an image and use OCR
+        if (isImageFile(selectedFile.name)) {
+          toast.info('Processing image with OCR... This may take a moment.');
+          text = await extractTextFromImage(selectedFile, languageSettings.target === 'English' ? 'eng' : 'eng+vie');
+          toast.success('Image text extracted successfully using OCR!');
+        } else {
+          // Use regular text extraction for documents
+          text = await extractTextFromFile(selectedFile);
+          toast.success('File text extracted successfully!');
+        }
+
         setInputText(text);
-        toast.success('File text extracted successfully!');
       } catch (error) {
         toast.error(`Failed to extract text: ${error instanceof Error ? error.message : 'Unknown error'}`);
         console.error(error);
@@ -555,23 +593,25 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
   return (
     <>
       {/* Floating Button */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          zIndex: 1000,
-        }}
-      >
-        <Button
-          color="primary"
-          className="rounded-circle shadow-lg p-3"
-          onClick={toggle}
-          style={{ width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      {showFloatingButton && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '30px',
+            right: '30px',
+            zIndex: 1000,
+          }}
         >
-          <FontAwesomeIcon icon={faRobot} size="lg" />
-        </Button>
-      </div>
+          <Button
+            color="primary"
+            className="rounded-circle shadow-lg p-3"
+            onClick={toggle}
+            style={{ width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <FontAwesomeIcon icon={faRobot} size="lg" />
+          </Button>
+        </div>
+      )}
 
       {/* Draggable Modal */}
       {isOpen && (
@@ -612,28 +652,54 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
                       <Alert color="info">
                         <strong>Bring Your Own Key (BYOK)</strong>
                         <p className="mb-2">
-                          To use AI features, you need your own Google Gemini API Key. It&apos;s free and takes 2 minutes to get.
+                          To use AI features, you need your own API Key (Google Gemini or OpenAI). Both are free to get.
                         </p>
-                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="alert-link">
-                          <FontAwesomeIcon icon={faKey} className="me-1" />
-                          Get Your Free API Key Here →
-                        </a>
+                        <div className="d-flex flex-column gap-2">
+                          <a
+                            href="https://aistudio.google.com/app/apikey"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-between"
+                          >
+                            <span>
+                              <i className="bi bi-google me-2"></i>
+                              Get Google Gemini API Key
+                            </span>
+                            <i className="bi bi-box-arrow-up-right"></i>
+                          </a>
+                          <a
+                            href="https://platform.openai.com/api-keys"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-sm btn-outline-success d-flex align-items-center justify-content-between"
+                          >
+                            <span>
+                              <i className="bi bi-chat-dots me-2"></i>
+                              Get OpenAI / ChatGPT API Key
+                            </span>
+                            <i className="bi bi-box-arrow-up-right"></i>
+                          </a>
+                        </div>
                       </Alert>
 
                       <FormGroup>
-                        <Label for="geminiKey">Your Google Gemini API Key</Label>
+                        <Label for="geminiKey">Your API Key (Gemini or OpenAI)</Label>
                         <Input
                           type="password"
                           id="geminiKey"
                           value={keyInputValue}
                           onChange={e => setKeyInputValue(e.target.value)}
-                          placeholder="AIza..."
+                          placeholder="AIza... (Gemini) or sk-... (OpenAI)"
                           onKeyDown={e => {
                             if (e.key === 'Enter') {
                               handleStartSession();
                             }
                           }}
                         />
+                        <div className="form-text">
+                          <i className="bi bi-info-circle me-1"></i>
+                          Supported: Google Gemini (AIza...) or OpenAI (sk-...)
+                        </div>
                       </FormGroup>
 
                       <FormGroup check className="mb-3">
@@ -752,8 +818,15 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({ unitId, onSuccess
                         <TabContent activeTab={activeTab}>
                           <TabPane tabId="1">
                             <FormGroup>
-                              <Label for="fileUpload">Select File (PDF, DOCX, TXT)</Label>
-                              <Input type="file" id="fileUpload" accept={getAcceptAttribute()} onChange={handleFileChange} />
+                              <Label for="fileUpload">Select File (PDF, DOCX, TXT, or Image for OCR)</Label>
+                              <Input type="file" id="fileUpload" accept={getAcceptAttributeWithImages()} onChange={handleFileChange} />
+                              <div className="form-text mt-2">
+                                <strong>Supported formats:</strong>
+                                <ul className="mb-0 mt-1">
+                                  <li>Documents: PDF, DOCX, XLSX, TXT</li>
+                                  <li>Images (OCR): JPG, PNG, BMP, GIF, TIFF, WEBP</li>
+                                </ul>
+                              </div>
                               {isExtracting && (
                                 <div className="mt-2">
                                   <Spinner size="sm" color="primary" /> Extracting text...

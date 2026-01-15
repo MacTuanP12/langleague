@@ -8,7 +8,10 @@ import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import { DataTable, Column } from 'app/shared/components/data-table';
 import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
 import { IBook } from 'app/shared/model/book.model';
+import { Container, Button, Input } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './book-management.scss';
+import '../teacher.scss';
 
 export const BookManagement = () => {
   const dispatch = useAppDispatch();
@@ -67,29 +70,52 @@ export const BookManagement = () => {
           <div className="book-details">
             <strong>{book.title}</strong>
             <span className="book-description">{book.description}</span>
-            <span className={`book-status ${book.isPublic ? 'public' : 'private'}`}>{book.isPublic ? 'Public' : 'Private'}</span>
+            <span className={`book-status ${book.isPublic ? 'public' : 'private'}`}>
+              {book.isPublic ? (
+                <Translate contentKey="langleague.teacher.books.form.fields.publicStatus">Public</Translate>
+              ) : (
+                <Translate contentKey="langleague.teacher.books.form.fields.privateStatus">Private</Translate>
+              )}
+            </span>
           </div>
         ),
       },
       {
         key: 'actions',
         header: translate('langleague.teacher.books.table.actions'),
-        width: '200px',
+        width: '250px',
         render: book => (
           <div className="action-buttons">
-            <Link to={`/teacher/books/${book.id}`} className="btn-manage" title="Manage Content">
-              Manage Content
-            </Link>
-            <Link to={`/teacher/books/${book.id}/edit`} className="btn-icon" title={translate('langleague.teacher.books.actions.edit')}>
-              <i className="fa fa-edit"></i>
-            </Link>
-            <button
+            <Button
+              tag={Link}
+              to={`/teacher/books/${book.id}`}
+              color="primary"
+              size="sm"
+              className="me-2"
+              title={translate('langleague.teacher.dashboard.quickActions.manageContent')}
+            >
+              <FontAwesomeIcon icon="list" className="me-1" />
+              <Translate contentKey="langleague.teacher.dashboard.quickActions.manageContent">Manage Content</Translate>
+            </Button>
+            <Button
+              tag={Link}
+              to={`/teacher/books/${book.id}/edit`}
+              color="secondary"
+              size="sm"
+              className="btn-icon me-1"
+              title={translate('langleague.teacher.books.actions.edit')}
+            >
+              <FontAwesomeIcon icon="pencil-alt" />
+            </Button>
+            <Button
               onClick={() => handleDeleteClick(book.id)}
+              color="danger"
+              size="sm"
               className="btn-icon"
               title={translate('langleague.teacher.books.actions.delete')}
             >
-              <i className="fa fa-trash"></i>
-            </button>
+              <FontAwesomeIcon icon="trash" />
+            </Button>
           </div>
         ),
       },
@@ -111,28 +137,32 @@ export const BookManagement = () => {
       subtitle={<Translate contentKey="langleague.teacher.books.management.description">Manage your library inventory</Translate>}
       showBackButton={false}
     >
-      <div className="book-management">
-        <div className="actions-bar">
+      <Container fluid className="teacher-page-container">
+        <div className="search-filter-bar">
           <div className="search-box">
-            <input
+            <Input
               type="text"
               placeholder={translate('langleague.teacher.books.search.placeholder')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
-          <Link to="/teacher/books/new" className="btn-primary">
+          <Button tag={Link} to="/teacher/books/new" color="primary" className="action-btn btn-primary">
+            <FontAwesomeIcon icon="plus" className="me-2" />
             <Translate contentKey="langleague.teacher.books.actions.addNew">+ Add New Book</Translate>
-          </Link>
+          </Button>
         </div>
 
-        <DataTable
-          data={filteredBooks}
-          columns={columns}
-          keyExtractor={book => book.id}
-          emptyMessage={translate('langleague.teacher.books.management.noBooks')}
-        />
-      </div>
+        <div className="table-responsive">
+          <DataTable
+            data={filteredBooks}
+            columns={columns}
+            keyExtractor={book => book.id}
+            emptyMessage={translate('langleague.teacher.books.management.noBooks')}
+            className="table table-striped table-hover teacher-table"
+          />
+        </div>
+      </Container>
 
       <ConfirmModal
         isOpen={deleteModalOpen}

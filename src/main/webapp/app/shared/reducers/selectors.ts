@@ -75,9 +75,9 @@ export const selectProgressLoading = createSelector(selectProgressState, state =
 export const selectProgressUpdating = createSelector(selectProgressState, state => state.updating);
 export const selectProgressError = createSelector(selectProgressState, state => state.errorMessage);
 export const selectProgressByUnitId = (unitId: number) =>
-  createSelector(selectUserProgresses, progresses => progresses.find(p => p.unitId === unitId));
+  createSelector(selectUserProgresses, progresses => progresses.find(p => p.unit?.id === unitId || p.unitId === unitId));
 export const selectCompletedUnits = createSelector(selectUserProgresses, progresses =>
-  progresses.filter(p => p.isCompleted).map(p => p.unitId),
+  progresses.filter(p => p.isCompleted).map(p => p.unit?.id || p.unitId),
 );
 
 // Combined selectors

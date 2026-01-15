@@ -65,27 +65,27 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 };
 
 // ============================================
-// Course Card Skeleton - For Dashboard
+// Book Card Skeleton - For Dashboard
 // ============================================
-export const CourseSkeleton: React.FC<{ className?: string }> = ({ className = '' }) => {
+export const BookSkeleton: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`course-skeleton ${className}`}>
-      {/* Course Image Area */}
-      <Skeleton variant="rectangular" height={180} className="course-skeleton-image" />
+    <div className={`book-skeleton ${className}`}>
+      {/* Book Image Area */}
+      <Skeleton variant="rectangular" height={180} className="book-skeleton-image" />
 
-      {/* Course Info */}
-      <div className="course-skeleton-content">
+      {/* Book Info */}
+      <div className="book-skeleton-content">
         {/* Badge */}
-        <Skeleton variant="rectangular" width={80} height={24} borderRadius={12} className="course-skeleton-badge" />
+        <Skeleton variant="rectangular" width={80} height={24} borderRadius={12} className="book-skeleton-badge" />
 
         {/* Title */}
-        <Skeleton variant="text" height={24} className="course-skeleton-title" />
-        <Skeleton variant="text" width="70%" height={20} className="course-skeleton-subtitle" />
+        <Skeleton variant="text" height={24} className="book-skeleton-title" />
+        <Skeleton variant="text" width="70%" height={20} className="book-skeleton-subtitle" />
 
         {/* Progress Bar */}
-        <div className="course-skeleton-progress">
+        <div className="book-skeleton-progress">
           <Skeleton variant="rectangular" height={8} borderRadius={4} />
-          <div className="course-skeleton-progress-text">
+          <div className="book-skeleton-progress-text">
             <Skeleton variant="text" width={60} height={16} />
             <Skeleton variant="text" width={80} height={16} />
           </div>
@@ -155,7 +155,7 @@ export const DashboardSkeleton: React.FC<{ count?: number; className?: string }>
   return (
     <div className={`dashboard-skeleton ${className}`}>
       {Array.from({ length: count }).map((_, index) => (
-        <CourseSkeleton key={index} />
+        <BookSkeleton key={index} />
       ))}
     </div>
   );

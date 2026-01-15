@@ -1,6 +1,7 @@
 package com.langleague.app.repository;
 
 import com.langleague.app.domain.Book;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -26,4 +27,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     long countByTeacherProfileUserLogin(String login);
 
     Page<Book> findAllByTeacherProfileUserLogin(String login, Pageable pageable);
+
+    /**
+     * Find top 4 newest books ordered by creation date descending.
+     * Used for featured/latest books on homepage.
+     *
+     * @return list of 4 most recently created books
+     */
+    List<Book> findTop4ByOrderByCreatedAtDesc();
 }

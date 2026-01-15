@@ -32,13 +32,44 @@
         "userManagement": "사용자 관리",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
+      "teacher": {
+        "main": "교사",
+        "dashboard": "대시보드",
+        "bookManager": "책 관리",
+        "studentAnalytics": "학생 분석"
+      },
       "language": "언어"
+    },
+    "sidebar": {
+      "hide": "숨기기",
+      "student": {
+        "home": "홈",
+        "myBooks": "내 책",
+        "flashCard": "플래시카드",
+        "games": "게임",
+        "profile": "프로필",
+        "logout": "로그아웃"
+      },
+      "teacher": {
+        "dashboard": "대시보드",
+        "books": "책",
+        "units": "단원",
+        "students": "학생",
+        "logout": "로그아웃"
+      },
+      "admin": {
+        "dashboard": "대시보드",
+        "books": "책",
+        "users": "사용자",
+        "settings": "설정",
+        "logout": "로그아웃"
+      }
     },
     "form": {
       "username.label": "로그인 아이디",
       "username.placeholder": "로그인 아이디",
-      "currentpassword.label": "Current password",
-      "currentpassword.placeholder": "Current password",
+      "currentpassword.label": "현재 비밀번호",
+      "currentpassword.placeholder": "현재 비밀번호",
       "newpassword.label": "새 비밀번호",
       "newpassword.placeholder": "새 비밀번호",
       "confirmpassword.label": "새 비밀번호 확인",
@@ -60,34 +91,70 @@
       },
       "error": {
         "dontmatch": "비밀번호가 일치하지 않습니다!"
+      }
+    },
+    "validate": {
+      "newpassword": {
+        "required": "비밀번호 입력이 필요합니다.",
+        "minlength": "비밀번호는 최소 4자 이상이어야 합니다",
+        "maxlength": "비밀번호는 최대 50자 까지입니다.",
+        "strength": "비밀번호 길이:"
       },
-      "validate": {
-        "newpassword": {
-          "required": "비밀번호 입력이 필요합니다.",
-          "minlength": "비밀번호는 최소 4자 이상이어야 합니다",
-          "maxlength": "비밀번호는 최대 50자 까지입니다.",
-          "strength": "비밀번호 길이:"
-        },
-        "confirmpassword": {
-          "required": "확인할 비밀번호 입력이 필요합니다.",
-          "minlength": "확인할 비밀번호는 최소 4자 이상이어야 합니다",
-          "maxlength": "확인할 비밀번호는 최대 50자 까지입니다"
-        },
-        "email": {
-          "required": "이메일 입력이 필요합니다.",
-          "invalid": "잘못된 이메일입니다.",
-          "minlength": "이메일은 최소 5자 이상이어야 합니다",
-          "maxlength": "이메일은 최대 50자 까지입니다."
-        }
+      "confirmpassword": {
+        "required": "확인할 비밀번호 입력이 필요합니다.",
+        "minlength": "확인할 비밀번호는 최소 4자 이상이어야 합니다",
+        "maxlength": "확인할 비밀번호는 최대 50자 까지입니다"
+      },
+      "email": {
+        "required": "이메일 입력이 필요합니다.",
+        "invalid": "잘못된 이메일입니다.",
+        "minlength": "이메일은 최소 5자 이상이어야 합니다",
+        "maxlength": "이메일은 최대 50자 까지입니다."
       }
     },
     "field": {
       "id": "ID"
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": "개발"
     },
-    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    "item-count": "{{first}} - {{second}} / {{total}} 항목을 표시합니다.",
+    "loading": "로딩 중...",
+    "selectSection": "사이드바에서 섹션을 선택하여 학습을 시작하세요.",
+    "progressSaved": "진행 상황이 자동으로 저장됩니다.",
+    "footer": {
+      "slogan": "현대적이고 인터랙티브한 학습 경험으로 전 세계 언어 학습자에게 힘을 실어줍니다.",
+      "copyright": "모든 권리 보유",
+      "madeWithLove": "사랑으로 만든",
+      "byTeam": "LangLeague 팀",
+      "quickLinks": {
+        "title": "빠른 링크",
+        "home": "홈",
+        "books": "책",
+        "about": "소개",
+        "help": "도움말 센터"
+      },
+      "resources": {
+        "title": "리소스",
+        "faq": "FAQ"
+      },
+      "legal": {
+        "title": "법적 정보",
+        "privacy": "개인정보 처리방침",
+        "terms": "서비스 약관",
+        "cookies": "쿠키 정책"
+      },
+      "connect": {
+        "title": "연결하기"
+      },
+      "social": {
+        "followUs": "소셜 미디어에서 팔로우하세요"
+      }
+    },
+    "user": {
+      "role": "역할",
+      "status": "상태"
+    }
   },
   "entity": {
     "action": {

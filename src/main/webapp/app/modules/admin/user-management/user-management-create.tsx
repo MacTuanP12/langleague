@@ -197,7 +197,6 @@ export const UserManagementCreate = () => {
                 <option value="ROLE_STUDENT">{translate('userManagement.create.roles.student')}</option>
                 <option value="ROLE_TEACHER">{translate('userManagement.create.roles.teacher')}</option>
                 <option value="ROLE_ADMIN">{translate('userManagement.create.roles.admin')}</option>
-                <option value="ROLE_LIBRARIAN">{translate('userManagement.create.roles.librarian')}</option>
               </select>
               {errors.role && <span className="error-message">{errors.role}</span>}
             </div>

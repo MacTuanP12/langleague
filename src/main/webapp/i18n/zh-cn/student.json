@@ -1,8 +1,31 @@
 {
   "langleague": {
+    "apiKey": {
+      "setupTitle": "设置 AI API 密钥",
+      "setupDescription": "要使用 AI 功能，您需要提供自己的 API 密钥（Google Gemini 或 OpenAI）。它是免费的，我们只将其存储在您的浏览器中。",
+      "label": "API 密钥",
+      "placeholder": "在此粘贴您的 API 密钥 (AIza... 或 sk-...)",
+      "formatHint": "支持的格式：Google Gemini (AIza...) 或 OpenAI (sk-...)",
+      "showKey": "显示密钥",
+      "hideKey": "隐藏密钥",
+      "getKeyTitle": "获取您的免费 API 密钥：",
+      "providers": {
+        "gemini": "Google Gemini API 密钥",
+        "openai": "OpenAI / ChatGPT API 密钥"
+      },
+      "recommendation": "💡 推荐：",
+      "recommendationText": "我们推荐使用 Google Gemini，因为它对越南语支持更好，而且完全免费！",
+      "cancel": "取消",
+      "saveButton": "保存并继续",
+      "errors": {
+        "empty": "请输入 API 密钥",
+        "invalidFormat": "无效的 API 密钥格式。请检查后重试。\nGemini 密钥以 'AIza' 开头，OpenAI 密钥以 'sk-' 开头"
+      }
+    },
     "student": {
       "dashboard": {
         "title": "我的仪表板",
+        "loading": "加载教材中...",
         "welcome": "欢迎回来，{{name}}！",
         "stats": {
           "hours": "学习时长",
@@ -21,6 +44,17 @@
         "book": {
           "continue": "继续",
           "start": "开始"
+        },
+        "streak": {
+          "label": "连续学习天数",
+          "start": "今天开始养成学习习惯！",
+          "active": "太棒了！您已连续学习{{count}}天！",
+          "nextMilestone": "下一个里程碑：{{count}}天",
+          "milestone": {
+            "title": "恭喜！",
+            "message": "🎉 恭喜！您已达成连续学习{{count}}天的成就！",
+            "confirmButton": "太棒了！"
+          }
         }
       },
       "books": {
@@ -28,7 +62,12 @@
           "loading": "加载中...",
           "backToBooks": "返回教材列表",
           "startLearning": "开始学习",
-          "enrollNow": "立即报名"
+          "enrollNow": "立即报名",
+          "units": {
+            "title": "本教材的单元",
+            "empty": "暂无单元"
+          },
+          "relatedBooks": "相关教材"
         },
         "messages": {
           "enrollSuccess": "课程报名成功！",
@@ -41,10 +80,15 @@
         "previousLesson": "上一课",
         "complete": "完成",
         "vocabulary": {
+          "unit": "单元",
           "title": "词汇",
+          "wordsToLearn": "个单词需学习",
+          "vocabularyWords": "词汇列表",
           "meaning": "释义：",
           "example": "例句：",
-          "noVocabulary": "此单元暂无词汇内容。",
+          "noVocabulary": "暂无词汇",
+          "noVocabularyDescription": "教师添加后，词汇将显示在此处",
+          "clickToHear": "点击单词即可收听发音",
           "navigation": {
             "previous": "上一个",
             "next": "下一个"
@@ -56,17 +100,75 @@
         },
         "exercise": {
           "title": "练习",
-          "noExercises": "此单元暂无练习题。"
+          "noExercises": "此单元暂无练习题。",
+          "backToBook": "返回教材列表",
+          "defaultTitle": "练习",
+          "loading": "加载中...",
+          "loadingExercises": "加载练习中...",
+          "question": "问题",
+          "of": "/",
+          "playAudio": "播放音频",
+          "audioNotSupported": "您的浏览器不支持音频元素。",
+          "correctAnswer": "正确！",
+          "incorrectAnswer": "错误",
+          "correctAnswerIs": "正确答案是：",
+          "selectAllCorrect": "选择所有正确答案：",
+          "typeAnswer": "在此输入您的答案...",
+          "previous": "上一题",
+          "checkAnswer": "检查答案",
+          "nextQuestion": "下一题",
+          "finish": "完成",
+          "pleaseAnswer": "请先选择或输入答案！",
+          "correct": "正确！",
+          "incorrect": "错误，请重试或查看答案。",
+          "explainWithAI": "AI 讲解"
+        },
+        "aiTutor": {
+          "button": "AI 讲解",
+          "grammarButton": "询问 AI 导师",
+          "title": "AI 导师讲解",
+          "grammarTitle": "AI 语法导师",
+          "thinking": "思考中...",
+          "question": "问题",
+          "close": "关闭",
+          "changeKey": "更换密钥",
+          "cancel": "取消",
+          "saveAndExplain": "保存并讲解",
+          "setupTitle": "设置 AI 导师",
+          "setupDescription": "要使用 AI 导师功能，您需要提供自己的 Google Gemini API 密钥。它是免费的，我们只将其存储在您的浏览器中。",
+          "apiKeyLabel": "Gemini API 密钥",
+          "apiKeyPlaceholder": "在此粘贴您的 API 密钥...",
+          "getFreeKey": "在此获取免费密钥",
+          "invalidKeyError": "无效的 API 密钥。请检查后重试。",
+          "somethingWentWrong": "出现错误。",
+          "grammarPromptPlaceholder": "询问有关此语法主题的任何问题...\n例如：能给我更多例子吗？这与...有什么不同？",
+          "grammarAsk": "提问",
+          "grammarClear": "清除对话"
         },
         "flashcard": {
+          "back": "返回",
+          "learning": "学习",
           "title": "闪卡",
+          "shuffle": "随机排序",
+          "studyMode": "学习模式",
+          "notes": "笔记",
           "card": "卡片",
-          "of": "/"
+          "of": "/",
+          "definition": "定义",
+          "answer": "答案",
+          "clickToFlip": "点击翻转",
+          "terminology": "本节术语",
+          "noCards": "暂无闪卡",
+          "noCardsDescription": "添加词汇后，闪卡将显示在此处"
         },
         "flashcardList": {
           "title": "闪卡",
+          "description": "选择一个单元来学习闪卡",
           "loading": "加载中...",
-          "noSets": "暂无可用教材"
+          "noSets": "暂无可用教材",
+          "enrollDescription": "注册教材以开始使用闪卡学习",
+          "studyFlashcards": "学习闪卡",
+          "noUnits": "此教材中暂无单元"
         },
         "bookLearn": {
           "progress": "学习进度"
@@ -76,6 +178,26 @@
           "topics": "{{count}}个主题",
           "questions": "{{count}}道题",
           "interactive": "互动式"
+        },
+        "notes": {
+          "title": "我的笔记",
+          "loading": "加载笔记中...",
+          "empty": "此单元暂无笔记。",
+          "emptyDescription": "开始记笔记，帮助你记住重要内容！",
+          "placeholder": "写笔记...",
+          "placeholderDisabled": "您已有此单元的笔记。点击编辑可修改。",
+          "addButton": "添加笔记",
+          "updateButton": "更新笔记",
+          "saving": "保存中...",
+          "updating": "更新中...",
+          "editButton": "编辑",
+          "deleteButton": "删除",
+          "cancelButton": "取消",
+          "deleteConfirm": "确定要删除这条笔记吗？",
+          "duplicateWarning": "您已有此单元的笔记。如需新建，请先删除现有笔记。",
+          "limitInfo": "每个单元只能有一条笔记。请编辑或删除现有笔记。",
+          "created": "创建时间：",
+          "updated": "更新时间："
         }
       },
       "games": {

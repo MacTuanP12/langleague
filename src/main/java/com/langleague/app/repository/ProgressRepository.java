@@ -25,4 +25,14 @@ public interface ProgressRepository extends JpaRepository<Progress, Long> {
     List<Progress> findByUnitId(Long unitId);
 
     Optional<Progress> findByUserProfileIdAndUnitId(Long userProfileId, Long unitId);
+
+    @Query(
+        "select progress from Progress progress where progress.userProfile.user.login = ?#{authentication.name} and progress.isBookmarked = true order by progress.lastAccessedAt desc"
+    )
+    List<Progress> findBookmarkedByCurrentUser();
+
+    @Query(
+        "select progress from Progress progress where progress.userProfile.user.login = ?#{authentication.name} order by progress.lastAccessedAt desc"
+    )
+    List<Progress> findByCurrentUserOrderByLastAccessedAtDesc();
 }

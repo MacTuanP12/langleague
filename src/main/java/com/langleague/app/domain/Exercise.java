@@ -39,13 +39,16 @@ public class Exercise implements Serializable {
     @Column(name = "correct_answer_raw")
     private String correctAnswerRaw;
 
-    @Column(name = "audio_url")
+    @Size(max = 500)
+    @Column(name = "audio_url", length = 500)
     private String audioUrl;
 
-    @Column(name = "image_url")
+    @Size(max = 500)
+    @Column(name = "image_url", length = 500)
     private String imageUrl;
 
     @NotNull
+    @Min(0)
     @Column(name = "order_index", nullable = false)
     private Integer orderIndex;
 

@@ -10,6 +10,8 @@ const initialState = {
   entity: defaultValue,
   updating: false,
   updateSuccess: false,
+  hasNoteForUnit: false, // New: track if unit has note
+  currentNote: null as INote | null, // New: single note for unit
 };
 
 const apiUrl = 'api/notes';
@@ -17,10 +19,21 @@ const apiUrl = 'api/notes';
 // Actions
 
 export const getNotesByUnit = createAsyncThunk('note/fetch_entity_list', async (unitId: string | number) => {
-  // Giả định backend hỗ trợ filter hoặc trả về notes của user hiện tại cho unit này
-  // Trong thực tế bạn cần đảm bảo Backend Controller hỗ trợ param này
+  // Backend returns notes filtered by current user and unitId
   const requestUrl = `${apiUrl}?unitId.equals=${unitId}&sort=createdAt,desc`;
   return axios.get<INote[]>(requestUrl);
+});
+
+// New: Check if user has note for this unit (returns boolean)
+export const checkNoteForUnit = createAsyncThunk('note/check_unit', async (unitId: string | number) => {
+  const requestUrl = `${apiUrl}/check-unit/${unitId}`;
+  return axios.get<boolean>(requestUrl);
+});
+
+// New: Get single note for current user and unit
+export const getNoteByUnit = createAsyncThunk('note/get_by_unit', async (unitId: string | number) => {
+  const requestUrl = `${apiUrl}/by-unit/${unitId}`;
+  return axios.get<INote>(requestUrl);
 });
 
 export const createNote = createAsyncThunk(
@@ -60,26 +73,56 @@ export const NoteSlice = createSlice({
   name: 'note',
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset() {
+      return initialState;
+    },
+    clearError(state) {
+      state.errorMessage = null;
+    },
   },
   extraReducers(builder) {
     builder
       .addCase(getNotesByUnit.fulfilled, (state, action) => {
         state.loading = false;
         state.entities = action.payload.data;
+        // Update hasNoteForUnit and currentNote
+        state.hasNoteForUnit = action.payload.data.length > 0;
+        state.currentNote = action.payload.data.length > 0 ? action.payload.data[0] : null;
       })
-      .addMatcher(isFulfilled(createNote, updateNote, deleteNote), state => {
+      .addCase(checkNoteForUnit.fulfilled, (state, action) => {
+        state.loading = false;
+        state.hasNoteForUnit = action.payload.data;
+      })
+      .addCase(getNoteByUnit.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentNote = action.payload.data;
+        state.hasNoteForUnit = true;
+      })
+      .addCase(getNoteByUnit.rejected, state => {
+        state.loading = false;
+        state.currentNote = null;
+        state.hasNoteForUnit = false;
+      })
+      .addMatcher(isFulfilled(createNote, updateNote), state => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
+        state.hasNoteForUnit = true;
       })
-      .addMatcher(isPending(getNotesByUnit, createNote, updateNote, deleteNote), state => {
+      .addMatcher(isFulfilled(deleteNote), state => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.hasNoteForUnit = false;
+        state.currentNote = null;
+      })
+      .addMatcher(isPending(getNotesByUnit, createNote, updateNote, deleteNote, checkNoteForUnit, getNoteByUnit), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
         state.loading = true;
       })
-      .addMatcher(isRejected(getNotesByUnit, createNote, updateNote, deleteNote), (state, action) => {
+      .addMatcher(isRejected(getNotesByUnit, createNote, updateNote, deleteNote, checkNoteForUnit), (state, action) => {
         state.loading = false;
         state.updating = false;
         state.updateSuccess = false;
@@ -88,7 +131,7 @@ export const NoteSlice = createSlice({
   },
 });
 
-export const { reset } = NoteSlice.actions;
+export const { reset, clearError } = NoteSlice.actions;
 
 // Reducer
 export default NoteSlice.reducer;

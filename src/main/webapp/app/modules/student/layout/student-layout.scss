@@ -1,7 +1,7 @@
 .student-layout {
   display: flex;
   min-height: 100vh;
-  background: #f6f6f8;
+  background: var(--bg-color);
   font-family:
     'Inter',
     -apple-system,
@@ -12,16 +12,19 @@
   /* Sidebar Styles */
   .student-sidebar {
     width: 250px;
-    background: white;
-    border-right: 1px solid #f0f2f4;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-    transition: width 0.3s ease;
+    box-shadow: 2px 0 8px var(--shadow);
+    transition:
+      width 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease;
     z-index: 1000;
     overflow: hidden;
 
@@ -57,7 +60,7 @@
 
     .sidebar-header {
       padding: 20px 16px;
-      border-bottom: 1px solid #f0f2f4;
+      border-bottom: 1px solid var(--border-color);
 
       .logo-section {
         display: flex;
@@ -68,7 +71,7 @@
         .logo-icon {
           width: 32px;
           height: 32px;
-          background: #1152d4;
+          background: var(--primary-color-alt);
           border-radius: 8px;
           display: flex;
           align-items: center;
@@ -85,7 +88,7 @@
         .logo-text {
           font-size: 18px;
           font-weight: 700;
-          color: #111318;
+          color: var(--text-primary);
           margin: 0;
           white-space: nowrap;
         }
@@ -106,7 +109,7 @@
         gap: 12px;
         padding: 10px 12px;
         border-radius: 8px;
-        color: #616f89;
+        color: var(--text-secondary);
         text-decoration: none;
         font-weight: 500;
         font-size: 14px;
@@ -119,13 +122,13 @@
         }
 
         &:hover {
-          background: #f8f9fa;
-          color: #1152d4;
+          background: var(--bg-secondary);
+          color: var(--primary-color-alt);
         }
 
         &.active {
           background: rgba(17, 82, 212, 0.1);
-          color: #1152d4;
+          color: var(--primary-color-alt);
 
           i {
             font-variation-settings: 'FILL' 1;
@@ -136,7 +139,7 @@
 
     .sidebar-footer {
       padding: 16px;
-      border-top: 1px solid #f0f2f4;
+      border-top: 1px solid var(--border-color); // Use CSS variable
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -150,7 +153,7 @@
         border-radius: 8px;
         border: none;
         background: transparent;
-        color: #616f89;
+        color: var(--text-secondary); // Use CSS variable
         cursor: pointer;
         font-weight: 500;
         font-size: 14px;
@@ -163,8 +166,8 @@
         }
 
         &:hover {
-          background: #fef2f2;
-          color: #ef4444;
+          background: rgba(239, 68, 68, 0.1); // Light red background
+          color: var(--error-color); // Use CSS variable
         }
       }
     }
@@ -214,55 +217,6 @@
   }
 }
 
-// Dark mode support
-.dark .student-layout {
-  background: #101622;
-
-  .student-sidebar {
-    background: #1a202c;
-    border-right-color: #2d3748;
-
-    .sidebar-header {
-      border-bottom-color: #2d3748;
-
-      .logo-section {
-        .logo-icon {
-          background: #60a5fa;
-        }
-
-        .logo-text {
-          color: white;
-        }
-      }
-    }
-
-    .nav-menu {
-      .student-nav-item {
-        color: #94a3b8;
-
-        &:hover {
-          background: #2d3748;
-          color: #60a5fa;
-        }
-
-        &.active {
-          background: rgba(96, 165, 250, 0.1);
-          color: #60a5fa;
-        }
-      }
-    }
-
-    .sidebar-footer {
-      border-top-color: #2d3748;
-
-      .logout-btn {
-        color: #94a3b8;
-
-        &:hover {
-          background: #7f1d1d;
-          color: #f87171;
-        }
-      }
-    }
-  }
-}
+// Note: Dark mode is now handled automatically via CSS variables in app.scss
+// No need for explicit .dark class styles - the sidebar will automatically
+// adapt to theme changes through var(--bg-primary), var(--text-primary), etc.

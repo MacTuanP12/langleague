@@ -26,10 +26,13 @@ public class Unit implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "title", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 200)
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
 
     @NotNull
+    @Min(0)
     @Column(name = "order_index", nullable = false)
     private Integer orderIndex;
 

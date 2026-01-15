@@ -1,0 +1,132 @@
+// Unit Table Styling with Consistent Column Widths
+.unit-table {
+  thead {
+    th {
+      white-space: nowrap;
+      vertical-align: middle;
+
+      // Consistent column widths
+      &.col-id {
+        width: 80px;
+        min-width: 80px;
+      }
+
+      &.col-title {
+        width: 20%;
+        min-width: 150px;
+      }
+
+      &.col-order {
+        width: 120px;
+        min-width: 120px;
+        text-align: center;
+      }
+
+      &.col-summary {
+        width: 30%;
+        min-width: 200px;
+      }
+
+      &.col-book {
+        width: 120px;
+        min-width: 120px;
+        text-align: center;
+      }
+
+      &.col-note {
+        width: 100px;
+        min-width: 100px;
+        text-align: center;
+      }
+
+      &.col-actions {
+        width: 250px;
+        min-width: 250px;
+        text-align: right;
+      }
+    }
+  }
+
+  tbody {
+    td {
+      vertical-align: middle;
+
+      &:nth-child(3) {
+        // Order Index
+        text-align: center;
+      }
+
+      &:nth-child(5) {
+        // Book
+        text-align: center;
+      }
+
+      &:nth-child(6) {
+        // Note
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Dark Theme Support
+[data-theme='dark'] {
+  .unit-table {
+    thead {
+      th {
+        background-color: #1f2937;
+        color: #f9fafb;
+        border-color: #374151;
+      }
+    }
+
+    tbody {
+      tr {
+        background-color: #111827;
+        border-color: #374151;
+
+        &:hover {
+          background-color: #1f2937;
+        }
+
+        td {
+          color: #d1d5db;
+          border-color: #374151;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1200px) {
+  .unit-table {
+    thead th {
+      &.col-summary {
+        width: 25%;
+        min-width: 150px;
+      }
+
+      &.col-actions {
+        width: 200px;
+        min-width: 200px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .unit-table {
+    thead th {
+      &.col-title {
+        width: 15%;
+        min-width: 120px;
+      }
+
+      &.col-summary {
+        width: 20%;
+        min-width: 120px;
+      }
+    }
+  }
+}

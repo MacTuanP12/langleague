@@ -9,6 +9,7 @@
           "books": "완료한 교재"
         },
         "noBooks": "검색 결과와 일치하는 교재가 없습니다.",
+        "noBooksDescription": "검색어나 필터를 조정하여 필요한 내용을 찾아보세요.",
         "loadMore": "더 많은 교재 불러오기",
         "search": {
           "placeholder": "교재 검색..."
@@ -20,15 +21,40 @@
         },
         "book": {
           "continue": "계속하기",
-          "start": "시작하기"
+          "start": "시작하기",
+          "completed": "완료됨",
+          "enrolled": "등록됨",
+          "units": "단원"
+        },
+        "streak": {
+          "label": "연속 학습 일수",
+          "start": "오늘부터 학습 습관을 시작하세요!",
+          "active": "대단해요! {{count}}일 연속 학습 중입니다!",
+          "nextMilestone": "다음 목표: {{count}}일",
+          "milestone": {
+            "title": "축하합니다!",
+            "message": "🎉 축하합니다! {{count}}일 연속 학습을 달성했습니다!",
+            "confirmButton": "멋져요!"
+          }
         }
       },
       "books": {
+        "title": "사용 가능한 교재",
+        "description": "교재를 선택하여 학습 여정을 시작하세요",
+        "public": "공개",
+        "viewDetails": "상세 보기",
+        "noBooks": "교재 없음",
+        "noBooksDescription": "새로운 학습 자료를 확인하려면 나중에 다시 방문하세요",
         "detail": {
           "loading": "로딩 중...",
           "backToBooks": "교재 목록으로 돌아가기",
           "startLearning": "학습 시작",
-          "enrollNow": "지금 등록"
+          "enrollNow": "지금 등록",
+          "units": {
+            "title": "이 교재의 단원",
+            "empty": "아직 단원이 없습니다"
+          },
+          "relatedBooks": "관련 교재"
         },
         "messages": {
           "enrollSuccess": "강좌 등록이 완료되었습니다!",
@@ -36,37 +62,87 @@
         }
       },
       "learning": {
+        "backToBook": "교재로 돌아가기",
+        "selectUnit": "학습을 시작할 단원을 선택하세요",
+        "bookContent": "교재 내용",
         "unit": "단원",
         "nextLesson": "다음 수업",
         "previousLesson": "이전 수업",
         "complete": "완료",
         "vocabulary": {
+          "unit": "단원",
           "title": "어휘",
+          "wordsToLearn": "학습할 단어",
+          "vocabularyWords": "어휘 목록",
           "meaning": "의미:",
           "example": "예문:",
-          "noVocabulary": "아직 이 단원에 추가된 어휘가 없습니다.",
+          "noVocabulary": "어휘 없음",
+          "noVocabularyDescription": "선생님이 추가하면 어휘가 여기에 표시됩니다",
+          "clickToHear": "단어를 클릭하여 발음 듣기",
           "navigation": {
             "previous": "이전",
             "next": "다음"
           }
         },
         "grammar": {
+          "unit": "단원",
           "title": "문법",
-          "noGrammar": "아직 이 단원에 추가된 문법 강의가 없습니다."
+          "lessons": "문법 수업",
+          "topics": "문법 주제",
+          "content": "내용",
+          "examples": "예시",
+          "noGrammar": "문법 수업 없음",
+          "noGrammarDescription": "선생님이 추가하면 문법 수업이 여기에 표시됩니다"
         },
         "exercise": {
           "title": "연습 문제",
-          "noExercises": "아직 이 단원에 추가된 연습 문제가 없습니다."
+          "noExercises": "연습 문제 없음",
+          "backToBook": "교재 목록으로 돌아가기",
+          "defaultTitle": "연습 문제",
+          "loading": "로딩 중...",
+          "loadingExercises": "연습 문제를 불러오는 중...",
+          "question": "문제",
+          "of": "/",
+          "playAudio": "오디오 재생",
+          "audioNotSupported": "브라우저가 오디오 요소를 지원하지 않습니다.",
+          "correctAnswer": "정답!",
+          "incorrectAnswer": "오답",
+          "correctAnswerIs": "정답은:",
+          "selectAllCorrect": "모든 정답을 선택하세요:",
+          "typeAnswer": "답을 입력하세요...",
+          "previous": "이전",
+          "checkAnswer": "답 확인",
+          "nextQuestion": "다음 문제",
+          "finish": "완료",
+          "pleaseAnswer": "먼저 답을 선택하거나 입력하세요!",
+          "correct": "정답!",
+          "incorrect": "오답입니다. 다시 시도하거나 답을 확인하세요.",
+          "explainWithAI": "AI로 설명"
         },
         "flashcard": {
+          "back": "돌아가기",
+          "learning": "학습",
           "title": "플래시카드",
+          "shuffle": "섞기",
+          "studyMode": "학습 모드",
+          "notes": "노트",
           "card": "카드",
-          "of": "/"
+          "of": "/",
+          "definition": "정의",
+          "answer": "답변",
+          "clickToFlip": "클릭하여 뒤집기",
+          "terminology": "이 섹션의 용어",
+          "noCards": "플래시카드 없음",
+          "noCardsDescription": "어휘가 있으면 플래시카드가 여기에 표시됩니다"
         },
         "flashcardList": {
           "title": "플래시카드",
+          "description": "학습할 단원을 선택하세요",
           "loading": "로딩 중...",
-          "noSets": "사용 가능한 교재가 없습니다"
+          "noSets": "사용 가능한 교재가 없습니다",
+          "enrollDescription": "플래시카드로 학습을 시작하려면 교재에 등록하세요",
+          "studyFlashcards": "플래시카드 학습",
+          "noUnits": "이 교재에는 단원이 없습니다"
         },
         "bookLearn": {
           "progress": "학습 진도"
@@ -118,14 +194,25 @@
         }
       },
       "profile": {
+        "title": "내 프로필",
+        "subtitle": "개인 정보 관리",
         "actions": {
           "changePhoto": "사진 변경",
-          "saveChanges": "변경 사항 저장"
+          "saveChanges": "변경 사항 저장",
+          "cancel": "취소"
+        },
+        "stats": {
+          "title": "학습 통계",
+          "booksEnrolled": "등록한 교재",
+          "streak": "현재 연속 일수",
+          "achievements": "업적"
         },
         "personalInfo": {
+          "title": "개인 정보",
           "fullName": "이름",
           "fullNamePlaceholder": "예: 홍길동",
           "email": "이메일 주소",
+          "username": "사용자 이름",
           "bio": "자기소개",
           "bioPlaceholder": "자신에 대해 간단히 소개해주세요..."
         },

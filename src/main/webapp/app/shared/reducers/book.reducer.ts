@@ -34,6 +34,12 @@ export const fetchMyBooks = createAsyncThunk('book/fetchMyBooks', async () => {
   return response.data;
 });
 
+export const fetchEnrolledBooks = createAsyncThunk('book/fetchEnrolledBooks', async () => {
+  // Use the new endpoint specifically designed for students to get their enrolled books
+  const response = await axios.get<IBook[]>('/api/books/enrolled');
+  return response.data;
+});
+
 export const fetchBookById = createAsyncThunk('book/fetchBookById', async (id: number) => {
   const response = await axios.get<IBook>(`/api/books/${id}`);
   return response.data;
@@ -104,6 +110,19 @@ const bookSlice = createSlice({
       .addCase(fetchMyBooks.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.error.message || 'Failed to fetch my books';
+      })
+      // fetchEnrolledBooks
+      .addCase(fetchEnrolledBooks.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+      })
+      .addCase(fetchEnrolledBooks.fulfilled, (state, action: PayloadAction<IBook[]>) => {
+        state.loading = false;
+        state.books = action.payload;
+      })
+      .addCase(fetchEnrolledBooks.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.error.message || 'Failed to fetch enrolled books';
       })
       // fetchBookById
       .addCase(fetchBookById.pending, state => {

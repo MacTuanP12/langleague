@@ -27,14 +27,16 @@ public class UserProfile implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Min(0)
     @Column(name = "streak_count")
     private Integer streakCount;
 
     @Column(name = "last_learning_date")
     private Instant lastLearningDate;
 
+    @Size(max = 1000)
     @Lob
-    @Column(name = "bio")
+    @Column(name = "bio", length = 1000)
     private String bio;
 
     @Enumerated(EnumType.STRING)

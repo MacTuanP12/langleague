@@ -120,19 +120,24 @@
       }
     }
 
+    /* Grid Layout - Aligned with Student Dashboard */
     .books-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
     }
 
+    /* Book Card - Aligned with Student Dashboard */
     .book-card {
       background: white;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       transition: all 0.3s ease;
+      position: relative;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
 
       &:hover {
         transform: translateY(-8px);
@@ -140,7 +145,7 @@
       }
 
       .book-cover {
-        height: 320px;
+        height: 200px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -148,22 +153,26 @@
         overflow: hidden;
 
         .book-placeholder {
-          padding: 24px;
-          font-size: 18px;
-          font-weight: 600;
-          color: #2d3748;
+          font-size: 24px;
+          font-weight: 700;
+          color: white;
           text-align: center;
+          padding: 20px;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
       }
 
       .book-info {
-        padding: 20px;
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
 
         h3 {
-          font-size: 18px;
-          font-weight: 600;
+          font-size: 20px;
+          font-weight: 700;
           color: #1a202c;
-          margin-bottom: 8px;
+          margin-bottom: 12px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -173,21 +182,31 @@
           font-size: 14px;
           color: #718096;
           margin-bottom: 16px;
+          line-height: 1.6;
+          flex: 1;
         }
 
         .details-btn {
-          display: inline-block;
-          padding: 8px 20px;
-          background: #4169e1;
+          width: 100%;
+          padding: 12px;
+          background: linear-gradient(135deg, #4169e1 0%, #5a67d8 100%);
           color: white;
-          border-radius: 8px;
-          text-decoration: none;
+          border: none;
+          border-radius: 12px;
           font-weight: 600;
           font-size: 14px;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
           transition: all 0.3s ease;
 
           &:hover {
-            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(65, 105, 225, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
           }
         }
       }
@@ -215,8 +234,8 @@
       }
 
       .books-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 20px;
+        grid-template-columns: 1fr;
+        gap: 16px;
       }
     }
   }

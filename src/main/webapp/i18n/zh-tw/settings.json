@@ -1,13 +1,33 @@
 {
   "settings": {
     "title": "[<strong>{{username}}</strong>] 使用者設定",
+    "page": {
+      "profile": "個人資料",
+      "account": "帳戶"
+    },
+    "sidebar": {
+      "home": "首頁",
+      "flashcard": "卡片",
+      "games": "遊戲"
+    },
+    "header": {
+      "changePhoto": "更換照片"
+    },
     "form": {
+      "fullName": "全名",
+      "fullNamePlaceholder": "張三",
+      "emailAddress": "電子郵件地址",
+      "emailPlaceholder": "zhangsan@university.edu",
+      "bio": "個人簡介",
+      "bioPlaceholder": "熱愛電腦科學的學生，喜歡演算法和開源軟體。一次學習一張卡片。",
       "firstname": "名字",
       "firstname.placeholder": "您的名字",
       "lastname": "姓氏",
       "lastname.placeholder": "您的姓氏",
       "language": "語言",
-      "button": "儲存"
+      "button": "儲存",
+      "changePassword": "更改密碼",
+      "saveChanges": "儲存變更"
     },
     "messages": {
       "error": {
@@ -15,6 +35,11 @@
         "emailexists": "<strong>電子郵件已經存在!</strong> 請使用其他電子郵件地址。"
       },
       "success": "<strong>設定儲存成功!</strong>",
+      "profileUpdateSuccess": "個人資料更新成功！",
+      "avatarUploadSuccess": "頭像上傳成功！",
+      "avatarUploadError": "頭像上傳失敗。請重試。",
+      "invalidImageType": "請選擇有效的圖像檔案（JPG、PNG、GIF等）",
+      "imageTooLarge": "圖像大小必須小於5MB",
       "validate": {
         "firstname": {
           "required": "您的名字是必填欄位。",

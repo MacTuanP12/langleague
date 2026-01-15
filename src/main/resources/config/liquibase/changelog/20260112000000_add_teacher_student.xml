@@ -7,6 +7,9 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="20260112000000-1" author="jhipster">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM jhi_user WHERE id = 3</sqlCheck>
+        </preConditions>
         <insert tableName="jhi_user">
             <column name="id" valueNumeric="3"/>
             <column name="login" value="teacher"/>
@@ -31,7 +34,12 @@
             <column name="streak_count" valueNumeric="0"/>
             <column name="theme" value="SYSTEM"/>
         </insert>
+    </changeSet>
 
+    <changeSet id="20260112000000-2" author="jhipster">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM jhi_user WHERE id = 4</sqlCheck>
+        </preConditions>
         <insert tableName="jhi_user">
             <column name="id" valueNumeric="4"/>
             <column name="login" value="student"/>

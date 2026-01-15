@@ -21,7 +21,7 @@ export interface StatCardProps {
  * Replaces duplicate stat card implementations across admin/teacher/student modules
  *
  * @example
- * <StatCard icon="bi bi-book" label="My Courses" value={12} />
+ * <StatCard icon="bi bi-book" label="My Books" value={12} />
  * <StatCard icon="bi bi-people" label="Students" value={150} variant="success" />
  */
 export const StatCard: React.FC<StatCardProps> = ({ icon, label, value, variant = 'default', className = '', onClick }) => {

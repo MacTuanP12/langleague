@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useBooks } from 'app/shared/reducers/hooks';
 import { IBook, defaultBookValue } from 'app/shared/model/book.model';
-import TeacherLayout from 'app/modules/teacher/layout/teacher-layout';
+import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import './book-update.scss';
 import { translate, Translate } from 'react-jhipster';
 
@@ -92,10 +92,15 @@ export const BookUpdate = () => {
   const onSubmit = async (formData: IBook) => {
     try {
       setUpdating(true);
+      // Ensure isPublic is always a boolean (required by backend validation)
+      const bookData = {
+        ...formData,
+        isPublic: formData.isPublic ?? false,
+      };
       if (id) {
-        await editBook(formData);
+        await editBook(bookData);
       } else {
-        await addBook(formData);
+        await addBook(bookData);
       }
       navigate('/teacher/books');
     } catch (error) {
@@ -111,8 +116,20 @@ export const BookUpdate = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3>{id ? 'Edit Book' : 'Add New Book'}</h3>
-              <p>Enter the details below to {id ? 'update the' : 'catalog a new'} resource.</p>
+              <h3>
+                <Translate contentKey={id ? 'langleague.teacher.books.form.header.edit' : 'langleague.teacher.books.form.header.add'}>
+                  {id ? 'Edit Book' : 'Add New Book'}
+                </Translate>
+              </h3>
+              <p>
+                <Translate
+                  contentKey={
+                    id ? 'langleague.teacher.books.form.header.descriptionEdit' : 'langleague.teacher.books.form.header.descriptionAdd'
+                  }
+                >
+                  Enter the details below to {id ? 'update the' : 'catalog a new'} resource.
+                </Translate>
+              </p>
               <button className="close-btn" onClick={() => navigate('/teacher/books')}>
                 ×
               </button>
@@ -199,7 +216,12 @@ export const BookUpdate = () => {
                       control={control}
                       render={({ field }) => (
                         <div className="toggle-switch">
-                          <input type="checkbox" id="isPublic" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                          <input
+                            type="checkbox"
+                            id="isPublic"
+                            checked={field.value ?? false}
+                            onChange={e => field.onChange(e.target.checked)}
+                          />
                           <label htmlFor="isPublic" className="toggle-label">
                             <span className="toggle-slider"></span>
                           </label>

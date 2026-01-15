@@ -1,6 +1,7 @@
 package com.langleague.app.web.rest;
 
 import com.langleague.app.repository.BookRepository;
+import com.langleague.app.security.AuthoritiesConstants;
 import com.langleague.app.service.BookService;
 import com.langleague.app.service.UnitService;
 import com.langleague.app.service.dto.BookDTO;
@@ -62,6 +63,7 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
         LOG.debug("REST request to save Book : {}", bookDTO);
         if (bookDTO.getId() != null) {
@@ -84,6 +86,7 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<BookDTO> updateBook(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody BookDTO bookDTO
@@ -118,6 +121,7 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<BookDTO> partialUpdateBook(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody BookDTO bookDTO
@@ -144,6 +148,7 @@ public class BookResource {
 
     /**
      * {@code GET  /books} : get all the books.
+     * Students and Teachers can view books.
      *
      * @param pageable the pagination information.
      * @param filter the filter to apply (enrolled, not-enrolled).
@@ -180,13 +185,26 @@ public class BookResource {
     }
 
     /**
+     * {@code GET  /books/newest} : get top 4 newest books.
+     * Used for featured/latest books display on homepage.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of 4 newest books in body.
+     */
+    @GetMapping("/newest")
+    public ResponseEntity<List<BookDTO>> getNewestBooks() {
+        LOG.debug("REST request to get top 4 newest Books");
+        List<BookDTO> books = bookService.findTop4Newest();
+        return ResponseEntity.ok().body(books);
+    }
+
+    /**
      * {@code GET  /books/my-books} : get all books created by the current teacher.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
     @GetMapping("/my-books")
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<List<BookDTO>> getMyBooks(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of My Books");
         Page<BookDTO> page = bookService.findAllMyBooks(pageable);
@@ -195,7 +213,24 @@ public class BookResource {
     }
 
     /**
+     * {@code GET  /books/enrolled} : get all books that the current student has enrolled in.
+     * This endpoint is specifically designed for students to retrieve their enrolled books,
+     * providing a cleaner alternative to using the TEACHER role endpoint.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of enrolled books in body.
+     */
+    @GetMapping("/enrolled")
+    public ResponseEntity<List<BookDTO>> getEnrolledBooks(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        LOG.debug("REST request to get a page of Enrolled Books");
+        Page<BookDTO> page = bookService.findAllEnrolledBooks(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /books/:id} : get the "id" book.
+     * Students and Teachers can view books.
      *
      * @param id the id of the bookDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bookDTO, or with status {@code 404 (Not Found)}.
@@ -209,6 +244,7 @@ public class BookResource {
 
     /**
      * {@code GET  /books/:id/units} : get all units for the "id" book.
+     * Students and Teachers can view units.
      *
      * @param id the id of the book.
      * @return the list of units.
@@ -221,12 +257,14 @@ public class BookResource {
 
     /**
      * {@code PUT  /books/:id/units/reorder} : Reorder units for the "id" book.
+     * Ownership verification is handled in the service layer.
      *
      * @param id the id of the book.
      * @param request the request containing unitIds in new order.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
     @PutMapping("/{id}/units/reorder")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> reorderUnits(@PathVariable("id") Long id, @RequestBody Map<String, List<Long>> request) {
         LOG.debug("REST request to reorder Units for Book : {}", id);
         List<Long> unitIds = request.get("unitIds");
@@ -243,6 +281,7 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<Void> deleteBook(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Book : {}", id);
         bookService.delete(id);

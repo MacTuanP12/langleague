@@ -33,7 +33,7 @@ export const BookDetail = () => {
     if (!id) return;
     try {
       await dispatch(enrollInBook(Number(id))).unwrap();
-      toast.success(translate('langleague.student.books.messages.enrollSuccess', 'Successfully enrolled in the course!'));
+      toast.success(translate('langleague.student.books.messages.enrollSuccess', 'Successfully enrolled in the book!'));
       // No need to manually reload enrollment, the thunk updates the state
     } catch (error) {
       toast.error(translate('langleague.student.books.messages.enrollError', 'Failed to enroll. Please try again.'));

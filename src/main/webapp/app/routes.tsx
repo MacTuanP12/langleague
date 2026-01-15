@@ -9,7 +9,6 @@ import PasswordResetInit from 'app/modules/account/password-reset/init/password-
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import Logout from 'app/modules/account/logout';
 import Home from 'app/modules/home/home';
-import EntitiesRoutes from 'app/entities/routes';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import PrivateRoute from 'app/shared/auth/private-route';
@@ -38,14 +37,22 @@ const Student = Loadable({
 });
 const AppRoutes = () => {
   return (
-    <div className="view-routes">
+    <main id="main-content" className="view-routes" role="main">
       <ErrorBoundaryRoutes>
         <Route index element={<Home />} />
         <Route path="login" element={<AuthSlider />} />
         <Route path="logout" element={<Logout />} />
         <Route path="account">
-          {/* Temporarily PUBLIC - No authentication required */}
-          <Route path="*" element={<Account />} />
+          {/* Protected account routes - require authentication */}
+          <Route
+            path="*"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.TEACHER, AUTHORITIES.STUDENT]}>
+                <Account />
+              </PrivateRoute>
+            }
+          />
+          {/* Public routes - no authentication required */}
           <Route path="register" element={<AuthSlider />} />
           <Route path="activate" element={<Activate />} />
           <Route path="reset">
@@ -68,24 +75,17 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Protected Teacher Routes - Accessible by ROLE_TEACHER and ROLE_ADMIN */}
-        {/* TODO: TEMPORARILY PUBLIC FOR FE TESTING - REMOVE BEFORE PRODUCTION */}
-        <Route path="teacher/*" element={<Teacher />} />
-        {/* ORIGINAL PROTECTED ROUTE (uncomment for production):
+        {/* Protected Teacher Routes - Only accessible by ROLE_TEACHER */}
         <Route
           path="teacher/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.TEACHER, AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.TEACHER]}>
               <Teacher />
             </PrivateRoute>
           }
         />
-        */}
 
         {/* Protected Student Routes - Only accessible by ROLE_STUDENT */}
-        {/* TODO: TEMPORARILY PUBLIC FOR FE TESTING - REMOVE BEFORE PRODUCTION */}
-        <Route path="student/*" element={<Student />} />
-        {/* ORIGINAL PROTECTED ROUTE (uncomment for production):
         <Route
           path="student/*"
           element={
@@ -94,11 +94,13 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
-        */}
-        <Route path="*" element={<EntitiesRoutes />} />
+
+        {/* DEPRECATED: Old entity CRUD routes - now integrated into role-specific modules */}
+        {/* <Route path="*" element={<EntitiesRoutes />} /> */}
+
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>
-    </div>
+    </main>
   );
 };
 

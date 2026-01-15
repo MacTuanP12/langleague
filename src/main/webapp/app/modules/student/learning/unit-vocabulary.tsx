@@ -1,107 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useUnits, useVocabularies } from 'app/shared/reducers/hooks';
-import { Translate } from 'react-jhipster';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IVocabulary } from 'app/shared/model/vocabulary.model';
+import './unit-vocabulary.scss'; // Pure widget styling
 
-export const UnitVocabulary = () => {
-  const { selectedUnit, loadUnit } = useUnits();
-  const { vocabularies, loading, loadVocabularies } = useVocabularies();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { unitId } = useParams<{ unitId: string }>();
-  const navigate = useNavigate();
+interface UnitVocabularyProps {
+  data: IVocabulary[];
+}
 
-  useEffect(() => {
-    if (unitId) {
-      loadUnit(unitId);
-      loadVocabularies(unitId);
+export const UnitVocabulary: React.FC<UnitVocabularyProps> = ({ data }) => {
+  const [speakingId, setSpeakingId] = useState<number | null>(null);
+
+  // Detect language from text
+  const detectLanguage = (text: string): string => {
+    if (!text) return 'en-US';
+    if (/[\u4e00-\u9fff]/.test(text)) return 'zh-CN';
+    if (/[\u3040-\u309f\u30a0-\u30ff]/.test(text)) return 'ja-JP';
+    if (/[\uac00-\ud7af\u1100-\u11ff\u3130-\u318f]/.test(text)) return 'ko-KR';
+    if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(text)) return 'vi-VN';
+    if (/[àâæçéèêëïîôùûüÿœ]/i.test(text)) return 'fr-FR';
+    if (/[áéíñóúü¿¡]/i.test(text)) return 'es-ES';
+    if (/[äöüß]/i.test(text)) return 'de-DE';
+    return 'en-US';
+  };
+
+  // Text-to-Speech function with language detection
+  const speakWord = (word: string, vocabId: number, event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
+    window.speechSynthesis.cancel();
+
+    if ('speechSynthesis' in window) {
+      const detectedLang = detectLanguage(word);
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = detectedLang;
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      setSpeakingId(vocabId);
+      utterance.onend = () => setSpeakingId(null);
+      utterance.onerror = () => setSpeakingId(null);
+      window.speechSynthesis.speak(utterance);
     }
-  }, [unitId, loadUnit, loadVocabularies]);
-
-  const categories = [
-    { id: 'greeting', label: 'Greeting', subtitle: 'Lời chào hỏi', icon: '👋' },
-    { id: 'occupation', label: 'Occupation', subtitle: 'Nghề nghiệp', icon: '👔' },
-    { id: 'family', label: 'Family', subtitle: 'Gia đình', icon: '👨‍👩‍👧‍👦' },
-    { id: 'hobby', label: 'Hobby', subtitle: 'Sở thích', icon: '🎨' },
-    { id: 'education', label: 'Education', subtitle: 'Giáo dục', icon: '📚' },
-    { id: 'nationality', label: 'Nationality', subtitle: 'Quốc tịch', icon: '🌍' },
-  ];
+  };
 
   return (
-    <div className="unit-vocabulary">
-      <div className="vocabulary-header">
-        <button onClick={() => navigate(-1)} className="back-btn">
-          ← Back to Book List
-        </button>
-        <div className="header-info">
-          <div className="breadcrumb">
-            <span>UNIT 1 - VOCABULARY</span>
+    <div className="vocabulary-grid">
+      {data.map(vocab => (
+        <div key={vocab.id} className="vocabulary-card">
+          {/* Vocab Header */}
+          <div className="vocab-header">
+            <h5 className="vocab-word clickable" onClick={e => speakWord(vocab.word, vocab.id, e)} title="Click to pronounce">
+              {vocab.word}
+            </h5>
+            <button
+              className={`speak-btn ${speakingId === vocab.id ? 'speaking' : ''}`}
+              onClick={e => speakWord(vocab.word, vocab.id, e)}
+              title="Pronounce"
+            >
+              <FontAwesomeIcon icon={speakingId === vocab.id ? 'volume-high' : 'volume-up'} />
+            </button>
           </div>
-          <h2>Introduction</h2>
-          <span className="learn-count">6 words to learn</span>
-        </div>
-      </div>
 
-      <div className="vocabulary-content">
-        <div className="categories-grid">
-          {categories.map(category => (
-            <div key={category.id} className="category-card" onClick={() => setSelectedCategory(category.id)}>
-              <div className="category-icon">{category.icon}</div>
-              <div className="category-info">
-                <h4>{category.label}</h4>
-                <p>{category.subtitle}</p>
-              </div>
+          {/* Pronunciation */}
+          {vocab.phonetic && <p className="vocab-pronunciation">/{vocab.phonetic}/</p>}
+
+          {/* Meaning */}
+          <p className="vocab-meaning">{vocab.meaning}</p>
+
+          {/* Example */}
+          {vocab.example && (
+            <div className="vocab-example">
+              <em>&quot;{vocab.example}&quot;</em>
             </div>
-          ))}
-        </div>
+          )}
 
-        <div className="vocabulary-list">
-          <h3>
-            <Translate contentKey="langleague.student.learning.vocabulary.title">Vocabulary Words</Translate>
-          </h3>
-          {vocabularies.map(vocab => (
-            <div key={vocab.id} className="vocabulary-card">
-              <div className="vocab-header">
-                <div className="vocab-word">
-                  <h4>{vocab.word}</h4>
-                  {vocab.phonetic && <span className="pronunciation">/{vocab.phonetic}/</span>}
-                </div>
-              </div>
-
-              <div className="vocab-meaning">
-                <strong>
-                  <Translate contentKey="langleague.student.learning.vocabulary.meaning">Meaning:</Translate>
-                </strong>{' '}
-                {vocab.meaning}
-              </div>
-
-              {vocab.example && (
-                <div className="vocab-example">
-                  <strong>
-                    <Translate contentKey="langleague.student.learning.vocabulary.example">Example:</Translate>
-                  </strong>
-                  <p className="example-sentence">&quot;{vocab.example}&quot;</p>
-                </div>
-              )}
-
-              {vocab.imageUrl && (
-                <div className="vocab-image">
-                  <img src={vocab.imageUrl} alt={vocab.word} />
-                </div>
-              )}
+          {/* Image */}
+          {vocab.imageUrl && (
+            <div className="vocab-image">
+              <img src={vocab.imageUrl} alt={vocab.word} />
             </div>
-          ))}
+          )}
         </div>
-
-        {vocabularies.length === 0 && (
-          <div className="empty-state">
-            <p>
-              <Translate contentKey="langleague.student.learning.vocabulary.noVocabulary">
-                No vocabulary words added yet for this unit.
-              </Translate>
-            </p>
-          </div>
-        )}
-      </div>
+      ))}
     </div>
   );
 };

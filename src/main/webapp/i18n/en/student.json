@@ -1,8 +1,31 @@
 {
   "langleague": {
+    "apiKey": {
+      "setupTitle": "Setup AI API Key",
+      "setupDescription": "To use AI features, you need to provide your own API Key (Google Gemini or OpenAI). It's free and we only store it in your browser.",
+      "label": "API Key",
+      "placeholder": "Paste your API key here (AIza... or sk-...)",
+      "formatHint": "Supported formats: Google Gemini (AIza...) or OpenAI (sk-...)",
+      "showKey": "Show key",
+      "hideKey": "Hide key",
+      "getKeyTitle": "Get your free API key:",
+      "providers": {
+        "gemini": "Google Gemini API Key",
+        "openai": "OpenAI / ChatGPT API Key"
+      },
+      "recommendation": "💡 Recommendation:",
+      "recommendationText": "We recommend Google Gemini for better Vietnamese language support and it's completely free!",
+      "cancel": "Cancel",
+      "saveButton": "Save & Continue",
+      "errors": {
+        "empty": "Please enter an API key",
+        "invalidFormat": "Invalid API key format. Please check and try again.\nGemini keys start with 'AIza', OpenAI keys start with 'sk-'"
+      }
+    },
     "student": {
       "dashboard": {
         "title": "My Dashboard",
+        "loading": "Loading your books...",
         "welcome": "Welcome back, {{name}}!",
         "stats": {
           "hours": "Hours Studied",
@@ -26,7 +49,12 @@
           "label": "Day Streak",
           "start": "Start your streak today!",
           "active": "You are on fire! {{count}} day streak!",
-          "nextMilestone": "Next milestone: {{count}} days"
+          "nextMilestone": "Next milestone: {{count}} days",
+          "milestone": {
+            "title": "Congratulations!",
+            "message": "🎉 Congratulations! You've reached a {{count}} day streak!",
+            "confirmButton": "Awesome!"
+          }
         }
       },
       "books": {
@@ -34,7 +62,12 @@
           "loading": "Loading...",
           "backToBooks": "Back to Books",
           "startLearning": "Start Learning",
-          "enrollNow": "Enroll Now"
+          "enrollNow": "Enroll Now",
+          "units": {
+            "title": "UNITS IN THIS BOOK",
+            "empty": "No units available yet"
+          },
+          "relatedBooks": "Related Books"
         },
         "messages": {
           "enrollSuccess": "Successfully enrolled in the book!",
@@ -48,9 +81,14 @@
         "complete": "Complete",
         "vocabulary": {
           "title": "Vocabulary",
+          "unit": "UNIT",
           "meaning": "Meaning:",
           "example": "Example:",
-          "noVocabulary": "No vocabulary words added yet for this unit.",
+          "wordsToLearn": "words to learn",
+          "vocabularyWords": "Vocabulary Words",
+          "noVocabulary": "No vocabulary words yet",
+          "noVocabularyDescription": "Vocabulary words will appear here once added by your teacher",
+          "clickToHear": "Click on the word to hear pronunciation",
           "navigation": {
             "previous": "Previous",
             "next": "Next"
@@ -62,17 +100,75 @@
         },
         "exercise": {
           "title": "Exercise",
-          "noExercises": "No exercises added yet for this unit."
+          "noExercises": "No exercises added yet for this unit.",
+          "backToBook": "Back to Book List",
+          "defaultTitle": "Exercise",
+          "loading": "Loading...",
+          "loadingExercises": "Loading exercises...",
+          "question": "Question",
+          "of": "of",
+          "playAudio": "Play Audio",
+          "audioNotSupported": "Your browser does not support the audio element.",
+          "correctAnswer": "Correct!",
+          "incorrectAnswer": "Incorrect",
+          "correctAnswerIs": "The correct answer is:",
+          "selectAllCorrect": "Select all correct answers:",
+          "typeAnswer": "Type your answer here...",
+          "previous": "Previous",
+          "checkAnswer": "Check Answer",
+          "nextQuestion": "Next Question",
+          "finish": "Finish",
+          "pleaseAnswer": "Please select or type an answer first!",
+          "correct": "Correct!",
+          "incorrect": "Incorrect, try again or check the answer.",
+          "explainWithAI": "Explain with AI"
+        },
+        "aiTutor": {
+          "button": "Explain with AI",
+          "grammarButton": "Ask AI Tutor",
+          "title": "AI Tutor Explanation",
+          "grammarTitle": "AI Grammar Tutor",
+          "thinking": "Thinking...",
+          "question": "Question",
+          "close": "Close",
+          "changeKey": "Change Key",
+          "cancel": "Cancel",
+          "saveAndExplain": "Save & Explain",
+          "setupTitle": "Setup AI Tutor",
+          "setupDescription": "To use the AI Tutor feature, you need to provide your own Google Gemini API Key. It's free and we only store it in your browser.",
+          "apiKeyLabel": "Gemini API Key",
+          "apiKeyPlaceholder": "Paste your API key here...",
+          "getFreeKey": "Get a free key here",
+          "invalidKeyError": "Invalid API Key. Please check and try again.",
+          "somethingWentWrong": "Something went wrong.",
+          "grammarPromptPlaceholder": "Ask anything about this grammar topic...\nFor example: Can you give me more examples? How is this different from...?",
+          "grammarAsk": "Ask",
+          "grammarClear": "Clear Chat"
         },
         "flashcard": {
+          "back": "Back",
+          "learning": "Learning",
           "title": "Flashcards",
+          "shuffle": "Shuffle",
+          "studyMode": "Study Mode",
+          "notes": "Notes",
           "card": "Card",
-          "of": "of"
+          "of": "of",
+          "definition": "DEFINITION",
+          "answer": "ANSWER",
+          "clickToFlip": "Click to Flip",
+          "terminology": "Terminology in this section",
+          "noCards": "No flashcards available",
+          "noCardsDescription": "Flashcards will appear here once vocabulary is added"
         },
         "flashcardList": {
           "title": "Flashcards",
+          "description": "Select a unit to study flashcards",
           "loading": "Loading...",
-          "noSets": "No books available"
+          "noSets": "No books available",
+          "enrollDescription": "Enroll in books to start studying with flashcards",
+          "studyFlashcards": "Study Flashcards",
+          "noUnits": "No units available in this book"
         },
         "bookLearn": {
           "progress": "Your Progress"
@@ -82,6 +178,26 @@
           "topics": "{{count}} topics",
           "questions": "{{count}} questions",
           "interactive": "Interactive"
+        },
+        "notes": {
+          "title": "My Notes",
+          "loading": "Loading notes...",
+          "empty": "No notes yet for this unit.",
+          "emptyDescription": "Start taking notes to help you remember important points!",
+          "placeholder": "Take a note...",
+          "placeholderDisabled": "You already have a note for this unit. Click Edit to modify it.",
+          "addButton": "Add Note",
+          "updateButton": "Update Note",
+          "saving": "Saving...",
+          "updating": "Updating...",
+          "editButton": "Edit",
+          "deleteButton": "Delete",
+          "cancelButton": "Cancel",
+          "deleteConfirm": "Are you sure you want to delete this note?",
+          "duplicateWarning": "You already have a note for this unit. Please delete it first if you want to create a new one.",
+          "limitInfo": "You can only have one note per unit. Edit or delete your existing note.",
+          "created": "Created:",
+          "updated": "Updated:"
         }
       },
       "games": {

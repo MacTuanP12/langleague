@@ -6,6 +6,11 @@
       "placeholder": "Search for books or topics...",
       "button": "Search"
     },
+    "featured": {
+      "title": "Featured Books",
+      "viewAll": "View all",
+      "details": "Details"
+    },
     "logged": {
       "message": "You are logged in as \"{{username}}\"."
     },

@@ -3,20 +3,28 @@
     "request": {
       "title": "重設您的密碼",
       "form": {
-        "button": "重設密碼"
+        "button": "發送驗證碼"
       },
       "messages": {
-        "info": "輸入註冊時使用的電子郵件地址",
-        "success": "檢查您的電子郵件信箱，了解如何重設密碼。"
+        "info": "請輸入您的電子郵件地址以接收驗證碼。",
+        "success": "請檢查您的電子郵件以了解如何重設密碼。",
+        "checkEmail": "檢查您的電子郵件",
+        "emailSent": "我們已向 {email} 發送了密碼重設連結。請檢查您的電子郵件並按照說明重設密碼。",
+        "checkSpam": "找不到？請檢查您的垃圾郵件或垃圾資料夾。",
+        "error": "發送重設郵件失敗。請重試。"
+      },
+      "actions": {
+        "backToLogin": "返回登入",
+        "tryDifferent": "嘗試其他信箱"
       }
     },
     "finish": {
       "title": "重設密碼",
       "form": {
-        "button": "確定"
+        "button": "驗證新密碼"
       },
       "messages": {
-        "info": "請設定新的密碼",
+        "info": "選擇新密碼",
         "success": "<strong>您的密碼已重設。</strong> 請 ",
         "keymissing": "沒有輸入重設金鑰",
         "error": "無法重設密碼。 請注意，密碼重設要求的效期只有 24 小時。"

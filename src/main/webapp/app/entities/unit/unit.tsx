@@ -9,6 +9,7 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities } from './unit.reducer';
+import './unit.scss';
 
 export const Unit = () => {
   const dispatch = useAppDispatch();
@@ -106,28 +107,31 @@ export const Unit = () => {
       </h2>
       <div className="table-responsive">
         {unitList && unitList.length > 0 ? (
-          <Table responsive>
+          <Table responsive className="unit-table">
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
+                <th className="hand col-id" onClick={sort('id')}>
                   <Translate contentKey="langleagueApp.unit.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('title')}>
+                <th className="hand col-title" onClick={sort('title')}>
                   <Translate contentKey="langleagueApp.unit.title">Title</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('title')} />
                 </th>
-                <th className="hand" onClick={sort('orderIndex')}>
+                <th className="hand col-order" onClick={sort('orderIndex')}>
                   <Translate contentKey="langleagueApp.unit.orderIndex">Order Index</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('orderIndex')} />
                 </th>
-                <th className="hand" onClick={sort('summary')}>
+                <th className="hand col-summary" onClick={sort('summary')}>
                   <Translate contentKey="langleagueApp.unit.summary">Summary</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('summary')} />
                 </th>
-                <th>
+                <th className="col-book">
                   <Translate contentKey="langleagueApp.unit.book">Book</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th />
+                <th className="col-note">
+                  <Translate contentKey="langleagueApp.unit.note">Note</Translate>
+                </th>
+                <th className="col-actions" />
               </tr>
             </thead>
             <tbody>
@@ -141,7 +145,12 @@ export const Unit = () => {
                   <td>{unit.title}</td>
                   <td>{unit.orderIndex}</td>
                   <td>{unit.summary}</td>
-                  <td>{unit.book ? <Link to={`/book/${unit.book.id}`}>{unit.book.id}</Link> : ''}</td>
+                  <td>{unit.book ? <Link to={`/book/${unit.book.id}`}>{unit.book.title || unit.book.id}</Link> : ''}</td>
+                  <td>
+                    <Button tag={Link} to={`/student/learn/unit/${unit.id}/notes`} color="secondary" size="sm" title="View Notes">
+                      <FontAwesomeIcon icon="sticky-note" />
+                    </Button>
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/unit/${unit.id}`} color="info" size="sm" data-cy="entityDetailsButton">

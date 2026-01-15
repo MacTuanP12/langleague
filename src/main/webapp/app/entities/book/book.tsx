@@ -34,7 +34,11 @@ export const Book = () => {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Translate contentKey="global.loading">Loading...</Translate>
+      </div>
+    );
   }
 
   return (

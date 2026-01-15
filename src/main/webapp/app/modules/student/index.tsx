@@ -6,9 +6,9 @@ import StudentDashboard from 'app/modules/student/dashboard/student-dashboard';
 import BookList from 'app/modules/student/books/book-list';
 import BookDetail from 'app/modules/student/books/book-detail';
 import BookLearn from 'app/modules/student/learning/book-learn';
-import UnitExercise from 'app/modules/student/learning/unit-exercise';
-import UnitGrammar from 'app/modules/student/learning/unit-grammar';
-import UnitVocabulary from 'app/modules/student/learning/unit-vocabulary';
+import UnitExercisePage from 'app/modules/student/learning/unit-exercise-page';
+import UnitGrammarPage from 'app/modules/student/learning/unit-grammar-page';
+import UnitVocabularyPage from 'app/modules/student/learning/unit-vocabulary-page';
 import Flashcard from 'app/modules/student/learning/flashcard';
 import FlashcardList from 'app/modules/student/learning/flashcard-list';
 import GameHub from 'app/modules/student/games/game-hub';
@@ -30,9 +30,9 @@ const StudentRoutes = () => {
         {/* Learning */}
         <Route path="learn">
           <Route path="book/:bookId" element={<BookLearn />} />
-          <Route path="unit/:unitId/exercise" element={<UnitExercise />} />
-          <Route path="unit/:unitId/grammar" element={<UnitGrammar />} />
-          <Route path="unit/:unitId/vocabulary" element={<UnitVocabulary />} />
+          <Route path="unit/:unitId/exercise" element={<UnitExercisePage />} />
+          <Route path="unit/:unitId/grammar" element={<UnitGrammarPage />} />
+          <Route path="unit/:unitId/vocabulary" element={<UnitVocabularyPage />} />
           <Route path="unit/:unitId/flashcard" element={<Flashcard />} />
         </Route>
 

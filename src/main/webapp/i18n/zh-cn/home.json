@@ -6,6 +6,11 @@
       "placeholder": "搜索教材、课程或主题...",
       "button": "搜索"
     },
+    "featured": {
+      "title": "精选书籍",
+      "viewAll": "查看全部",
+      "details": "详情"
+    },
     "logged": {
       "message": "您目前是以 \"{{username}}\" 账号登录."
     },

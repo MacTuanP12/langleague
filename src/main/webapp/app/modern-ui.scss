@@ -69,10 +69,10 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4169e1 0%, #5a67d8 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   color: white;
   border: none;
-  box-shadow: 0 4px 12px rgba(65, 105, 225, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -84,7 +84,7 @@
 
 .fab:hover {
   transform: translateY(-4px) scale(1.1);
-  box-shadow: 0 8px 20px rgba(65, 105, 225, 0.5);
+  box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.5);
 }
 
 .fab:active {
@@ -220,7 +220,7 @@
 /* Progress Bar */
 .progress-modern {
   height: 8px;
-  background: #e2e8f0;
+  background: var(--bg-secondary);
   border-radius: 9999px;
   overflow: hidden;
   position: relative;
@@ -228,7 +228,7 @@
 
 .progress-modern-bar {
   height: 100%;
-  background: linear-gradient(90deg, #4169e1 0%, #5a67d8 100%);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   border-radius: 9999px;
   transition: width 0.5s ease;
   position: relative;
@@ -433,17 +433,17 @@
 }
 
 .table-responsive::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--bg-secondary);
   border-radius: 4px;
 }
 
 .table-responsive::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--border-color);
   border-radius: 4px;
 }
 
 .table-responsive::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--text-tertiary);
 }
 
 /* Card Grid Responsive */

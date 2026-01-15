@@ -14,12 +14,15 @@
           "title": "Thao Tác Nhanh",
           "manageBooks": "Quản Lý Sách",
           "createBook": "Tạo Sách Mới",
-          "viewStudents": "Xem Học Sinh"
+          "viewStudents": "Xem Học Sinh",
+          "manageContent": "Quản Lý Nội Dung"
         },
         "recentActivity": {
           "title": "Hoạt Động Gần Đây",
           "noData": "Không có hoạt động gần đây"
-        }
+        },
+        "enrollments": "Số Lượng Đăng Ký Theo Sách",
+        "noEnrollmentData": "Chưa có dữ liệu đăng ký."
       },
       "books": {
         "management": {
@@ -85,8 +88,13 @@
             "actions": {
               "edit": "Chỉnh Sửa",
               "delete": "Xóa",
+              "manageContent": "Quản Lý Nội Dung",
               "confirmDelete": "Bạn có chắc chắn muốn xóa bài học này không?"
             }
+          },
+          "syllabus": {
+            "title": "Giáo Trình Sách",
+            "backToBooks": "Quay Lại Danh Sách Sách"
           }
         },
         "form": {
@@ -106,7 +114,11 @@
             "titleRequired": "Tiêu đề sách là bắt buộc",
             "titleMinLength": "Tiêu đề phải có ít nhất 2 ký tự",
             "descriptionLabel": "Mô Tả",
-            "descriptionPlaceholder": "Nhập mô tả ngắn gọn về nội dung sách..."
+            "descriptionPlaceholder": "Nhập mô tả ngắn gọn về nội dung sách...",
+            "isPublicLabel": "Công Khai",
+            "isPublicHint": "Sách công khai có thể được tất cả học sinh khám phá và đăng ký",
+            "publicStatus": "Công Khai",
+            "privateStatus": "Riêng Tư"
           },
           "footer": {
             "infoText": "Tất cả các trường được tự động lưu cục bộ.",
@@ -122,7 +134,65 @@
           "confirmDelete": "Bạn có chắc chắn muốn xóa bài học này không?"
         }
       },
+      "editor": {
+        "title": "Trình Soạn Nội Dung Bài",
+        "backToSyllabus": "Quay Lại Giáo Trình",
+        "backToBook": "Quay Lại Sách",
+        "subtitle": "Quản lý từ vựng, ngữ pháp và bài tập",
+        "tabs": {
+          "vocabulary": "Từ Vựng",
+          "grammar": "Ngữ Pháp",
+          "exercises": "Bài Tập"
+        },
+        "vocabulary": {
+          "title": "Danh Sách Từ Vựng",
+          "addWord": "Thêm Từ",
+          "aiGenerate": "✨ Tạo Bằng AI",
+          "empty": "Chưa có từ vựng nào.",
+          "emptyHint": "Sử dụng Trợ Lý AI để tạo từ vựng từ chủ đề!"
+        },
+        "grammar": {
+          "title": "Quy Tắc Ngữ Pháp",
+          "addRule": "Thêm Quy Tắc",
+          "aiGenerate": "✨ Tạo Bằng AI",
+          "empty": "Chưa có quy tắc ngữ pháp nào."
+        },
+        "exercises": {
+          "title": "Bài Tập",
+          "addQuestion": "Thêm Câu Hỏi",
+          "aiGenerate": "✨ Tạo Bằng AI",
+          "empty": "Chưa có bài tập nào.",
+          "question": "Câu Hỏi"
+        },
+        "confirmDelete": {
+          "vocabulary": "Bạn có chắc chắn muốn xóa từ vựng này không?",
+          "grammar": "Bạn có chắc chắn muốn xóa quy tắc ngữ pháp này không?",
+          "exercise": "Bạn có chắc chắn muốn xóa bài tập này không?"
+        },
+        "success": {
+          "vocabularyDeleted": "Đã xóa từ vựng",
+          "grammarDeleted": "Đã xóa quy tắc ngữ pháp",
+          "exerciseDeleted": "Đã xóa bài tập"
+        }
+      },
+      "students": {
+        "title": "Học Sinh Của Tôi",
+        "subtitle": "Theo dõi tiến độ và đăng ký của học sinh",
+        "search": "Tìm kiếm theo tên hoặc sách...",
+        "totalStudents": "Tổng Số Học Sinh:",
+        "table": {
+          "student": "Học Sinh",
+          "enrolledBook": "Sách Đã Đăng Ký",
+          "enrolledDate": "Ngày Đăng Ký",
+          "status": "Trạng Thái"
+        },
+        "empty": "Không tìm thấy học sinh nào đăng ký sách của bạn."
+      },
       "units": {
+        "labels": {
+          "newVocabulary": "Từ Vựng Mới",
+          "newGrammar": "Chủ Đề Ngữ Pháp Mới"
+        },
         "form": {
           "backButton": "Quay Lại",
           "titlePlaceholder": "Tiêu Đề Bài Học",
@@ -136,6 +206,15 @@
           "validation": {
             "titleRequired": "Tiêu đề bài học là bắt buộc",
             "titleMinLength": "Tiêu đề phải có ít nhất 3 ký tự"
+          },
+          "actions": {
+            "removeTooltip": "Xóa mục",
+            "duplicateTooltip": "Nhân đôi mục",
+            "duplicate": "Nhân Đôi"
+          },
+          "controls": {
+            "expandAll": "Mở Rộng",
+            "collapseAll": "Thu Gọn"
           },
           "buttons": {
             "addVocabulary": "Thêm Từ Vựng",
@@ -218,7 +297,44 @@
             "multiChoice": "Nhiều Đáp Án",
             "fillInBlank": "Điền Vào Chỗ Trống"
           }
+        },
+        "menu": {
+          "addContent": "Thêm Nội Dung",
+          "vocabulary": "Từ Vựng",
+          "vocabularyDesc": "Thêm từ vựng với nghĩa và ví dụ",
+          "grammar": "Ngữ Pháp",
+          "grammarDesc": "Thêm quy tắc và giải thích ngữ pháp",
+          "exercise": "Bài Tập",
+          "exerciseDesc": "Tạo câu hỏi luyện tập",
+          "singleChoice": "Một Đáp Án",
+          "multiChoice": "Nhiều Đáp Án",
+          "fillInBlank": "Điền Vào Chỗ Trống"
+        },
+        "zoom": {
+          "in": "Phóng To",
+          "out": "Thu Nhỏ",
+          "reset": "Đặt Lại Zoom",
+          "shortcuts": {
+            "in": "Ctrl + +",
+            "out": "Ctrl + -",
+            "reset": "Ctrl + 0"
+          }
         }
+      },
+      "common": {
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "delete": "Xóa",
+        "back": "Quay Lại",
+        "edit": "Chỉnh Sửa",
+        "view": "Xem",
+        "add": "Thêm",
+        "create": "Tạo",
+        "update": "Cập Nhật",
+        "loading": "Đang tải...",
+        "search": "Tìm kiếm",
+        "filter": "Lọc",
+        "actions": "Thao Tác"
       }
     }
   }

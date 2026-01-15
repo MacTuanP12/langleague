@@ -8,6 +8,7 @@ import com.langleague.app.repository.UserRepository;
 import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.dto.NoteDTO;
 import com.langleague.app.service.mapper.NoteMapper;
+import com.langleague.app.web.rest.errors.BadRequestAlertException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,41 @@ public class NoteService {
     }
 
     /**
+     * Get current user's profile.
+     * @return Optional<UserProfile>
+     */
+    private Optional<UserProfile> getCurrentUserProfile() {
+        return SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .map(user -> {
+                UserProfile probe = new UserProfile();
+                probe.setUser(user);
+                return userProfileRepository.findOne(Example.of(probe)).orElse(null);
+            });
+    }
+
+    /**
+     * Verify that the current user owns the note.
+     * @param noteId the note id
+     * @throws BadRequestAlertException if user doesn't own the note
+     */
+    private void verifyOwnership(Long noteId) {
+        UserProfile currentUserProfile = getCurrentUserProfile()
+            .orElseThrow(() -> new BadRequestAlertException("User profile not found", "note", "userprofilenotfound"));
+
+        Note note = noteRepository
+            .findById(noteId)
+            .orElseThrow(() -> new BadRequestAlertException("Note not found", "note", "notenotfound"));
+
+        if (!note.getUserProfile().getId().equals(currentUserProfile.getId())) {
+            throw new BadRequestAlertException("Access denied: You don't own this note", "note", "accessdenied");
+        }
+    }
+
+    /**
      * Save a note.
+     * BUSINESS RULE: 1 student can only have 1 note per unit.
+     * If note already exists, throw exception (student must DELETE old note first).
      *
      * @param noteDTO the entity to save.
      * @return the persisted entity.
@@ -63,13 +98,21 @@ public class NoteService {
 
         // Auto-assign UserProfile if missing (matches Frontend expectation)
         if (noteDTO.getUserProfileId() == null) {
-            SecurityUtils.getCurrentUserLogin()
-                .flatMap(userRepository::findOneByLogin)
-                .ifPresent(user -> {
-                    UserProfile probe = new UserProfile();
-                    probe.setUser(user);
-                    userProfileRepository.findOne(Example.of(probe)).ifPresent(profile -> noteDTO.setUserProfileId(profile.getId()));
-                });
+            UserProfile currentUserProfile = getCurrentUserProfile()
+                .orElseThrow(() -> new BadRequestAlertException("User profile not found", "note", "userprofilenotfound"));
+            noteDTO.setUserProfileId(currentUserProfile.getId());
+        }
+
+        // **BUSINESS RULE ENFORCEMENT**
+        // Check if user already has a note for this unit
+        List<Note> existingNotes = noteRepository.findAllByUserProfileIdAndUnitId(noteDTO.getUserProfileId(), noteDTO.getUnitId());
+
+        if (!existingNotes.isEmpty()) {
+            throw new BadRequestAlertException(
+                "You already have a note for this unit. Please delete it first before creating a new one.",
+                "note",
+                "duplicatenote"
+            );
         }
 
         Note note = noteMapper.toEntity(noteDTO);
@@ -85,6 +128,10 @@ public class NoteService {
      */
     public NoteDTO update(NoteDTO noteDTO) {
         log.debug("Request to update Note : {}", noteDTO);
+
+        // Verify ownership before update
+        verifyOwnership(noteDTO.getId());
+
         noteDTO.setUpdatedAt(Instant.now());
         Note note = noteMapper.toEntity(noteDTO);
         note = noteRepository.save(note);
@@ -100,10 +147,14 @@ public class NoteService {
     public Optional<NoteDTO> partialUpdate(NoteDTO noteDTO) {
         log.debug("Request to partially update Note : {}", noteDTO);
 
+        // Verify ownership before update
+        verifyOwnership(noteDTO.getId());
+
         return noteRepository
             .findById(noteDTO.getId())
             .map(existingNote -> {
                 noteMapper.partialUpdate(existingNote, noteDTO);
+                existingNote.setUpdatedAt(Instant.now());
 
                 return existingNote;
             })
@@ -132,6 +183,10 @@ public class NoteService {
     @Transactional(readOnly = true)
     public Optional<NoteDTO> findOne(Long id) {
         log.debug("Request to get Note : {}", id);
+
+        // Verify ownership before returning
+        verifyOwnership(id);
+
         return noteRepository.findById(id).map(noteMapper::toDto);
     }
 
@@ -153,12 +208,89 @@ public class NoteService {
     }
 
     /**
+     * Get all notes for the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the page of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<NoteDTO> findAllByCurrentUser(Pageable pageable) {
+        log.debug("Request to get all Notes for current user");
+        return SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .flatMap(user -> {
+                UserProfile probe = new UserProfile();
+                probe.setUser(user);
+                return userProfileRepository.findOne(Example.of(probe));
+            })
+            .map(profile -> noteRepository.findAllByUserProfileId(profile.getId(), pageable).map(noteMapper::toDto))
+            .orElse(Page.empty(pageable));
+    }
+
+    /**
+     * Get all notes for the current user and unit.
+     *
+     * @param unitId the id of the unit.
+     * @param pageable the pagination information.
+     * @return the page of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<NoteDTO> findAllByCurrentUserAndUnit(Long unitId, Pageable pageable) {
+        log.debug("Request to get all Notes for current user and unit : {}", unitId);
+        return SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .flatMap(user -> {
+                UserProfile probe = new UserProfile();
+                probe.setUser(user);
+                return userProfileRepository.findOne(Example.of(probe));
+            })
+            .map(profile -> noteRepository.findAllByUserProfileIdAndUnitId(profile.getId(), unitId, pageable).map(noteMapper::toDto))
+            .orElse(Page.empty(pageable));
+    }
+
+    /**
      * Delete the note by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete Note : {}", id);
+
+        // Verify ownership before delete
+        verifyOwnership(id);
+
         noteRepository.deleteById(id);
+    }
+
+    /**
+     * Check if current user has a note for the given unit.
+     *
+     * @param unitId the unit id
+     * @return true if note exists, false otherwise
+     */
+    @Transactional(readOnly = true)
+    public boolean hasNoteForUnit(Long unitId) {
+        log.debug("Request to check if current user has note for unit : {}", unitId);
+
+        return getCurrentUserProfile()
+            .map(profile -> !noteRepository.findAllByUserProfileIdAndUnitId(profile.getId(), unitId).isEmpty())
+            .orElse(false);
+    }
+
+    /**
+     * Get note for current user and unit (if exists).
+     *
+     * @param unitId the unit id
+     * @return Optional<NoteDTO>
+     */
+    @Transactional(readOnly = true)
+    public Optional<NoteDTO> findNoteByCurrentUserAndUnit(Long unitId) {
+        log.debug("Request to get note for current user and unit : {}", unitId);
+
+        return getCurrentUserProfile()
+            .flatMap(profile -> {
+                List<Note> notes = noteRepository.findAllByUserProfileIdAndUnitId(profile.getId(), unitId);
+                return notes.isEmpty() ? Optional.empty() : Optional.of(noteMapper.toDto(notes.get(0)));
+            });
     }
 }
