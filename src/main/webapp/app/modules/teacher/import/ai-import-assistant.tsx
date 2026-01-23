@@ -42,8 +42,8 @@ import { useAppDispatch } from 'app/config/store';
 import { bulkCreateExercises } from 'app/shared/reducers/exercise.reducer';
 import { bulkCreateVocabularies } from 'app/shared/reducers/vocabulary.reducer';
 import { bulkCreateGrammars } from 'app/shared/reducers/grammar.reducer';
-
-const USER_GEMINI_KEY_STORAGE = 'USER_GEMINI_KEY';
+import { USER_GEMINI_KEY_STORAGE } from 'app/shared/util/ai-utils';
+import './ai-import-assistant.scss';
 
 interface AIImportAssistantProps {
   unitId: string;
@@ -179,21 +179,22 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
 
   // Handle API Key Verification
   const handleStartSession = () => {
-    if (!keyInputValue.trim()) {
+    const trimmedKey = keyInputValue.trim();
+    if (!trimmedKey) {
       toast.error('Please enter your API key.');
       return;
     }
 
     // Save to appropriate storage
     if (rememberKey) {
-      localStorage.setItem(USER_GEMINI_KEY_STORAGE, keyInputValue);
+      localStorage.setItem(USER_GEMINI_KEY_STORAGE, trimmedKey);
       sessionStorage.removeItem(USER_GEMINI_KEY_STORAGE);
     } else {
-      sessionStorage.setItem(USER_GEMINI_KEY_STORAGE, keyInputValue);
+      sessionStorage.setItem(USER_GEMINI_KEY_STORAGE, trimmedKey);
       localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
     }
 
-    setUserApiKey(keyInputValue);
+    setUserApiKey(trimmedKey);
     setIsKeyVerified(true);
     setKeyInputValue('');
     toast.success('API key configured successfully!');
@@ -315,7 +316,8 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
       toast.error('Please provide some text to analyze.');
       return;
     }
-    if (!userApiKey.trim()) {
+    const apiKey = userApiKey.trim();
+    if (!apiKey) {
       toast.error('Please enter your AI API Key.');
       return;
     }
@@ -330,7 +332,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
 
       if (selectedModel.includes('gemini')) {
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${userApiKey}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`,
           {
             method: 'POST',
             headers: {
@@ -349,7 +351,13 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
         // Handle API key errors
         if (response.status === 400 || response.status === 401 || response.status === 403) {
           const errorData = await response.json().catch(() => ({ error: { message: 'Invalid API key' } }));
-          toast.error(`Invalid API Key: ${errorData.error?.message || 'Please check your Gemini API key and try again.'}`);
+          const errorMessage = errorData.error?.message || 'Please check your Gemini API key and try again.';
+
+          if (errorMessage.includes('leaked')) {
+            toast.error('Your API key was reported as leaked by Google. Please generate a NEW key.');
+          } else {
+            toast.error(`Invalid API Key: ${errorMessage}`);
+          }
 
           // Clear the invalid key
           localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
@@ -383,7 +391,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${userApiKey}`,
+            Authorization: `Bearer ${apiKey}`,
           },
           body: JSON.stringify({
             model: selectedModel,
@@ -594,22 +602,8 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     <>
       {/* Floating Button */}
       {showFloatingButton && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '30px',
-            right: '30px',
-            zIndex: 1000,
-          }}
-        >
-          <Button
-            color="primary"
-            className="rounded-circle shadow-lg p-3"
-            onClick={toggle}
-            style={{ width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <FontAwesomeIcon icon={faRobot} size="lg" />
-          </Button>
+        <div className="ai-floating-btn" onClick={toggle}>
+          <FontAwesomeIcon icon={faRobot} size="lg" />
         </div>
       )}
 
@@ -617,7 +611,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
       {isOpen && (
         <Draggable handle=".modal-header">
           <div
-            className="modal-dialog modal-lg shadow-lg"
+            className="modal-dialog modal-lg shadow-lg ai-assistant-modal"
             style={{
               position: 'fixed',
               top: '10%',
@@ -628,7 +622,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
             }}
           >
             <div className="modal-content">
-              <ModalHeader toggle={toggle} className="cursor-move bg-light d-flex justify-content-between align-items-center">
+              <ModalHeader toggle={toggle} className="cursor-move d-flex justify-content-between align-items-center">
                 <div>
                   <FontAwesomeIcon icon={faMagic} className="me-2 text-primary" />
                   AI Import Assistant

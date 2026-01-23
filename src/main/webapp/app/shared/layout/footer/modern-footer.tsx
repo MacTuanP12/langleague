@@ -40,7 +40,7 @@ export const ModernFooter: React.FC<ModernFooterProps> = ({ className = '', vari
           <div className="footer-column brand-column">
             <div className="brand-section">
               <div className="brand-logo">
-                <i className="bi bi-translate"></i>
+                <img src="content/images/1780b2f0-03c1-41b9-8974-d4277af11f79.jpg" alt="LangLeague Logo" className="brand-img" />
                 <span className="brand-name">LangLeague</span>
               </div>
               <p className="brand-slogan">

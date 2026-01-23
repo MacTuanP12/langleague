@@ -61,7 +61,26 @@ public class ExerciseService {
         LOG.debug("Request to save Exercise : {}", exerciseDTO);
         Exercise exercise = exerciseMapper.toEntity(exerciseDTO);
         exercise = exerciseRepository.save(exercise);
-        return exerciseMapper.toDto(exercise);
+
+        // Handle options for CREATE
+        if (exerciseDTO.getOptions() != null && !exerciseDTO.getOptions().isEmpty()) {
+            List<ExerciseOption> newOptions = new ArrayList<>();
+            for (ExerciseOptionDTO optionDTO : exerciseDTO.getOptions()) {
+                optionDTO.setId(null); // Ensure new
+
+                ExerciseOption option = exerciseOptionService.toEntity(optionDTO);
+                option.setExercise(exercise); // Use managed entity
+
+                newOptions.add(option);
+            }
+            exerciseOptionService.saveAllEntities(newOptions);
+        }
+
+        // Return with options
+        List<ExerciseOptionDTO> savedOptions = exerciseOptionService.findAllByExerciseId(exercise.getId());
+        ExerciseDTO result = exerciseMapper.toDto(exercise);
+        result.setOptions(savedOptions);
+        return result;
     }
 
     /**
@@ -78,13 +97,10 @@ public class ExerciseService {
 
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
 
-        UnitDTO unitDTO = new UnitDTO();
-        unitDTO.setId(unit.getId());
-
         // Step 1: Prepare all exercises
         List<Exercise> exercisesToSave = new ArrayList<>();
         for (ExerciseDTO exerciseDTO : exercises) {
-            exerciseDTO.setUnit(unitDTO);
+            exerciseDTO.setUnitId(unit.getId());
             Exercise exercise = exerciseMapper.toEntity(exerciseDTO);
             exercisesToSave.add(exercise);
         }
@@ -104,11 +120,8 @@ public class ExerciseService {
                 exerciseIdToOptionsMap.put(savedExercise.getId(), exerciseDTO.getOptions());
 
                 for (ExerciseOptionDTO optionDTO : exerciseDTO.getOptions()) {
-                    ExerciseDTO tempExerciseDTO = new ExerciseDTO();
-                    tempExerciseDTO.setId(savedExercise.getId());
-                    optionDTO.setExercise(tempExerciseDTO);
-
                     ExerciseOption option = exerciseOptionService.toEntity(optionDTO);
+                    option.setExercise(savedExercise); // Use managed entity
                     allOptionsToSave.add(option);
                 }
             }
@@ -155,7 +168,34 @@ public class ExerciseService {
         LOG.debug("Request to update Exercise : {}", exerciseDTO);
         Exercise exercise = exerciseMapper.toEntity(exerciseDTO);
         exercise = exerciseRepository.save(exercise);
-        return exerciseMapper.toDto(exercise);
+
+        // Handle options
+        if (exerciseDTO.getOptions() != null) {
+            // 1. Delete existing options
+            List<ExerciseOptionDTO> existingOptions = exerciseOptionService.findAllByExerciseId(exercise.getId());
+            for (ExerciseOptionDTO option : existingOptions) {
+                exerciseOptionService.delete(option.getId());
+            }
+
+            // 2. Save new options
+            List<ExerciseOption> newOptions = new ArrayList<>();
+            for (ExerciseOptionDTO optionDTO : exerciseDTO.getOptions()) {
+                // Reset ID to ensure creation
+                optionDTO.setId(null);
+
+                ExerciseOption option = exerciseOptionService.toEntity(optionDTO);
+                option.setExercise(exercise); // Use managed entity
+
+                newOptions.add(option);
+            }
+            exerciseOptionService.saveAllEntities(newOptions);
+        }
+
+        // Return with options
+        List<ExerciseOptionDTO> savedOptions = exerciseOptionService.findAllByExerciseId(exercise.getId());
+        ExerciseDTO result = exerciseMapper.toDto(exercise);
+        result.setOptions(savedOptions);
+        return result;
     }
 
     /**

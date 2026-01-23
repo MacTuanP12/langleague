@@ -8,6 +8,7 @@ import com.langleague.app.repository.VocabularyRepository;
 import com.langleague.app.security.AuthoritiesConstants;
 import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.VocabularyService;
+import com.langleague.app.service.dto.GameVocabularyDTO;
 import com.langleague.app.service.dto.VocabularyDTO;
 import com.langleague.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -24,8 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -37,6 +38,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/vocabularies")
+@Transactional
 public class VocabularyResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(VocabularyResource.class);
@@ -62,21 +64,6 @@ public class VocabularyResource {
         this.unitRepository = unitRepository;
     }
 
-    private void checkOwnership(Book book) {
-        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.TEACHER)) {
-            throw new AccessDeniedException("You do not have the authority to perform this action");
-        }
-        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccessDeniedException("User not logged in"));
-
-        if (
-            book.getTeacherProfile() == null ||
-            book.getTeacherProfile().getUser() == null ||
-            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
-        ) {
-            throw new AccessDeniedException("You are not the owner of this book");
-        }
-    }
-
     /**
      * {@code POST  /vocabularies} : Create a new vocabulary.
      *
@@ -91,13 +78,13 @@ public class VocabularyResource {
         if (vocabularyDTO.getId() != null) {
             throw new BadRequestAlertException("A new vocabulary cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (vocabularyDTO.getUnit() == null || vocabularyDTO.getUnit().getId() == null) {
+        if (vocabularyDTO.getUnitId() == null) {
             throw new BadRequestAlertException("A new vocabulary must belong to a unit", ENTITY_NAME, "unitnull");
         }
         Unit unit = unitRepository
-            .findById(vocabularyDTO.getUnit().getId())
+            .findById(vocabularyDTO.getUnitId())
             .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         vocabularyDTO = vocabularyService.save(vocabularyDTO);
         return ResponseEntity.created(new URI("/api/vocabularies/" + vocabularyDTO.getId()))
@@ -122,11 +109,11 @@ public class VocabularyResource {
         // Validate ownership for the first item (assuming all belong to same unit/book for now, or we check each)
         // For simplicity and performance, we check the first one's unit.
         // In a robust system, we should group by unit and check each unit.
-        Long unitId = vocabularies.get(0).getUnit().getId();
+        Long unitId = vocabularies.get(0).getUnitId();
         Unit unit = unitRepository
             .findById(unitId)
             .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         List<VocabularyDTO> result = vocabularyService.saveBulk(unitId, vocabularies);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "bulk")).body(result);
@@ -163,7 +150,7 @@ public class VocabularyResource {
         Vocabulary vocabulary = vocabularyRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(vocabulary.getUnit().getBook());
+        SecurityUtils.checkOwnership(vocabulary.getUnit().getBook());
 
         vocabularyDTO = vocabularyService.update(vocabularyDTO);
         return ResponseEntity.ok()
@@ -203,7 +190,7 @@ public class VocabularyResource {
         Vocabulary vocabulary = vocabularyRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(vocabulary.getUnit().getBook());
+        SecurityUtils.checkOwnership(vocabulary.getUnit().getBook());
 
         Optional<VocabularyDTO> result = vocabularyService.partialUpdate(vocabularyDTO);
 
@@ -270,11 +257,54 @@ public class VocabularyResource {
         Vocabulary vocabulary = vocabularyRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(vocabulary.getUnit().getBook());
+        SecurityUtils.checkOwnership(vocabulary.getUnit().getBook());
 
         vocabularyService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /vocabularies/game-data/:unitId} : get lightweight vocabularies for games by unit ID.
+     *
+     * This endpoint returns only essential vocabulary fields needed for game play,
+     * avoiding heavy entity relationships and improving performance.
+     *
+     * @param unitId the unit ID to fetch vocabularies from
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of game vocabularies in body
+     */
+    @GetMapping("/game-data/{unitId}")
+    public ResponseEntity<List<GameVocabularyDTO>> getGameVocabularies(@PathVariable("unitId") Long unitId) {
+        LOG.debug("REST request to get game vocabularies for unit : {}", unitId);
+
+        // Verify unit exists
+        Unit unit = unitRepository
+            .findById(unitId)
+            .orElseThrow(() -> new BadRequestAlertException("Unit not found", "unit", "unitnotfound"));
+
+        List<GameVocabularyDTO> gameVocabularies = vocabularyService.getGameVocabularies(unitId);
+        return ResponseEntity.ok().body(gameVocabularies);
+    }
+
+    /**
+     * {@code POST  /vocabularies/by-units} : get lightweight vocabularies for games by list of unit IDs.
+     *
+     * This endpoint returns only essential vocabulary fields needed for game play,
+     * avoiding heavy entity relationships and improving performance.
+     *
+     * @param unitIds the list of unit IDs to fetch vocabularies from
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of game vocabularies in body
+     */
+    @PostMapping("/by-units")
+    public ResponseEntity<List<GameVocabularyDTO>> getGameVocabulariesByUnits(@RequestBody List<Long> unitIds) {
+        LOG.debug("REST request to get game vocabularies for units : {}", unitIds);
+
+        if (unitIds == null || unitIds.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        List<GameVocabularyDTO> gameVocabularies = vocabularyService.getGameVocabulariesByUnits(unitIds);
+        return ResponseEntity.ok().body(gameVocabularies);
     }
 }

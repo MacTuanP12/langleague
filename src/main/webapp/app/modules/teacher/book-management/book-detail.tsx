@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Container, Row, Col, Card, CardBody, Button, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchBookById } from 'app/shared/reducers/book.reducer';
+import { getEntity } from 'app/entities/book/book.reducer';
 import { fetchUnitsByBookId, deleteUnit, reorderUnits } from 'app/shared/reducers/unit.reducer';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import TeacherLayout from 'app/modules/teacher/teacher-layout';
@@ -18,7 +18,7 @@ export const BookDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const book = useAppSelector(state => state.book.selectedBook);
+  const book = useAppSelector(state => state.book.entity);
   const units = useAppSelector(state => state.unit.units);
   const bookLoading = useAppSelector(state => state.book.loading);
 
@@ -30,7 +30,7 @@ export const BookDetail = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchBookById(Number(id)));
+      dispatch(getEntity(id));
       dispatch(fetchUnitsByBookId(Number(id)));
     }
   }, [dispatch, id]);
@@ -147,7 +147,7 @@ export const BookDetail = () => {
                 <Row>
                   <Col md="3" className="text-center">
                     <img
-                      src={book.coverImageUrl || '/content/images/default-book.png'}
+                      src={book.coverImageUrl || 'https://placehold.co/400x600?text=No+Cover'}
                       alt={book.title}
                       className="img-fluid rounded"
                       style={{ maxHeight: '200px', objectFit: 'cover' }}
@@ -259,17 +259,17 @@ export const BookDetail = () => {
                             <small className="text-muted">
                               <FontAwesomeIcon icon="book" className="me-1" />
                               <Translate contentKey="langleague.teacher.books.detail.units.stats.vocabulary">Vocabulary:</Translate>{' '}
-                              <strong>{unit.vocabularies?.length || 0}</strong>
+                              <strong>{unit.vocabularyCount || 0}</strong>
                             </small>
                             <small className="text-muted">
                               <FontAwesomeIcon icon="book-open" className="me-1" />
                               <Translate contentKey="langleague.teacher.books.detail.units.stats.grammar">Grammar:</Translate>{' '}
-                              <strong>{unit.grammars?.length || 0}</strong>
+                              <strong>{unit.grammarCount || 0}</strong>
                             </small>
                             <small className="text-muted">
                               <FontAwesomeIcon icon="question-circle" className="me-1" />
                               <Translate contentKey="langleague.teacher.books.detail.units.stats.exercises">Exercises:</Translate>{' '}
-                              <strong>{unit.exercises?.length || 0}</strong>
+                              <strong>{unit.exerciseCount || 0}</strong>
                             </small>
                           </div>
                         </Col>

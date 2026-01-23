@@ -1,12 +1,12 @@
 .unit-update-v2 {
   min-height: 100vh;
-  background: var(--bg-secondary);
+  background: var(--teacher-bg-secondary);
   font-family: 'Roboto', 'Inter', sans-serif;
 
   // Header - Google Form style
   .form-header {
-    background: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--teacher-bg-primary);
+    border-bottom: 1px solid var(--teacher-border);
     padding: 1.5rem 2rem;
     position: sticky;
     top: 0;
@@ -14,19 +14,19 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    box-shadow: 0 1px 2px var(--shadow);
+    box-shadow: 0 1px 2px var(--teacher-shadow);
 
     .back-btn {
       background: transparent;
       border: none;
-      color: var(--text-secondary);
+      color: var(--teacher-text-secondary);
       cursor: pointer;
       padding: 0.5rem;
       border-radius: 50%;
       transition: background 0.2s ease;
 
       &:hover {
-        background: var(--bg-secondary);
+        background: var(--teacher-bg-secondary);
       }
 
       i {
@@ -43,22 +43,22 @@
         border-bottom: 1px solid transparent;
         font-size: 2rem;
         font-weight: 400;
-        color: var(--text-primary);
+        color: var(--teacher-text-primary);
         padding: 0.5rem 0;
         background: transparent;
         transition: border-color 0.2s ease;
 
         &:focus {
           outline: none;
-          border-bottom-color: var(--primary-color);
+          border-bottom-color: var(--teacher-primary);
         }
 
         &::placeholder {
-          color: var(--placeholder-color);
+          color: var(--teacher-text-tertiary);
         }
 
         &.error {
-          border-bottom-color: var(--error-color);
+          border-bottom-color: var(--teacher-danger);
         }
       }
 
@@ -66,7 +66,7 @@
         width: 100%;
         border: none;
         font-size: 0.875rem;
-        color: var(--text-secondary);
+        color: var(--teacher-text-secondary);
         padding: 0.5rem 0;
         background: transparent;
         resize: none;
@@ -77,13 +77,13 @@
         }
 
         &::placeholder {
-          color: var(--placeholder-color);
+          color: var(--teacher-text-tertiary);
         }
       }
 
       .error-message {
         display: block;
-        color: var(--error-color);
+        color: var(--teacher-danger);
         font-size: 0.75rem;
         margin-top: 0.25rem;
         font-weight: 400;
@@ -91,19 +91,19 @@
     }
 
     .send-btn {
-      background: var(--primary-color);
-      color: var(--bg-primary);
+      background: var(--teacher-primary);
+      color: white;
       border: none;
       padding: 0.75rem 2rem;
       border-radius: 4px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 1px 2px var(--shadow);
+      box-shadow: 0 1px 2px var(--teacher-shadow);
 
       &:hover {
-        background: var(--primary-color-alt);
-        box-shadow: 0 2px 4px var(--shadow-medium);
+        background: var(--teacher-primary-hover);
+        box-shadow: 0 2px 4px var(--teacher-shadow-lg);
       }
 
       i {
@@ -129,11 +129,11 @@
     .divider-line {
       flex: 1;
       height: 1px;
-      background: var(--border-color);
+      background: var(--teacher-border);
     }
 
     .section-title {
-      color: var(--primary-color);
+      color: var(--teacher-primary);
       font-size: 1.25rem;
       font-weight: 500;
       margin: 0;
@@ -153,9 +153,9 @@
     margin-bottom: 1rem;
 
     .control-btn {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
+      background: var(--teacher-bg-primary);
+      border: 1px solid var(--teacher-border);
+      color: var(--teacher-text-secondary);
       padding: 0.5rem 1rem;
       border-radius: 4px;
       font-size: 0.875rem;
@@ -167,9 +167,9 @@
       gap: 0.5rem;
 
       &:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        background: var(--bg-secondary);
+        border-color: var(--teacher-primary);
+        color: var(--teacher-primary);
+        background: var(--teacher-bg-secondary);
       }
 
       i {
@@ -180,27 +180,27 @@
 
   // Collapsible Card System
   .collapsible-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    background: var(--teacher-bg-primary);
+    border: 1px solid var(--teacher-border);
     border-radius: 8px;
     margin-bottom: 1rem;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      border-color: var(--primary-color);
-      box-shadow: 0 2px 8px rgba(103, 58, 183, 0.1);
+      border-color: var(--teacher-primary);
+      box-shadow: 0 2px 8px var(--teacher-shadow);
     }
 
     &.expanded {
-      border-left: 4px solid var(--primary-color);
-      box-shadow: 0 2px 8px rgba(103, 58, 183, 0.15);
+      border-left: 4px solid var(--teacher-primary);
+      box-shadow: 0 2px 8px var(--teacher-shadow-lg);
     }
 
     &.dragging {
       opacity: 0.5;
       transform: scale(0.98);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px var(--teacher-shadow-lg);
     }
 
     .collapsible-card-header {
@@ -208,13 +208,13 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.25rem;
-      background: var(--bg-secondary);
+      background: var(--teacher-bg-secondary);
       cursor: pointer;
       user-select: none;
       transition: background 0.2s ease;
 
       &:hover {
-        background: var(--bg-secondary);
+        background: var(--teacher-bg-tertiary);
       }
 
       .header-left {
@@ -225,7 +225,7 @@
         min-width: 0;
 
         .drag-handle {
-          color: var(--placeholder-color);
+          color: var(--teacher-text-tertiary);
           font-size: 1.25rem;
           cursor: grab;
           transition: color 0.2s ease;
@@ -236,13 +236,13 @@
           }
 
           &:hover {
-            color: var(--primary-color);
+            color: var(--teacher-primary);
           }
         }
 
         .card-number {
-          background: var(--primary-color);
-          color: var(--bg-primary);
+          background: var(--teacher-primary);
+          color: white;
           width: 28px;
           height: 28px;
           border-radius: 50%;
@@ -255,14 +255,14 @@
         }
 
         .card-icon {
-          color: var(--primary-color);
+          color: var(--teacher-primary);
           font-size: 1.125rem;
           flex-shrink: 0;
         }
 
         .card-summary {
           font-weight: 500;
-          color: var(--text-primary);
+          color: var(--teacher-text-primary);
           font-size: 1rem;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -279,7 +279,7 @@
         .action-btn {
           background: transparent;
           border: none;
-          color: var(--text-secondary);
+          color: var(--teacher-text-secondary);
           cursor: pointer;
           padding: 0.375rem;
           border-radius: 50%;
@@ -294,7 +294,7 @@
 
           &.delete:hover {
             background: rgba(244, 67, 54, 0.1);
-            color: var(--error-color);
+            color: var(--teacher-danger);
           }
 
           i {
@@ -305,7 +305,7 @@
         .toggle-btn {
           background: transparent;
           border: none;
-          color: var(--primary-color);
+          color: var(--teacher-primary);
           cursor: pointer;
           padding: 0.375rem;
           border-radius: 50%;
@@ -349,16 +349,16 @@
         .field-textarea {
           width: 100%;
           border: none;
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--teacher-border);
           font-size: 1rem;
-          color: var(--text-primary);
+          color: var(--teacher-text-primary);
           padding: 0.75rem 0;
           background: transparent;
           transition: border-color 0.2s ease;
 
           &:focus {
             outline: none;
-            border-bottom-color: var(--primary-color);
+            border-bottom-color: var(--teacher-primary);
 
             ~ .field-underline {
               transform: scaleX(1);
@@ -366,7 +366,7 @@
           }
 
           &::placeholder {
-            color: var(--placeholder-color);
+            color: var(--teacher-text-tertiary);
           }
 
           &.small {
@@ -386,7 +386,7 @@
           left: 0;
           width: 100%;
           height: 2px;
-          background: var(--primary-color);
+          background: var(--teacher-primary);
           transform: scaleX(0);
           transition: transform 0.2s ease;
         }
@@ -394,7 +394,7 @@
         .field-hint {
           display: block;
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: var(--teacher-text-secondary);
           margin-top: 0.5rem;
         }
       }
@@ -411,12 +411,12 @@
         gap: 0.5rem;
         padding-top: 1rem;
         margin-top: 1rem;
-        border-top: 1px solid var(--bg-secondary);
+        border-top: 1px solid var(--teacher-bg-secondary);
 
         .action-btn {
           background: transparent;
-          border: 1px solid var(--border-color);
-          color: var(--text-secondary);
+          border: 1px solid var(--teacher-border);
+          color: var(--teacher-text-secondary);
           cursor: pointer;
           padding: 0.5rem 1rem;
           border-radius: 4px;
@@ -428,9 +428,9 @@
           gap: 0.5rem;
 
           &:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background: var(--bg-secondary);
+            border-color: var(--teacher-primary);
+            color: var(--teacher-primary);
+            background: var(--teacher-bg-secondary);
           }
 
           i {
@@ -449,8 +449,8 @@
 
   // Form Card - Google Form style
   .form-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    background: var(--teacher-bg-primary);
+    border: 1px solid var(--teacher-border);
     border-radius: 8px;
     margin-bottom: 1rem;
     padding: 1.5rem;
@@ -469,16 +469,16 @@
       height: 40px;
       background: linear-gradient(
         180deg,
-        var(--border-color) 0%,
-        var(--border-color) 20%,
+        var(--teacher-border) 0%,
+        var(--teacher-border) 20%,
         transparent 20%,
         transparent 40%,
-        var(--border-color) 40%,
-        var(--border-color) 60%,
+        var(--teacher-border) 40%,
+        var(--teacher-border) 60%,
         transparent 60%,
         transparent 80%,
-        var(--border-color) 80%,
-        var(--border-color) 100%
+        var(--teacher-border) 80%,
+        var(--teacher-border) 100%
       );
       border-radius: 0 2px 2px 0;
       opacity: 0;
@@ -486,8 +486,8 @@
     }
 
     &:hover {
-      border-color: var(--primary-color);
-      box-shadow: 0 1px 3px rgba(103, 58, 183, 0.1);
+      border-color: var(--teacher-primary);
+      box-shadow: 0 1px 3px var(--teacher-shadow);
       transform: translateY(-1px);
 
       &::before {
@@ -496,9 +496,9 @@
     }
 
     &.focused {
-      border-color: var(--primary-color);
-      border-left: 6px solid var(--primary-color);
-      box-shadow: 0 3px 12px rgba(103, 58, 183, 0.2);
+      border-color: var(--teacher-primary);
+      border-left: 6px solid var(--teacher-primary);
+      box-shadow: 0 3px 12px var(--teacher-shadow-lg);
       transform: translateY(-2px);
 
       &::before {
@@ -509,11 +509,11 @@
     &.dragging {
       opacity: 0.7;
       transform: scale(1.02) rotate(1deg);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 24px var(--teacher-shadow-lg);
       cursor: grabbing;
       z-index: 1000;
-      border-color: var(--primary-color);
-      border-left: 6px solid var(--primary-color);
+      border-color: var(--teacher-primary);
+      border-left: 6px solid var(--teacher-primary);
 
       &::before {
         opacity: 0;
@@ -523,7 +523,7 @@
         content: '';
         position: absolute;
         inset: -4px;
-        border: 2px dashed var(--primary-color);
+        border: 2px dashed var(--teacher-primary);
         border-radius: 8px;
         animation: dashMove 0.5s linear infinite;
       }
@@ -541,11 +541,11 @@
       gap: 1rem;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--bg-secondary);
+      border-bottom: 1px solid var(--teacher-bg-secondary);
 
       .card-number {
-        background: var(--primary-color);
-        color: var(--bg-primary);
+        background: var(--teacher-primary);
+        color: white;
         width: 32px;
         height: 32px;
         border-radius: 50%;
@@ -557,13 +557,13 @@
       }
 
       .card-icon {
-        color: var(--text-secondary);
+        color: var(--teacher-text-secondary);
         font-size: 1.25rem;
       }
 
       .drag-handle {
         margin-left: auto;
-        color: var(--placeholder-color);
+        color: var(--teacher-text-tertiary);
         font-size: 1.25rem;
         cursor: grab;
         transition: color 0.2s ease;
@@ -573,22 +573,22 @@
         }
 
         &:hover {
-          color: var(--primary-color);
+          color: var(--teacher-primary);
         }
       }
 
       .question-type-select {
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--teacher-border);
         border-radius: 4px;
         padding: 0.5rem 1rem;
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        background: var(--teacher-bg-primary);
+        color: var(--teacher-text-primary);
         font-size: 0.875rem;
         cursor: pointer;
 
         &:focus {
           outline: none;
-          border-color: var(--primary-color);
+          border-color: var(--teacher-primary);
         }
       }
     }
@@ -605,16 +605,16 @@
       .field-textarea {
         width: 100%;
         border: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--teacher-border);
         font-size: 1rem;
-        color: var(--text-primary);
+        color: var(--teacher-text-primary);
         padding: 0.75rem 0;
         background: transparent;
         transition: border-color 0.2s ease;
 
         &:focus {
           outline: none;
-          border-bottom-color: var(--primary-color);
+          border-bottom-color: var(--teacher-primary);
 
           ~ .field-underline {
             transform: scaleX(1);
@@ -622,7 +622,7 @@
         }
 
         &::placeholder {
-          color: var(--placeholder-color);
+          color: var(--teacher-text-tertiary);
         }
 
         &.small {
@@ -642,7 +642,7 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background: var(--primary-color);
+        background: var(--teacher-primary);
         transform: scaleX(0);
         transition: transform 0.2s ease;
       }
@@ -650,7 +650,7 @@
       .field-hint {
         display: block;
         font-size: 0.75rem;
-        color: var(--text-secondary);
+        color: var(--teacher-text-secondary);
         margin-top: 0.5rem;
       }
     }
@@ -675,40 +675,40 @@
           width: 20px;
           height: 20px;
           cursor: pointer;
-          accent-color: var(--primary-color);
+          accent-color: var(--teacher-primary);
         }
 
         .option-input {
           flex: 1;
           border: none;
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--teacher-border);
           font-size: 1rem;
-          color: var(--text-primary);
+          color: var(--teacher-text-primary);
           padding: 0.5rem 0;
           background: transparent;
 
           &:focus {
             outline: none;
-            border-bottom-color: var(--primary-color);
+            border-bottom-color: var(--teacher-primary);
           }
 
           &::placeholder {
-            color: var(--placeholder-color);
+            color: var(--teacher-text-tertiary);
           }
         }
 
         .option-delete {
           background: transparent;
           border: none;
-          color: var(--text-secondary);
+          color: var(--teacher-text-secondary);
           cursor: pointer;
           padding: 0.25rem;
           border-radius: 50%;
           transition: background 0.2s ease;
 
           &:hover {
-            background: var(--bg-secondary);
-            color: var(--error-color);
+            background: var(--teacher-bg-secondary);
+            color: var(--teacher-danger);
           }
 
           i {
@@ -720,7 +720,7 @@
       .add-option-btn {
         background: transparent;
         border: none;
-        color: var(--primary-color);
+        color: var(--teacher-primary);
         cursor: pointer;
         padding: 0.5rem 0;
         font-size: 0.875rem;
@@ -742,24 +742,24 @@
       justify-content: flex-end;
       gap: 0.5rem;
       padding-top: 1rem;
-      border-top: 1px solid var(--bg-secondary);
+      border-top: 1px solid var(--teacher-bg-secondary);
 
       .action-btn {
         background: transparent;
         border: none;
-        color: var(--text-secondary);
+        color: var(--teacher-text-secondary);
         cursor: pointer;
         padding: 0.5rem;
         border-radius: 50%;
         transition: all 0.2s ease;
 
         &:hover {
-          background: var(--bg-secondary);
+          background: var(--teacher-bg-secondary);
         }
 
         &.delete:hover {
           background: rgba(244, 67, 54, 0.1);
-          color: var(--error-color);
+          color: var(--teacher-danger);
         }
 
         i {
@@ -771,9 +771,9 @@
 
   // Add Section Button
   .add-section-btn {
-    background: var(--bg-primary);
-    border: 2px dashed var(--border-color);
-    color: var(--primary-color);
+    background: var(--teacher-bg-primary);
+    border: 2px dashed var(--teacher-border);
+    color: var(--teacher-primary);
     width: 100%;
     padding: 1rem;
     border-radius: 8px;
@@ -783,8 +783,8 @@
     margin-bottom: 2rem;
 
     &:hover {
-      border-color: var(--primary-color);
-      background: var(--bg-secondary);
+      border-color: var(--teacher-primary);
+      background: var(--teacher-bg-secondary);
     }
 
     i {
@@ -802,9 +802,9 @@
       margin-top: 0.75rem;
 
       .type-btn {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        color: var(--text-secondary);
+        background: var(--teacher-bg-primary);
+        border: 1px solid var(--teacher-border);
+        color: var(--teacher-text-secondary);
         padding: 0.875rem 1rem;
         border-radius: 8px;
         font-weight: 500;
@@ -813,9 +813,9 @@
         text-align: left;
 
         &:hover {
-          border-color: var(--primary-color);
-          color: var(--primary-color);
-          background: var(--bg-secondary);
+          border-color: var(--teacher-primary);
+          color: var(--teacher-primary);
+          background: var(--teacher-bg-secondary);
         }
 
         i {

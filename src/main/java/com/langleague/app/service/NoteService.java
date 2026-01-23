@@ -85,34 +85,48 @@ public class NoteService {
     /**
      * Save a note.
      * BUSINESS RULE: 1 student can only have 1 note per unit.
-     * If note already exists, throw exception (student must DELETE old note first).
+     * This method now handles create and update logic separately.
      *
      * @param noteDTO the entity to save.
      * @return the persisted entity.
      */
     public NoteDTO save(NoteDTO noteDTO) {
         log.debug("Request to save Note : {}", noteDTO);
-        if (noteDTO.getCreatedAt() == null) {
+
+        UserProfile currentUserProfile = getCurrentUserProfile()
+            .orElseThrow(() -> new BadRequestAlertException("User profile not found", "note", "userprofilenotfound"));
+
+        // CREATE logic
+        if (noteDTO.getId() == null) {
+            // Check if a note already exists for this user and unit
+            List<Note> existingNotes = noteRepository.findAllByUserProfileIdAndUnitId(currentUserProfile.getId(), noteDTO.getUnitId());
+
+            if (!existingNotes.isEmpty()) {
+                // Instead of throwing an error, update the existing note with the new content
+                Note existingNote = existingNotes.get(0);
+                log.warn(
+                    "Duplicate note creation attempt detected for user {} and unit {}. Updating existing note ID: {}",
+                    currentUserProfile.getId(),
+                    noteDTO.getUnitId(),
+                    existingNote.getId()
+                );
+
+                // Update the existing note with new content
+                existingNote.setContent(noteDTO.getContent());
+                existingNote.setUpdatedAt(Instant.now());
+                existingNote = noteRepository.save(existingNote);
+                return noteMapper.toDto(existingNote);
+            }
+
+            // Set creation-specific fields for new note
+            noteDTO.setUserProfileId(currentUserProfile.getId());
             noteDTO.setCreatedAt(Instant.now());
         }
-
-        // Auto-assign UserProfile if missing (matches Frontend expectation)
-        if (noteDTO.getUserProfileId() == null) {
-            UserProfile currentUserProfile = getCurrentUserProfile()
-                .orElseThrow(() -> new BadRequestAlertException("User profile not found", "note", "userprofilenotfound"));
-            noteDTO.setUserProfileId(currentUserProfile.getId());
-        }
-
-        // **BUSINESS RULE ENFORCEMENT**
-        // Check if user already has a note for this unit
-        List<Note> existingNotes = noteRepository.findAllByUserProfileIdAndUnitId(noteDTO.getUserProfileId(), noteDTO.getUnitId());
-
-        if (!existingNotes.isEmpty()) {
-            throw new BadRequestAlertException(
-                "You already have a note for this unit. Please delete it first before creating a new one.",
-                "note",
-                "duplicatenote"
-            );
+        // UPDATE logic
+        else {
+            // For updates, we must verify ownership to prevent IDOR attacks
+            verifyOwnership(noteDTO.getId());
+            noteDTO.setUpdatedAt(Instant.now());
         }
 
         Note note = noteMapper.toEntity(noteDTO);
@@ -129,13 +143,9 @@ public class NoteService {
     public NoteDTO update(NoteDTO noteDTO) {
         log.debug("Request to update Note : {}", noteDTO);
 
-        // Verify ownership before update
-        verifyOwnership(noteDTO.getId());
-
-        noteDTO.setUpdatedAt(Instant.now());
-        Note note = noteMapper.toEntity(noteDTO);
-        note = noteRepository.save(note);
-        return noteMapper.toDto(note);
+        // This method is now a simple wrapper around save() for clarity in the Resource layer.
+        // All logic is centralized in the save() method.
+        return save(noteDTO);
     }
 
     /**

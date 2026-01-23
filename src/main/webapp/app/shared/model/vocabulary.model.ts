@@ -1,5 +1,3 @@
-import { IUnit } from 'app/shared/model/unit.model';
-
 export interface IVocabulary {
   id?: number;
   word?: string;
@@ -8,7 +6,8 @@ export interface IVocabulary {
   example?: string | null;
   imageUrl?: string | null;
   orderIndex?: number;
-  unit?: IUnit;
+  unitId?: number;
+  unitTitle?: string;
 }
 
 export const defaultVocabularyValue: Readonly<IVocabulary> = {
@@ -19,7 +18,8 @@ export const defaultVocabularyValue: Readonly<IVocabulary> = {
   example: '',
   imageUrl: '',
   orderIndex: 0,
-  unit: undefined,
+  unitId: undefined,
+  unitTitle: '',
 };
 
 export const defaultValue = defaultVocabularyValue;

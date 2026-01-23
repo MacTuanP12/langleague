@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, CardBody, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAppSelector } from 'app/config/store';
+import { useAppSelector, useAppDispatch } from 'app/config/store';
 import { toast } from 'react-toastify';
 import { translate, Translate } from 'react-jhipster';
 import { useUserProfile } from 'app/shared/reducers/hooks';
-import '../student.scss';
+import { getSession, updateAvatar } from 'app/shared/reducers/authentication';
+import { saveAccountSettings } from 'app/modules/account/settings/settings.reducer';
+import axios from 'axios';
 import './student-profile.scss';
+import { processImageUrl } from 'app/shared/util/image-utils';
 
 export const StudentProfile = () => {
-  const { userProfile, loading, editProfile, loadCurrentProfile } = useUserProfile();
+  const dispatch = useAppDispatch();
+  const { userProfile, loading, loadCurrentProfile } = useUserProfile();
   const account = useAppSelector(state => state.authentication.account);
+  const avatarLoading = useAppSelector(state => state.authentication.loading);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -19,6 +25,8 @@ export const StudentProfile = () => {
     bio: '',
     imageUrl: '',
   });
+
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     loadCurrentProfile();
@@ -30,11 +38,11 @@ export const StudentProfile = () => {
         fullName: `${account.firstName || ''} ${account.lastName || ''}`.trim() || account.login,
         email: account.email || '',
         username: account.login || '',
-        bio: userProfile?.bio || '',
+        bio: account.bio || '', // Get bio from account
         imageUrl: account.imageUrl || '',
       });
     }
-  }, [account, userProfile]);
+  }, [account]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -46,10 +54,30 @@ export const StudentProfile = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userProfile) return;
+    if (!account) return;
 
     try {
-      await editProfile({ ...userProfile, bio: formData.bio });
+      // Split fullName into firstName and lastName
+      const nameParts = formData.fullName.trim().split(/\s+/);
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      // Process image URL before saving
+      const processedImageUrl = processImageUrl(formData.imageUrl);
+
+      // Create the updated account object with all changes
+      const updatedAccount = {
+        ...account,
+        firstName,
+        lastName,
+        email: formData.email, // Email is disabled, so this sends the original value
+        bio: formData.bio, // Add bio to the main account update
+        imageUrl: processedImageUrl,
+      };
+
+      // Dispatch the save action and wait for it to complete
+      await dispatch(saveAccountSettings(updatedAccount)).unwrap();
+
       toast.success(translate('langleague.student.profile.messages.success'));
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -58,8 +86,64 @@ export const StudentProfile = () => {
   };
 
   const handlePhotoChange = () => {
-    toast.info(translate('langleague.student.profile.messages.photoComingSoon'));
+    fileInputRef.current?.click();
   };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image size should be less than 2MB');
+      return;
+    }
+
+    const uploadData = new FormData();
+    uploadData.append('file', file);
+
+    try {
+      setUploading(true);
+      // Upload via API
+      const response = await axios.post('/api/upload/image', uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      const imageUrl = response.data.fileUrl;
+
+      // Update avatar via API with the URL
+      await dispatch(updateAvatar(imageUrl)).unwrap();
+
+      // Update local form state
+      setFormData(prev => ({
+        ...prev,
+        imageUrl,
+      }));
+
+      toast.success('Avatar updated successfully!');
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      toast.error('Failed to update avatar');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  if (!account) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Container fluid className="student-page-container">
@@ -84,7 +168,7 @@ export const StudentProfile = () => {
               <div className="mb-4">
                 {formData.imageUrl ? (
                   <img
-                    src={formData.imageUrl}
+                    src={processImageUrl(formData.imageUrl)}
                     alt="Avatar"
                     className="rounded-circle"
                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}
@@ -100,9 +184,11 @@ export const StudentProfile = () => {
               </div>
               <h4>{formData.fullName}</h4>
               <p className="text-muted">@{formData.username}</p>
-              <Button color="secondary" outline onClick={handlePhotoChange} block>
-                <FontAwesomeIcon icon="camera" className="me-2" />
-                <Translate contentKey="langleague.student.profile.actions.changePhoto">Change Photo</Translate>
+
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileSelect} />
+              <Button color="secondary" outline onClick={handlePhotoChange} block disabled={avatarLoading || uploading} className="mt-2">
+                <FontAwesomeIcon icon={avatarLoading || uploading ? 'sync' : 'camera'} spin={avatarLoading || uploading} className="me-2" />
+                <Translate contentKey="langleague.student.profile.actions.changePhoto">Upload Photo</Translate>
               </Button>
             </CardBody>
           </Card>
@@ -207,7 +293,7 @@ export const StudentProfile = () => {
                     <Translate contentKey="langleague.student.profile.actions.cancel">Cancel</Translate>
                   </Button>
                   <Button color="primary" type="submit" disabled={loading}>
-                    <FontAwesomeIcon icon="save" className="me-2" />
+                    {loading ? <FontAwesomeIcon icon="sync" spin className="me-2" /> : <FontAwesomeIcon icon="save" className="me-2" />}
                     <Translate contentKey="langleague.student.profile.actions.saveChanges">Save Changes</Translate>
                   </Button>
                 </div>

@@ -140,6 +140,7 @@
           "apiKeyPlaceholder": "在此貼上您的 API 金鑰...",
           "getFreeKey": "在此取得免費金鑰",
           "invalidKeyError": "無效的 API 金鑰。請檢查後重試。",
+          "rateLimitError": "⚠️ API 配額已超限。系統已自動重試但仍失敗。請等待幾分鐘後再試，或升級您的 API 計劃。免費套餐有每日限制。",
           "somethingWentWrong": "出現錯誤。",
           "grammarPromptPlaceholder": "詢問有關此語法主題的任何問題...\n例如：能給我更多例子嗎？這與...有什麼不同？",
           "grammarAsk": "提問",

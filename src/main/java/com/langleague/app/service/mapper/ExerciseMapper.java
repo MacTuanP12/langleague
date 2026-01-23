@@ -5,7 +5,6 @@ import com.langleague.app.domain.ExerciseOption;
 import com.langleague.app.domain.Unit;
 import com.langleague.app.service.dto.ExerciseDTO;
 import com.langleague.app.service.dto.ExerciseOptionDTO;
-import com.langleague.app.service.dto.UnitDTO;
 import java.util.List;
 import java.util.Set;
 import org.mapstruct.*;
@@ -15,14 +14,10 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ExerciseMapper extends EntityMapper<ExerciseDTO, Exercise> {
-    @Mapping(target = "unit", source = "unit", qualifiedByName = "unitId")
+    @Mapping(target = "unitId", source = "unit.id")
+    @Mapping(target = "unitTitle", source = "unit.title")
     @Mapping(target = "options", source = "options", qualifiedByName = "optionsWithoutExercise")
     ExerciseDTO toDto(Exercise s);
-
-    @Named("unitId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UnitDTO toDtoUnitId(Unit unit);
 
     @Named("optionsWithoutExercise")
     default List<ExerciseOptionDTO> mapOptionsWithoutExercise(Set<ExerciseOption> options) {
@@ -51,6 +46,15 @@ public interface ExerciseMapper extends EntityMapper<ExerciseDTO, Exercise> {
     @Override
     @Mapping(target = "options", ignore = true)
     @Mapping(target = "removeOptions", ignore = true)
-    @Mapping(target = "unit", source = "unit")
+    @Mapping(target = "unit", source = "unitId")
     Exercise toEntity(ExerciseDTO exerciseDTO);
+
+    default Unit fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Unit unit = new Unit();
+        unit.setId(id);
+        return unit;
+    }
 }

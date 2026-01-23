@@ -35,4 +35,6 @@ public interface ProgressRepository extends JpaRepository<Progress, Long> {
         "select progress from Progress progress where progress.userProfile.user.login = ?#{authentication.name} order by progress.lastAccessedAt desc"
     )
     List<Progress> findByCurrentUserOrderByLastAccessedAtDesc();
+
+    long countByIsCompletedTrue();
 }

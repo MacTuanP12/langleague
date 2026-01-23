@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -116,7 +117,17 @@ public class UnitService {
     @Transactional(readOnly = true)
     public List<UnitDTO> findAllByBookId(Long bookId) {
         LOG.debug("Request to get all Units for Book : {}", bookId);
-        return unitMapper.toDto(unitRepository.findAllByBookIdOrderByOrderIndexAsc(bookId));
+        List<Unit> units = unitRepository.findAllByBookIdOrderByOrderIndexAsc(bookId);
+        return units
+            .stream()
+            .map(unit -> {
+                UnitDTO dto = unitMapper.toDto(unit);
+                dto.setVocabularyCount((long) unit.getVocabularies().size());
+                dto.setGrammarCount((long) unit.getGrammars().size());
+                dto.setExerciseCount((long) unit.getExercises().size());
+                return dto;
+            })
+            .collect(Collectors.toList());
     }
 
     /**

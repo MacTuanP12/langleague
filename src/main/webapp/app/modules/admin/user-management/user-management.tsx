@@ -8,7 +8,7 @@ import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
 import './user-management.scss';
 
 export const UserManagement = () => {
-  const { loadUsers: fetchUsers, deleteUser } = useUserManagement();
+  const { loadUsers: fetchUsers, deleteUser, updateUser } = useUserManagement();
   const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,13 +21,17 @@ export const UserManagement = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadUsers();
-  }, [currentPage, roleFilter, statusFilter]);
+    const timer = setTimeout(() => {
+      loadUsers();
+    }, 500); // Debounce search
+
+    return () => clearTimeout(timer);
+  }, [currentPage, roleFilter, statusFilter, searchTerm]);
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetchUsers(currentPage - 1, 10);
+      const response = await fetchUsers(currentPage - 1, 10, 'id,asc', searchTerm, roleFilter, statusFilter);
       setUsers(response.data);
       const total = parseInt(response.headers['x-total-count'], 10);
       setTotalPages(Math.ceil(total / 10) || 1);
@@ -64,13 +68,23 @@ export const UserManagement = () => {
     setUserToDelete(null);
   };
 
-  const filteredUsers = users.filter(
-    user =>
-      user.login?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName?.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const handleToggleStatus = async (user: IUser) => {
+    try {
+      const updatedUser = { ...user, activated: !user.activated };
+      await updateUser(updatedUser);
+      toast.success(
+        translate(
+          updatedUser.activated
+            ? 'langleague.admin.userManagement.messages.activateSuccess'
+            : 'langleague.admin.userManagement.messages.deactivateSuccess',
+        ),
+      );
+      loadUsers();
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      toast.error(translate('langleague.admin.userManagement.messages.updateError'));
+    }
+  };
 
   const getRoleBadgeClass = (authorities: string[]) => {
     if (authorities?.includes('ROLE_ADMIN')) return 'role-admin';
@@ -93,14 +107,6 @@ export const UserManagement = () => {
       ? translate('langleague.admin.userManagement.status.active')
       : translate('langleague.admin.userManagement.status.suspended');
   };
-
-  if (loading && users.length === 0) {
-    return (
-      <div className="user-management">
-        <LoadingSpinner message="langleague.admin.userManagement.loading" isI18nKey />
-      </div>
-    );
-  }
 
   return (
     <div className="user-management">
@@ -126,10 +132,20 @@ export const UserManagement = () => {
             type="text"
             placeholder={translate('langleague.admin.userManagement.search.placeholder')}
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={e => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Reset to first page on search
+            }}
           />
         </div>
-        <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="filter-select">
+        <select
+          value={roleFilter}
+          onChange={e => {
+            setRoleFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="filter-select"
+        >
           <option value="all">
             <Translate contentKey="langleague.admin.userManagement.filters.role.all">All Roles</Translate>
           </option>
@@ -143,7 +159,14 @@ export const UserManagement = () => {
             <Translate contentKey="langleague.admin.userManagement.filters.role.admin">Admin</Translate>
           </option>
         </select>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="filter-select">
+        <select
+          value={statusFilter}
+          onChange={e => {
+            setStatusFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="filter-select"
+        >
           <option value="all">
             <Translate contentKey="langleague.admin.userManagement.filters.status.all">All Statuses</Translate>
           </option>
@@ -159,114 +182,126 @@ export const UserManagement = () => {
         </select>
       </div>
 
-      <div className="users-table-container table-responsive">
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" />
-              </th>
-              <th>
-                <Translate contentKey="langleague.admin.userManagement.table.name">USER NAME</Translate>
-              </th>
-              <th>
-                <Translate contentKey="langleague.admin.userManagement.table.role">ROLE</Translate>
-              </th>
-              <th>
-                <Translate contentKey="langleague.admin.userManagement.table.status">STATUS</Translate>
-              </th>
-              <th>
-                <Translate contentKey="langleague.admin.userManagement.table.registrationDate">REGISTRATION DATE</Translate>
-              </th>
-              <th>
-                <Translate contentKey="langleague.admin.userManagement.table.actions">ACTIONS</Translate>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map(user => (
-              <tr key={user.id}>
-                <td>
+      {loading ? (
+        <div className="user-management">
+          <LoadingSpinner message="langleague.admin.userManagement.loading" isI18nKey />
+        </div>
+      ) : (
+        <div className="users-table-container table-responsive">
+          <table className="users-table">
+            <thead>
+              <tr>
+                <th>
                   <input type="checkbox" />
-                </td>
-                <td>
-                  <div className="user-info">
-                    <div className="user-avatar">
-                      {user.imageUrl ? (
-                        <img src={user.imageUrl} alt={user.login} />
-                      ) : (
-                        <div className="avatar-placeholder">{user.firstName?.charAt(0) || user.login?.charAt(0) || '?'}</div>
-                      )}
-                    </div>
-                    <div className="user-details">
-                      <span className="user-name">
-                        {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.login}
-                      </span>
-                      <span className="user-email">{user.email}</span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span className={`role-badge ${getRoleBadgeClass(user.authorities)}`}>{getRoleLabel(user.authorities)}</span>
-                </td>
-                <td>
-                  <span className={`status-badge ${getStatusBadgeClass(user.activated)}`}>
-                    <span className="status-dot"></span>
-                    {getStatusLabel(user.activated)}
-                  </span>
-                </td>
-                <td>
-                  {user.createdDate
-                    ? new Date(user.createdDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                    : 'N/A'}
-                </td>
-                <td>
-                  <div className="action-buttons">
-                    <button
-                      className="btn-action btn-edit"
-                      onClick={() => navigate(`/admin/user-management/${user.login}/edit`)}
-                      title={translate('langleague.admin.userManagement.actions.editTitle')}
-                    >
-                      <i className="bi bi-pencil"></i>
-                    </button>
-                    <button className="btn-action btn-lock" title={translate('langleague.admin.userManagement.actions.lockTitle')}>
-                      <i className="bi bi-lock"></i>
-                    </button>
-                    <button
-                      className="btn-action btn-delete"
-                      onClick={() => handleDeleteClick(user.login || '')}
-                      title={translate('langleague.admin.userManagement.actions.deleteTitle')}
-                    >
-                      <i className="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </td>
+                </th>
+                <th>
+                  <Translate contentKey="langleague.admin.userManagement.table.name">USER NAME</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="langleague.admin.userManagement.table.role">ROLE</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="langleague.admin.userManagement.table.status">STATUS</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="langleague.admin.userManagement.table.registrationDate">REGISTRATION DATE</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="langleague.admin.userManagement.table.actions">ACTIONS</Translate>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr key={user.id}>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+                  <td>
+                    <div className="user-info">
+                      <div className="user-avatar">
+                        {user.imageUrl ? (
+                          <img src={user.imageUrl} alt={user.login} />
+                        ) : (
+                          <div className="avatar-placeholder">{user.firstName?.charAt(0) || user.login?.charAt(0) || '?'}</div>
+                        )}
+                      </div>
+                      <div className="user-details">
+                        <span className="user-name">
+                          {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.login}
+                        </span>
+                        <span className="user-email">{user.email}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`role-badge ${getRoleBadgeClass(user.authorities)}`}>{getRoleLabel(user.authorities)}</span>
+                  </td>
+                  <td>
+                    <span className={`status-badge ${getStatusBadgeClass(user.activated)}`}>
+                      <span className="status-dot"></span>
+                      {getStatusLabel(user.activated)}
+                    </span>
+                  </td>
+                  <td>
+                    {user.createdDate
+                      ? new Date(user.createdDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                      : 'N/A'}
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="btn-action btn-edit"
+                        onClick={() => navigate(`/admin/user-management/${user.login}/edit`)}
+                        title={translate('langleague.admin.userManagement.actions.editTitle')}
+                      >
+                        <i className="bi bi-pencil"></i>
+                      </button>
+                      <button
+                        className={`btn-action ${user.activated ? 'btn-lock' : 'btn-unlock'}`}
+                        onClick={() => handleToggleStatus(user)}
+                        title={translate(
+                          user.activated
+                            ? 'langleague.admin.userManagement.actions.lockTitle'
+                            : 'langleague.admin.userManagement.actions.unlockTitle',
+                        )}
+                      >
+                        <i className={`bi ${user.activated ? 'bi-lock' : 'bi-unlock'}`}></i>
+                      </button>
+                      <button
+                        className="btn-action btn-delete"
+                        onClick={() => handleDeleteClick(user.login || '')}
+                        title={translate('langleague.admin.userManagement.actions.deleteTitle')}
+                      >
+                        <i className="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="pagination-container">
         <div className="pagination-info">
-          <Translate contentKey="langleague.admin.userManagement.pagination.showing">Showing</Translate> <strong>1</strong>{' '}
-          <Translate contentKey="langleague.admin.userManagement.pagination.to">to</Translate> <strong>10</strong>{' '}
-          <Translate contentKey="langleague.admin.userManagement.pagination.of">of</Translate> <strong>128</strong>{' '}
+          <Translate contentKey="langleague.admin.userManagement.pagination.showing">Showing</Translate>{' '}
+          <strong>{(currentPage - 1) * 10 + 1}</strong> <Translate contentKey="langleague.admin.userManagement.pagination.to">to</Translate>{' '}
+          <strong>{Math.min(currentPage * 10, (currentPage - 1) * 10 + users.length)}</strong>{' '}
+          <Translate contentKey="langleague.admin.userManagement.pagination.of">of</Translate> <strong>{totalPages * 10}</strong>{' '}
+          {/* Note: totalItems is not available in local state, using approximation or need to fetch total */}
           <Translate contentKey="langleague.admin.userManagement.pagination.results">results</Translate>
         </div>
         <div className="pagination">
           <button className="page-btn" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
             <i className="bi bi-chevron-left"></i>
           </button>
-          {[1, 2, 3].map(page => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
             <button key={page} className={`page-btn ${currentPage === page ? 'active' : ''}`} onClick={() => setCurrentPage(page)}>
               {page}
             </button>
           ))}
-          <span className="page-dots">...</span>
-          <button className="page-btn" onClick={() => setCurrentPage(12)}>
-            12
-          </button>
           <button className="page-btn" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
             <i className="bi bi-chevron-right"></i>
           </button>

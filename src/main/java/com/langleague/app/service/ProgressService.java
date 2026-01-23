@@ -376,4 +376,20 @@ public class ProgressService {
         progress = progressRepository.save(progress);
         return progressMapper.toDto(progress);
     }
+
+    /**
+     * Get system-wide completion rate.
+     *
+     * @return the completion rate percentage.
+     */
+    @Transactional(readOnly = true)
+    public int getSystemCompletionRate() {
+        LOG.debug("Request to get system completion rate");
+        long total = progressRepository.count();
+        if (total == 0) {
+            return 0;
+        }
+        long completed = progressRepository.countByIsCompletedTrue();
+        return (int) Math.round(((double) completed / total) * 100);
+    }
 }

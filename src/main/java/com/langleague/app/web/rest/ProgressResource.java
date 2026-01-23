@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -302,6 +303,19 @@ public class ProgressResource {
         LOG.debug("REST request to update section progress for unit {} : section {}", unitId, sectionType);
         ProgressDTO result = progressService.updateSectionProgress(unitId, sectionType);
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * {@code GET  /progresses/stats/completion-rate} : get system-wide completion rate.
+     * Only admins can view this statistic.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the rate in body.
+     */
+    @GetMapping("/stats/completion-rate")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<Integer> getSystemCompletionRate() {
+        LOG.debug("REST request to get system completion rate");
+        return ResponseEntity.ok(progressService.getSystemCompletionRate());
     }
 
     /**

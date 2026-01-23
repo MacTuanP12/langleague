@@ -10,9 +10,10 @@ export interface EnrolledBook {
   progress: number;
   coverColor?: string;
   coverImageUrl?: string;
-  status: 'ACTIVE' | 'COMPLETED' | 'ENROLLED';
+  status: 'ACTIVE' | 'COMPLETED' | 'ENROLLED' | 'NOT_ENROLLED';
   image?: string;
   enrolledAt?: string;
+  isPublic?: boolean;
 }
 
 export type FilterTab = 'all' | 'enrolled' | 'notEnroll';

@@ -103,6 +103,11 @@ public class MailService {
     @Async
     public void sendActivationEmail(User user) {
         LOG.debug("Sending activation email to '{}'", user.getEmail());
+
+        // Explicitly log the activation link for development convenience
+        String activationLink = jHipsterProperties.getMail().getBaseUrl() + "/account/activate?key=" + user.getActivationKey();
+        LOG.info("ACTIVATION LINK for user '{}': {}", user.getLogin(), activationLink);
+
         sendEmailFromTemplateSync(user, "mail/activationEmail", "email.activation.title");
     }
 

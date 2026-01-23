@@ -1,0 +1,9 @@
+{
+  "langleagueApp": {
+    "note": {
+      "created": "Ghi chú cho bài học {{ param }} đã được tạo",
+      "updated": "Ghi chú đã được cập nhật!",
+      "deleted": "Ghi chú đã được xóa!"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { IGrammar } from 'app/shared/model/grammar.model';
 import { translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical, faBook, faTrash, faChevronUp, faChevronDown, faCopy } from '@fortawesome/free-solid-svg-icons';
 
 export interface GrammarItemCardProps {
   index: number;
@@ -37,9 +39,9 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
         {/* Card Header - Always Visible */}
         <div className="collapsible-card-header" onClick={onToggle}>
           <div className="header-left">
-            <i className="bi bi-grip-vertical drag-handle"></i>
+            <FontAwesomeIcon icon={faGripVertical} className="drag-handle" />
             <span className="card-number">{index + 1}</span>
-            <i className="bi bi-book card-icon"></i>
+            <FontAwesomeIcon icon={faBook} className="card-icon" />
             <span className="card-summary">{displayText}</span>
           </div>
           <div className="header-right">
@@ -51,7 +53,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
               }}
               title={translate('langleague.teacher.units.form.actions.removeTooltip')}
             >
-              <i className="bi bi-trash"></i>
+              <FontAwesomeIcon icon={faTrash} />
             </button>
             <button
               className="toggle-btn"
@@ -61,7 +63,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
                   : translate('langleague.teacher.units.form.controls.expandAll')
               }
             >
-              <i className={`bi bi-chevron-${isExpanded ? 'up' : 'down'}`}></i>
+              <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} />
             </button>
           </div>
         </div>
@@ -71,7 +73,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
           <div className="form-field">
             <input
               type="text"
-              value={data.title}
+              value={data.title || ''}
               onChange={e => onChange('title', e.target.value)}
               placeholder={translate('langleague.teacher.units.grammar.placeholders.title')}
               className="field-input"
@@ -82,7 +84,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
 
           <div className="form-field">
             <textarea
-              value={data.contentMarkdown}
+              value={data.contentMarkdown || ''}
               onChange={e => onChange('contentMarkdown', e.target.value)}
               placeholder={translate('langleague.teacher.units.grammar.placeholders.content')}
               className="field-textarea"
@@ -95,7 +97,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
 
           <div className="form-field">
             <textarea
-              value={data.exampleUsage}
+              value={data.exampleUsage || ''}
               onChange={e => onChange('exampleUsage', e.target.value)}
               placeholder={translate('langleague.teacher.units.grammar.placeholders.example')}
               className="field-textarea"
@@ -104,18 +106,6 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
             />
             <div className="field-underline"></div>
             <span className="field-hint">{translate('langleague.teacher.units.grammar.fields.exampleHint')}</span>
-          </div>
-
-          <div className="form-field">
-            <input
-              type="number"
-              value={data.orderIndex}
-              onChange={e => onChange('orderIndex', parseInt(e.target.value, 10))}
-              placeholder={translate('langleague.teacher.units.grammar.placeholders.order')}
-              className="field-input"
-              onClick={e => e.stopPropagation()}
-            />
-            <div className="field-underline"></div>
           </div>
 
           {/* Footer with duplicate button */}
@@ -128,7 +118,7 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
               }}
               title={translate('langleague.teacher.units.form.actions.duplicateTooltip')}
             >
-              <i className="bi bi-files"></i> {translate('langleague.teacher.units.form.actions.duplicate')}
+              <FontAwesomeIcon icon={faCopy} /> {translate('langleague.teacher.units.form.actions.duplicate')}
             </button>
           </div>
         </div>

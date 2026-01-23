@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntity } from 'app/entities/unit/unit.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IVocabulary } from 'app/shared/model/vocabulary.model';
+import { LoadingSpinner } from 'app/shared/components';
 import './unit-vocabulary.scss'; // Pure widget styling
 
 interface UnitVocabularyProps {
-  data: IVocabulary[];
+  data?: IVocabulary[];
 }
 
 export const UnitVocabulary: React.FC<UnitVocabularyProps> = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const { unitId } = useParams<'unitId'>();
+  const unit = useAppSelector(state => state.unit.entity);
+  const loading = useAppSelector(state => state.unit.loading);
+
+  useEffect(() => {
+    if (!data && unitId) {
+      dispatch(getEntity(unitId));
+    }
+  }, [unitId, data, dispatch]);
+
+  const vocabList = useMemo(() => data || unit?.vocabularies || [], [data, unit]);
   const [speakingId, setSpeakingId] = useState<number | null>(null);
 
   // Detect language from text
@@ -43,9 +59,17 @@ export const UnitVocabulary: React.FC<UnitVocabularyProps> = ({ data }) => {
     }
   };
 
+  if (loading && !data) {
+    return (
+      <div className="p-4 text-center">
+        <LoadingSpinner message="langleague.student.learning.vocabulary.loading" isI18nKey />
+      </div>
+    );
+  }
+
   return (
     <div className="vocabulary-grid">
-      {data.map(vocab => (
+      {vocabList.map(vocab => (
         <div key={vocab.id} className="vocabulary-card">
           {/* Vocab Header */}
           <div className="vocab-header">

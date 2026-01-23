@@ -88,6 +88,8 @@
       "breadcrumb": "Add New User",
       "subtitle": "Enter the user details below to create a new account.",
       "fields": {
+        "login": "Username",
+        "loginPlaceholder": "Enter username (letters, numbers, _ . @ - only)",
         "email": "Email",
         "emailPlaceholder": "Enter email",
         "fullName": "Full Name",
@@ -111,6 +113,8 @@
       },
       "required": "*",
       "validation": {
+        "loginRequired": "Username is required",
+        "loginPattern": "Username can only contain letters, numbers, and the characters _ . @ -  (no spaces allowed)",
         "emailRequired": "Email is required",
         "emailInvalid": "Email is invalid",
         "fullNameRequired": "Full name is required",
@@ -137,5 +141,72 @@
     "createdDate": "Created date",
     "lastModifiedBy": "Modified by",
     "lastModifiedDate": "Modified date"
+  },
+  "langleague": {
+    "admin": {
+      "userManagement": {
+        "title": "User Management",
+        "subtitle": "Manage student, teacher, and staff accounts.",
+        "loading": "Loading users...",
+        "actions": {
+          "addNew": "Add New User",
+          "editTitle": "Edit",
+          "lockTitle": "Lock Account",
+          "unlockTitle": "Unlock Account",
+          "deleteTitle": "Delete"
+        },
+        "search": {
+          "placeholder": "Search users..."
+        },
+        "filters": {
+          "role": {
+            "all": "All Roles",
+            "student": "Student",
+            "teacher": "Teacher",
+            "admin": "Admin"
+          },
+          "status": {
+            "all": "All Statuses",
+            "active": "Active",
+            "suspended": "Suspended",
+            "pending": "Pending"
+          }
+        },
+        "table": {
+          "name": "USER NAME",
+          "role": "ROLE",
+          "status": "STATUS",
+          "registrationDate": "REGISTRATION DATE",
+          "actions": "ACTIONS"
+        },
+        "status": {
+          "active": "Active",
+          "suspended": "Suspended"
+        },
+        "role": {
+          "admin": "Admin",
+          "teacher": "Teacher",
+          "student": "Student"
+        },
+        "pagination": {
+          "showing": "Showing",
+          "to": "to",
+          "of": "of",
+          "results": "results"
+        },
+        "confirmDeleteTitle": "Confirm Delete",
+        "confirmDelete": "Are you sure you want to delete this user?",
+        "deleteSuccess": "User deleted successfully",
+        "deleteFailed": "Failed to delete user",
+        "messages": {
+          "loadError": "Error loading users",
+          "createSuccess": "User created successfully",
+          "createError": "Error creating user",
+          "activateSuccess": "Account activated successfully",
+          "deactivateSuccess": "Account locked successfully",
+          "updateError": "Error updating account status"
+        }
+      }
+    }
   }
 }

@@ -6,6 +6,7 @@ interface VocabularyState {
   vocabularies: IVocabulary[];
   loading: boolean;
   updating: boolean;
+  updateSuccess: boolean;
   errorMessage: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: VocabularyState = {
   vocabularies: [],
   loading: false,
   updating: false,
+  updateSuccess: false,
   errorMessage: null,
 };
 
@@ -52,7 +54,19 @@ const vocabularySlice = createSlice({
   name: 'vocabulary',
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset(state) {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
+    resetAll(state) {
+      state.vocabularies = [];
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -72,23 +86,28 @@ const vocabularySlice = createSlice({
       // createVocabulary
       .addCase(createVocabulary.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(createVocabulary.fulfilled, (state, action: PayloadAction<IVocabulary>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.vocabularies.push(action.payload);
       })
       .addCase(createVocabulary.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to create vocabulary';
       })
       // updateVocabulary
       .addCase(updateVocabulary.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(updateVocabulary.fulfilled, (state, action: PayloadAction<IVocabulary>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const index = state.vocabularies.findIndex(vocab => vocab.id === action.payload.id);
         if (index !== -1) {
           state.vocabularies[index] = action.payload;
@@ -96,50 +115,60 @@ const vocabularySlice = createSlice({
       })
       .addCase(updateVocabulary.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to update vocabulary';
       })
       // deleteVocabulary
       .addCase(deleteVocabulary.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(deleteVocabulary.fulfilled, (state, action: PayloadAction<number>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.vocabularies = state.vocabularies.filter(vocab => vocab.id !== action.payload);
       })
       .addCase(deleteVocabulary.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to delete vocabulary';
       })
       // bulkCreateVocabularies
       .addCase(bulkCreateVocabularies.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkCreateVocabularies.fulfilled, (state, action: PayloadAction<IVocabulary[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.vocabularies = [...state.vocabularies, ...action.payload];
       })
       .addCase(bulkCreateVocabularies.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk create vocabularies';
       })
       // bulkUpdateVocabularies
       .addCase(bulkUpdateVocabularies.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkUpdateVocabularies.fulfilled, (state, action: PayloadAction<IVocabulary[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.vocabularies = action.payload;
       })
       .addCase(bulkUpdateVocabularies.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk update vocabularies';
       });
   },
 });
 
-export const { reset } = vocabularySlice.actions;
+export const { reset, resetAll } = vocabularySlice.actions;
 
 export default vocabularySlice.reducer;

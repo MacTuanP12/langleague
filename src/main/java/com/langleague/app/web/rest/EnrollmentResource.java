@@ -176,6 +176,19 @@ public class EnrollmentResource {
     }
 
     /**
+     * {@code GET  /enrollments/count} : count all enrollments.
+     * Only admins can view this statistic.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<Long> countAllEnrollments() {
+        LOG.debug("REST request to count all Enrollments");
+        return ResponseEntity.ok(enrollmentService.countAll());
+    }
+
+    /**
      * {@code GET  /enrollments/:id} : get the "id" enrollment.
      * Only students can view enrollments. Teacher không có quyền truy cập enrollment.
      *

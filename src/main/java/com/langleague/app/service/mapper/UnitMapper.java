@@ -2,7 +2,6 @@ package com.langleague.app.service.mapper;
 
 import com.langleague.app.domain.Book;
 import com.langleague.app.domain.Unit;
-import com.langleague.app.service.dto.BookDTO;
 import com.langleague.app.service.dto.UnitDTO;
 import org.mapstruct.*;
 
@@ -11,13 +10,9 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface UnitMapper extends EntityMapper<UnitDTO, Unit> {
-    @Mapping(target = "book", source = "book", qualifiedByName = "bookId")
+    @Mapping(target = "bookId", source = "book.id")
+    @Mapping(target = "bookTitle", source = "book.title")
     UnitDTO toDto(Unit s);
-
-    @Named("bookId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    BookDTO toDtoBookId(Book book);
 
     @Override
     @Mapping(target = "vocabularies", ignore = true)
@@ -28,6 +23,15 @@ public interface UnitMapper extends EntityMapper<UnitDTO, Unit> {
     @Mapping(target = "removeExercises", ignore = true)
     @Mapping(target = "progresses", ignore = true)
     @Mapping(target = "removeProgresses", ignore = true)
-    @Mapping(target = "book", source = "book")
+    @Mapping(target = "book", source = "bookId")
     Unit toEntity(UnitDTO unitDTO);
+
+    default Book fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Book book = new Book();
+        book.setId(id);
+        return book;
+    }
 }

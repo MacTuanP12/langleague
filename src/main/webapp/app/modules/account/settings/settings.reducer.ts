@@ -2,7 +2,6 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Storage } from 'react-jhipster';
 import { getSession } from 'app/shared/reducers/authentication';
-import { AppThunk } from 'app/config/store';
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IUser } from 'app/shared/model/user.model';
 
@@ -20,19 +19,26 @@ export type SettingsState = Readonly<typeof initialState>;
 // Actions
 const apiUrl = 'api/account';
 
-export const saveAccountSettings: (account: IUser) => AppThunk = account => async dispatch => {
-  await dispatch(updateAccount(account));
-
-  if (Storage.session.get(`locale`)) {
-    Storage.session.remove(`locale`);
-  }
-
-  dispatch(getSession());
-};
-
 export const updateAccount = createAsyncThunk('settings/update_account', async (account: IUser) => axios.post<IUser>(apiUrl, account), {
   serializeError: serializeAxiosError,
 });
+
+export const saveAccountSettings = createAsyncThunk(
+  'settings/save_account_settings',
+  async (account: IUser, { dispatch }) => {
+    await dispatch(updateAccount(account)).unwrap();
+
+    if (Storage.session.get(`locale`)) {
+      Storage.session.remove(`locale`);
+    }
+
+    dispatch(getSession());
+    return account;
+  },
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const uploadAvatar = createAsyncThunk(
   'settings/upload_avatar',
@@ -57,6 +63,23 @@ export const SettingsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(saveAccountSettings.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.updateFailure = false;
+      })
+      .addCase(saveAccountSettings.rejected, (state, action) => {
+        state.loading = false;
+        state.updateFailure = true;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(saveAccountSettings.fulfilled, state => {
+        state.loading = false;
+        state.updateSuccess = true;
+        state.updateFailure = false;
+        state.successMessage = 'settings.messages.success';
+      })
       .addCase(updateAccount.pending, state => {
         state.loading = true;
         state.errorMessage = null;

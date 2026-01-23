@@ -40,6 +40,10 @@ export const PasswordPage = () => {
     dispatch(reset());
   }, [successMessage, errorMessage]);
 
+  // Regex for password strength validation
+  // Min 8 chars, 1 uppercase, 1 number, 1 special char
+  const passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]).{8,}$/;
+
   return (
     <div className="password-page-wrapper">
       <div className="password-content">
@@ -83,8 +87,12 @@ export const PasswordPage = () => {
                 type="password"
                 validate={{
                   required: { value: true, message: translate('global.messages.validate.newpassword.required') },
-                  minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
-                  maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
+                  minLength: { value: 8, message: translate('global.messages.validate.newpassword.minlength') },
+                  maxLength: { value: 100, message: translate('global.messages.validate.newpassword.maxlength') },
+                  pattern: {
+                    value: passwordPattern,
+                    message: translate('global.messages.validate.newpassword.strength') || 'Password is too weak',
+                  },
                 }}
                 onChange={updatePassword}
                 data-cy="newPassword"
@@ -123,8 +131,8 @@ export const PasswordPage = () => {
                 type="password"
                 validate={{
                   required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
-                  minLength: { value: 4, message: translate('global.messages.validate.confirmpassword.minlength') },
-                  maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
+                  minLength: { value: 8, message: translate('global.messages.validate.confirmpassword.minlength') },
+                  maxLength: { value: 100, message: translate('global.messages.validate.confirmpassword.maxlength') },
                   validate: v => v === password || translate('global.messages.error.dontmatch'),
                 }}
                 data-cy="confirmPassword"

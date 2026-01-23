@@ -7,20 +7,8 @@
 // Header Container - Sticky Glassmorphism
 // ============================================
 .modern-header-wrapper {
-  // Fix: Move variables inside the wrapper to prevent global override
+  // Use global theme variables - removed local overrides
   --header-height: 70px;
-  --primary-color: #4169e1;
-  --primary-dark: #3451b2;
-  --primary-light: #eff6ff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --hover-bg: #f1f5f9;
-  --active-bg: #4169e1;
-  --active-text: #ffffff;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
   --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -28,11 +16,11 @@
   top: 0;
   z-index: 1000;
   width: 100%;
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px var(--shadow);
   transition: var(--transition-fast);
 
   &::before {
@@ -41,6 +29,18 @@
     inset: 0;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     pointer-events: none;
+  }
+
+  // Dark mode glassmorphism
+  .theme-dark &,
+  body.theme-dark &,
+  [data-theme='dark'] & {
+    background: rgba(26, 26, 26, 0.85);
+    border-bottom: 1px solid var(--border-color);
+
+    &::before {
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+    }
   }
 }
 
@@ -82,14 +82,15 @@
     transition: var(--transition-smooth);
     letter-spacing: -0.5px;
 
-    .brand-icon {
-      font-size: 1.75rem;
-      color: var(--primary-color);
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
       transition: var(--transition-smooth);
     }
 
     .brand-text {
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -98,8 +99,8 @@
     &:hover {
       transform: translateY(-1px);
 
-      .brand-icon {
-        transform: scale(1.1) rotate(-5deg);
+      .brand-logo {
+        transform: scale(1.05);
       }
     }
   }
@@ -212,7 +213,7 @@
 
       // Hover State
       &:hover {
-        background: var(--hover-bg);
+        background: var(--bg-secondary);
         color: var(--primary-color);
         transform: translateY(-1px);
 
@@ -223,19 +224,19 @@
 
       // Active State
       &.active {
-        background: var(--active-bg);
-        color: var(--active-text);
+        background: var(--primary-color);
+        color: white;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(65, 105, 225, 0.3);
+        box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
 
         i {
-          color: var(--active-text);
+          color: white;
         }
 
         &:hover {
-          background: var(--primary-dark);
+          background: var(--primary-color-alt);
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(65, 105, 225, 0.4);
+          box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
         }
       }
     }
@@ -302,15 +303,26 @@
       top: calc(100% + 0.5rem);
       right: 0;
       min-width: 200px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: #ffffff; // Default light theme background
+      border: 1px solid #e5e7eb; // Default light theme border
       border-radius: 0.75rem;
-      box-shadow: var(--shadow-md);
+      box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06); // Stronger shadow
       padding: 0.5rem;
       z-index: 1050;
       animation: slideDown 0.2s ease-out;
+
+      // Dark mode support
+      .theme-dark &,
+      body.theme-dark &,
+      [data-theme='dark'] & {
+        background: #1f2937; // Dark theme background (gray-800)
+        border-color: #374151; // Dark theme border (gray-700)
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.5),
+          0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      }
 
       @keyframes slideDown {
         from {
@@ -453,15 +465,26 @@
       top: calc(100% + 0.5rem);
       right: 0;
       min-width: 220px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: #ffffff; // Default light theme background
+      border: 1px solid #e5e7eb; // Default light theme border
       border-radius: 0.75rem;
-      box-shadow: var(--shadow-md);
+      box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06); // Stronger shadow
       padding: 0.5rem;
       z-index: 1050;
       animation: slideDown 0.2s ease-out;
+
+      // Dark mode support
+      .theme-dark &,
+      body.theme-dark &,
+      [data-theme='dark'] & {
+        background: #1f2937; // Dark theme background (gray-800)
+        border-color: #374151; // Dark theme border (gray-700)
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.5),
+          0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      }
 
       .menu-item {
         display: flex;
@@ -701,13 +724,4 @@
   }
 }
 
-// ============================================
-// Dark Mode Support (Optional)
-// ============================================
-body.theme-dark .modern-header-wrapper {
-  --glass-bg: rgba(15, 23, 42, 0.85);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --hover-bg: rgba(51, 65, 85, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.1);
-}
+// Dark mode support is handled by global CSS variables in app.scss

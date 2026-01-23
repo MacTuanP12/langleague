@@ -15,6 +15,9 @@ export interface IUnit {
   grammars?: IGrammar[];
   exercises?: IExercise[];
   progresses?: IProgress[];
+  vocabularyCount?: number;
+  grammarCount?: number;
+  exerciseCount?: number;
 }
 
 export const defaultUnitValue: Readonly<IUnit> = {
@@ -27,6 +30,9 @@ export const defaultUnitValue: Readonly<IUnit> = {
   grammars: [],
   exercises: [],
   progresses: [],
+  vocabularyCount: 0,
+  grammarCount: 0,
+  exerciseCount: 0,
 };
 
 export const defaultValue = defaultUnitValue;

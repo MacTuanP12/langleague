@@ -3,24 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IBook } from 'app/shared/model/book.model';
 import { Translate } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchBooks, deleteBook } from 'app/shared/reducers/book.reducer';
+import { getEntities, deleteEntity } from 'app/entities/book/book.reducer';
 
 export const Book = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const books = useAppSelector(state => state.book.books);
+  const books = useAppSelector(state => state.book.entities);
   const loading = useAppSelector(state => state.book.loading);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    dispatch(fetchBooks());
+    dispatch(getEntities({}));
   }, [dispatch]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this book?')) {
       try {
-        await dispatch(deleteBook(id)).unwrap();
+        await dispatch(deleteEntity(id)).unwrap();
       } catch (error) {
         console.error('Error deleting book:', error);
       }

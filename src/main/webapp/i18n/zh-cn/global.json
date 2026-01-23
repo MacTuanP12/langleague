@@ -216,5 +216,14 @@
     "idexists": "新建的 {{entityName}} 不能包含ID",
     "idnull": "无效的 ID"
   },
-  "footer": "这里是页脚"
+  "footer": "这里是页脚",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "您的 API 密钥仅在浏览器中使用",
+        "noStorage": "我们不会存储您的密钥",
+        "noShare": "请勿与他人分享您的密钥"
+      }
+    }
+  }
 }

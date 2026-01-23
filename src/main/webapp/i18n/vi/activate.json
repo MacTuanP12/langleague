@@ -2,27 +2,30 @@
   "activate": {
     "title": "Kích hoạt",
     "messages": {
-      "success": "<strong>Tài khoản của bạn đã được kích hoạt.</strong> Bạn vui lòng ",
-      "error": "<strong>Không thể kích hoạt tài khoản của bạn.</strong> Vui lòng quay lại trang đăng ký để tạo tài khoản.",
-      "verifying": {
-        "title": "Đang xác minh tài khoản của bạn...",
-        "description": "Vui lòng đợi trong khi chúng tôi xác minh địa chỉ email của bạn."
-      },
       "success": {
         "title": "Tài Khoản Của Bạn Đã Được Kích Hoạt!",
         "description": "Bạn đã sẵn sàng để bắt đầu hành trình học tập với LangLeague. Đăng nhập ngay để khám phá thư viện và công cụ của chúng tôi."
       },
-      "failure": {
-        "title": "Xác minh địa chỉ email của bạn",
-        "description": "Chúng tôi đã gửi liên kết xác minh đến email của bạn. Vui lòng nhấp vào liên kết trong email đó để bảo mật tài khoản của bạn.",
-        "checkSpam": "Không tìm thấy? Kiểm tra thư mục thư rác hoặc spam."
+      "error": {
+        "title": "Kích Hoạt Thất Bại",
+        "description": "Mã kích hoạt không hợp lệ hoặc đã hết hạn."
+      },
+      "info": {
+        "title": "Kích Hoạt Tài Khoản",
+        "description": "Vui lòng xác nhận mã kích hoạt để kích hoạt tài khoản của bạn."
       }
     },
     "actions": {
+      "login": "Đăng Nhập",
       "loginNow": "Đăng Nhập Ngay",
       "goHome": "Về Trang Chủ",
-      "login": "Đăng Nhập",
-      "resend": "Gửi lại email xác nhận"
+      "retry": "Thử Lại Kích Hoạt",
+      "activate": "Kích Hoạt Ngay"
+    },
+    "form": {
+      "label": "Nhập Mã Kích Hoạt",
+      "placeholder": "Dán mã kích hoạt của bạn vào đây",
+      "keyPlaceholder": "Mã Kích Hoạt"
     },
     "footer": {
       "needHelp": "Cần giúp đỡ?",

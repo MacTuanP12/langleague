@@ -19,13 +19,16 @@
       "saveButton": "Lưu & Tiếp Tục",
       "errors": {
         "empty": "Vui lòng nhập API key",
-        "invalidFormat": "Định dạng API key không hợp lệ. Vui lòng kiểm tra và thử lại.\nKey Gemini bắt đầu với 'AIza', key OpenAI bắt đầu với 'sk-'"
+        "invalidFormat": "Định dạng API key không hợp lệ. Vui lòng kiểm tra và thử lại.\\nKey Gemini bắt đầu với 'AIza', key OpenAI bắt đầu với 'sk-'"
       }
     },
     "student": {
       "dashboard": {
         "title": "Bảng Điều Khiển",
+        "loading": "Đang tải sách...",
         "welcome": "Chào mừng trở lại, {{name}}!",
+        "activeBooks": "Khóa Học Đang Học",
+        "progress": "Tiến Độ Tổng Thể",
         "stats": {
           "hours": "Giờ Học",
           "books": "Sách Đã Hoàn Thành"
@@ -46,13 +49,15 @@
           "start": "Bắt Đầu",
           "completed": "Đã Hoàn Thành",
           "enrolled": "Đã Đăng Ký",
+          "active": "Đang Học",
+          "not_enrolled": "Chưa Đăng Ký",
           "units": "Bài Học"
         },
         "streak": {
           "label": "Chuỗi Ngày Học",
           "start": "Bắt đầu chuỗi ngày học ngay hôm nay!",
           "active": "Bạn đang rất tuyệt! Chuỗi {{count}} ngày liên tiếp!",
-          "nextMilestone": "Cột mốc tiếp theo",
+          "nextMilestone": "Cột mốc tiếp theo: {{count}} ngày",
           "milestone": {
             "title": "Chúc mừng!",
             "message": "🎉 Chúc mừng! Bạn đã đạt chuỗi {{count}} ngày liên tiếp!",
@@ -60,9 +65,46 @@
           }
         }
       },
+      "profile": {
+        "title": "Hồ Sơ Của Tôi",
+        "subtitle": "Quản lý tài khoản và tiến trình của bạn",
+        "actions": {
+          "changePhoto": "Đổi Ảnh",
+          "saveChanges": "Lưu Thay Đổi",
+          "cancel": "Hủy"
+        },
+        "personalInfo": {
+          "title": "Thông Tin Cá Nhân",
+          "fullName": "Họ Và Tên",
+          "fullNamePlaceholder": "vd. Nguyễn Văn A",
+          "email": "Địa Chỉ Email",
+          "username": "Tên Đăng Nhập",
+          "bio": "Tiểu Sử",
+          "bioPlaceholder": "Hãy kể cho chúng tôi về bạn..."
+        },
+        "stats": {
+          "title": "Thống Kê Học Tập",
+          "booksEnrolled": "Khóa Học Đã Đăng Ký",
+          "streak": "Chuỗi Ngày",
+          "achievements": "Thành Tích"
+        },
+        "preferences": {
+          "theme": "Chủ Đề",
+          "themeLight": "☀️ Sáng",
+          "themeDark": "🌙 Tối",
+          "themeSystem": "💻 Hệ Thống"
+        },
+        "messages": {
+          "success": "Cập nhật hồ sơ thành công!",
+          "error": "Cập nhật hồ sơ thất bại",
+          "themeChanged": "Đã cập nhật chủ đề!",
+          "themeError": "Không thể thay đổi chủ đề",
+          "photoComingSoon": "Tính năng tải ảnh sẽ có sớm!"
+        }
+      },
       "books": {
-        "title": "Sách Có Sẵn",
-        "description": "Chọn một cuốn sách để bắt đầu hành trình học tập",
+        "title": "Kho Sách Khóa Học",
+        "description": "Chọn một cuốn sách để tiếp tục hành trình học tập của bạn",
         "public": "Công Khai",
         "viewDetails": "Xem Chi Tiết",
         "noBooks": "Chưa có sách nào",
@@ -70,8 +112,12 @@
         "detail": {
           "loading": "Đang tải...",
           "backToBooks": "Quay Lại Danh Sách Sách",
+          "backToHome": "Quay Lại Trang Chủ",
           "startLearning": "Bắt Đầu Học",
           "enrollNow": "Đăng Ký Ngay",
+          "studyNow": "Học Ngay",
+          "chapters": "Chương",
+          "completed": "Đã Hoàn Thành",
           "units": {
             "title": "CÁC BÀI HỌC TRONG SÁCH NÀY",
             "empty": "Chưa có bài học nào"
@@ -91,6 +137,15 @@
         "nextLesson": "Bài Tiếp Theo",
         "previousLesson": "Bài Trước",
         "complete": "Hoàn Thành",
+        "unitCompleted": "Đã hoàn thành bài học! Chuyển sang bài tiếp theo...",
+        "bookCompleted": "Chúc mừng! Bạn đã hoàn thành cuốn sách!",
+        "sections": {
+          "vocabulary": "Từ Vựng",
+          "grammar": "Ngữ Pháp",
+          "exercise": "Bài Tập",
+          "flashcard": "Flashcard",
+          "note": "Ghi Chú"
+        },
         "vocabulary": {
           "unit": "BÀI",
           "title": "TỪ VỰNG",
@@ -114,7 +169,9 @@
           "content": "Nội Dung",
           "examples": "Ví Dụ",
           "noGrammar": "Chưa có bài ngữ pháp",
-          "noGrammarDescription": "Bài học ngữ pháp sẽ xuất hiện ở đây khi giáo viên thêm vào"
+          "noGrammarDescription": "Bài học ngữ pháp sẽ xuất hiện ở đây khi giáo viên thêm vào",
+          "example": "Ví dụ:",
+          "practiceFlashcard": "Luyện tập Ngữ pháp với Flashcards"
         },
         "exercise": {
           "title": "BÀI TẬP",
@@ -158,8 +215,9 @@
           "apiKeyPlaceholder": "Dán API key của bạn vào đây...",
           "getFreeKey": "Lấy key miễn phí tại đây",
           "invalidKeyError": "API Key không hợp lệ. Vui lòng kiểm tra và thử lại.",
+          "rateLimitError": "⚠️ Đã vượt quá hạn mức API. Hệ thống đã tự động thử lại nhưng vẫn thất bại. Vui lòng đợi vài phút trước khi thử lại, hoặc nâng cấp gói API của bạn. Gói miễn phí có giới hạn hàng ngày.",
           "somethingWentWrong": "Đã xảy ra lỗi.",
-          "grammarPromptPlaceholder": "Hỏi bất cứ điều gì về chủ đề ngữ pháp này...\nVí dụ: Bạn có thể cho tôi thêm ví dụ không? Điểm khác biệt với... là gì?",
+          "grammarPromptPlaceholder": "Hỏi bất cứ điều gì về chủ đề ngữ pháp này...\\nVí dụ: Bạn có thể cho tôi thêm ví dụ không? Điểm khác biệt với... là gì?",
           "grammarAsk": "Hỏi",
           "grammarClear": "Xóa Trò Chuyện"
         },
@@ -177,7 +235,9 @@
           "clickToFlip": "Nhấn Để Lật",
           "terminology": "Thuật ngữ trong phần này",
           "noCards": "Chưa có flashcards",
-          "noCardsDescription": "Flashcards sẽ xuất hiện ở đây khi có từ vựng"
+          "noCardsDescription": "Flashcards sẽ xuất hiện ở đây khi có từ vựng",
+          "reviewMode": "Chế Độ Ôn Tập ({{count}})",
+          "reviewSession": "Phiên Ôn Tập"
         },
         "flashcardList": {
           "title": "Flashcards",
@@ -186,10 +246,20 @@
           "noSets": "Chưa có sách",
           "enrollDescription": "Đăng ký sách để bắt đầu học với flashcards",
           "studyFlashcards": "Học Flashcards",
-          "noUnits": "Chưa có bài học trong sách này"
+          "noUnits": "Chưa có bài học trong sách này",
+          "customSession": "Phiên Tùy Chỉnh"
         },
         "bookLearn": {
-          "progress": "Tiến Độ Của Bạn"
+          "progress": "Tiến Độ Của Bạn",
+          "backToBook": "Quay Lại Sách",
+          "bookContent": "Nội Dung Sách",
+          "selectUnit": "Chọn một bài học để bắt đầu học",
+          "unitCompleted": "Đã hoàn thành bài học! Chuyển sang bài tiếp theo...",
+          "bookCompleted": "Chúc mừng! Bạn đã hoàn thành cuốn sách!",
+          "messages": {
+            "unitCompleted": "Đã hoàn thành bài học! Chuyển sang bài tiếp theo...",
+            "bookCompleted": "Chúc mừng! Bạn đã hoàn thành cuốn sách!"
+          }
         },
         "itemCount": {
           "words": "{{count}} từ",
@@ -199,9 +269,10 @@
         },
         "notes": {
           "title": "Ghi Chú Của Tôi",
+          "loading": "Đang tải ghi chú...",
           "empty": "Chưa có ghi chú cho bài học này.",
           "emptyDescription": "Bắt đầu ghi chú để giúp bạn nhớ các điểm quan trọng!",
-          "placeholder": "Viết ghi chú...",
+          "placeholder": "Viết ghi chú của bạn ở đây (Hỗ trợ Markdown)...",
           "placeholderDisabled": "Bạn đã có ghi chú cho bài học này. Nhấn Sửa để chỉnh sửa.",
           "addButton": "Thêm Ghi Chú",
           "updateButton": "Cập Nhật",
@@ -214,17 +285,53 @@
           "duplicateWarning": "Bạn đã có ghi chú cho bài học này. Vui lòng xóa ghi chú cũ trước nếu muốn tạo ghi chú mới.",
           "limitInfo": "Bạn chỉ có thể có một ghi chú cho mỗi bài học. Sửa hoặc xóa ghi chú hiện tại.",
           "created": "Tạo:",
-          "updated": "Cập nhật:"
+          "updated": "Cập nhật:",
+          "lastUpdated": "Cập nhật lần cuối",
+          "characters": "ký tự",
+          "clear": "Xóa",
+          "save": "Lưu",
+          "preview": "Xem Trước",
+          "maximize": "Phóng To",
+          "minimize": "Thu Nhỏ",
+          "emptyPreview": "Chưa có nội dung để xem trước..."
         }
       },
       "games": {
         "title": "Trò Chơi Học Tập",
         "subtitle": "Học vui hơn! Chơi trò chơi để cải thiện kỹ năng ngôn ngữ",
         "backToDashboard": "Quay Lại Bảng Điều Khiển",
+        "backToMenu": "Quay Lại Menu",
         "loading": "Đang tải trò chơi...",
         "noGamesForDifficulty": "Không tìm thấy trò chơi cho mức độ này",
         "noGames": "Không có trò chơi",
         "noGamesDescription": "Thử điều chỉnh bộ lọc độ khó",
+        "progress": "Tiến độ",
+        "score": "Điểm",
+        "question": "Câu hỏi",
+        "filterByDifficulty": "Lọc theo độ khó:",
+        "playNow": "Chơi Ngay",
+        "comingSoon": "Sắp Ra Mắt",
+        "active": "Đang Hoạt Động",
+        "inactive": "Không Hoạt Động",
+        "difficulty": {
+          "all": "Tất Cả Trò Chơi",
+          "easy": "Dễ",
+          "medium": "Trung Bình",
+          "hard": "Khó"
+        },
+        "stats": {
+          "played": "Đã Chơi",
+          "score": "Tổng Điểm",
+          "achievements": "Thành Tích"
+        },
+        "dataSource": {
+          "title": "Chọn Tài Liệu Học",
+          "description": "Chọn các bài học bạn muốn ôn tập.",
+          "selectAll": "Chọn Tất Cả",
+          "unitsSelected": "{{count}} bài đã chọn",
+          "cancel": "Hủy",
+          "startGame": "Bắt Đầu"
+        },
         "list": {
           "vocabularyMatch": {
             "title": "Ghép Từ Vựng",
@@ -234,6 +341,11 @@
           "wordScramble": {
             "title": "Xếp Chữ",
             "description": "Sắp xếp các chữ cái để tạo thành từ vựng đúng",
+            "time": "10-15 phút"
+          },
+          "bridgeGame": {
+            "title": "Cầu Đứt Gãy",
+            "description": "Điền từ vào chỗ trống để vượt qua cây cầu",
             "time": "10-15 phút"
           },
           "grammarQuest": {
@@ -256,46 +368,92 @@
             "description": "Tạo câu đúng từ các từ và cụm từ bị xáo trộn",
             "time": "10-15 phút"
           }
-        }
-      },
-      "profile": {
-        "title": "Hồ Sơ Của Tôi",
-        "subtitle": "Quản lý thông tin cá nhân",
-        "actions": {
-          "changePhoto": "Đổi Ảnh",
-          "saveChanges": "Lưu Thay Đổi",
-          "cancel": "Hủy"
         },
-        "stats": {
-          "title": "Thống Kê Học Tập",
-          "booksEnrolled": "Sách Đã Đăng Ký",
-          "streak": "Chuỗi Ngày Hiện Tại",
-          "achievements": "Thành Tích"
+        "vocabularyMatch": {
+          "title": "Ghép Từ Vựng",
+          "instructions": "Nhấn vào một từ và sau đó nhấn vào nghĩa tương ứng",
+          "matched": "Đã Ghép",
+          "total": "Tổng",
+          "attempts": "Lượt Thử"
         },
-        "personalInfo": {
-          "title": "Thông Tin Cá Nhân",
-          "fullName": "Họ Và Tên",
-          "fullNamePlaceholder": "vd. Nguyễn Văn A",
-          "email": "Địa Chỉ Email",
-          "username": "Tên Đăng Nhập",
-          "bio": "Tiểu Sử",
-          "bioPlaceholder": "Hãy kể cho chúng tôi về bạn..."
+        "wordScramble": {
+          "title": "Xếp Chữ",
+          "instructions": "Nhấn vào các chữ cái theo thứ tự đúng để tạo thành từ",
+          "meaning": "Nghĩa",
+          "tapLetters": "Nhấn vào các chữ cái bên dưới...",
+          "removeLetter": "Xóa Ký Tự Cuối",
+          "example": "Ví Dụ",
+          "hideHint": "Ẩn Gợi Ý",
+          "showHint": "Hiện Gợi Ý",
+          "skip": "Bỏ Qua",
+          "correct": "Chính Xác!",
+          "incorrect": "Thử Lại!"
         },
-        "preferences": {
-          "theme": "Chủ Đề",
-          "themeLight": "☀️ Sáng",
-          "themeDark": "🌙 Tối",
-          "themeSystem": "💻 Hệ Thống"
+        "speedQuiz": {
+          "title": "Đố Nhanh",
+          "instructions": "Chọn câu trả lời đúng trước khi hết giờ!",
+          "selectMeaning": "Chọn nghĩa của từ:",
+          "selectWord": "Chọn từ cho nghĩa:",
+          "notEnoughWords": "Cần ít nhất 4 từ để chơi Đố Nhanh"
         },
-        "messages": {
-          "success": "Cập nhật hồ sơ thành công!",
-          "error": "Cập nhật hồ sơ thất bại",
-          "themeChanged": "Đã cập nhật chủ đề!",
-          "themeError": "Không thể thay đổi chủ đề",
-          "photoComingSoon": "Tính năng tải ảnh sẽ có sớm!"
+        "bridge": {
+          "title": "Cầu Đứt Gãy",
+          "loading": "Đang tải trò chơi...",
+          "fillBlank": "Điền từ vào chỗ trống:",
+          "victory": "🎉 Chiến Thắng!",
+          "victoryMessage": "Bạn đã vượt qua tất cả các cây cầu!",
+          "gameOver": "💔 Trò Chơi Kết Thúc",
+          "gameOverMessage": "Cây cầu đã sập!",
+          "reviewMistakes": "Xem Lại Các Câu Sai:",
+          "tryAgain": "Thử Lại",
+          "playAgain": "Chơi Lại",
+          "noSentences": "Không có câu ví dụ nào",
+          "noQuestions": "Không thể tạo câu hỏi",
+          "loadError": "Không thể tải trò chơi",
+          "correctAnswers": "Câu Trả Lời Đúng",
+          "viewReview": "Xem Đánh Giá",
+          "reviewTitle": "📋 Đánh Giá Câu Trả Lời",
+          "reviewSummary": "Bạn trả lời đúng {{correct}} trong tổng số {{total}} câu hỏi!",
+          "questionNum": "Câu Hỏi #{{num}}",
+          "correct": "Đúng",
+          "incorrect": "Sai",
+          "yourAnswer": "Câu Trả Lời Của Bạn",
+          "correctAnswer": "Đáp Án Đúng"
+        },
+        "result": {
+          "title": "Hoàn Thành Trò Chơi!",
+          "score": "Điểm Số",
+          "time": "Thời Gian",
+          "playAgain": "Chơi Lại",
+          "exit": "Thoát",
+          "correctAnswers": "Câu Trả Lời Đúng",
+          "timeTaken": "Thời gian",
+          "backToMenu": "Quay Lại Menu",
+          "excellent": {
+            "title": "Xuất Sắc!",
+            "message": "Thành tích vượt trội! Bạn đã nắm vững nội dung này!"
+          },
+          "good": {
+            "title": "Làm Tốt Lắm!",
+            "message": "Làm tốt lắm! Hãy tiếp tục phát huy!"
+          },
+          "fair": {
+            "title": "Cũng Được!",
+            "message": "Không tệ! Luyện tập thêm một chút nữa là bạn sẽ làm rất tốt!"
+          },
+          "needsImprovement": {
+            "title": "Thử Lại Nhé!",
+            "message": "Đừng bỏ cuộc! Có công mài sắt có ngày nên kim!"
+          }
         }
       }
     }
+  },
+  "games": {
+    "points": "Điểm",
+    "playAgain": "Chơi Lại",
+    "backToMenu": "Quay Lại Menu",
+    "tryAgain": "Thử Lại"
   },
   "student": {
     "bookList": {

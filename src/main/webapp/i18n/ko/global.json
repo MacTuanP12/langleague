@@ -211,5 +211,14 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "하단영역"
+  "footer": "하단영역",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "API 키는 브라우저에서만 사용됩니다",
+        "noStorage": "키는 저장되지 않습니다",
+        "noShare": "키를 다른 사람과 공유하지 마세요"
+      }
+    }
+  }
 }

@@ -129,10 +129,10 @@
 
     /* Book Card - Aligned with Student Dashboard */
     .book-card {
-      background: white;
+      background: var(--bg-primary);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px var(--shadow);
       transition: all 0.3s ease;
       position: relative;
       cursor: pointer;
@@ -141,7 +141,7 @@
 
       &:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 12px 24px var(--shadow-medium);
       }
 
       .book-cover {
@@ -171,7 +171,7 @@
         h3 {
           font-size: 20px;
           font-weight: 700;
-          color: #1a202c;
+          color: var(--text-primary);
           margin-bottom: 12px;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -180,7 +180,7 @@
 
         .author {
           font-size: 14px;
-          color: #718096;
+          color: var(--text-secondary);
           margin-bottom: 16px;
           line-height: 1.6;
           flex: 1;
@@ -189,7 +189,7 @@
         .details-btn {
           width: 100%;
           padding: 12px;
-          background: linear-gradient(135deg, #4169e1 0%, #5a67d8 100%);
+          background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
           color: white;
           border: none;
           border-radius: 12px;
@@ -202,7 +202,7 @@
 
           &:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(65, 105, 225, 0.3);
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3);
           }
 
           &:active {

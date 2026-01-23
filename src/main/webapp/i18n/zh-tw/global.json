@@ -173,6 +173,7 @@
       "addimage": "新增圖片",
       "back": "返回",
       "cancel": "取消",
+      "close": "關閉",
       "delete": "刪除",
       "edit": "編輯",
       "open": "開啟",
@@ -222,5 +223,14 @@
       "not.image": "檔案應該要是圖片格式，但實際卻是 \"{{ fileType }}\""
     }
   },
-  "footer": "這裡是您的頁尾"
+  "footer": "這裡是您的頁尾",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "您的 API 金鑰僅在瀏覽器中使用",
+        "noStorage": "我們不會儲存您的金鑰",
+        "noShare": "請勿與他人分享您的金鑰"
+      }
+    }
+  }
 }

@@ -8,8 +8,8 @@ export const useUserManagement = () => {
   const { users, loading, totalItems, user, updating, errorMessage } = useAppSelector(state => state.userManagement);
 
   const loadUsers = useCallback(
-    (page = 0, size = 10, sort = 'id,asc') => {
-      return dispatch(getUsersAsAdmin({ page, size, sort })).unwrap();
+    (page = 0, size = 10, sort = 'id,asc', login?: string, role?: string, status?: string) => {
+      return dispatch(getUsersAsAdmin({ page, size, sort, login, role, status })).unwrap();
     },
     [dispatch],
   );

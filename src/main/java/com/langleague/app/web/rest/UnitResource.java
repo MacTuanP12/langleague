@@ -23,8 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -36,6 +36,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/units")
+@Transactional
 public class UnitResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(UnitResource.class);
@@ -57,21 +58,6 @@ public class UnitResource {
         this.bookRepository = bookRepository;
     }
 
-    private void checkOwnership(Book book) {
-        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.TEACHER)) {
-            throw new AccessDeniedException("You do not have the authority to perform this action");
-        }
-        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccessDeniedException("User not logged in"));
-
-        if (
-            book.getTeacherProfile() == null ||
-            book.getTeacherProfile().getUser() == null ||
-            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
-        ) {
-            throw new AccessDeniedException("You are not the owner of this book");
-        }
-    }
-
     /**
      * {@code POST  /units} : Create a new unit.
      *
@@ -86,13 +72,13 @@ public class UnitResource {
         if (unitDTO.getId() != null) {
             throw new BadRequestAlertException("A new unit cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (unitDTO.getBook() == null || unitDTO.getBook().getId() == null) {
+        if (unitDTO.getBookId() == null) {
             throw new BadRequestAlertException("A new unit must belong to a book", ENTITY_NAME, "booknull");
         }
         Book book = bookRepository
-            .findById(unitDTO.getBook().getId())
+            .findById(unitDTO.getBookId())
             .orElseThrow(() -> new BadRequestAlertException("Book not found", ENTITY_NAME, "booknotfound"));
-        checkOwnership(book);
+        SecurityUtils.checkOwnership(book);
 
         unitDTO = unitService.save(unitDTO);
         return ResponseEntity.created(new URI("/api/units/" + unitDTO.getId()))
@@ -128,7 +114,7 @@ public class UnitResource {
         Unit unit = unitRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         unitDTO = unitService.update(unitDTO);
         return ResponseEntity.ok()
@@ -165,7 +151,7 @@ public class UnitResource {
         Unit unit = unitRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         Optional<UnitDTO> result = unitService.partialUpdate(unitDTO);
 
@@ -199,6 +185,7 @@ public class UnitResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of units in body.
      */
     @GetMapping("/by-book/{bookId}")
+    @PreAuthorize("permitAll()")
     public List<UnitDTO> getAllUnitsByBook(@PathVariable Long bookId) {
         LOG.debug("REST request to get all Utilities by bookId : {}", bookId);
         return unitService.findAllByBookId(bookId);
@@ -231,7 +218,7 @@ public class UnitResource {
         Unit unit = unitRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         unitService.delete(id);
         return ResponseEntity.noContent()

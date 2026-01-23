@@ -27,6 +27,42 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
+export const getNewestBooks = createAsyncThunk(
+  'book/fetch_newest_books',
+  async () => {
+    const requestUrl = `${apiUrl}/newest`;
+    return axios.get<IBook[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getPublicBooks = createAsyncThunk(
+  'book/fetch_public_books',
+  async ({ page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}/public?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    return axios.get<IBook[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getMyBooks = createAsyncThunk(
+  'book/fetch_my_books',
+  async ({ page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}/my-books?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    return axios.get<IBook[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getEnrolledBooks = createAsyncThunk(
+  'book/fetch_enrolled_books',
+  async ({ page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}/enrolled?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    return axios.get<IBook[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const getEntity = createAsyncThunk(
   'book/fetch_entity',
   async (id: string | number) => {
@@ -88,12 +124,16 @@ export const BookSlice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
+      .addCase(getNewestBooks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entities = action.payload.data;
+      })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getEntities, getPublicBooks, getMyBooks, getEnrolledBooks), (state, action) => {
         const { data, headers } = action.payload;
 
         return {
@@ -109,7 +149,7 @@ export const BookSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getEntities, getEntity, getNewestBooks, getPublicBooks, getMyBooks, getEnrolledBooks), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

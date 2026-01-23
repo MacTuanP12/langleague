@@ -1,23 +1,39 @@
 {
   "register": {
-    "title": "登録",
+    "title": "新規登録",
     "form": {
-      "button": "登録する"
+      "button": "登録する",
+      "button.registering": "登録中...",
+      "email": {
+        "placeholder": "メールアドレスを入力"
+      }
     },
     "messages": {
       "validate": {
         "login": {
-          "required": "ユーザー名が必要です。",
-          "minlength": "ユーザー名は1文字以上で入力してください",
-          "maxlength": "ユーザー名は50文字以下で入力してください",
-          "pattern": "ユーザー名が無効です"
+          "required": "ユーザー名は必須です。",
+          "minlength": "ユーザー名は1文字以上で入力してください。",
+          "maxlength": "ユーザー名は50文字以下で入力してください。",
+          "pattern": "ユーザー名が無効です。"
+        },
+        "email": {
+          "required": "メールアドレスを入力してください。",
+          "invalid": "メールアドレスが無効です。"
+        },
+        "newpassword": {
+          "required": "パスワードを入力してください。",
+          "minlength": "パスワードは4文字以上で入力してください。"
+        },
+        "confirmpassword": {
+          "required": "パスワードの確認を入力してください。"
         }
       },
-      "success": "<strong>登録が完了しました!</strong> 送られたメールを確認して下さい。",
+      "success": "<strong>登録が完了しました！</strong> 確認メールをご確認ください。",
       "error": {
-        "fail": "<strong>登録が失敗しました!</strong> 後ほど再度登録を行ってください。",
-        "userexists": "<strong>ユーザー名が既に登録されています!</strong> 別のユーザー名を使用してください。",
-        "emailexists": "<strong>メールアドレスが既に登録されています!</strong> 別のメールアドレスを使用してください。"
+        "fail": "<strong>登録に失敗しました！</strong> 後ほど再度お試しください。",
+        "userexists": "<strong>ユーザー名が既に登録されています！</strong> 別のユーザー名をお選びください。",
+        "emailexists": "<strong>メールアドレスが既に使用されています！</strong> 別のメールアドレスをお選びください。",
+        "dontmatch": "パスワードが一致しません。"
       }
     }
   }

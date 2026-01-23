@@ -1,54 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import './home.scss';
 import { translate, Translate } from 'react-jhipster';
 import { ModernHeader } from 'app/shared/layout/header/modern-header';
 import { ModernFooter } from 'app/shared/layout/footer/modern-footer';
-
-const FEATURED_BOOKS = [
-  {
-    id: 1,
-    title: 'Milk and Honey',
-    author: 'Rupi Kaur',
-    coverColor: '#f4d5b8',
-    image: '/content/images/book-milk-honey.png',
-  },
-  {
-    id: 2,
-    title: 'Python Crash Course',
-    author: 'Eric Matthes',
-    coverColor: '#5ba3a3',
-    image: '/content/images/book-python.png',
-  },
-  {
-    id: 3,
-    title: 'Design of Everyday Things',
-    author: 'Don Norman',
-    coverColor: '#f5e6d3',
-    image: '/content/images/book-design.png',
-  },
-  {
-    id: 4,
-    title: 'Atomic Habits',
-    author: 'James Clear',
-    coverColor: '#4a7c7e',
-    image: '/content/images/book-atomic.png',
-  },
-];
+import { getNewestBooks } from 'app/entities/book/book.reducer';
 
 export const HomeNew = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const account = useAppSelector(state => state.authentication.account);
+  const bookList = useAppSelector(state => state.book.entities);
+  const loading = useAppSelector(state => state.book.loading);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    dispatch(getNewestBooks());
+  }, [dispatch]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Navigate to search results
-      navigate(`/books/search?q=${encodeURIComponent(searchQuery)}`);
+      // Navigate to public books list with search query
+      navigate(`/books?q=${encodeURIComponent(searchQuery)}`);
     }
+  };
+
+  const handleBookClick = id => {
+    navigate(`/book/${id}`);
   };
 
   return (
@@ -92,22 +73,36 @@ export const HomeNew = () => {
           </Link>
         </div>
 
-        <div className="books-grid">
-          {FEATURED_BOOKS.map(book => (
-            <div key={book.id} className="book-card">
-              <div className="book-cover" style={{ backgroundColor: book.coverColor }}>
-                <div className="book-placeholder">{book.title}</div>
+        {loading ? (
+          <div className="text-center p-5">
+            <Translate contentKey="home.loading">Loading...</Translate>
+          </div>
+        ) : (
+          <div className="books-grid">
+            {bookList &&
+              bookList.map(book => (
+                <div key={book.id} className="book-card" onClick={() => handleBookClick(book.id)}>
+                  <div
+                    className="book-cover"
+                    style={{ backgroundImage: book.coverImageUrl ? `url(${book.coverImageUrl})` : 'none', backgroundColor: '#e0e0e0' }}
+                  >
+                    {!book.coverImageUrl && <div className="book-placeholder">{book.title}</div>}
+                  </div>
+                  <div className="book-info">
+                    <h3>{book.title}</h3>
+                    <Link to={`/book/${book.id}`} className="details-btn">
+                      <Translate contentKey="home.featured.details">Details</Translate>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            {bookList && bookList.length === 0 && (
+              <div className="text-center w-100">
+                <Translate contentKey="home.noBooks">No books found.</Translate>
               </div>
-              <div className="book-info">
-                <h3>{book.title}</h3>
-                <p className="author">{book.author}</p>
-                <Link to={`/books/${book.id}`} className="details-btn">
-                  <Translate contentKey="home.featured.details">Details</Translate>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Footer */}

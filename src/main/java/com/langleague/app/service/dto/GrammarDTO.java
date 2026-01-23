@@ -28,8 +28,9 @@ public class GrammarDTO implements Serializable {
     @Min(0)
     private Integer orderIndex;
 
-    @NotNull
-    private UnitDTO unit;
+    private Long unitId;
+
+    private String unitTitle;
 
     public Long getId() {
         return id;
@@ -71,12 +72,20 @@ public class GrammarDTO implements Serializable {
         this.orderIndex = orderIndex;
     }
 
-    public UnitDTO getUnit() {
-        return unit;
+    public Long getUnitId() {
+        return unitId;
     }
 
-    public void setUnit(UnitDTO unit) {
-        this.unit = unit;
+    public void setUnitId(Long unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getUnitTitle() {
+        return unitTitle;
+    }
+
+    public void setUnitTitle(String unitTitle) {
+        this.unitTitle = unitTitle;
     }
 
     @Override
@@ -109,7 +118,8 @@ public class GrammarDTO implements Serializable {
             ", contentMarkdown='" + getContentMarkdown() + "'" +
             ", exampleUsage='" + getExampleUsage() + "'" +
             ", orderIndex=" + getOrderIndex() +
-            ", unit=" + getUnit() +
+            ", unitId=" + getUnitId() +
+            ", unitTitle='" + getUnitTitle() + "'" +
             "}";
     }
 }

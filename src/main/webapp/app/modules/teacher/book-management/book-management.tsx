@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Translate, translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchMyBooks, deleteBook } from 'app/shared/reducers/book.reducer';
+import { getMyBooks, deleteEntity } from 'app/entities/book/book.reducer';
 import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import { DataTable, Column } from 'app/shared/components/data-table';
 import { LoadingSpinner, ConfirmModal } from 'app/shared/components';
@@ -15,13 +15,13 @@ import '../teacher.scss';
 
 export const BookManagement = () => {
   const dispatch = useAppDispatch();
-  const { books, loading } = useAppSelector(state => state.book);
+  const { entities, loading } = useAppSelector(state => state.book);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [bookToDelete, setBookToDelete] = useState<number | null>(null);
 
   useEffect(() => {
-    dispatch(fetchMyBooks());
+    dispatch(getMyBooks({}));
   }, [dispatch]);
 
   const handleDeleteClick = (id: number) => {
@@ -32,7 +32,7 @@ export const BookManagement = () => {
   const handleDeleteConfirm = async () => {
     if (bookToDelete) {
       try {
-        await dispatch(deleteBook(bookToDelete)).unwrap();
+        await dispatch(deleteEntity(bookToDelete)).unwrap();
         toast.success(translate('langleague.teacher.books.actions.deleteSuccess'));
       } catch (error) {
         toast.error(translate('langleague.teacher.books.actions.deleteFailed'));
@@ -50,8 +50,8 @@ export const BookManagement = () => {
   // Memoize filtered books to prevent unnecessary recalculations
   // Add safe fallback to handle undefined books
   const filteredBooks = useMemo(
-    () => (books || []).filter(book => book.title?.toLowerCase().includes(searchTerm.toLowerCase())),
-    [books, searchTerm],
+    () => (entities || []).filter(book => book.title?.toLowerCase().includes(searchTerm.toLowerCase())),
+    [entities, searchTerm],
   );
 
   // Define table columns with memoization
@@ -149,7 +149,7 @@ export const BookManagement = () => {
           </div>
           <Button tag={Link} to="/teacher/books/new" color="primary" className="action-btn btn-primary">
             <FontAwesomeIcon icon="plus" className="me-2" />
-            <Translate contentKey="langleague.teacher.books.actions.addNew">+ Add New Book</Translate>
+            <Translate contentKey="langleague.teacher.books.actions.addNew"> Add New Book</Translate>
           </Button>
         </div>
 

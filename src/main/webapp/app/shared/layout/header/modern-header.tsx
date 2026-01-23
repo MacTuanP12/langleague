@@ -31,26 +31,29 @@ const NavigationItems: React.FC<{
   isAuthenticated: boolean;
   account: UserAccount;
   isActive: (path: string) => boolean;
-}> = ({ isAuthenticated, account, isActive }) => {
+  isAdminPage: boolean;
+}> = ({ isAuthenticated, account, isActive, isAdminPage }) => {
   const isAdmin = account?.authorities?.includes('ROLE_ADMIN');
   const isTeacher = account?.authorities?.includes('ROLE_TEACHER');
   const isStudent = account?.authorities?.includes('ROLE_STUDENT');
 
   return (
     <Nav className="main-nav" navbar>
-      <NavItem>
-        <NavLink tag={Link} to="/" className={isActive('/') ? 'active' : ''}>
-          <i className="bi bi-house-door"></i>
-          <span>
-            <Translate contentKey="global.menu.home">Home</Translate>
-          </span>
-        </NavLink>
-      </NavItem>
+      {!isAdminPage && (
+        <NavItem>
+          <NavLink tag={Link} to="/" className={isActive('/') ? 'active' : ''}>
+            <i className="bi bi-house-door"></i>
+            <span>
+              <Translate contentKey="global.menu.home">Home</Translate>
+            </span>
+          </NavLink>
+        </NavItem>
+      )}
 
       {isAuthenticated && (
         <>
           {/* Student menu - only for students */}
-          {isStudent && (
+          {isStudent && !isAdminPage && (
             <NavItem>
               <NavLink tag={Link} to="/student" className={isActive('/student') ? 'active' : ''}>
                 <i className="bi bi-mortarboard"></i>
@@ -62,7 +65,7 @@ const NavigationItems: React.FC<{
           )}
 
           {/* Teacher menu - only for teachers */}
-          {isTeacher && (
+          {isTeacher && !isAdminPage && (
             <NavItem>
               <NavLink tag={Link} to="/teacher" className={isActive('/teacher') ? 'active' : ''}>
                 <i className="bi bi-person-badge"></i>
@@ -89,43 +92,6 @@ const NavigationItems: React.FC<{
     </Nav>
   );
 };
-
-// ============================================
-// Language Switcher - Globe Icon Component
-// ============================================
-const LanguageSwitcher: React.FC<{
-  currentLocale: string;
-  showLanguageMenu: boolean;
-  setShowLanguageMenu: (show: boolean) => void;
-  handleLocaleChange: (langKey: string) => void;
-  languageRef: React.RefObject<HTMLDivElement>;
-}> = ({ currentLocale, showLanguageMenu, setShowLanguageMenu, handleLocaleChange, languageRef }) => (
-  <div className="language-switcher" ref={languageRef}>
-    <button
-      className="action-btn language-btn"
-      onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-      aria-label="Change language"
-      aria-expanded={showLanguageMenu}
-    >
-      <i className="bi bi-globe"></i>
-    </button>
-
-    {showLanguageMenu && (
-      <div className="dropdown-menu-custom language-menu">
-        {Object.keys(languages).map(langKey => (
-          <button
-            key={langKey}
-            className={`menu-item ${currentLocale === langKey ? 'active' : ''}`}
-            onClick={() => handleLocaleChange(langKey)}
-          >
-            <span className="language-name">{languages[langKey].name}</span>
-            {currentLocale === langKey && <i className="bi bi-check2 check-icon"></i>}
-          </button>
-        ))}
-      </div>
-    )}
-  </div>
-);
 
 // ============================================
 // Profile Menu Component
@@ -273,13 +239,7 @@ const ProfileMenu: React.FC<{
 
           <div className="menu-divider"></div>
 
-          {/* Account Settings */}
-          <Link to="/account/settings" className="menu-item" onClick={() => setShowProfileMenu(false)}>
-            <i className="bi bi-gear"></i>
-            <span>
-              <Translate contentKey="global.menu.account.settings">Settings</Translate>
-            </span>
-          </Link>
+          {/* Account Settings - REMOVED */}
           <Link to="/account/password" className="menu-item" onClick={() => setShowProfileMenu(false)}>
             <i className="bi bi-shield-lock"></i>
             <span>
@@ -317,12 +277,10 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
 
   // UI State
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Refs for click outside detection
   const profileRef = useRef<HTMLDivElement>(null);
-  const languageRef = useRef<HTMLDivElement>(null);
 
   // ============================================
   // Handle Language Change with Persistence
@@ -331,7 +289,6 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
     dispatch(setLocale(langKey));
     Storage.session.set('locale', langKey);
     Storage.local.set('locale', langKey);
-    setShowLanguageMenu(false);
   };
 
   // ============================================
@@ -353,6 +310,9 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
     return location.pathname.startsWith(path);
   };
 
+  // Check if current page is admin page
+  const isAdminPage = location.pathname.startsWith('/admin');
+
   // ============================================
   // Close Dropdowns When Clicking Outside
   // ============================================
@@ -360,9 +320,6 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
     const handleClickOutside = (event: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setShowProfileMenu(false);
-      }
-      if (languageRef.current && !languageRef.current.contains(event.target as Node)) {
-        setShowLanguageMenu(false);
       }
     };
 
@@ -376,7 +333,6 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
   useEffect(() => {
     setMobileMenuOpen(false);
     setShowProfileMenu(false);
-    setShowLanguageMenu(false);
   }, [location.pathname]);
 
   // ============================================
@@ -388,7 +344,12 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
         <div className="header-container">
           {/* Brand / Logo */}
           <Link to="/" className="navbar-brand">
-            <i className="bi bi-translate brand-icon"></i>
+            <img
+              src="content/images/1780b2f0-03c1-41b9-8974-d4277af11f79.jpg"
+              alt="LangLeague Logo"
+              className="brand-logo"
+              style={{ height: '40px', marginRight: '10px', borderRadius: '8px' }}
+            />
             <span className="brand-text">LangLeague</span>
           </Link>
 
@@ -399,18 +360,10 @@ export const ModernHeader: React.FC<ModernHeaderProps> = ({ className = '' }) =>
 
           {/* Navigation & Actions */}
           <Collapse isOpen={mobileMenuOpen} navbar>
-            <NavigationItems isAuthenticated={isAuthenticated} account={account} isActive={isActive} />
+            <NavigationItems isAuthenticated={isAuthenticated} account={account} isActive={isActive} isAdminPage={isAdminPage} />
 
             {/* Right Side Actions */}
             <div className="header-actions">
-              <LanguageSwitcher
-                currentLocale={currentLocale}
-                showLanguageMenu={showLanguageMenu}
-                setShowLanguageMenu={setShowLanguageMenu}
-                handleLocaleChange={handleLocaleChange}
-                languageRef={languageRef}
-              />
-
               {/* User Profile or Login Button */}
               {isAuthenticated ? (
                 <ProfileMenu

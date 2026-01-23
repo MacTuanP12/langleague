@@ -6,6 +6,7 @@ interface GrammarState {
   grammars: IGrammar[];
   loading: boolean;
   updating: boolean;
+  updateSuccess: boolean;
   errorMessage: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: GrammarState = {
   grammars: [],
   loading: false,
   updating: false,
+  updateSuccess: false,
   errorMessage: null,
 };
 
@@ -52,7 +54,19 @@ const grammarSlice = createSlice({
   name: 'grammar',
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset(state) {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
+    resetAll(state) {
+      state.grammars = [];
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -72,23 +86,28 @@ const grammarSlice = createSlice({
       // createGrammar
       .addCase(createGrammar.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(createGrammar.fulfilled, (state, action: PayloadAction<IGrammar>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.grammars.push(action.payload);
       })
       .addCase(createGrammar.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to create grammar';
       })
       // updateGrammar
       .addCase(updateGrammar.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(updateGrammar.fulfilled, (state, action: PayloadAction<IGrammar>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const index = state.grammars.findIndex(grammar => grammar.id === action.payload.id);
         if (index !== -1) {
           state.grammars[index] = action.payload;
@@ -96,50 +115,60 @@ const grammarSlice = createSlice({
       })
       .addCase(updateGrammar.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to update grammar';
       })
       // deleteGrammar
       .addCase(deleteGrammar.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(deleteGrammar.fulfilled, (state, action: PayloadAction<number>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.grammars = state.grammars.filter(grammar => grammar.id !== action.payload);
       })
       .addCase(deleteGrammar.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to delete grammar';
       })
       // bulkCreateGrammars
       .addCase(bulkCreateGrammars.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkCreateGrammars.fulfilled, (state, action: PayloadAction<IGrammar[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.grammars = [...state.grammars, ...action.payload];
       })
       .addCase(bulkCreateGrammars.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk create grammars';
       })
       // bulkUpdateGrammars
       .addCase(bulkUpdateGrammars.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkUpdateGrammars.fulfilled, (state, action: PayloadAction<IGrammar[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.grammars = action.payload;
       })
       .addCase(bulkUpdateGrammars.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk update grammars';
       });
   },
 });
 
-export const { reset } = grammarSlice.actions;
+export const { reset, resetAll } = grammarSlice.actions;
 
 export default grammarSlice.reducer;

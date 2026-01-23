@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { Translate, translate } from 'react-jhipster';
-import { generateAiExplanation } from 'app/shared/util/ai-tutor.service';
+import { generateAiExplanation, Language } from 'app/shared/util/ai-tutor.service';
 import { ApiKeySetupModal } from 'app/shared/components/ApiKeySetupModal';
 import { STORAGE_KEYS } from 'app/config/storage-keys';
 import ReactMarkdown from 'react-markdown';
+import { useAppSelector } from 'app/config/store';
 
 interface AiTutorButtonProps {
   questionText: string;
@@ -23,6 +24,9 @@ export const AiTutorButton: React.FC<AiTutorButtonProps> = ({ questionText, corr
   const [explanation, setExplanation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [keyModalError, setKeyModalError] = useState<string | null>(null);
+
+  // Get current language from store
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
 
   useEffect(() => {
     // Load key from storage on mount
@@ -48,10 +52,22 @@ export const AiTutorButton: React.FC<AiTutorButtonProps> = ({ questionText, corr
     setExplanation(null); // Clear previous result
 
     try {
+      // Map current locale to supported AI language
+      const langMap: Record<string, Language> = {
+        en: 'en',
+        vi: 'vi',
+        ja: 'ja',
+        ko: 'ko',
+        'zh-cn': 'zh',
+        'zh-tw': 'zh',
+      };
+      const language = langMap[currentLocale] || 'en';
+
       const result = await generateAiExplanation(key, {
         question: questionText,
         correctAnswer,
         userAnswer: userContext,
+        language,
       });
       setExplanation(result);
     } catch (err: unknown) {
@@ -63,6 +79,13 @@ export const AiTutorButton: React.FC<AiTutorButtonProps> = ({ questionText, corr
         // Clear invalid key from storage
         localStorage.removeItem(STORAGE_KEYS.GEMINI_API_KEY);
         setApiKey('');
+      } else if ((err as Error).message === 'RATE_LIMIT_ERROR') {
+        setError(
+          translate(
+            'langleague.student.learning.aiTutor.rateLimitError',
+            'You have exceeded your API quota. The system automatically retried but the limit persists. Please wait a few minutes or upgrade your API plan.',
+          ),
+        );
       } else {
         setError((err as Error).message || translate('langleague.student.learning.aiTutor.somethingWentWrong'));
       }

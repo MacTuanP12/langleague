@@ -79,6 +79,14 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                     .requestMatchers(mvc.pattern("/api/captcha")).permitAll()
 
+                    // 3.5 Public Content APIs
+                    .requestMatchers(mvc.pattern("/api/books/newest")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/books/public")).permitAll()
+                    // Allow public access to view specific book details
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/books/{id}")).permitAll()
+                    // Allow public access to view units of a book
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/units/by-book/{bookId}")).permitAll()
+
                     // 4. Secured APIs - Role-based access
                     // Admin: chỉ quản lí người dùng
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)

@@ -1,9 +1,13 @@
 {
   "langleague": {
     "teacher": {
+      "sidebar": {
+        "title": "Hệ Thống Quản Lý Giáo Viên"
+      },
       "dashboard": {
         "title": "Bảng Điều Khiển Giáo Viên",
-        "welcome": "Chào mừng trở lại, {name}!",
+        "loading": "Đang tải bảng điều khiển...",
+        "welcome": "Chào mừng trở lại, {{name}}!",
         "stats": {
           "myBooks": "Sách Của Tôi",
           "totalStudents": "Tổng Số Học Sinh",
@@ -28,7 +32,7 @@
         "management": {
           "title": "Quản Lý Sách",
           "description": "Quản lý kho sách của bạn, theo dõi sách đã phát hành và cập nhật chi tiết danh mục.",
-          "loading": "Đang tải...",
+          "loading": "Đang tải sách...",
           "noBooks": "Không tìm thấy sách"
         },
         "stats": {
@@ -61,7 +65,7 @@
           "next": "Tiếp"
         },
         "detail": {
-          "loading": "Đang tải...",
+          "loading": "Đang tải chi tiết sách...",
           "backToBooks": "Quay Lại Danh Sách",
           "editBook": "Chỉnh Sửa Sách",
           "addUnit": "Thêm Bài",
@@ -186,7 +190,11 @@
           "enrolledDate": "Ngày Đăng Ký",
           "status": "Trạng Thái"
         },
-        "empty": "Không tìm thấy học sinh nào đăng ký sách của bạn."
+        "empty": "Không tìm thấy học sinh nào đăng ký sách của bạn.",
+        "messages": {
+          "loading": "Đang tải danh sách học sinh...",
+          "noStudents": "Không tìm thấy học sinh nào đăng ký sách của bạn."
+        }
       },
       "units": {
         "labels": {
@@ -194,14 +202,13 @@
           "newGrammar": "Chủ Đề Ngữ Pháp Mới"
         },
         "form": {
-          "backButton": "Quay Lại",
-          "titlePlaceholder": "Tiêu Đề Bài Học",
-          "summaryPlaceholder": "Mô Tả Bài Học",
-          "submit": "Gửi",
-          "saving": "Đang lưu...",
-          "expandAll": "Mở rộng tất cả",
-          "collapseAll": "Thu gọn tất cả",
-          "addVocabulary": "Thêm Từ Vựng",
+          "buttons": {
+            "saving": "Đang lưu...",
+            "submit": "Gửi",
+            "expandAll": "Mở rộng tất cả",
+            "collapseAll": "Thu gọn tất cả",
+            "addVocabulary": "Thêm Từ Vựng"
+          },
           "addGrammar": "Thêm Ngữ Pháp",
           "validation": {
             "titleRequired": "Tiêu đề bài học là bắt buộc",
@@ -216,17 +223,27 @@
             "expandAll": "Mở Rộng",
             "collapseAll": "Thu Gọn"
           },
-          "buttons": {
-            "addVocabulary": "Thêm Từ Vựng",
-            "addGrammar": "Thêm Ngữ Pháp",
-            "expandAll": "Mở rộng tất cả",
-            "collapseAll": "Thu gọn tất cả",
-            "saving": "Đang lưu...",
-            "submit": "Gửi"
-          },
           "fields": {
             "titlePlaceholder": "Tiêu Đề Bài Học",
             "summaryPlaceholder": "Mô Tả Bài Học"
+          },
+          "messages": {
+            "unitUpdated": "Cập nhật bài học thành công",
+            "unitCreated": "Tạo bài học thành công",
+            "vocabSaved": "Đã lưu từ vựng",
+            "vocabSaveFailed": "Lưu từ vựng thất bại",
+            "vocabDeleted": "Đã xóa từ vựng",
+            "vocabDeleteFailed": "Xóa từ vựng thất bại",
+            "grammarSaved": "Đã lưu ngữ pháp",
+            "grammarSaveFailed": "Lưu ngữ pháp thất bại",
+            "grammarDeleted": "Đã xóa ngữ pháp",
+            "grammarDeleteFailed": "Xóa ngữ pháp thất bại",
+            "exerciseSaved": "Đã lưu bài tập",
+            "exerciseSaveFailed": "Lưu bài tập thất bại",
+            "exerciseDeleted": "Đã xóa bài tập",
+            "exerciseDeleteFailed": "Xóa bài tập thất bại",
+            "loading": "Đang tải dữ liệu bài học...",
+            "loadFailed": "Tải dữ liệu bài học thất bại"
           }
         },
         "vocabulary": {
@@ -283,13 +300,14 @@
             "option": "Lựa chọn {number}"
           },
           "placeholders": {
-            "question": "Nội dung câu hỏi",
+            "text": "Nội dung câu hỏi",
             "correctAnswer": "Nhập câu trả lời đúng...",
             "imageUrl": "URL Hình Ảnh (tùy chọn)",
-            "audioUrl": "URL Âm Thanh (tùy chọn)"
+            "audioUrl": "URL Âm Thanh (tùy chọn)",
+            "option": "Lựa chọn"
           },
-          "options": {
-            "addButton": "Thêm lựa chọn"
+          "buttons": {
+            "addOption": "Thêm lựa chọn"
           },
           "menu": {
             "addExercise": "Thêm Bài Tập",
@@ -334,7 +352,8 @@
         "loading": "Đang tải...",
         "search": "Tìm kiếm",
         "filter": "Lọc",
-        "actions": "Thao Tác"
+        "actions": "Thao Tác",
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?"
       }
     }
   }

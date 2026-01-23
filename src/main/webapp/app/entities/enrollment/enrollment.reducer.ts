@@ -12,6 +12,7 @@ const initialState: EntityState<IEnrollment> = {
   entity: defaultValue,
   updating: false,
   updateSuccess: false,
+  totalItems: 0,
 };
 
 const apiUrl = 'api/enrollments';
@@ -23,6 +24,42 @@ export const getEntities = createAsyncThunk(
   async ({ sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
     return axios.get<IEnrollment[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const fetchMyEnrollments = createAsyncThunk(
+  'enrollment/fetch_my_enrollments',
+  async () => {
+    const requestUrl = `${apiUrl}?filter=my-books&cacheBuster=${new Date().getTime()}`;
+    return axios.get<IEnrollment[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const fetchEnrollmentByBookId = createAsyncThunk(
+  'enrollment/fetch_enrollment_by_book_id',
+  async (bookId: number | string) => {
+    const requestUrl = `${apiUrl}/book/${bookId}`;
+    return axios.get<IEnrollment>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const enrollInBook = createAsyncThunk(
+  'enrollment/enroll_in_book',
+  async (bookId: number) => {
+    const requestUrl = `${apiUrl}/enroll/${bookId}`;
+    return axios.post<IEnrollment>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const countAllEnrollments = createAsyncThunk(
+  'enrollment/count_all',
+  async () => {
+    const requestUrl = `${apiUrl}/count`;
+    return axios.get<number>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
@@ -88,39 +125,48 @@ export const EnrollmentSlice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
+      .addCase(fetchEnrollmentByBookId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
+      .addCase(countAllEnrollments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalItems = action.payload.data;
+      })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getEntities, fetchMyEnrollments), (state, action) => {
         const { data } = action.payload;
 
         return {
           ...state,
           loading: false,
           entities: data.sort((a, b) => {
-            if (!action.meta?.arg?.sort) {
+            const arg = action.meta.arg as IQueryParams | undefined;
+            if (!arg?.sort) {
               return 1;
             }
-            const order = action.meta.arg.sort.split(',')[1];
-            const predicate = action.meta.arg.sort.split(',')[0];
+            const order = arg.sort.split(',')[1];
+            const predicate = arg.sort.split(',')[0];
             return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
           }),
         };
       })
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity, enrollInBook), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getEntities, getEntity, countAllEnrollments, fetchMyEnrollments, fetchEnrollmentByBookId), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity, enrollInBook), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;

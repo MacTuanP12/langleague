@@ -179,6 +179,17 @@ public class EnrollmentService {
     }
 
     /**
+     * Count all enrollments.
+     *
+     * @return the count of entities.
+     */
+    @Transactional(readOnly = true)
+    public long countAll() {
+        LOG.debug("Request to count all Enrollments");
+        return enrollmentRepository.count();
+    }
+
+    /**
      * Delete the enrollment by id.
      *
      * @param id the id of the entity.

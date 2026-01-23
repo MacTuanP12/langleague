@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import UnitNotes from './unit-notes';
+import { Translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './floating-note-widget.scss';
+import NoteErrorBoundary from './note-error-boundary';
 
 interface IFloatingNoteWidgetProps {
   unitId: number;
@@ -15,6 +18,7 @@ const BOUNDARY_PADDING = 10;
 export const FloatingNoteWidget = ({ unitId, isOpen, onClose }: IFloatingNoteWidgetProps) => {
   const [position, setPosition] = useState({ x: window.innerWidth - 380, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const panelStartPos = useRef({ x: 0, y: 0 });
 
@@ -82,17 +86,25 @@ export const FloatingNoteWidget = ({ unitId, isOpen, onClose }: IFloatingNoteWid
   if (!isOpen) return null;
 
   return (
-    <div className="note-panel" style={{ left: position.x, top: position.y }}>
-      <div className="note-panel-header" onMouseDown={handleMouseDown}>
+    <div className={`note-panel ${isExpanded ? 'expanded' : ''}`} style={!isExpanded ? { left: position.x, top: position.y } : {}}>
+      <div className="note-panel-header" onMouseDown={!isExpanded ? handleMouseDown : undefined}>
         <h4>
-          <i className="bi bi-journal-text"></i> Notes
+          <FontAwesomeIcon icon="sticky-note" className="me-2" />
+          <Translate contentKey="langleague.student.learning.notes.title">Notes</Translate>
         </h4>
-        <button className="close-button" onClick={onClose} onMouseDown={e => e.stopPropagation()}>
-          <i className="bi bi-x-lg"></i>
-        </button>
+        <div className="header-controls">
+          <button className="control-btn" onClick={() => setIsExpanded(!isExpanded)} title={isExpanded ? 'Minimize' : 'Maximize'}>
+            <FontAwesomeIcon icon={isExpanded ? 'compress' : 'expand'} />
+          </button>
+          <button className="close-button" onClick={onClose} onMouseDown={e => e.stopPropagation()}>
+            <FontAwesomeIcon icon="times" />
+          </button>
+        </div>
       </div>
       <div className="note-panel-body">
-        <UnitNotes unitId={unitId} />
+        <NoteErrorBoundary>
+          <UnitNotes unitId={unitId} />
+        </NoteErrorBoundary>
       </div>
     </div>
   );

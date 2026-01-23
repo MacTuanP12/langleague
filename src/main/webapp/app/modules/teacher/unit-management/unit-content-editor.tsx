@@ -10,20 +10,31 @@ import { fetchVocabulariesByUnitId, deleteVocabulary } from 'app/shared/reducers
 import { fetchGrammarsByUnitId, deleteGrammar } from 'app/shared/reducers/grammar.reducer';
 import { fetchExercisesByUnitId, deleteExercise } from 'app/shared/reducers/exercise.reducer';
 import TeacherLayout from 'app/modules/teacher/teacher-layout';
-import AIImportAssistant from 'app/modules/teacher/import/ai-import-assistant';
 import { VocabularyDisplayCard } from './VocabularyDisplayCard';
 import { GrammarDisplayCard } from './GrammarDisplayCard';
 import { LoadingSpinner } from 'app/shared/components';
 import { toast } from 'react-toastify';
 import '../teacher.scss';
+import { VocabularyModal } from './VocabularyModal';
+import { GrammarModal } from './GrammarModal';
+import { ExerciseModal } from './ExerciseModal';
+import { IVocabulary } from 'app/shared/model/vocabulary.model';
+import { IGrammar } from 'app/shared/model/grammar.model';
+import { IExercise } from 'app/shared/model/exercise.model';
 
 export const UnitContentEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState('1');
-  const [aiAssistantOpen, setAiAssistantOpen] = useState(false);
-  const [aiContentType, setAiContentType] = useState<'EXERCISE' | 'VOCABULARY' | 'GRAMMAR'>('EXERCISE');
+
+  const [vocabModalOpen, setVocabModalOpen] = useState(false);
+  const [grammarModalOpen, setGrammarModalOpen] = useState(false);
+  const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
+
+  const [selectedVocabulary, setSelectedVocabulary] = useState<IVocabulary | null>(null);
+  const [selectedGrammar, setSelectedGrammar] = useState<IGrammar | null>(null);
+  const [selectedExercise, setSelectedExercise] = useState<IExercise | null>(null);
 
   const unit = useAppSelector(state => state.unit.selectedUnit);
   const vocabularies = useAppSelector(state => state.vocabulary.vocabularies);
@@ -60,12 +71,22 @@ export const UnitContentEditor = () => {
     }
   };
 
+  const handleEditVocabulary = (vocab: IVocabulary) => {
+    setSelectedVocabulary(vocab);
+    setVocabModalOpen(true);
+  };
+
   const handleDeleteGrammar = async (grammarId: number) => {
     if (window.confirm(translate('langleague.teacher.editor.confirmDelete.grammar'))) {
       await dispatch(deleteGrammar(grammarId));
       toast.success(translate('langleague.teacher.editor.success.grammarDeleted'));
       loadContent();
     }
+  };
+
+  const handleEditGrammar = (grammar: IGrammar) => {
+    setSelectedGrammar(grammar);
+    setGrammarModalOpen(true);
   };
 
   const handleDeleteExercise = async (exerciseId: number) => {
@@ -76,9 +97,9 @@ export const UnitContentEditor = () => {
     }
   };
 
-  const openAIAssistant = (type: 'EXERCISE' | 'VOCABULARY' | 'GRAMMAR') => {
-    setAiContentType(type);
-    setAiAssistantOpen(true);
+  const handleEditExercise = (exercise: IExercise) => {
+    setSelectedExercise(exercise);
+    setExerciseModalOpen(true);
   };
 
   if (!unit && loading) {
@@ -91,7 +112,7 @@ export const UnitContentEditor = () => {
 
   return (
     <TeacherLayout
-      title={unit?.name || 'Unit Content'}
+      title={unit?.title || 'Unit Content'}
       subtitle={<Translate contentKey="langleague.teacher.editor.subtitle">Manage vocabulary, grammar, and exercises</Translate>}
       showBackButton={false}
     >
@@ -137,13 +158,16 @@ export const UnitContentEditor = () => {
                     <Translate contentKey="langleague.teacher.editor.vocabulary.title">Vocabulary List</Translate>
                   </h4>
                   <div className="d-flex gap-2">
-                    <Button color="primary" outline>
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => {
+                        setSelectedVocabulary(null);
+                        setVocabModalOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon icon="plus" className="me-2" />
                       <Translate contentKey="langleague.teacher.editor.vocabulary.addWord">Add Word</Translate>
-                    </Button>
-                    <Button color="warning" outline onClick={() => openAIAssistant('VOCABULARY')}>
-                      <span className="me-2">✨</span>
-                      <Translate contentKey="langleague.teacher.editor.vocabulary.aiGenerate">AI Generate</Translate>
                     </Button>
                   </div>
                 </div>
@@ -154,17 +178,16 @@ export const UnitContentEditor = () => {
                     <p className="text-muted">
                       <Translate contentKey="langleague.teacher.editor.vocabulary.empty">No vocabulary added yet.</Translate>
                     </p>
-                    <p className="text-muted">
-                      <Translate contentKey="langleague.teacher.editor.vocabulary.emptyHint">
-                        Use the AI Assistant to generate words from a topic!
-                      </Translate>
-                    </p>
                   </div>
                 ) : (
                   <Row>
                     {vocabularies.map(vocab => (
                       <Col md={6} lg={4} key={vocab.id} className="mb-3">
-                        <VocabularyDisplayCard vocabulary={vocab} onDelete={() => handleDeleteVocabulary(vocab.id)} onEdit={() => {}} />
+                        <VocabularyDisplayCard
+                          vocabulary={vocab}
+                          onDelete={() => handleDeleteVocabulary(vocab.id)}
+                          onEdit={() => handleEditVocabulary(vocab)}
+                        />
                       </Col>
                     ))}
                   </Row>
@@ -182,13 +205,16 @@ export const UnitContentEditor = () => {
                     <Translate contentKey="langleague.teacher.editor.grammar.title">Grammar Rules</Translate>
                   </h4>
                   <div className="d-flex gap-2">
-                    <Button color="primary" outline>
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => {
+                        setSelectedGrammar(null);
+                        setGrammarModalOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon icon="plus" className="me-2" />
                       <Translate contentKey="langleague.teacher.editor.grammar.addRule">Add Rule</Translate>
-                    </Button>
-                    <Button color="warning" outline onClick={() => openAIAssistant('GRAMMAR')}>
-                      <span className="me-2">✨</span>
-                      <Translate contentKey="langleague.teacher.editor.grammar.aiGenerate">AI Generate</Translate>
                     </Button>
                   </div>
                 </div>
@@ -204,7 +230,11 @@ export const UnitContentEditor = () => {
                   <Row>
                     {grammars.map(grammar => (
                       <Col md={12} key={grammar.id} className="mb-3">
-                        <GrammarDisplayCard grammar={grammar} onDelete={() => handleDeleteGrammar(grammar.id)} onEdit={() => {}} />
+                        <GrammarDisplayCard
+                          grammar={grammar}
+                          onDelete={() => handleDeleteGrammar(grammar.id)}
+                          onEdit={() => handleEditGrammar(grammar)}
+                        />
                       </Col>
                     ))}
                   </Row>
@@ -222,13 +252,16 @@ export const UnitContentEditor = () => {
                     <Translate contentKey="langleague.teacher.editor.exercises.title">Exercises</Translate>
                   </h4>
                   <div className="d-flex gap-2">
-                    <Button color="primary" outline>
+                    <Button
+                      color="primary"
+                      outline
+                      onClick={() => {
+                        setSelectedExercise(null);
+                        setExerciseModalOpen(true);
+                      }}
+                    >
                       <FontAwesomeIcon icon="plus" className="me-2" />
                       <Translate contentKey="langleague.teacher.editor.exercises.addQuestion">Add Question</Translate>
-                    </Button>
-                    <Button color="warning" outline onClick={() => openAIAssistant('EXERCISE')}>
-                      <span className="me-2">✨</span>
-                      <Translate contentKey="langleague.teacher.editor.exercises.aiGenerate">AI Generate</Translate>
                     </Button>
                   </div>
                 </div>
@@ -250,11 +283,16 @@ export const UnitContentEditor = () => {
                               <h5 className="card-title">
                                 <Translate contentKey="langleague.teacher.editor.exercises.question">Question</Translate> {index + 1}
                               </h5>
-                              <p className="card-text">{exercise.question}</p>
+                              <p className="card-text">{exercise.exerciseText}</p>
                             </div>
-                            <Button size="sm" color="danger" outline onClick={() => handleDeleteExercise(exercise.id)}>
-                              <FontAwesomeIcon icon="trash" />
-                            </Button>
+                            <div className="d-flex gap-2">
+                              <Button size="sm" color="info" outline onClick={() => handleEditExercise(exercise)}>
+                                <FontAwesomeIcon icon="pencil-alt" />
+                              </Button>
+                              <Button size="sm" color="danger" outline onClick={() => handleDeleteExercise(exercise.id)}>
+                                <FontAwesomeIcon icon="trash" />
+                              </Button>
+                            </div>
                           </div>
                         </CardBody>
                       </Card>
@@ -266,14 +304,36 @@ export const UnitContentEditor = () => {
           </TabPane>
         </TabContent>
 
-        {/* AI Import Assistant - Controlled by buttons in tabs */}
-        <AIImportAssistant
+        {/* Manual Creation/Edit Modals */}
+        <VocabularyModal
+          isOpen={vocabModalOpen}
+          toggle={() => {
+            setVocabModalOpen(!vocabModalOpen);
+            if (vocabModalOpen) setSelectedVocabulary(null);
+          }}
           unitId={id}
           onSuccess={loadContent}
-          initialContentType={aiContentType}
-          isOpen={aiAssistantOpen}
-          onToggle={() => setAiAssistantOpen(!aiAssistantOpen)}
-          showFloatingButton={false}
+          vocabularyEntity={selectedVocabulary}
+        />
+        <GrammarModal
+          isOpen={grammarModalOpen}
+          toggle={() => {
+            setGrammarModalOpen(!grammarModalOpen);
+            if (grammarModalOpen) setSelectedGrammar(null);
+          }}
+          unitId={id}
+          onSuccess={loadContent}
+          grammarEntity={selectedGrammar}
+        />
+        <ExerciseModal
+          isOpen={exerciseModalOpen}
+          toggle={() => {
+            setExerciseModalOpen(!exerciseModalOpen);
+            if (exerciseModalOpen) setSelectedExercise(null);
+          }}
+          unitId={id}
+          onSuccess={loadContent}
+          exerciseEntity={selectedExercise}
         />
       </Container>
     </TeacherLayout>

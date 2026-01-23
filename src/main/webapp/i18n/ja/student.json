@@ -1,14 +1,40 @@
-{
+﻿{
   "langleague": {
+    "apiKey": {
+      "setupTitle": "AI APIキーの設定",
+      "setupDescription": "AI機能を使用するには、独自のAPIキー（Google GeminiまたはOpenAI）を提供する必要があります。無料で、ブラウザにのみ保存されます。",
+      "label": "APIキー",
+      "placeholder": "APIキーをここに貼り付けてください (AIza... または sk-...)",
+      "formatHint": "対応形式: Google Gemini (AIza...) または OpenAI (sk-...)",
+      "showKey": "キーを表示",
+      "hideKey": "キーを隠す",
+      "getKeyTitle": "無料のAPIキーを取得:",
+      "providers": {
+        "gemini": "Google Gemini APIキー",
+        "openai": "OpenAI / ChatGPT APIキー"
+      },
+      "recommendation": "💡 推奨:",
+      "recommendationText": "ベトナム語のサポートが優れており、完全に無料のGoogle Geminiをお勧めします！",
+      "cancel": "キャンセル",
+      "saveButton": "保存して続行",
+      "errors": {
+        "empty": "APIキーを入力してください",
+        "invalidFormat": "APIキーの形式が無効です。確認して再試行してください。\nGeminiキーは'AIza'で始まり、OpenAIキーは'sk-'で始まります"
+      }
+    },
     "student": {
       "dashboard": {
         "title": "マイダッシュボード",
+        "loading": "教材を読み込み中...",
         "welcome": "おかえりなさい、{{name}}さん！",
+        "activeBooks": "受講中のコース",
+        "progress": "総合進捗",
         "stats": {
           "hours": "学習時間",
           "books": "完了した教材"
         },
         "noBooks": "検索条件に一致する教材が見つかりませんでした。",
+        "noBooksDescription": "検索条件やフィルタを調整して、必要なものを見つけてください。",
         "loadMore": "さらに読み込む",
         "search": {
           "placeholder": "教材を検索..."
@@ -20,7 +46,12 @@
         },
         "book": {
           "continue": "続ける",
-          "start": "開始"
+          "start": "開始",
+          "completed": "完了",
+          "enrolled": "受講中",
+          "active": "学習中",
+          "not_enrolled": "未受講",
+          "units": "ユニット"
         },
         "streak": {
           "label": "連続学習日数",
@@ -34,136 +65,28 @@
           }
         }
       },
-      "books": {
-        "detail": {
-          "loading": "読み込み中...",
-          "backToBooks": "教材一覧に戻る",
-          "startLearning": "学習を開始",
-          "enrollNow": "今すぐ登録",
-          "units": {
-            "title": "この教材のユニット",
-            "empty": "ユニットはまだありません"
-          },
-          "relatedBooks": "関連する教材"
-        },
-        "messages": {
-          "enrollSuccess": "教材への登録が完了しました！",
-          "enrollError": "登録に失敗しました。もう一度お試しください。"
-        }
-      },
-      "learning": {
-        "unit": "ユニット",
-        "nextLesson": "次のレッスン",
-        "previousLesson": "前のレッスン",
-        "complete": "完了",
-        "vocabulary": {
-          "unit": "ユニット",
-          "title": "語彙",
-          "wordsToLearn": "個の単語を学習",
-          "vocabularyWords": "語彙リスト",
-          "meaning": "意味：",
-          "example": "例文：",
-          "noVocabulary": "語彙はまだありません",
-          "noVocabularyDescription": "教師が追加すると、語彙がここに表示されます",
-          "clickToHear": "単語をクリックして発音を聞く",
-          "navigation": {
-            "previous": "前へ",
-            "next": "次へ"
-          }
-        },
-        "grammar": {
-          "title": "文法",
-          "noGrammar": "このユニットにはまだ文法レッスンが追加されていません。"
-        },
-        "exercise": {
-          "title": "練習問題",
-          "noExercises": "このユニットにはまだ練習問題が追加されていません。"
-        },
-        "flashcard": {
-          "back": "戻る",
-          "learning": "学習",
-          "title": "フラッシュカード",
-          "shuffle": "シャッフル",
-          "studyMode": "学習モード",
-          "notes": "ノート",
-          "card": "カード",
-          "of": "/",
-          "definition": "定義",
-          "answer": "答え",
-          "clickToFlip": "クリックして裏返す",
-          "terminology": "このセクションの用語",
-          "noCards": "フラッシュカードがありません",
-          "noCardsDescription": "語彙が追加されると、フラッシュカードがここに表示されます"
-        },
-        "flashcardList": {
-          "title": "フラッシュカード",
-          "description": "学習するユニットを選択してください",
-          "loading": "読み込み中...",
-          "noSets": "利用可能な教材がありません",
-          "enrollDescription": "フラッシュカードで学習を始めるには教材に登録してください",
-          "studyFlashcards": "フラッシュカードを学習",
-          "noUnits": "この教材にはユニットがありません"
-        },
-        "bookLearn": {
-          "progress": "学習進度"
-        },
-        "itemCount": {
-          "words": "{{count}}個の単語",
-          "topics": "{{count}}個のトピック",
-          "questions": "{{count}}個の問題",
-          "interactive": "インタラクティブ"
-        }
-      },
-      "games": {
-        "title": "学習ゲーム",
-        "subtitle": "楽しく学習しましょう！ゲームで語学力を向上させよう",
-        "backToDashboard": "ダッシュボードに戻る",
-        "loading": "ゲームを読み込み中...",
-        "noGamesForDifficulty": "この難易度のゲームが見つかりませんでした",
-        "list": {
-          "vocabularyMatch": {
-            "title": "語彙マッチング",
-            "description": "ペースの速い記憶ゲームで単語と意味をマッチさせましょう",
-            "time": "5-10分"
-          },
-          "wordScramble": {
-            "title": "単語パズル",
-            "description": "文字を並べ替えて正しい語彙を作りましょう",
-            "time": "10-15分"
-          },
-          "grammarQuest": {
-            "title": "文法クエスト",
-            "description": "文法チャレンジを通じて実績を解除しましょう",
-            "time": "15-20分"
-          },
-          "listeningChallenge": {
-            "title": "リスニングチャレンジ",
-            "description": "様々な文脈で正しい単語を聞いて識別しましょう",
-            "time": "10-15分"
-          },
-          "speedQuiz": {
-            "title": "スピードクイズ",
-            "description": "制限時間内にできるだけ多くの問題に答えましょう",
-            "time": "5分"
-          },
-          "sentenceBuilder": {
-            "title": "文章構築",
-            "description": "バラバラの単語やフレーズから正しい文章を作りましょう",
-            "time": "10-15分"
-          }
-        }
-      },
       "profile": {
+        "title": "マイプロフィール",
+        "subtitle": "アカウントと進捗を管理する",
         "actions": {
           "changePhoto": "写真を変更",
-          "saveChanges": "変更を保存"
+          "saveChanges": "変更を保存",
+          "cancel": "キャンセル"
         },
         "personalInfo": {
+          "title": "個人情報",
           "fullName": "氏名",
           "fullNamePlaceholder": "例：山田太郎",
           "email": "メールアドレス",
+          "username": "ユーザー名",
           "bio": "自己紹介",
           "bioPlaceholder": "自己紹介を入力してください..."
+        },
+        "stats": {
+          "title": "学習統計",
+          "booksEnrolled": "受講中のコース",
+          "streak": "連続日数",
+          "achievements": "実績"
         },
         "preferences": {
           "theme": "テーマ設定",
@@ -178,8 +101,358 @@
           "themeError": "テーマの変更に失敗しました",
           "photoComingSoon": "写真アップロード機能は近日公開予定です！"
         }
+      },
+      "books": {
+        "title": "コース教材",
+        "description": "学習を続ける教材を選択してください",
+        "public": "公開",
+        "viewDetails": "詳細を見る",
+        "noBooks": "教材がありません",
+        "noBooksDescription": "新しい学習教材については後でご確認ください",
+        "detail": {
+          "loading": "読み込み中...",
+          "backToBooks": "教材一覧に戻る",
+          "startLearning": "学習を開始",
+          "enrollNow": "今すぐ登録",
+          "studyNow": "今すぐ学習",
+          "chapters": "チャプター",
+          "completed": "完了",
+          "units": {
+            "title": "この教材のユニット",
+            "empty": "ユニットはまだありません"
+          },
+          "relatedBooks": "関連する教材"
+        },
+        "messages": {
+          "enrollSuccess": "教材への登録が成功しました！",
+          "enrollError": "登録に失敗しました。もう一度お試しください。"
+        }
+      },
+      "learning": {
+        "backToBook": "教材に戻る",
+        "selectUnit": "学習を開始するユニットを選択してください",
+        "bookContent": "教材の内容",
+        "unit": "ユニット",
+        "nextLesson": "次のレッスン",
+        "previousLesson": "前のレッスン",
+        "complete": "完了",
+        "unitCompleted": "ユニット完了！次のユニットに移動中...",
+        "bookCompleted": "おめでとうございます！教材を完了しました！",
+        "sections": {
+          "vocabulary": "語彙",
+          "grammar": "文法",
+          "exercise": "演習",
+          "flashcard": "フラッシュカード",
+          "note": "ノート"
+        },
+        "vocabulary": {
+          "unit": "ユニット",
+          "title": "語彙",
+          "wordsToLearn": "学習する単語",
+          "vocabularyWords": "語彙リスト",
+          "meaning": "意味:",
+          "example": "例:",
+          "noVocabulary": "まだ語彙がありません",
+          "noVocabularyDescription": "教師が追加すると、ここに語彙が表示されます",
+          "clickToHear": "単語をクリックして発音を聞く",
+          "navigation": {
+            "previous": "前へ",
+            "next": "次へ"
+          }
+        },
+        "grammar": {
+          "unit": "ユニット",
+          "title": "文法",
+          "lessons": "文法レッスン",
+          "topics": "文法トピック",
+          "content": "内容",
+          "examples": "例",
+          "noGrammar": "まだ文法レッスンがありません",
+          "noGrammarDescription": "教師が追加すると、ここに文法レッスンが表示されます",
+          "example": "例:",
+          "practiceFlashcard": "フラッシュカードで文法を練習"
+        },
+        "exercise": {
+          "title": "演習",
+          "noExercises": "まだ演習がありません",
+          "backToBook": "教材一覧に戻る",
+          "defaultTitle": "演習",
+          "loading": "読み込み中...",
+          "loadingExercises": "演習を読み込み中...",
+          "question": "問題",
+          "of": "の",
+          "playAudio": "音声を再生",
+          "audioNotSupported": "お使いのブラウザは音声要素をサポートしていません。",
+          "correctAnswer": "正解！",
+          "incorrectAnswer": "不正解",
+          "correctAnswerIs": "正解は:",
+          "selectAllCorrect": "すべての正解を選択してください:",
+          "typeAnswer": "答えを入力してください...",
+          "previous": "前へ",
+          "checkAnswer": "答えを確認",
+          "nextQuestion": "次の問題",
+          "finish": "完了",
+          "pleaseAnswer": "まず答えを選択または入力してください！",
+          "correct": "正解！",
+          "incorrect": "不正解です。もう一度試すか、答えを確認してください。",
+          "explainWithAI": "AIで説明"
+        },
+        "aiTutor": {
+          "button": "AIで説明",
+          "grammarButton": "AIチューターに質問",
+          "title": "AIチューターの説明",
+          "grammarTitle": "AI文法チューター",
+          "thinking": "考え中...",
+          "question": "質問",
+          "close": "閉じる",
+          "changeKey": "キーを変更",
+          "cancel": "キャンセル",
+          "saveAndExplain": "保存して説明",
+          "setupTitle": "AIチューターの設定",
+          "setupDescription": "AIチューター機能を使用するには、独自のGoogle Gemini APIキーを提供する必要があります。無料で、ブラウザにのみ保存されます。",
+          "apiKeyLabel": "Gemini APIキー",
+          "apiKeyPlaceholder": "APIキーをここに貼り付けてください...",
+          "getFreeKey": "ここで無料キーを取得",
+          "invalidKeyError": "無効なAPIキーです。確認して再試行してください。",
+          "rateLimitError": "⚠️ APIクォータを超えました。システムは自動的に再試行しましたが失敗しました。数分待ってから再試行するか、APIプランをアップグレードしてください。無料プランには日次制限があります。",
+          "somethingWentWrong": "エラーが発生しました。",
+          "grammarPromptPlaceholder": "この文法トピックについて何でも質問してください...\n例：もっと例を教えてもらえますか？これと...の違いは何ですか？",
+          "grammarAsk": "質問する",
+          "grammarClear": "チャットをクリア"
+        },
+        "flashcard": {
+          "back": "戻る",
+          "learning": "学習",
+          "title": "フラッシュカード",
+          "shuffle": "シャッフル",
+          "studyMode": "学習モード",
+          "notes": "ノート",
+          "card": "カード",
+          "of": "の",
+          "definition": "定義",
+          "answer": "答え",
+          "clickToFlip": "クリックして反転",
+          "terminology": "このセクションの用語",
+          "noCards": "フラッシュカードがありません",
+          "noCardsDescription": "語彙が追加されると、ここにフラッシュカードが表示されます",
+          "reviewMode": "復習モード ({{count}})",
+          "reviewSession": "復習セッション"
+        },
+        "flashcardList": {
+          "title": "フラッシュカード",
+          "description": "フラッシュカードを学習するユニットを選択してください",
+          "loading": "読み込み中...",
+          "noSets": "教材がありません",
+          "enrollDescription": "フラッシュカードで学習を開始するには、教材に登録してください",
+          "studyFlashcards": "フラッシュカードを学習",
+          "noUnits": "この教材にはユニットがありません",
+          "customSession": "カスタムセッション"
+        },
+        "bookLearn": {
+          "progress": "あなたの進捗",
+          "backToBook": "教材に戻る",
+          "bookContent": "教材の内容",
+          "selectUnit": "学習を開始するユニットを選択してください",
+          "unitCompleted": "ユニット完了！次のユニットに移動中...",
+          "bookCompleted": "おめでとうございます！教材を完了しました！",
+          "messages": {
+            "unitCompleted": "ユニット完了！次のユニットに移動中...",
+            "bookCompleted": "おめでとうございます！教材を完了しました！"
+          }
+        },
+        "itemCount": {
+          "words": "{{count}} 単語",
+          "topics": "{{count}} トピック",
+          "questions": "{{count}} 問題",
+          "interactive": "インタラクティブ"
+        },
+        "notes": {
+          "title": "マイノート",
+          "loading": "ノートを読み込み中...",
+          "empty": "このユニットにはまだノートがありません。",
+          "emptyDescription": "重要なポイントを覚えるためにノートを取り始めましょう！",
+          "placeholder": "ここに個人のノートを追加してください (Markdownサポート)...",
+          "placeholderDisabled": "このユニットには既にノートがあります。編集をクリックして変更してください。",
+          "addButton": "ノートを追加",
+          "updateButton": "更新",
+          "saving": "保存中...",
+          "updating": "更新中...",
+          "editButton": "編集",
+          "deleteButton": "削除",
+          "cancelButton": "キャンセル",
+          "deleteConfirm": "このノートを削除してもよろしいですか？",
+          "duplicateWarning": "このユニットには既にノートがあります。新しいノートを作成する場合は、まず削除してください。",
+          "limitInfo": "ユニットごとに1つのノートしか持てません。既存のノートを編集または削除してください。",
+          "created": "作成:",
+          "updated": "更新:",
+          "lastUpdated": "最終更新",
+          "characters": "文字",
+          "clear": "クリア",
+          "save": "保存",
+          "preview": "プレビュー",
+          "maximize": "最大化",
+          "minimize": "最小化",
+          "emptyPreview": "プレビューするものがまだありません..."
+        }
+      },
+      "games": {
+        "title": "学習ゲーム",
+        "subtitle": "楽しく学習！ゲームをプレイして言語スキルを向上させましょう",
+        "backToDashboard": "ダッシュボードに戻る",
+        "backToMenu": "メニューに戻る",
+        "loading": "ゲームを読み込み中...",
+        "noGamesForDifficulty": "この難易度のゲームが見つかりませんでした",
+        "noGames": "ゲームがありません",
+        "noGamesDescription": "難易度フィルタを調整してみてください",
+        "progress": "進捗",
+        "score": "スコア",
+        "question": "問題",
+        "filterByDifficulty": "難易度でフィルタ:",
+        "playNow": "今すぐプレイ",
+        "comingSoon": "近日公開",
+        "active": "アクティブ",
+        "inactive": "非アクティブ",
+        "difficulty": {
+          "all": "すべてのゲーム",
+          "easy": "簡単",
+          "medium": "普通",
+          "hard": "難しい"
+        },
+        "stats": {
+          "played": "プレイしたゲーム",
+          "score": "合計スコア",
+          "achievements": "実績"
+        },
+        "dataSource": {
+          "title": "学習教材を選択",
+          "description": "練習したいユニットを選択してください。",
+          "selectAll": "すべて選択",
+          "unitsSelected": "{{count}} ユニット選択済み",
+          "cancel": "キャンセル",
+          "startGame": "ゲームを開始"
+        },
+        "list": {
+          "vocabularyMatch": {
+            "title": "語彙マッチ",
+            "description": "この速いペースの記憶ゲームで、単語とその意味をマッチさせましょう",
+            "time": "5-10分"
+          },
+          "wordScramble": {
+            "title": "単語並べ替え",
+            "description": "文字を並べ替えて正しい語彙を作りましょう",
+            "time": "10-15分"
+          },
+          "bridgeGame": {
+            "title": "壊れた橋",
+            "description": "空欄を埋めて壊れた橋を渡りましょう",
+            "time": "10-15分"
+          },
+          "grammarQuest": {
+            "title": "文法クエスト",
+            "description": "文法チャレンジを冒険し、実績をアンロックしましょう",
+            "time": "15-20分"
+          },
+          "listeningChallenge": {
+            "title": "リスニングチャレンジ",
+            "description": "様々な文脈で正しい単語を聞き取りましょう",
+            "time": "10-15分"
+          },
+          "speedQuiz": {
+            "title": "スピードクイズ",
+            "description": "制限時間内にできるだけ多くの問題に答えましょう",
+            "time": "5分"
+          },
+          "sentenceBuilder": {
+            "title": "文章組み立て",
+            "description": "並べ替えられた単語やフレーズから正しい文を作りましょう",
+            "time": "10-15分"
+          }
+        },
+        "vocabularyMatch": {
+          "title": "語彙マッチ",
+          "instructions": "単語をクリックしてから、その意味をクリックしてください",
+          "matched": "マッチ済み",
+          "total": "合計",
+          "attempts": "試行回数"
+        },
+        "wordScramble": {
+          "title": "単語並べ替え",
+          "instructions": "正しい順序で文字をタップして単語を作成してください",
+          "meaning": "意味",
+          "tapLetters": "下の文字をタップ...",
+          "removeLetter": "最後を削除",
+          "example": "例",
+          "hideHint": "ヒントを隠す",
+          "showHint": "ヒントを表示",
+          "skip": "スキップ",
+          "correct": "正解！",
+          "incorrect": "もう一度！"
+        },
+        "speedQuiz": {
+          "title": "スピードクイズ",
+          "instructions": "タイマーが切れる前に正しい答えを選択してください。速く！",
+          "selectMeaning": "次の意味を選択:",
+          "selectWord": "次の単語を選択:",
+          "notEnoughWords": "スピードクイズをプレイするには少なくとも4つの単語が必要です"
+        },
+        "bridge": {
+          "title": "壊れた橋",
+          "loading": "ゲームを読み込み中...",
+          "fillBlank": "空欄を埋めてください:",
+          "victory": "🎉 勝利！",
+          "victoryMessage": "すべての橋を渡ることに成功しました！",
+          "gameOver": "💔 ゲームオーバー",
+          "gameOverMessage": "橋が崩れました！",
+          "reviewMistakes": "間違いを復習:",
+          "tryAgain": "もう一度",
+          "playAgain": "再プレイ",
+          "noSentences": "例文がありません",
+          "noQuestions": "問題を生成できません",
+          "loadError": "ゲームの読み込みに失敗しました",
+          "correctAnswers": "正解",
+          "viewReview": "復習を見る",
+          "reviewTitle": "📋 答えの復習",
+          "reviewSummary": "{{total}}問中{{correct}}問正解しました！",
+          "questionNum": "問題 #{{num}}",
+          "correct": "正解",
+          "incorrect": "不正解",
+          "yourAnswer": "あなたの答え",
+          "correctAnswer": "正解"
+        },
+        "result": {
+          "title": "ゲーム完了！",
+          "score": "スコア",
+          "time": "時間",
+          "playAgain": "再プレイ",
+          "exit": "終了",
+          "correctAnswers": "正解数",
+          "timeTaken": "所要時間",
+          "backToMenu": "メニューに戻る",
+          "excellent": {
+            "title": "素晴らしい！",
+            "message": "優れたパフォーマンス！このコンテンツをマスターしました！"
+          },
+          "good": {
+            "title": "よくできました！",
+            "message": "よくやりました！この調子で続けましょう！"
+          },
+          "fair": {
+            "title": "頑張りました！",
+            "message": "悪くないです！もう少し練習すれば素晴らしくなります！"
+          },
+          "needsImprovement": {
+            "title": "もう一度！",
+            "message": "諦めないでください！練習は完璧を作ります！"
+          }
+        }
       }
     }
+  },
+  "games": {
+    "points": "ポイント",
+    "playAgain": "再プレイ",
+    "backToMenu": "メニューに戻る",
+    "tryAgain": "もう一度"
   },
   "student": {
     "bookList": {

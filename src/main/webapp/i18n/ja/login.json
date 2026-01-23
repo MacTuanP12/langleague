@@ -5,13 +5,35 @@
       "username": "ユーザー名",
       "username.placeholder": "ユーザー名を入力",
       "password": "パスワード",
-      "password.placeholder": "パスワード",
-      "rememberme": "自動ログイン",
-      "button": "ログイン"
+      "password.placeholder": "パスワードを入力",
+      "rememberme": "ログイン状態を保持",
+      "button": "ログイン",
+      "button.signing": "ログイン中...",
+      "captcha": {
+        "loading": "認証コードを読み込み中...",
+        "placeholder": "認証コードを入力",
+        "error": "読み込みに失敗しました。クリックして再試行してください。"
+      }
     },
     "messages": {
       "error": {
-        "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
+        "authentication": "<strong>ログインに失敗しました！</strong> 認証情報を確認して再試行してください。",
+        "badcredentials": "<strong>ログインに失敗しました！</strong> 認証情報が正しくありません。",
+        "usernotfound": "<strong>ログインに失敗しました！</strong> ユーザーが見つかりません。",
+        "accountlocked": "<strong>ログインに失敗しました！</strong> アカウントがロックされています。",
+        "accountdisabled": "<strong>ログインに失敗しました！</strong> アカウントが無効になっています。",
+        "captcha": "認証コードが無効です。もう一度お試しください。"
+      },
+      "validate": {
+        "username": {
+          "required": "ユーザー名は必須です。"
+        },
+        "password": {
+          "required": "パスワードは必須です。"
+        },
+        "captcha": {
+          "required": "認証コードは必須です。"
+        }
       },
       "info": {
         "authenticated": {
@@ -26,7 +48,7 @@
       }
     },
     "password": {
-      "forgot": "パスワードを忘れてしまいましたか?"
+      "forgot": "パスワードをお忘れですか？"
     }
   }
 }

@@ -2,6 +2,8 @@
   "home": {
     "title": "Discover Knowledge",
     "subtitle": "Explore our vast collection of educational resources",
+    "loading": "Loading...",
+    "noBooks": "No books found.",
     "search": {
       "placeholder": "Search for books or topics...",
       "button": "Search"
@@ -10,6 +12,14 @@
       "title": "Featured Books",
       "viewAll": "View all",
       "details": "Details"
+    },
+    "books": {
+      "title": "Available Books",
+      "description": "Choose a book to start your learning journey",
+      "noBooks": "No books available",
+      "noBooksDescription": "Check back later for new learning materials",
+      "public": "Public",
+      "viewDetails": "View Details"
     },
     "logged": {
       "message": "You are logged in as \"{{username}}\"."

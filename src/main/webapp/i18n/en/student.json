@@ -27,11 +27,14 @@
         "title": "My Dashboard",
         "loading": "Loading your books...",
         "welcome": "Welcome back, {{name}}!",
+        "activeBooks": "Active Courses",
+        "progress": "Overall Progress",
         "stats": {
           "hours": "Hours Studied",
           "books": "Books Completed"
         },
         "noBooks": "No books found matching your search.",
+        "noBooksDescription": "Try adjusting your search or filters to find what you need.",
         "loadMore": "Load more books",
         "search": {
           "placeholder": "Search books..."
@@ -43,7 +46,12 @@
         },
         "book": {
           "continue": "Continue",
-          "start": "Start"
+          "start": "Start",
+          "completed": "Completed",
+          "enrolled": "Enrolled",
+          "active": "Active",
+          "not_enrolled": "Not Enrolled",
+          "units": "Units"
         },
         "streak": {
           "label": "Day Streak",
@@ -57,12 +65,58 @@
           }
         }
       },
+      "profile": {
+        "title": "My Profile",
+        "subtitle": "Manage your account and progress",
+        "actions": {
+          "changePhoto": "Change Photo",
+          "saveChanges": "Save Changes",
+          "cancel": "Cancel"
+        },
+        "personalInfo": {
+          "title": "Personal Information",
+          "fullName": "Full Name",
+          "fullNamePlaceholder": "e.g. Alex Johnson",
+          "email": "Email Address",
+          "username": "Username",
+          "bio": "Bio / About Me",
+          "bioPlaceholder": "Tell us a little about yourself..."
+        },
+        "stats": {
+          "title": "Learning Statistics",
+          "booksEnrolled": "Courses Enrolled",
+          "streak": "Day Streak",
+          "achievements": "Achievements"
+        },
+        "preferences": {
+          "theme": "Theme Preference",
+          "themeLight": "☀️ Light",
+          "themeDark": "🌙 Dark",
+          "themeSystem": "💻 System"
+        },
+        "messages": {
+          "success": "Profile updated successfully!",
+          "error": "Failed to update profile",
+          "themeChanged": "Theme updated!",
+          "themeError": "Failed to change theme",
+          "photoComingSoon": "Photo upload functionality coming soon!"
+        }
+      },
       "books": {
+        "title": "Course Books",
+        "description": "Select a book to continue your learning journey",
+        "public": "Public",
+        "viewDetails": "View Details",
+        "noBooks": "No books available",
+        "noBooksDescription": "Check back later for new learning materials",
         "detail": {
           "loading": "Loading...",
-          "backToBooks": "Back to Books",
+          "backToHome": "Back to Home",
           "startLearning": "Start Learning",
           "enrollNow": "Enroll Now",
+          "studyNow": "Study Now",
+          "chapters": "Chapters",
+          "completed": "Completed",
           "units": {
             "title": "UNITS IN THIS BOOK",
             "empty": "No units available yet"
@@ -75,17 +129,29 @@
         }
       },
       "learning": {
+        "backToBook": "Back to Book",
+        "selectUnit": "Select a unit to start learning",
+        "bookContent": "Book Content",
         "unit": "Unit",
         "nextLesson": "Next Lesson",
         "previousLesson": "Previous Lesson",
         "complete": "Complete",
+        "unitCompleted": "Unit completed! Moving to next unit...",
+        "bookCompleted": "Congratulations! You have completed the book!",
+        "sections": {
+          "vocabulary": "Vocabulary",
+          "grammar": "Grammar",
+          "exercise": "Exercise",
+          "flashcard": "Flashcard",
+          "note": "Note"
+        },
         "vocabulary": {
-          "title": "Vocabulary",
           "unit": "UNIT",
-          "meaning": "Meaning:",
-          "example": "Example:",
+          "title": "VOCABULARY",
           "wordsToLearn": "words to learn",
           "vocabularyWords": "Vocabulary Words",
+          "meaning": "Meaning:",
+          "example": "Example:",
           "noVocabulary": "No vocabulary words yet",
           "noVocabularyDescription": "Vocabulary words will appear here once added by your teacher",
           "clickToHear": "Click on the word to hear pronunciation",
@@ -95,11 +161,19 @@
           }
         },
         "grammar": {
-          "title": "Grammar",
-          "noGrammar": "No grammar lessons added yet for this unit."
+          "unit": "UNIT",
+          "title": "GRAMMAR",
+          "lessons": "grammar lessons",
+          "topics": "Grammar Topics",
+          "content": "Content",
+          "examples": "Examples",
+          "noGrammar": "No grammar lessons added yet for this unit.",
+          "noGrammarDescription": "Grammar lessons will appear here once added by your teacher",
+          "example": "Example:",
+          "practiceFlashcard": "Practice Grammar with Flashcards"
         },
         "exercise": {
-          "title": "Exercise",
+          "title": "EXERCISE",
           "noExercises": "No exercises added yet for this unit.",
           "backToBook": "Back to Book List",
           "defaultTitle": "Exercise",
@@ -140,6 +214,7 @@
           "apiKeyPlaceholder": "Paste your API key here...",
           "getFreeKey": "Get a free key here",
           "invalidKeyError": "Invalid API Key. Please check and try again.",
+          "rateLimitError": "⚠️ API quota exceeded. The system tried to retry automatically but failed. Please wait a few minutes before trying again, or consider upgrading your API plan. Free tier has daily limits.",
           "somethingWentWrong": "Something went wrong.",
           "grammarPromptPlaceholder": "Ask anything about this grammar topic...\nFor example: Can you give me more examples? How is this different from...?",
           "grammarAsk": "Ask",
@@ -159,7 +234,9 @@
           "clickToFlip": "Click to Flip",
           "terminology": "Terminology in this section",
           "noCards": "No flashcards available",
-          "noCardsDescription": "Flashcards will appear here once vocabulary is added"
+          "noCardsDescription": "Flashcards will appear here once vocabulary is added",
+          "reviewMode": "Review Mode ({{count}})",
+          "reviewSession": "Review Session"
         },
         "flashcardList": {
           "title": "Flashcards",
@@ -168,10 +245,20 @@
           "noSets": "No books available",
           "enrollDescription": "Enroll in books to start studying with flashcards",
           "studyFlashcards": "Study Flashcards",
-          "noUnits": "No units available in this book"
+          "noUnits": "No units available in this book",
+          "customSession": "Custom Session"
         },
         "bookLearn": {
-          "progress": "Your Progress"
+          "progress": "Your Progress",
+          "backToBook": "Back to Book",
+          "bookContent": "Book Content",
+          "selectUnit": "Select a unit to start learning",
+          "unitCompleted": "Unit completed! Moving to next unit...",
+          "bookCompleted": "Congratulations! You have completed the book!",
+          "messages": {
+            "unitCompleted": "Unit completed! Moving to next unit...",
+            "bookCompleted": "Congratulations! You have completed the book!"
+          }
         },
         "itemCount": {
           "words": "{{count}} words",
@@ -184,7 +271,7 @@
           "loading": "Loading notes...",
           "empty": "No notes yet for this unit.",
           "emptyDescription": "Start taking notes to help you remember important points!",
-          "placeholder": "Take a note...",
+          "placeholder": "Click here to add your personal notes (Markdown supported)...",
           "placeholderDisabled": "You already have a note for this unit. Click Edit to modify it.",
           "addButton": "Add Note",
           "updateButton": "Update Note",
@@ -197,15 +284,53 @@
           "duplicateWarning": "You already have a note for this unit. Please delete it first if you want to create a new one.",
           "limitInfo": "You can only have one note per unit. Edit or delete your existing note.",
           "created": "Created:",
-          "updated": "Updated:"
+          "updated": "Updated:",
+          "lastUpdated": "Last updated",
+          "characters": "characters",
+          "clear": "Clear",
+          "save": "Save",
+          "preview": "Preview",
+          "maximize": "Maximize",
+          "minimize": "Minimize",
+          "emptyPreview": "Nothing to preview yet..."
         }
       },
       "games": {
         "title": "Learning Games",
         "subtitle": "Make learning fun! Play games to improve your language skills",
         "backToDashboard": "Back to Dashboard",
+        "backToMenu": "Back to Menu",
         "loading": "Loading games...",
         "noGamesForDifficulty": "No games found for this difficulty level",
+        "noGames": "No games available",
+        "noGamesDescription": "Try adjusting your difficulty filter",
+        "progress": "Progress",
+        "score": "Score",
+        "question": "Question",
+        "filterByDifficulty": "Filter by difficulty:",
+        "playNow": "Play Now",
+        "comingSoon": "Coming Soon",
+        "active": "Active",
+        "inactive": "Inactive",
+        "difficulty": {
+          "all": "All Games",
+          "easy": "Easy",
+          "medium": "Medium",
+          "hard": "Hard"
+        },
+        "stats": {
+          "played": "Games Played",
+          "score": "Total Score",
+          "achievements": "Achievements"
+        },
+        "dataSource": {
+          "title": "Select Learning Material",
+          "description": "Choose the units you want to practice with.",
+          "selectAll": "Select All",
+          "unitsSelected": "{{count}} units selected",
+          "cancel": "Cancel",
+          "startGame": "Start Game"
+        },
         "list": {
           "vocabularyMatch": {
             "title": "Vocabulary Match",
@@ -215,6 +340,11 @@
           "wordScramble": {
             "title": "Word Scramble",
             "description": "Unscramble letters to form the correct vocabulary words",
+            "time": "10-15 min"
+          },
+          "bridgeGame": {
+            "title": "The Broken Bridge",
+            "description": "Fill in the blanks to cross the broken bridge",
             "time": "10-15 min"
           },
           "grammarQuest": {
@@ -237,35 +367,92 @@
             "description": "Build correct sentences from scrambled words and phrases",
             "time": "10-15 min"
           }
-        }
-      },
-      "profile": {
-        "actions": {
-          "changePhoto": "Change Photo",
-          "saveChanges": "Save Changes"
         },
-        "personalInfo": {
-          "fullName": "Full Name",
-          "fullNamePlaceholder": "e.g. Alex Johnson",
-          "email": "Email Address",
-          "bio": "Bio / About Me",
-          "bioPlaceholder": "Tell us a little about yourself..."
+        "vocabularyMatch": {
+          "title": "Vocabulary Match",
+          "instructions": "Click on a word and then click on its matching meaning",
+          "matched": "Matched",
+          "total": "Total",
+          "attempts": "Attempts"
         },
-        "preferences": {
-          "theme": "Theme Preference",
-          "themeLight": "☀️ Light",
-          "themeDark": "🌙 Dark",
-          "themeSystem": "💻 System"
+        "wordScramble": {
+          "title": "Word Scramble",
+          "instructions": "Rearrange the letters to form the correct word. Spaces and punctuation are ignored.",
+          "meaning": "Meaning",
+          "tapLetters": "Tap letters below...",
+          "removeLetter": "Remove Last",
+          "example": "Example",
+          "hideHint": "Hide Hint",
+          "showHint": "Show Hint",
+          "skip": "Skip",
+          "correct": "Correct!",
+          "incorrect": "Try again!"
         },
-        "messages": {
-          "success": "Profile updated successfully!",
-          "error": "Failed to update profile",
-          "themeChanged": "Theme updated!",
-          "themeError": "Failed to change theme",
-          "photoComingSoon": "Photo upload functionality coming soon!"
+        "speedQuiz": {
+          "title": "Speed Quiz",
+          "instructions": "Select the correct answer before the timer runs out. Be quick!",
+          "selectMeaning": "Select the meaning of:",
+          "selectWord": "Select the word for:",
+          "notEnoughWords": "Need at least 4 words to play Speed Quiz"
+        },
+        "bridge": {
+          "title": "The Broken Bridge",
+          "loading": "Loading game...",
+          "fillBlank": "Fill in the blank:",
+          "victory": "🎉 Victory!",
+          "victoryMessage": "You crossed all bridges successfully!",
+          "gameOver": "💔 Game Over",
+          "gameOverMessage": "The bridge collapsed!",
+          "reviewMistakes": "Review Your Mistakes:",
+          "tryAgain": "Try Again",
+          "playAgain": "Play Again",
+          "noSentences": "No example sentences available",
+          "noQuestions": "Unable to generate questions",
+          "loadError": "Failed to load game",
+          "correctAnswers": "Correct Answers",
+          "viewReview": "View Review",
+          "reviewTitle": "📋 Answer Review",
+          "reviewSummary": "You got {{correct}} out of {{total}} questions correct!",
+          "questionNum": "Question #{{num}}",
+          "correct": "Correct",
+          "incorrect": "Incorrect",
+          "yourAnswer": "Your Answer",
+          "correctAnswer": "Correct Answer"
+        },
+        "result": {
+          "title": "Game Complete!",
+          "score": "Score",
+          "time": "Time",
+          "playAgain": "Play Again",
+          "exit": "Exit",
+          "correctAnswers": "Correct Answers",
+          "timeTaken": "Time taken",
+          "backToMenu": "Back to Menu",
+          "excellent": {
+            "title": "Excellent!",
+            "message": "Outstanding performance! You have mastered this content!"
+          },
+          "good": {
+            "title": "Great Job!",
+            "message": "Well done! Keep up the good work!"
+          },
+          "fair": {
+            "title": "Good Effort!",
+            "message": "Not bad! A bit more practice and you will do great!"
+          },
+          "needsImprovement": {
+            "title": "Try Again!",
+            "message": "Do not give up! Practice makes perfect!"
+          }
         }
       }
     }
+  },
+  "games": {
+    "points": "Points",
+    "playAgain": "Play Again",
+    "backToMenu": "Back to Menu",
+    "tryAgain": "Try Again"
   },
   "student": {
     "bookList": {

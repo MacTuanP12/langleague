@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchMyBooks, fetchPublicBooks, fetchEnrolledBooks } from 'app/shared/reducers/book.reducer';
+import { getMyBooks, getPublicBooks, getEnrolledBooks } from 'app/entities/book/book.reducer';
 import { IBook } from 'app/shared/model/book.model';
 
 type BookFetchMode = 'teacher' | 'student-public' | 'student-enrolled';
@@ -30,17 +30,17 @@ interface UseBooksReturn {
  */
 export const useBooks = ({ mode, autoFetch = true, searchTerm = '' }: UseBooksOptions): UseBooksReturn => {
   const dispatch = useAppDispatch();
-  const { books, loading, errorMessage } = useAppSelector(state => state.book);
+  const { entities, loading, errorMessage } = useAppSelector(state => state.book);
 
   // Fetch books based on mode
   const fetchBooks = () => {
     switch (mode) {
       case 'teacher':
-        return dispatch(fetchMyBooks());
+        return dispatch(getMyBooks({}));
       case 'student-public':
-        return dispatch(fetchPublicBooks());
+        return dispatch(getPublicBooks({}));
       case 'student-enrolled':
-        return dispatch(fetchEnrolledBooks());
+        return dispatch(getEnrolledBooks({}));
       default:
         return Promise.resolve();
     }
@@ -55,16 +55,16 @@ export const useBooks = ({ mode, autoFetch = true, searchTerm = '' }: UseBooksOp
 
   // Filter books by search term (memoized)
   const filteredBooks = useMemo(() => {
-    if (!searchTerm) return books || [];
+    if (!searchTerm) return entities || [];
 
     const lowerSearchTerm = searchTerm.toLowerCase();
-    return (books || []).filter(
+    return (entities || []).filter(
       book => book.title?.toLowerCase().includes(lowerSearchTerm) || book.description?.toLowerCase().includes(lowerSearchTerm),
     );
-  }, [books, searchTerm]);
+  }, [entities, searchTerm]);
 
   return {
-    books: books || [],
+    books: entities || [],
     filteredBooks,
     loading,
     errorMessage,

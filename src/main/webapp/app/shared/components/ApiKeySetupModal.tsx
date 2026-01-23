@@ -24,15 +24,6 @@ const validateGeminiKey = (key: string): boolean => {
 };
 
 /**
- * Validates OpenAI API Key format
- * Format: sk- + alphanumeric characters
- */
-const validateOpenAIKey = (key: string): boolean => {
-  const OPENAI_KEY_REGEX = /^sk-[0-9A-Za-z]{48,}$/;
-  return OPENAI_KEY_REGEX.test(key);
-};
-
-/**
  * Shared component for API Key setup
  * Used across student and teacher features
  */
@@ -69,9 +60,8 @@ export const ApiKeySetupModal: React.FC<ApiKeySetupModalProps> = ({
 
     // Validate key format
     const isGeminiValid = validateGeminiKey(trimmedKey);
-    const isOpenAIValid = validateOpenAIKey(trimmedKey);
 
-    if (!isGeminiValid && !isOpenAIValid) {
+    if (!isGeminiValid) {
       setValidationError(translate('langleague.apiKey.errors.invalidFormat'));
       return;
     }
@@ -97,8 +87,7 @@ export const ApiKeySetupModal: React.FC<ApiKeySetupModalProps> = ({
         <p className="text-muted small">
           {description || (
             <Translate contentKey="langleague.apiKey.setupDescription">
-              To use AI features, you need to provide your own API Key (Google Gemini or OpenAI). It&apos;s free and we only store it in
-              your browser.
+              To use AI features, you need to provide your own API Key (Google Gemini). It&apos;s free and we only store it in your browser.
             </Translate>
           )}
         </p>
@@ -135,9 +124,32 @@ export const ApiKeySetupModal: React.FC<ApiKeySetupModalProps> = ({
               </Button>
             </div>
             <small className="text-muted form-text">
-              <Translate contentKey="langleague.apiKey.formatHint">Supported formats: Google Gemini (AIza...) or OpenAI (sk-...)</Translate>
+              <Translate contentKey="langleague.apiKey.formatHint">Supported formats: Google Gemini (AIza...)</Translate>
             </small>
           </FormGroup>
+
+          <div className="mt-3 mb-3">
+            <div className="d-flex align-items-center mb-1">
+              <span className="me-2">🔐</span>
+              <small className="text-muted">
+                <Translate contentKey="langleague.apiKey.security.browserOnly">
+                  API key của bạn chỉ được sử dụng trong trình duyệt
+                </Translate>
+              </small>
+            </div>
+            <div className="d-flex align-items-center mb-1">
+              <span className="me-2">❌</span>
+              <small className="text-muted">
+                <Translate contentKey="langleague.apiKey.security.noStorage">Chúng tôi KHÔNG lưu key</Translate>
+              </small>
+            </div>
+            <div className="d-flex align-items-center">
+              <span className="me-2">⚠️</span>
+              <small className="text-muted">
+                <Translate contentKey="langleague.apiKey.security.noShare">Không chia sẻ key với người khác</Translate>
+              </small>
+            </div>
+          </div>
 
           {showProviderLinks && (
             <div className="mt-3">
@@ -154,18 +166,6 @@ export const ApiKeySetupModal: React.FC<ApiKeySetupModalProps> = ({
                   <span>
                     <i className="bi bi-google me-2"></i>
                     <Translate contentKey="langleague.apiKey.providers.gemini">Google Gemini API Key</Translate>
-                  </span>
-                  <i className="bi bi-box-arrow-up-right"></i>
-                </a>
-                <a
-                  href={API_PROVIDER_LINKS.OPENAI}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-sm btn-outline-success d-flex align-items-center justify-content-between"
-                >
-                  <span>
-                    <i className="bi bi-chat-dots me-2"></i>
-                    <Translate contentKey="langleague.apiKey.providers.openai">OpenAI / ChatGPT API Key</Translate>
                   </span>
                   <i className="bi bi-box-arrow-up-right"></i>
                 </a>

@@ -23,11 +23,26 @@ const initialState: UserManagementState = {
 
 const apiUrl = 'api/admin/users';
 
+export interface IUserQueryParams extends IQueryParams {
+  login?: string;
+  role?: string;
+  status?: string;
+}
+
 // Async thunks
 export const getUsersAsAdmin = createAsyncThunk(
   'userManagement/fetchAll',
-  async ({ page = 0, size = 10, sort = 'id,asc' }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?page=${page}&size=${size}&sort=${sort}`;
+  async ({ page = 0, size = 10, sort = 'id,asc', login, role, status }: IUserQueryParams) => {
+    let requestUrl = `${apiUrl}?page=${page}&size=${size}&sort=${sort}`;
+    if (login) {
+      requestUrl += `&login=${login}`;
+    }
+    if (role && role !== 'all') {
+      requestUrl += `&role=${role}`;
+    }
+    if (status && status !== 'all') {
+      requestUrl += `&status=${status}`;
+    }
     return axios.get<IUser[]>(requestUrl);
   },
   {

@@ -18,4 +18,14 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     Page<Note> findAllByUserProfileId(Long userProfileId, Pageable pageable);
 
     Page<Note> findAllByUserProfileIdAndUnitId(Long userProfileId, Long unitId, Pageable pageable);
+
+    /**
+     * Efficiently checks if a note exists for a given user profile and unit.
+     * This is more performant than fetching the entire list.
+     *
+     * @param userProfileId the user profile ID.
+     * @param unitId the unit ID.
+     * @return true if a note exists, false otherwise.
+     */
+    boolean existsByUserProfileIdAndUnitId(Long userProfileId, Long unitId);
 }

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, Alert } from 'reactstrap';
 import { Translate, translate } from 'react-jhipster';
-import { generateAiGrammarHelp } from 'app/shared/util/ai-tutor.service';
+// Import hook để lấy Redux state
+import { useAppSelector } from 'app/config/store';
+import { generateAiGrammarHelp, Language } from 'app/shared/util/ai-tutor.service';
 import { ApiKeySetupModal } from 'app/shared/components/ApiKeySetupModal';
 import { STORAGE_KEYS } from 'app/config/storage-keys';
 import ReactMarkdown from 'react-markdown';
@@ -13,11 +15,14 @@ interface AiGrammarTutorButtonProps {
 }
 
 interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
+  role: 'user' | 'model';
+  parts: string;
 }
 
 export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ grammarTitle, grammarContent, grammarExamples }) => {
+  // 1. Lấy ngôn ngữ hiện tại từ JHipster Redux
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
+
   // State for UI visibility
   const [showChatModal, setShowChatModal] = useState(false);
   const [showKeyModal, setShowKeyModal] = useState(false);
@@ -56,45 +61,55 @@ export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ gram
     setUserInput('');
 
     // Add user message to chat
-    setChatHistory(prev => [...prev, { role: 'user', content: userMessage }]);
+    const newUserMessage: ChatMessage = { role: 'user', parts: userMessage };
+    setChatHistory(prev => [...prev, newUserMessage]);
 
     setLoading(true);
+    setError(null);
 
     try {
+      // 2. Truyền ngôn ngữ vào Service
       const result = await generateAiGrammarHelp(apiKey, {
         grammarTopic: grammarTitle,
         grammarContent,
         grammarExamples,
         userQuestion: userMessage,
         chatHistory,
+        language: currentLocale as Language, // Ép kiểu string -> Language
       });
 
       // Add AI response to chat
-      setChatHistory(prev => [...prev, { role: 'assistant', content: result }]);
+      const newAiMessage: ChatMessage = { role: 'model', parts: result };
+      setChatHistory(prev => [...prev, newAiMessage]);
     } catch (err: unknown) {
-      if ((err as Error).message === 'INVALID_KEY') {
-        // Close chat modal and open key modal to ask for new key
+      const errorMessage = (err as Error).message;
+      if (errorMessage === 'INVALID_KEY') {
         setShowChatModal(false);
         setShowKeyModal(true);
         setKeyModalError(translate('langleague.student.learning.aiTutor.invalidKeyError'));
-        // Clear invalid key from storage
         localStorage.removeItem(STORAGE_KEYS.GEMINI_API_KEY);
         setApiKey('');
+      } else if (errorMessage === 'RATE_LIMIT_ERROR') {
+        setError(
+          translate(
+            'langleague.student.learning.aiTutor.rateLimitError',
+            'You have exceeded your API quota. The system automatically retried but the limit persists. Please wait a few minutes or upgrade your API plan.',
+          ),
+        );
       } else {
-        setError((err as Error).message || translate('langleague.student.learning.aiTutor.somethingWentWrong'));
+        setError(errorMessage || translate('langleague.student.learning.aiTutor.somethingWentWrong'));
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // ... (Giữ nguyên các hàm handleSaveKey, handleChangeKey, v.v.)
   const handleSaveKey = (newKey: string) => {
     localStorage.setItem(STORAGE_KEYS.GEMINI_API_KEY, newKey);
     setApiKey(newKey);
     setShowKeyModal(false);
     setKeyModalError(null);
-
-    // Open chat modal after saving key
     setShowChatModal(true);
   };
 
@@ -113,7 +128,6 @@ export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ gram
   const toggleChatModal = () => {
     setShowChatModal(!showChatModal);
     if (!showChatModal) {
-      // Reset when opening
       setError(null);
     }
   };
@@ -140,6 +154,7 @@ export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ gram
 
       {/* Chat Modal */}
       <Modal isOpen={showChatModal} toggle={toggleChatModal} centered size="lg" scrollable>
+        {/* ... (Phần nội dung Modal giữ nguyên như code cũ của bạn) */}
         <ModalHeader toggle={toggleChatModal}>
           <div className="d-flex align-items-center">
             <i className="bi bi-robot me-2 text-primary"></i>
@@ -171,11 +186,7 @@ export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ gram
                   <div className="d-flex align-items-start">
                     <i className={`bi ${message.role === 'user' ? 'bi-person-fill' : 'bi-robot'} me-2`}></i>
                     <div className="flex-grow-1">
-                      {message.role === 'assistant' ? (
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
-                      ) : (
-                        <p className="mb-0">{message.content}</p>
-                      )}
+                      {message.role === 'model' ? <ReactMarkdown>{message.parts}</ReactMarkdown> : <p className="mb-0">{message.parts}</p>}
                     </div>
                   </div>
                 </div>
@@ -184,9 +195,7 @@ export const AiGrammarTutorButton: React.FC<AiGrammarTutorButtonProps> = ({ gram
             {loading && (
               <div className="text-center py-3">
                 <div className="spinner-border spinner-border-sm text-primary me-2" role="status">
-                  <span className="visually-hidden">
-                    <Translate contentKey="langleague.student.learning.aiTutor.thinking">Thinking...</Translate>
-                  </span>
+                  <span className="visually-hidden">Thinking...</span>
                 </div>
                 <span className="text-muted">
                   <Translate contentKey="langleague.student.learning.aiTutor.thinking">Thinking...</Translate>

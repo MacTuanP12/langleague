@@ -5,8 +5,10 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { saveAccountSettings, uploadAvatar } from './settings.reducer';
 import { getSession } from 'app/shared/reducers/authentication';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import './settings.scss';
 import { SidebarToggleButton } from 'app/shared/layout/sidebar/SidebarToggleButton';
+import { processImageUrl } from 'app/shared/util/image-utils';
 
 /**
  * ⚠️ DEPRECATION NOTICE - GOLDEN STANDARD REFERENCE
@@ -31,6 +33,7 @@ export const SettingsNew = () => {
   const [bio, setBio] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [imageUrlInput, setImageUrlInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -38,8 +41,17 @@ export const SettingsNew = () => {
       setFullName(`${account.firstName || ''} ${account.lastName || ''}`.trim() || account.login);
       setEmail(account.email || '');
       setAvatarPreview(account.imageUrl || null);
+      setImageUrlInput(account.imageUrl || '');
     }
   }, [account]);
+
+  useEffect(() => {
+    if (imageUrlInput) {
+      setAvatarPreview(processImageUrl(imageUrlInput));
+    } else {
+      setAvatarPreview(null);
+    }
+  }, [imageUrlInput]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +61,7 @@ export const SettingsNew = () => {
       firstName: names[0] || '',
       lastName: names.slice(1).join(' ') || '',
       email,
-      imageUrl: avatarPreview || account.imageUrl,
+      imageUrl: processImageUrl(imageUrlInput) || account.imageUrl,
     };
     dispatch(saveAccountSettings(updatedAccount));
     toast.success(translate('settings.messages.profileUpdateSuccess'));
@@ -59,7 +71,7 @@ export const SettingsNew = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
@@ -74,12 +86,20 @@ export const SettingsNew = () => {
         return;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageUrl = reader.result as string;
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        // Upload via API
+        const response = await axios.post('/api/upload/image', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        const imageUrl = response.data.fileUrl;
+        setImageUrlInput(imageUrl);
         setAvatarPreview(imageUrl);
 
-        // Upload immediately and refresh session
+        // Update user profile immediately with the new URL
         dispatch(uploadAvatar(imageUrl))
           .then(() => {
             dispatch(getSession());
@@ -89,8 +109,10 @@ export const SettingsNew = () => {
             toast.error(translate('settings.messages.avatarUploadError'));
             setAvatarPreview(account.imageUrl || null);
           });
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        toast.error(translate('settings.messages.avatarUploadError'));
+      }
     }
   };
 
@@ -177,14 +199,25 @@ export const SettingsNew = () => {
               <div className="avatar-section">
                 {getAvatarDisplay()}
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
-                <button type="button" className="change-photo-btn" onClick={handleAvatarClick} disabled={avatarUploading}>
-                  <i className="bi bi-camera"></i>{' '}
-                  {avatarUploading ? (
-                    <Translate contentKey="settings.header.uploading">Uploading...</Translate>
-                  ) : (
-                    <Translate contentKey="settings.header.changePhoto">Change Photo</Translate>
-                  )}
-                </button>
+                <div className="avatar-actions">
+                  <button type="button" className="change-photo-btn" onClick={handleAvatarClick} disabled={avatarUploading}>
+                    <i className="bi bi-camera"></i>{' '}
+                    {avatarUploading ? (
+                      <Translate contentKey="settings.header.uploading">Uploading...</Translate>
+                    ) : (
+                      <Translate contentKey="settings.header.changePhoto">Upload Photo</Translate>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="url-input-container" style={{ marginTop: '10px', width: '100%', maxWidth: '300px' }}>
+                <input
+                  type="text"
+                  value={imageUrlInput}
+                  onChange={e => setImageUrlInput(e.target.value)}
+                  placeholder={translate('global.form.image.url.placeholder')}
+                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+                />
               </div>
             </div>
 

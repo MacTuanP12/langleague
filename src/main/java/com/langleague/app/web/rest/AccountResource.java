@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -127,14 +128,23 @@ public class AccountResource {
      * @return the updated account information.
      */
     @PostMapping("/account/avatar")
+    @Transactional
     public AdminUserDTO updateAvatar(@RequestBody String imageUrl) {
+        LOG.debug("Received imageUrl: {}", imageUrl != null ? imageUrl.substring(0, Math.min(100, imageUrl.length())) : "null");
+
         String userLogin = SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
 
         User user = userRepository.findOneByLogin(userLogin).orElseThrow(() -> new AccountResourceException("User could not be found"));
 
+        // Remove surrounding quotes if present (Spring may include them from JSON string)
+        String cleanImageUrl = imageUrl;
+        if (cleanImageUrl != null && cleanImageUrl.startsWith("\"") && cleanImageUrl.endsWith("\"")) {
+            cleanImageUrl = cleanImageUrl.substring(1, cleanImageUrl.length() - 1);
+        }
+
         // Update only the imageUrl field
-        user.setImageUrl(imageUrl);
+        user.setImageUrl(cleanImageUrl);
         userRepository.save(user);
 
         LOG.debug("Updated avatar for User: {}", user);

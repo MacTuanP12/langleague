@@ -98,7 +98,14 @@
         "deleteSuccess": "Đã xóa người dùng thành công",
         "deleteFailed": "Không thể xóa người dùng",
         "confirmDeleteTitle": "Xóa Người Dùng?",
-        "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác."
+        "confirmDelete": "Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.",
+        "messages": {
+          "loadError": "Tải danh sách người dùng thất bại",
+          "createSuccess": "Tạo người dùng thành công",
+          "createError": "Tạo người dùng thất bại",
+          "updateSuccess": "Cập nhật người dùng thành công",
+          "updateError": "Cập nhật người dùng thất bại"
+        }
       }
     },
     "common": {

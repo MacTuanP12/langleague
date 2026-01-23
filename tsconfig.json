@@ -20,8 +20,17 @@
     },
     "importHelpers": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "include": ["src/main/webapp/app", "src/main/webapp/app/shared/types", "src/main/webapp/app/typings.d.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "node_modules/react-simplemde-editor/dist/**",
+    "node_modules/@types/pdfjs-dist/**",
+    "node_modules/pdfjs-dist/types/**"
+  ]
 }

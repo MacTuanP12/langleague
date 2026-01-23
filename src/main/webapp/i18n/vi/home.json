@@ -2,9 +2,24 @@
   "home": {
     "title": "Khám phá tri thức",
     "subtitle": "Khám phá bộ sưu tập tài nguyên giáo dục phong phú của chúng tôi",
+    "loading": "Đang tải...",
+    "noBooks": "Không tìm thấy sách.",
     "search": {
       "placeholder": "Tìm kiếm sách, khóa học hoặc chủ đề...",
       "button": "Tìm kiếm"
+    },
+    "featured": {
+      "title": "Sách nổi bật",
+      "viewAll": "Xem tất cả",
+      "details": "Chi tiết"
+    },
+    "books": {
+      "title": "Sách hiện có",
+      "description": "Chọn một cuốn sách để bắt đầu hành trình học tập của bạn",
+      "noBooks": "Không có sách nào",
+      "noBooksDescription": "Vui lòng quay lại sau để xem tài liệu học tập mới",
+      "public": "Công khai",
+      "viewDetails": "Xem chi tiết"
     },
     "logged": {
       "message": "Bạn đang đăng nhập với tên \"{{username}}\"."

@@ -26,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -37,6 +38,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/grammars")
+@Transactional
 public class GrammarResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrammarResource.class);
@@ -58,19 +60,29 @@ public class GrammarResource {
         this.unitRepository = unitRepository;
     }
 
-    private void checkOwnership(Book book) {
-        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.TEACHER)) {
-            throw new AccessDeniedException("You do not have the authority to perform this action");
-        }
-        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccessDeniedException("User not logged in"));
+    private void checkUnitOwnership(Long unitId) {
+        Unit unit = unitRepository
+            .findById(unitId)
+            .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
+        SecurityUtils.checkOwnership(unit.getBook());
+    }
 
-        if (
-            book.getTeacherProfile() == null ||
-            book.getTeacherProfile().getUser() == null ||
-            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
-        ) {
-            throw new AccessDeniedException("You are not the owner of this book");
+    private Grammar validateAndGetGrammar(Long id, GrammarDTO grammarDTO) {
+        if (grammarDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, grammarDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+        return getGrammarAndCheckOwnership(id);
+    }
+
+    private Grammar getGrammarAndCheckOwnership(Long id) {
+        Grammar grammar = grammarRepository
+            .findById(id)
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        SecurityUtils.checkOwnership(grammar.getUnit().getBook());
+        return grammar;
     }
 
     /**
@@ -87,13 +99,10 @@ public class GrammarResource {
         if (grammarDTO.getId() != null) {
             throw new BadRequestAlertException("A new grammar cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (grammarDTO.getUnit() == null || grammarDTO.getUnit().getId() == null) {
+        if (grammarDTO.getUnitId() == null) {
             throw new BadRequestAlertException("A new grammar must belong to a unit", ENTITY_NAME, "unitnull");
         }
-        Unit unit = unitRepository
-            .findById(grammarDTO.getUnit().getId())
-            .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        checkUnitOwnership(grammarDTO.getUnitId());
 
         grammarDTO = grammarService.save(grammarDTO);
         return ResponseEntity.created(new URI("/api/grammars/" + grammarDTO.getId()))
@@ -115,11 +124,8 @@ public class GrammarResource {
             return ResponseEntity.ok(List.of());
         }
 
-        Long unitId = grammars.get(0).getUnit().getId();
-        Unit unit = unitRepository
-            .findById(unitId)
-            .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        Long unitId = grammars.getFirst().getUnitId();
+        checkUnitOwnership(unitId);
 
         List<GrammarDTO> result = grammarService.saveBulk(unitId, grammars);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "bulk")).body(result);
@@ -133,30 +139,15 @@ public class GrammarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated grammarDTO,
      * or with status {@code 400 (Bad Request)} if the grammarDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the grammarDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<GrammarDTO> updateGrammar(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody GrammarDTO grammarDTO
-    ) throws URISyntaxException {
+    ) {
         LOG.debug("REST request to update Grammar : {}, {}", id, grammarDTO);
-        if (grammarDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, grammarDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!grammarRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Grammar grammar = grammarRepository
-            .findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(grammar.getUnit().getBook());
+        validateAndGetGrammar(id, grammarDTO);
 
         grammarDTO = grammarService.update(grammarDTO);
         return ResponseEntity.ok()
@@ -173,30 +164,15 @@ public class GrammarResource {
      * or with status {@code 400 (Bad Request)} if the grammarDTO is not valid,
      * or with status {@code 404 (Not Found)} if the grammarDTO is not found,
      * or with status {@code 500 (Internal Server Error)} if the grammarDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     @PreAuthorize("hasAuthority('" + AuthoritiesConstants.TEACHER + "')")
     public ResponseEntity<GrammarDTO> partialUpdateGrammar(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody GrammarDTO grammarDTO
-    ) throws URISyntaxException {
+    ) {
         LOG.debug("REST request to partial update Grammar partially : {}, {}", id, grammarDTO);
-        if (grammarDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, grammarDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!grammarRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Grammar grammar = grammarRepository
-            .findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(grammar.getUnit().getBook());
+        validateAndGetGrammar(id, grammarDTO);
 
         Optional<GrammarDTO> result = grammarService.partialUpdate(grammarDTO);
 
@@ -260,10 +236,7 @@ public class GrammarResource {
     public ResponseEntity<Void> deleteGrammar(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Grammar : {}", id);
 
-        Grammar grammar = grammarRepository
-            .findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(grammar.getUnit().getBook());
+        getGrammarAndCheckOwnership(id);
 
         grammarService.delete(id);
         return ResponseEntity.noContent()

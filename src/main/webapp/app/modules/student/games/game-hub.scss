@@ -1,0 +1,82 @@
+// ========================================
+// GAME HUB STYLES
+// ========================================
+// Styles for the Game Hub page
+
+@import '../student-gamification';
+
+.game-hub-container {
+  padding: 2rem;
+
+  .game-card {
+    transition: transform 0.2s;
+    height: 100%;
+    cursor: pointer;
+    border: 1px solid var(--student-border);
+    box-shadow: 0 4px 6px var(--student-shadow);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--student-bg-primary);
+
+    &:hover:not(.disabled) {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px var(--student-shadow-lg);
+      border-color: var(--student-primary);
+    }
+
+    &.disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      background-color: var(--student-bg-tertiary);
+    }
+
+    .card-img-top {
+      height: 150px;
+      object-fit: cover;
+      background: var(--student-bg-game);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: white;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--student-text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-text {
+        color: var(--student-text-secondary);
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // Animation cho game
+  .shake {
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    /* ... thêm keyframes nếu cần ... */
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .game-hub-container {
+    padding: 1rem;
+  }
+}

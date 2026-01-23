@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { fetchBooks } from 'app/shared/reducers/book.reducer';
+import { getEntities as fetchBooks } from 'app/entities/book/book.reducer';
 import { createUnit, updateUnit, fetchUnitById, reset } from 'app/shared/reducers/unit.reducer';
 
 export const UnitUpdate = () => {
@@ -16,7 +16,7 @@ export const UnitUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const books = useAppSelector(state => state.book.books);
+  const books = useAppSelector(state => state.book.entities);
   const unitEntity = useAppSelector(state => state.unit.selectedUnit);
   const loading = useAppSelector(state => state.unit.loading);
   const updating = useAppSelector(state => state.unit.updating);
@@ -32,7 +32,7 @@ export const UnitUpdate = () => {
       dispatch(fetchUnitById(id));
     }
 
-    dispatch(fetchBooks());
+    dispatch(fetchBooks({}));
   }, [id, isNew]);
 
   const saveEntity = async values => {

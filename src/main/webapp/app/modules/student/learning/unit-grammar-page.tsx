@@ -37,29 +37,31 @@ export const UnitGrammarPage = () => {
     );
   }
   return (
-    <div className="unit-grammar-page">
-      <div className="grammar-page-header">
-        <Button onClick={handleBack} className="back-btn">
-          <FontAwesomeIcon icon="arrow-left" className="me-2" />
-          <Translate contentKey="entity.action.back">Back</Translate>
-        </Button>
-        <div className="header-info">
-          <div className="breadcrumb">
-            <Translate contentKey="langleague.student.grammar.title">Grammar</Translate>
+    <div className="page-unit-grammar-wrapper">
+      <div className="unit-grammar-page">
+        <div className="grammar-page-header">
+          <Button onClick={handleBack} className="back-btn">
+            <FontAwesomeIcon icon="arrow-left" className="me-2" />
+            <Translate contentKey="entity.action.back">Back</Translate>
+          </Button>
+          <div className="header-info">
+            <div className="breadcrumb">
+              <Translate contentKey="langleague.student.grammar.title">Grammar</Translate>
+            </div>
+            <h2>{unit?.title || 'Unit Grammar'}</h2>
           </div>
-          <h2>{unit?.title || 'Unit Grammar'}</h2>
         </div>
-      </div>
-      <div className="grammar-content">
-        {grammars && grammars.length > 0 ? (
-          <UnitGrammar data={grammars} />
-        ) : (
-          <div className="empty-state">
-            <p>
-              <Translate contentKey="langleague.student.grammar.noGrammar">No grammar lessons available for this unit</Translate>
-            </p>
-          </div>
-        )}
+        <div className="grammar-content">
+          {grammars && grammars.length > 0 ? (
+            <UnitGrammar data={grammars} />
+          ) : (
+            <div className="empty-state">
+              <p>
+                <Translate contentKey="langleague.student.grammar.noGrammar">No grammar lessons available for this unit</Translate>
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

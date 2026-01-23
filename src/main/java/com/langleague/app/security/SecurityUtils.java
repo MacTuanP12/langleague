@@ -1,8 +1,10 @@
 package com.langleague.app.security;
 
+import com.langleague.app.domain.Book;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -118,5 +120,20 @@ public final class SecurityUtils {
 
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+    }
+
+    public static void checkOwnership(Book book) {
+        if (!hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.TEACHER)) {
+            throw new AccessDeniedException("You do not have the authority to perform this action");
+        }
+        String currentUserLogin = getCurrentUserLogin().orElseThrow(() -> new AccessDeniedException("User not logged in"));
+
+        if (
+            book.getTeacherProfile() == null ||
+            book.getTeacherProfile().getUser() == null ||
+            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
+        ) {
+            throw new AccessDeniedException("You are not the owner of this book");
+        }
     }
 }

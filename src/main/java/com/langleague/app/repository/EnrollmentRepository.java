@@ -38,12 +38,13 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Query(
         "SELECT new com.langleague.app.service.dto.StudentDTO(" +
         "u.id, u.login, u.firstName, u.lastName, u.email, u.imageUrl, " +
-        "b.title, e.enrolledAt, 'ACTIVE') " +
+        "b.title, MAX(e.enrolledAt), 'ACTIVE') " +
         "FROM Enrollment e " +
         "JOIN e.userProfile up " +
         "JOIN up.user u " +
         "JOIN e.book b " +
-        "WHERE b.teacherProfile.user.login = ?1"
+        "WHERE b.teacherProfile.user.login = ?1 " +
+        "GROUP BY u.id, u.login, u.firstName, u.lastName, u.email, u.imageUrl, b.title"
     )
     List<StudentDTO> findStudentsByTeacher(String teacherLogin);
 }

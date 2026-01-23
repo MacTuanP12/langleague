@@ -64,8 +64,10 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "lang_key", length = 10)
     private String langKey;
 
-    @Size(max = 256)
-    @Column(name = "image_url", length = 256)
+    // Increased to support base64 encoded images using MEDIUMTEXT (supports up to ~16MB)
+    // Base64 images can be very long (e.g., 100KB image = ~140,000 characters)
+    @Lob
+    @Column(name = "image_url", columnDefinition = "MEDIUMTEXT")
     private String imageUrl;
 
     @Size(max = 20)

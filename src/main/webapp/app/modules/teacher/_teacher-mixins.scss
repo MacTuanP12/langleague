@@ -1,0 +1,36 @@
+// ========================================
+// TEACHER MIXINS & PLACEHOLDERS
+// ========================================
+// Contains only definitions, no output CSS
+
+// Status Badges Placeholders
+%status-badge-base {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+%badge-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--teacher-success);
+}
+
+%badge-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--teacher-warning);
+}
+
+%badge-secondary {
+  background-color: var(--teacher-bg-tertiary);
+  color: var(--teacher-text-secondary);
+}
+
+%badge-info {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--teacher-info);
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from 'app/config/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import '../../student.scss';
 
 export const StreakWidget = () => {
@@ -50,9 +50,7 @@ export const StreakWidget = () => {
         </div>
         <p className="mb-2">
           {streakCount > 0 ? (
-            <Translate contentKey="langleague.student.dashboard.streak.active" interpolate={{ count: streakCount }}>
-              You are on fire! {streakCount} day streak!
-            </Translate>
+            <span>{translate('langleague.student.dashboard.streak.active', { count: streakCount })}</span>
           ) : (
             <Translate contentKey="langleague.student.dashboard.streak.start">Start your learning streak today!</Translate>
           )}
@@ -63,7 +61,9 @@ export const StreakWidget = () => {
           <div className="mt-3">
             <div className="d-flex justify-content-between mb-1">
               <small>
-                <Translate contentKey="langleague.student.dashboard.streak.nextMilestone">Next milestone</Translate>
+                <Translate contentKey="langleague.student.dashboard.streak.nextMilestone" interpolate={{ count: nextMilestone }}>
+                  Next milestone: {nextMilestone.toString()} days
+                </Translate>
               </small>
               <small className="fw-bold">{nextMilestone} days</small>
             </div>

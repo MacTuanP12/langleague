@@ -1,7 +1,7 @@
 import { translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
 import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
-import { isAxiosError } from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
@@ -42,8 +42,18 @@ export default () => next => action => {
   }
 
   if (isRejectedAction(action) && isAxiosError(error)) {
+    // Ignore cancellation errors
+    if (axios.isCancel(error) || error.name === 'AbortError') {
+      return next(action);
+    }
+
     if (error.response) {
       const { response } = error;
+      // Ignore 404 for enrollment check (user not enrolled yet)
+      if (action.type === 'enrollment/fetch_enrollment_by_book_id/rejected' && response.status === 404) {
+        return next(action);
+      }
+
       if (response.status === 401) {
         // Ignore, page will be redirected to login.
       } else if (error.config?.url?.endsWith('api/account') || error.config?.url?.endsWith('api/authenticate')) {
@@ -85,7 +95,10 @@ export default () => next => action => {
       addErrorAlert({ message: error.message ?? 'Unknown error!' });
     }
   } else if (error) {
-    addErrorAlert({ message: error.message ?? 'Unknown error!' });
+    // Ignore cancellation errors for non-Axios errors as well
+    if (error.name !== 'AbortError') {
+      addErrorAlert({ message: error.message ?? 'Unknown error!' });
+    }
   }
 
   return next(action);

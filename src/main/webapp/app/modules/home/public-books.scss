@@ -1,0 +1,41 @@
+// Styles for Public Book List (Home Page)
+// Reuses components from Student module but adapts for public layout
+
+@import '../student/student-cards';
+
+// Override container for public view (no sidebar)
+.public-books-container {
+  padding: 24px;
+  background: var(--bg-secondary);
+  min-height: calc(100vh - 64px);
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.public-header {
+  margin-bottom: 32px;
+  text-align: center;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+  }
+}
+
+// Reuse grid from student but ensure it works here
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}

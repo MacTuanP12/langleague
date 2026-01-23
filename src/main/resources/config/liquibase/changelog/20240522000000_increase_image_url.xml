@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20240522000000-1" author="admin">
+        <comment>Increase image_url column size to support long URLs (Firebase/Google) and Base64 strings</comment>
+        <modifyDataType tableName="jhi_user" columnName="image_url" newDataType="MEDIUMTEXT"/>
+    </changeSet>
+
+</databaseChangeLog>

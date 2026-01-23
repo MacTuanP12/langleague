@@ -5,20 +5,24 @@
       "username": "用户名",
       "username.placeholder": "请输入用户名",
       "password": "密码",
-      "password.placeholder": "您的密码",
-      "rememberme": "自动登录",
+      "password.placeholder": "请输入密码",
+      "rememberme": "记住我",
       "button": "登录",
       "button.signing": "登录中...",
       "captcha": {
-        "loading": "加载验证码...",
+        "loading": "加载验证码中...",
         "placeholder": "输入验证码",
-        "error": "加载失败，点击重试。"
+        "error": "加载失败。点击重试。"
       }
     },
     "messages": {
       "error": {
-        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次.",
-        "captcha": "验证码错误，请重试。"
+        "authentication": "<strong>登录失败！</strong> 请检查您的登录信息并重试。",
+        "badcredentials": "<strong>登录失败！</strong> 用户名或密码错误。",
+        "usernotfound": "<strong>登录失败！</strong> 用户不存在。",
+        "accountlocked": "<strong>登录失败！</strong> 账户已被锁定。",
+        "accountdisabled": "<strong>登录失败！</strong> 账户已被禁用。",
+        "captcha": "验证码错误。请重试。"
       },
       "validate": {
         "username": {
@@ -35,7 +39,7 @@
         "authenticated": {
           "prefix": "如果您想 ",
           "link": "登录",
-          "suffix": "，可以尝试使用默认账户:<br/>- 管理员 (账号=\"admin\" 密码=\"admin\") <br/>- 用户 (账号=\"user\" 密码=\"user\")。"
+          "suffix": "，可以尝试使用默认账户:<br/>- 管理员 (用户名=\"admin\" 密码=\"admin\") <br/>- 用户 (用户名=\"user\" 密码=\"user\")。"
         },
         "register": {
           "noaccount": "还没有账户？",
@@ -44,7 +48,7 @@
       }
     },
     "password": {
-      "forgot": "忘记密码?"
+      "forgot": "忘记密码了吗？"
     }
   }
 }

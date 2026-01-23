@@ -164,13 +164,29 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<AdminUserDTO>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<AdminUserDTO>> getAllUsers(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        @RequestParam(name = "login", required = false) String login,
+        @RequestParam(name = "role", required = false) String role,
+        @RequestParam(name = "status", required = false) String status
+    ) {
         LOG.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable);
+        Boolean activated = null;
+        if ("active".equalsIgnoreCase(status)) {
+            activated = true;
+        } else if ("suspended".equalsIgnoreCase(status) || "inactive".equalsIgnoreCase(status)) {
+            activated = false;
+        }
+
+        if ("all".equalsIgnoreCase(role)) {
+            role = null;
+        }
+
+        final Page<AdminUserDTO> page = userService.getAllManagedUsers(login, role, activated, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

@@ -16,6 +16,7 @@
       }
     },
     "messages": {
+      "success": "<strong>Đăng nhập thành công!</strong> Chào mừng bạn quay lại.",
       "error": {
         "authentication": "Sai tên đăng nhập hoặc mật khẩu. Vui lòng kiểm tra lại.",
         "badcredentials": "Sai tên đăng nhập hoặc mật khẩu.",

@@ -34,8 +34,9 @@ public class ExerciseDTO implements Serializable {
     @Min(0)
     private Integer orderIndex;
 
-    @NotNull
-    private UnitDTO unit;
+    private Long unitId;
+
+    private String unitTitle;
 
     private List<ExerciseOptionDTO> options;
 
@@ -95,12 +96,20 @@ public class ExerciseDTO implements Serializable {
         this.orderIndex = orderIndex;
     }
 
-    public UnitDTO getUnit() {
-        return unit;
+    public Long getUnitId() {
+        return unitId;
     }
 
-    public void setUnit(UnitDTO unit) {
-        this.unit = unit;
+    public void setUnitId(Long unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getUnitTitle() {
+        return unitTitle;
+    }
+
+    public void setUnitTitle(String unitTitle) {
+        this.unitTitle = unitTitle;
     }
 
     public List<ExerciseOptionDTO> getOptions() {
@@ -143,7 +152,8 @@ public class ExerciseDTO implements Serializable {
             ", audioUrl='" + getAudioUrl() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
             ", orderIndex=" + getOrderIndex() +
-            ", unit=" + getUnit() +
+            ", unitId=" + getUnitId() +
+            ", unitTitle='" + getUnitTitle() + "'" +
             ", options=" + getOptions() +
             "}";
     }

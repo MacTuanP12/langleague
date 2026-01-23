@@ -1,0 +1,9 @@
+{
+  "langleagueApp": {
+    "note": {
+      "created": "Note saved successfully!",
+      "updated": "Note updated successfully!",
+      "deleted": "Note deleted successfully!"
+    }
+  }
+}

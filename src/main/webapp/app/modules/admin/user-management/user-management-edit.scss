@@ -1,55 +1,11 @@
+@import 'admin-forms';
+
 .user-management-edit {
-  padding: 24px;
-  max-width: 900px;
-  margin: 0 auto;
+  @include admin-form-styles;
+  @include admin-form-dark-mode;
 
-  .page-header {
-    margin-bottom: 32px;
-
-    .breadcrumb {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 12px;
-
-      a {
-        color: #3b82f6;
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-
-      .separator {
-        margin: 0 8px;
-        color: #9ca3af;
-      }
-
-      .current {
-        color: #111827;
-      }
-    }
-
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      color: #111827;
-      margin: 0 0 8px 0;
-    }
-
-    p {
-      font-size: 14px;
-      color: #6b7280;
-      margin: 0;
-    }
-  }
-
+  // Specific styles for Edit page
   .form-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 32px;
-
     .user-profile-section {
       display: flex;
       align-items: center;
@@ -113,203 +69,56 @@
       }
     }
 
-    form {
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-bottom: 24px;
+    form .form-group {
+      .input-with-icon {
+        position: relative;
 
-        @media (max-width: 640px) {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        &.full-width {
-          grid-column: 1 / -1;
+        input {
+          padding-right: 40px;
+          width: 100%;
         }
 
-        label {
-          font-size: 14px;
-          font-weight: 500;
-          color: #374151;
-
-          .read-only-label {
-            font-size: 12px;
-            color: #9ca3af;
-            font-weight: 400;
-          }
-        }
-
-        input,
-        select,
-        textarea {
-          padding: 10px 14px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
-          font-size: 14px;
-          transition: all 0.2s;
-          background: white;
-
-          &:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-          }
-
-          &::placeholder {
-            color: #9ca3af;
-          }
-
-          &:disabled,
-          &[readonly] {
-            background: #f9fafb;
-            cursor: not-allowed;
-            color: #6b7280;
-          }
-
-          &.error {
-            border-color: #ef4444;
-
-            &:focus {
-              box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-            }
-          }
-        }
-
-        textarea {
-          resize: vertical;
-          min-height: 100px;
-          font-family: inherit;
-        }
-
-        select {
-          cursor: pointer;
-          appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 12px center;
-          padding-right: 36px;
-
-          &:disabled {
-            background-color: #f9fafb;
-            cursor: not-allowed;
-          }
-        }
-
-        .input-with-icon {
-          position: relative;
-
-          input {
-            padding-right: 40px;
-            width: 100%;
-          }
-
-          i {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-            font-size: 14px;
-          }
-        }
-
-        .status-display {
-          padding: 10px 0;
-
-          .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-
-            .status-dot {
-              width: 8px;
-              height: 8px;
-              border-radius: 50%;
-            }
-
-            &.status-active {
-              background: #d1fae5;
-              color: #065f46;
-
-              .status-dot {
-                background: #10b981;
-              }
-            }
-
-            &.status-inactive {
-              background: #fee2e2;
-              color: #991b1b;
-
-              .status-dot {
-                background: #ef4444;
-              }
-            }
-          }
-        }
-
-        .character-count {
-          font-size: 12px;
+        i {
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
           color: #9ca3af;
-          text-align: right;
-        }
-
-        .error-message {
-          font-size: 13px;
-          color: #ef4444;
-          margin-top: -4px;
+          font-size: 14px;
         }
       }
 
-      .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 32px;
-        padding-top: 24px;
-        border-top: 1px solid #e5e7eb;
+      .status-display {
+        padding: 10px 0;
 
-        button {
-          padding: 10px 24px;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
+        .status-badge {
+          display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 13px;
+          font-weight: 500;
 
-          &.btn-cancel {
-            background: white;
-            color: #374151;
-            border: 1px solid #d1d5db;
+          .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+          }
 
-            &:hover {
-              background: #f9fafb;
-              border-color: #9ca3af;
+          &.status-active {
+            background: #d1fae5;
+            color: #065f46;
+            .status-dot {
+              background: #10b981;
             }
           }
 
-          &.btn-submit {
-            background: #3b82f6;
-            color: white;
-            border: none;
-
-            &:hover {
-              background: #2563eb;
-              transform: translateY(-1px);
-              box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+          &.status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+            .status-dot {
+              background: #ef4444;
             }
           }
         }
@@ -349,87 +158,18 @@
       }
     }
   }
-}
 
-// Dark mode support
-[data-theme='dark'] {
-  .user-management-edit {
-    .page-header {
-      .breadcrumb {
-        color: #9ca3af;
-
-        .current {
-          color: #f9fafb;
-        }
-      }
-
-      h1 {
-        color: #f9fafb;
-      }
-
-      p {
-        color: #9ca3af;
-      }
-    }
-
+  // Dark mode overrides for specific sections
+  [data-theme='dark'] & {
     .form-container {
-      background: #1f2937;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-
       .user-profile-section {
         border-bottom-color: #374151;
-
         .user-info {
           h3 {
             color: #f9fafb;
           }
-
           .user-meta {
             color: #9ca3af;
-          }
-        }
-      }
-
-      form {
-        .form-group {
-          label {
-            color: #d1d5db;
-          }
-
-          input,
-          select,
-          textarea {
-            background: #374151;
-            border-color: #4b5563;
-            color: #f9fafb;
-
-            &::placeholder {
-              color: #6b7280;
-            }
-
-            &:focus {
-              border-color: #3b82f6;
-            }
-
-            &:disabled,
-            &[readonly] {
-              background: #1f2937;
-              color: #9ca3af;
-            }
-          }
-        }
-
-        .form-actions {
-          border-top-color: #374151;
-
-          .btn-cancel {
-            background: #374151;
-            color: #d1d5db;
-            border-color: #4b5563;
-
-            &:hover {
-              background: #4b5563;
-            }
           }
         }
       }
@@ -437,7 +177,6 @@
       .info-box {
         background: #1e3a5f;
         border-color: #3b82f6;
-
         div {
           strong,
           p {

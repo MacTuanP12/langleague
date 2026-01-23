@@ -9,14 +9,15 @@ import { FilterTab } from './dashboard.constants';
 import { useBookFilters } from './hooks/useBookFilters';
 import { SearchFilterSection } from './components/SearchFilterSection';
 import { StreakWidget } from './components/StreakWidget';
-import { useEnrollments, useProgress, useUserProfile } from 'app/shared/reducers/hooks';
-import '../student.scss';
+import { useBooks, useEnrollments, useProgress, useUserProfile } from 'app/shared/reducers/hooks';
+// Removed direct import of student.scss as it should be loaded globally or via layout
 
 /**
  * StudentDashboard Component - Main learning dashboard with Redux integration
  *
  * Features:
- * - Fetch user enrollments from API
+ * - Fetch ALL books (public)
+ * - Fetch user enrollments to check status
  * - Track learning progress
  * - Filter and search books
  * - Display user statistics
@@ -40,34 +41,44 @@ export const StudentDashboard = () => {
   const [filterTab, setFilterTab] = useState<FilterTab>('all');
 
   // Redux hooks
-  const { enrollments, loading, loadMyEnrollments } = useEnrollments();
+  const { books: allBooks, loading: booksLoading, loadBooks } = useBooks();
+  const { enrollments, loading: enrollmentsLoading, loadMyEnrollments } = useEnrollments();
   const { progresses, loadMyProgresses } = useProgress();
   const { loadCurrentProfile } = useUserProfile();
 
-  // Transform enrollments to books format with safe null handling
-  const books = useMemo(() => {
-    if (!enrollments || !Array.isArray(enrollments)) return [];
+  const loading = booksLoading || enrollmentsLoading;
 
-    return enrollments.map(enrollment => ({
-      id: enrollment.book?.id || 0,
-      title: enrollment.book?.title || 'Untitled Book',
-      description: enrollment.book?.description || '',
-      coverImageUrl: enrollment.book?.coverImageUrl,
-      progress: calculateProgress(enrollment.book?.id, progresses || []),
-      status: enrollment.status || 'ACTIVE',
-      enrolledAt: enrollment.enrolledAt,
-    }));
-  }, [enrollments, progresses]);
+  // Transform all books to display format with enrollment status
+  const books = useMemo(() => {
+    if (!allBooks || !Array.isArray(allBooks)) return [];
+
+    return allBooks.map(book => {
+      const enrollment = enrollments?.find(e => e.book?.id === book.id);
+      const isEnrolled = !!enrollment;
+
+      return {
+        id: book.id || 0,
+        title: book.title || 'Untitled Book',
+        description: book.description || '',
+        coverImageUrl: book.coverImageUrl,
+        progress: calculateProgress(book.id, progresses || []),
+        status: enrollment?.status || (isEnrolled ? 'ACTIVE' : 'NOT_ENROLLED'),
+        enrolledAt: enrollment?.enrolledAt,
+        isPublic: book.isPublic,
+      };
+    });
+  }, [allBooks, enrollments, progresses]);
 
   // Use custom hook for filtering with memoization
   const { filteredBooks } = useBookFilters({ books, searchQuery, filterTab });
 
   // Fetch data on mount
   useEffect(() => {
+    loadBooks();
     loadMyEnrollments();
     loadMyProgresses();
     loadCurrentProfile();
-  }, [loadMyEnrollments, loadMyProgresses, loadCurrentProfile]);
+  }, [loadBooks, loadMyEnrollments, loadMyProgresses, loadCurrentProfile]);
 
   // Memoized event handlers
   const handleSearchChange = useCallback((query: string) => {
@@ -79,7 +90,7 @@ export const StudentDashboard = () => {
   }, []);
 
   // Loading state
-  if (loading) {
+  if (loading && (!books || books.length === 0)) {
     return (
       <Container fluid className="student-page-container">
         <LoadingSpinner message="langleague.student.dashboard.loading" isI18nKey />

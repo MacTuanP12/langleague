@@ -74,7 +74,17 @@
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
       "email.label": "Email",
-      "email.placeholder": "Your email"
+      "email.placeholder": "Your email",
+      "image": {
+        "url": {
+          "placeholder": "Paste image URL..."
+        }
+      },
+      "audio": {
+        "url": {
+          "placeholder": "Paste audio URL..."
+        }
+      }
     },
     "messages": {
       "info": {
@@ -95,9 +105,12 @@
     "validate": {
       "newpassword": {
         "required": "Your password is required.",
-        "minlength": "Your password is required to be at least 4 characters.",
+        "minlength": "At least 8 characters.",
         "maxlength": "Your password cannot be longer than 50 characters.",
-        "strength": "Password strength:"
+        "strength": "Password strength:",
+        "uppercase": "At least one uppercase letter",
+        "number": "At least one number",
+        "special": "At least one special character"
       },
       "confirmpassword": {
         "required": "Your confirmation password is required.",
@@ -121,6 +134,16 @@
     "loading": "Loading...",
     "selectSection": "Select a section from the sidebar to start learning.",
     "progressSaved": "Your progress will be saved automatically.",
+    "media": {
+      "invalidAudioType": "Invalid audio file type",
+      "imageUploaded": "Image uploaded successfully",
+      "audioUploaded": "Audio uploaded successfully",
+      "remove": "Remove",
+      "uploadFromComputer": "Upload from computer",
+      "upload": "Upload",
+      "imageSupport": "Supports: JPG, PNG, GIF, Google Drive links.",
+      "audioSupport": "Supports: MP3, WAV, Google Drive links."
+    },
     "footer": {
       "slogan": "Empowering language learners worldwide with modern, interactive learning experiences.",
       "copyright": "All rights reserved",
@@ -159,6 +182,7 @@
     "action": {
       "back": "Back",
       "cancel": "Cancel",
+      "close": "Close",
       "delete": "Delete",
       "edit": "Edit",
       "open": "Open",
@@ -194,7 +218,20 @@
     "userexists": "Login name already used!",
     "emailexists": "Email is already in use!",
     "idexists": "A new {{ entityName }} cannot already have an ID",
-    "idnull": "Invalid ID"
+    "idnull": "Invalid ID",
+    "invalidpassword": "Password does not meet security requirements. Must be 8-100 characters with at least one uppercase letter, one number, and one special character.",
+    "http": {
+      "400": "Bad Request - Please check your input"
+    }
   },
-  "footer": "This is your footer"
+  "footer": "This is your footer",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "Your API key is only used in the browser",
+        "noStorage": "We do NOT store your key",
+        "noShare": "Do not share your key with others"
+      }
+    }
+  }
 }

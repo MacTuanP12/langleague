@@ -8,7 +8,7 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
-import { createBook, updateBook, fetchBookById, reset } from 'app/shared/reducers/book.reducer';
+import { createEntity, updateEntity, getEntity, reset } from 'app/entities/book/book.reducer';
 
 export const BookUpdate = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export const BookUpdate = () => {
   const isNew = id === undefined;
 
   const userProfiles = useAppSelector(state => state.userProfile.entities);
-  const bookEntity = useAppSelector(state => state.book.selectedBook);
+  const bookEntity = useAppSelector(state => state.book.entity);
   const loading = useAppSelector(state => state.book.loading);
   const updating = useAppSelector(state => state.book.updating);
 
@@ -30,7 +30,7 @@ export const BookUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(fetchBookById(Number(id)));
+      dispatch(getEntity(id));
     }
 
     dispatch(getUserProfiles({}));
@@ -50,9 +50,9 @@ export const BookUpdate = () => {
 
     try {
       if (isNew) {
-        await dispatch(createBook(entity)).unwrap();
+        await dispatch(createEntity(entity)).unwrap();
       } else {
-        await dispatch(updateBook(entity)).unwrap();
+        await dispatch(updateEntity(entity)).unwrap();
       }
       handleClose();
     } catch (error) {

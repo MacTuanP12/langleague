@@ -59,6 +59,17 @@ const commonErrorProperties: Array<keyof SerializedError> = ['name', 'message', 
 export const serializeAxiosError = (value: any): AxiosError | SerializedError => {
   if (typeof value === 'object' && value !== null) {
     if (isAxiosError(value)) {
+      // Extract backend error message if available
+      if (value.response?.data) {
+        const data = value.response.data;
+        if (data.detail) {
+          value.message = data.detail;
+        } else if (data.title) {
+          value.message = data.title;
+        } else if (data.message) {
+          value.message = data.message;
+        }
+      }
       return value;
     }
     const simpleError: SerializedError = {};

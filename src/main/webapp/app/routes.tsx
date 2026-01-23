@@ -9,6 +9,8 @@ import PasswordResetInit from 'app/modules/account/password-reset/init/password-
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import Logout from 'app/modules/account/logout';
 import Home from 'app/modules/home/home';
+import PublicBookList from 'app/modules/home/public-book-list';
+import PublicBookDetail from 'app/modules/home/public-book-detail';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import PrivateRoute from 'app/shared/auth/private-route';
@@ -43,6 +45,14 @@ const AppRoutes = () => {
         <Route path="login" element={<AuthSlider />} />
         <Route path="logout" element={<Logout />} />
         <Route path="account">
+          {/* Public routes - no authentication required */}
+          <Route path="register" element={<AuthSlider />} />
+          <Route path="activate" element={<Activate />} />
+          <Route path="reset">
+            <Route path="request" element={<PasswordResetInit />} />
+            <Route path="finish" element={<PasswordResetFinish />} />
+          </Route>
+
           {/* Protected account routes - require authentication */}
           <Route
             path="*"
@@ -52,14 +62,11 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
-          {/* Public routes - no authentication required */}
-          <Route path="register" element={<AuthSlider />} />
-          <Route path="activate" element={<Activate />} />
-          <Route path="reset">
-            <Route path="request" element={<PasswordResetInit />} />
-            <Route path="finish" element={<PasswordResetFinish />} />
-          </Route>
         </Route>
+
+        {/* Public Book Routes */}
+        <Route path="books" element={<PublicBookList />} />
+        <Route path="book/:id" element={<PublicBookDetail />} />
 
         {/* ============================================
          * PROTECTED ROUTES - ROLE-BASED ACCESS CONTROL

@@ -99,19 +99,19 @@
 
 .empty-state-icon {
   font-size: 4rem;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
 .empty-state-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .empty-state-description {
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -124,8 +124,8 @@
 
 .tooltip-modern .tooltip-text {
   visibility: hidden;
-  background-color: #1e293b;
-  color: white;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   text-align: center;
   padding: 8px 12px;
   border-radius: 8px;
@@ -141,7 +141,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--shadow-medium);
 }
 
 .tooltip-modern .tooltip-text::after {
@@ -152,7 +152,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #1e293b transparent transparent transparent;
+  border-color: var(--bg-tertiary) transparent transparent transparent;
 }
 
 .tooltip-modern:hover .tooltip-text {
@@ -182,29 +182,29 @@
 
 .status-indicator.status-online {
   background: rgba(16, 185, 129, 0.1);
-  color: #059669;
+  color: var(--success-color);
 }
 
 .status-indicator.status-online::before {
-  background: #10b981;
+  background: var(--success-color);
 }
 
 .status-indicator.status-offline {
   background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  color: var(--error-color);
 }
 
 .status-indicator.status-offline::before {
-  background: #ef4444;
+  background: var(--error-color);
 }
 
 .status-indicator.status-away {
   background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  color: var(--warning-color);
 }
 
 .status-indicator.status-away::before {
-  background: #f59e0b;
+  background: var(--warning-color);
 }
 
 @keyframes pulse {

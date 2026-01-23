@@ -10,16 +10,19 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
 import applicationProfile from './application-profile';
 import authentication from './authentication';
 import locale from './locale';
-import book from './book.reducer';
+import book from 'app/entities/book/book.reducer';
 import unit from './unit.reducer';
 import vocabulary from './vocabulary.reducer';
 import grammar from './grammar.reducer';
 import exercise from './exercise.reducer';
-import enrollment from './enrollment.reducer';
+import enrollment from 'app/entities/enrollment/enrollment.reducer';
 import userProfile from './user-profile.reducer';
 import progress from './progress.reducer';
 import exerciseOption from './exercise-option.reducer';
 import teacher from './teacher.reducer';
+import adminDashboard from 'app/modules/admin/dashboard/admin-dashboard.reducer';
+import ai from './ai.reducer';
+import note from './note.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {
@@ -43,6 +46,9 @@ const rootReducer: ReducersMapObject = {
   progress,
   exerciseOption,
   teacher,
+  adminDashboard,
+  ai,
+  note,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

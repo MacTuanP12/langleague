@@ -1,3 +1,8 @@
+// ========================================
+// AI IMPORT ASSISTANT STYLES
+// ========================================
+
+// Floating Action Button
 .ai-floating-btn {
   position: fixed;
   bottom: 30px;
@@ -5,11 +10,11 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Màu tím mộng mơ AI */
+  background: linear-gradient(135deg, var(--teacher-primary) 0%, var(--teacher-secondary) 100%);
   color: white;
   border: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1050; /* Cao hơn footer */
+  z-index: 1050;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,11 +33,123 @@
     transform: scale(0.95);
   }
 
-  // Icon xoay nhẹ khi hover
-  i {
+  i,
+  svg {
     transition: transform 0.5s;
   }
-  &:hover i {
+  &:hover i,
+  &:hover svg {
     transform: rotate(20deg);
+  }
+}
+
+// Modal Styles
+.ai-assistant-modal {
+  .modal-content {
+    background-color: var(--teacher-bg-primary);
+    color: var(--teacher-text-primary);
+    border: 1px solid var(--teacher-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    background-color: var(--teacher-bg-secondary);
+    border-bottom: 1px solid var(--teacher-border);
+    color: var(--teacher-text-primary);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+
+    .close {
+      color: var(--teacher-text-secondary);
+      text-shadow: none;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+        color: var(--teacher-text-primary);
+      }
+    }
+  }
+
+  .modal-body {
+    background-color: var(--teacher-bg-primary);
+    color: var(--teacher-text-primary);
+  }
+
+  .modal-footer {
+    background-color: var(--teacher-bg-secondary);
+    border-top: 1px solid var(--teacher-border);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  // Form Elements
+  .form-control,
+  .form-select {
+    background-color: var(--teacher-bg-secondary);
+    border-color: var(--teacher-border);
+    color: var(--teacher-text-primary);
+
+    &:focus {
+      background-color: var(--teacher-bg-primary);
+      border-color: var(--teacher-primary);
+      color: var(--teacher-text-primary);
+      box-shadow: 0 0 0 0.25rem rgba(var(--teacher-primary-rgb), 0.25);
+    }
+
+    &::placeholder {
+      color: var(--teacher-text-tertiary);
+    }
+  }
+
+  // Cards inside modal
+  .card {
+    background-color: var(--teacher-bg-secondary);
+    border-color: var(--teacher-border);
+    color: var(--teacher-text-primary);
+
+    .card-body {
+      background-color: transparent;
+    }
+  }
+
+  // Tabs
+  .nav-tabs {
+    border-bottom-color: var(--teacher-border);
+
+    .nav-link {
+      color: var(--teacher-text-secondary);
+      border-color: transparent;
+
+      &:hover {
+        border-color: transparent;
+        color: var(--teacher-text-primary);
+        background-color: var(--teacher-bg-tertiary);
+      }
+
+      &.active {
+        color: var(--teacher-primary);
+        background-color: var(--teacher-bg-primary);
+        border-color: var(--teacher-border) var(--teacher-border) var(--teacher-bg-primary);
+      }
+    }
+  }
+
+  // Alerts
+  .alert-info {
+    background-color: rgba(var(--teacher-info-rgb), 0.1);
+    border-color: rgba(var(--teacher-info-rgb), 0.2);
+    color: var(--teacher-text-primary);
+  }
+
+  // Text muted
+  .text-muted {
+    color: var(--teacher-text-secondary) !important;
+  }
+
+  // Close button in modal header
+  .btn-close {
+    filter: var(--teacher-btn-close-filter);
   }
 }

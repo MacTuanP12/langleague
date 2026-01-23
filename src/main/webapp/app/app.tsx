@@ -23,6 +23,8 @@ const baseHref = document.querySelector('base')?.getAttribute('href')?.replace(/
 export const App = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const account = useAppSelector(state => state.authentication.account);
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
 
   // Fixed: Added dispatch to dependencies
   useEffect(() => {
@@ -31,20 +33,26 @@ export const App = () => {
   }, [dispatch]);
 
   // Fixed: Added dispatch to dependencies and used optional chaining
+  // Only check streak for students, not for admins or teachers
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(checkStreak()).then((action: { payload?: { milestoneReached?: boolean; streakCount?: number }; type: string }) => {
-        if (action.payload?.milestoneReached) {
-          Swal.fire({
-            icon: 'success',
-            title: translate('langleague.student.dashboard.streak.milestone.title'),
-            text: translate('langleague.student.dashboard.streak.milestone.message', { count: action.payload.streakCount }),
-            confirmButtonText: translate('langleague.student.dashboard.streak.milestone.confirmButton'),
-          });
-        }
-      });
+    if (isAuthenticated && account) {
+      const isStudent = account.authorities?.includes('ROLE_STUDENT');
+      const isAdminOrTeacher = account.authorities?.some(auth => auth === 'ROLE_ADMIN' || auth === 'ROLE_TEACHER');
+
+      if (isStudent && !isAdminOrTeacher) {
+        dispatch(checkStreak()).then((action: { payload?: { milestoneReached?: boolean; streakCount?: number }; type: string }) => {
+          if (action.payload?.milestoneReached) {
+            Swal.fire({
+              icon: 'success',
+              title: translate('langleague.student.dashboard.streak.milestone.title'),
+              text: translate('langleague.student.dashboard.streak.milestone.message', { count: action.payload.streakCount }),
+              confirmButtonText: translate('langleague.student.dashboard.streak.milestone.confirmButton'),
+            });
+          }
+        });
+      }
     }
-  }, [isAuthenticated, dispatch]);
+  }, [isAuthenticated, account, dispatch]);
 
   return (
     <ThemeProvider>
@@ -53,7 +61,7 @@ export const App = () => {
         <a href="#main-content" className="skip-link">
           {translate('global.menu.skipToContent', 'Skip to main content')}
         </a>
-        <div className="app-container">
+        <div className="app-container" key={currentLocale}>
           <ToastContainer position="top-right" className="toastify-container" toastClassName="toastify-toast" />
           <ErrorBoundary>
             <AppRoutes />

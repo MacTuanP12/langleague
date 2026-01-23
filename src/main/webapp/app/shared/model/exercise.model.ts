@@ -1,4 +1,3 @@
-import { IUnit } from 'app/shared/model/unit.model';
 import { ExerciseType } from 'app/shared/model/enumerations/exercise-type.model';
 import { IExerciseOption } from 'app/shared/model/exercise-option.model';
 
@@ -10,7 +9,8 @@ export interface IExercise {
   audioUrl?: string | null;
   imageUrl?: string | null;
   orderIndex?: number;
-  unit?: IUnit;
+  unitId?: number;
+  unitTitle?: string;
   options?: IExerciseOption[];
 }
 
@@ -22,7 +22,8 @@ export const defaultExerciseValue: Readonly<IExercise> = {
   audioUrl: '',
   imageUrl: '',
   orderIndex: 0,
-  unit: undefined,
+  unitId: undefined,
+  unitTitle: '',
   options: [],
 };
 

@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -33,4 +35,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
+    @Query(
+        "SELECT DISTINCT u FROM User u LEFT JOIN u.authorities a WHERE " +
+        "(:login IS NULL OR " +
+        "lower(u.login) LIKE lower(concat('%', :login,'%')) OR " +
+        "lower(u.email) LIKE lower(concat('%', :login,'%')) OR " +
+        "lower(u.firstName) LIKE lower(concat('%', :login,'%')) OR " +
+        "lower(u.lastName) LIKE lower(concat('%', :login,'%'))) AND " +
+        "(:role IS NULL OR a.name = :role) AND " +
+        "(:activated IS NULL OR u.activated = :activated)"
+    )
+    Page<User> findAllWithFilters(
+        @Param("login") String login,
+        @Param("role") String role,
+        @Param("activated") Boolean activated,
+        Pageable pageable
+    );
 }

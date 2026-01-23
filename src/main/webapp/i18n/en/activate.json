@@ -2,27 +2,30 @@
   "activate": {
     "title": "Activation",
     "messages": {
-      "success": "<strong>Your user account has been activated.</strong> Please ",
-      "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up.",
-      "verifying": {
-        "title": "Verifying your account...",
-        "description": "Please wait while we verify your email address."
-      },
       "success": {
         "title": "Your Account is Activated!",
         "description": "You are now ready to begin your learning journey with LangLeague. Log in now to explore our vast library and tools."
       },
-      "failure": {
-        "title": "Verify your email address",
-        "description": "We have sent a verification link to your email. Please click the link in that email to secure your account.",
-        "checkSpam": "Can't find it? Check your spam or junk folder."
+      "error": {
+        "title": "Activation Failed",
+        "description": "The activation key is invalid or has expired."
+      },
+      "info": {
+        "title": "Activate Account",
+        "description": "Please confirm your activation key to activate your account."
       }
     },
     "actions": {
+      "login": "Log In",
       "loginNow": "Log In Now",
       "goHome": "Go to Homepage",
-      "login": "Log In",
-      "resend": "Resend confirmation email"
+      "retry": "Retry Activation",
+      "activate": "Activate Now"
+    },
+    "form": {
+      "label": "Enter Activation Key",
+      "placeholder": "Paste your activation key here",
+      "keyPlaceholder": "Activation Key"
     },
     "footer": {
       "needHelp": "Need help?",

@@ -3,36 +3,27 @@ import { Translate } from 'react-jhipster';
 import { Container, Row, Col, Card, CardBody, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector, useAppDispatch } from 'app/config/store';
-import { useBooks, useEnrollments, useProgress } from 'app/shared/reducers/hooks';
 import { getUsersAsAdmin } from 'app/modules/admin/user-management/user-management.reducer';
+import { countAllBooks, countAllEnrollments, getSystemCompletionRate } from './admin-dashboard.reducer';
 import '../admin.scss';
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
   const { totalItems: totalUsers } = useAppSelector(state => state.userManagement);
-
-  // Redux hooks for statistics
-  const { books, loadBooks } = useBooks();
-  const { enrollments, loadMyEnrollments } = useEnrollments();
-  const { progresses, loadMyProgresses } = useProgress();
+  const { totalBooks, totalEnrollments, completionRate } = useAppSelector(state => state.adminDashboard);
 
   useEffect(() => {
-    // Load data for statistics
-    loadBooks();
-    loadMyEnrollments();
-    loadMyProgresses();
     // Load users count (page 0, size 1 just to get total count in header)
     dispatch(getUsersAsAdmin({ page: 0, size: 1, sort: 'id,asc' }));
-  }, [loadBooks, loadMyEnrollments, loadMyProgresses, dispatch]);
 
-  // Calculate statistics
+    // Load dashboard stats
+    dispatch(countAllBooks());
+    dispatch(countAllEnrollments());
+    dispatch(getSystemCompletionRate());
+  }, [dispatch]);
+
+  // Calculate statistics (growth is mocked for now)
   const stats = useMemo(() => {
-    const totalBooks = (books || []).length;
-    const totalEnrollments = (enrollments || []).length;
-    const completedUnits = (progresses || []).filter(p => p.isCompleted).length;
-    const totalUnits = (progresses || []).length;
-    const completionRate = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
-
     // Calculate growth percentages (mock data for now)
     const usersGrowth = totalUsers > 0 ? Math.round(Math.random() * 20 - 5) : 0;
     const booksGrowth = totalBooks > 0 ? Math.round(Math.random() * 15) : 0;
@@ -47,7 +38,7 @@ export const AdminDashboard = () => {
       booksGrowth,
       enrollmentsGrowth,
     };
-  }, [books, enrollments, progresses, totalUsers]);
+  }, [totalUsers, totalBooks, totalEnrollments, completionRate]);
 
   return (
     <Container fluid className="admin-page-container">

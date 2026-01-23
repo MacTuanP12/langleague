@@ -2,7 +2,6 @@ package com.langleague.app.service.mapper;
 
 import com.langleague.app.domain.Unit;
 import com.langleague.app.domain.Vocabulary;
-import com.langleague.app.service.dto.UnitDTO;
 import com.langleague.app.service.dto.VocabularyDTO;
 import org.mapstruct.*;
 
@@ -11,15 +10,19 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface VocabularyMapper extends EntityMapper<VocabularyDTO, Vocabulary> {
-    @Mapping(target = "unit", source = "unit", qualifiedByName = "unitId")
+    @Mapping(target = "unitId", source = "unit.id")
+    @Mapping(target = "unitTitle", source = "unit.title")
     VocabularyDTO toDto(Vocabulary s);
 
-    @Named("unitId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UnitDTO toDtoUnitId(Unit unit);
-
-    @Override
-    @Mapping(target = "unit", source = "unit")
+    @Mapping(target = "unit", source = "unitId")
     Vocabulary toEntity(VocabularyDTO vocabularyDTO);
+
+    default Unit fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Unit unit = new Unit();
+        unit.setId(id);
+        return unit;
+    }
 }

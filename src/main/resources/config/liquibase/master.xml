@@ -11,6 +11,7 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
     <property name="timeType" value="time(6)" dbms="mysql"/>
 
+    <!--
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108164533_added_entity_UserProfile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108164534_added_entity_Book.xml" relativeToChangelogFile="false"/>
@@ -25,7 +26,20 @@
     <include file="config/liquibase/changelog/20260114_add_progress_uc49_columns.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260114_added_entity_Note.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260114_add_note_unique_constraint.xml" relativeToChangelogFile="false"/>
+    -->
+
+    <!-- Load full snapshot from SQL file -->
+    <include file="config/liquibase/changelog/20240123000000_init_snapshot.xml" relativeToChangelogFile="false"/>
+
+    <!-- Increase imageUrl column size to support base64 images -->
+    <include file="config/liquibase/changelog/20260117000000_increase_imageurl_size.xml" relativeToChangelogFile="false"/>
+
+    <!-- Increase image_url column size to support long URLs (Firebase/Google) and Base64 strings -->
+    <include file="config/liquibase/changelog/20240522000000_increase_image_url.xml" relativeToChangelogFile="false"/>
+
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+
+    <!--
     <include file="config/liquibase/changelog/20260108164533_added_entity_constraints_UserProfile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108164534_added_entity_constraints_Book.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108164535_added_entity_constraints_Enrollment.xml" relativeToChangelogFile="false"/>
@@ -36,9 +50,15 @@
     <include file="config/liquibase/changelog/20260108164540_added_entity_constraints_ExerciseOption.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108164541_added_entity_constraints_Progress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260108_add_unique_constraints.xml" relativeToChangelogFile="false"/>
+    -->
+
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- Load sample data after all tables/columns are ready -->
+
+    <!--
     <include file="config/liquibase/changelog/20260112000001_add_sample_enrollments.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260115_load_sample_data.xml" relativeToChangelogFile="false"/>
+    -->
+
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

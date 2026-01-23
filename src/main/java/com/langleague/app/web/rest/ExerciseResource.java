@@ -27,8 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -40,6 +40,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/exercises")
+@Transactional
 public class ExerciseResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExerciseResource.class);
@@ -69,21 +70,6 @@ public class ExerciseResource {
         this.exerciseOptionService = exerciseOptionService;
     }
 
-    private void checkOwnership(Book book) {
-        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.TEACHER)) {
-            throw new AccessDeniedException("You do not have the authority to perform this action");
-        }
-        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccessDeniedException("User not logged in"));
-
-        if (
-            book.getTeacherProfile() == null ||
-            book.getTeacherProfile().getUser() == null ||
-            !currentUserLogin.equals(book.getTeacherProfile().getUser().getLogin())
-        ) {
-            throw new AccessDeniedException("You are not the owner of this book");
-        }
-    }
-
     /**
      * {@code POST  /exercises} : Create a new exercise.
      *
@@ -98,13 +84,13 @@ public class ExerciseResource {
         if (exerciseDTO.getId() != null) {
             throw new BadRequestAlertException("A new exercise cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (exerciseDTO.getUnit() == null || exerciseDTO.getUnit().getId() == null) {
+        if (exerciseDTO.getUnitId() == null) {
             throw new BadRequestAlertException("A new exercise must belong to a unit", ENTITY_NAME, "unitnull");
         }
         Unit unit = unitRepository
-            .findById(exerciseDTO.getUnit().getId())
+            .findById(exerciseDTO.getUnitId())
             .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         exerciseDTO = exerciseService.save(exerciseDTO);
         return ResponseEntity.created(new URI("/api/exercises/" + exerciseDTO.getId()))
@@ -126,11 +112,11 @@ public class ExerciseResource {
             return ResponseEntity.ok(List.of());
         }
 
-        Long unitId = exercises.get(0).getUnit().getId();
+        Long unitId = exercises.get(0).getUnitId();
         Unit unit = unitRepository
             .findById(unitId)
             .orElseThrow(() -> new BadRequestAlertException("Unit not found", ENTITY_NAME, "unitnotfound"));
-        checkOwnership(unit.getBook());
+        SecurityUtils.checkOwnership(unit.getBook());
 
         List<ExerciseDTO> result = exerciseService.saveBulk(unitId, exercises);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "bulk")).body(result);
@@ -164,7 +150,7 @@ public class ExerciseResource {
         Exercise exercise = exerciseRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(exercise.getUnit().getBook());
+        SecurityUtils.checkOwnership(exercise.getUnit().getBook());
 
         exerciseDTO = exerciseService.update(exerciseDTO);
         return ResponseEntity.ok()
@@ -197,7 +183,7 @@ public class ExerciseResource {
         Exercise firstExercise = exerciseRepository
             .findById(firstExerciseId)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(firstExercise.getUnit().getBook());
+        SecurityUtils.checkOwnership(firstExercise.getUnit().getBook());
 
         // Verify all exercises have IDs
         for (ExerciseDTO exerciseDTO : exercises) {
@@ -239,7 +225,7 @@ public class ExerciseResource {
         Exercise exercise = exerciseRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(exercise.getUnit().getBook());
+        SecurityUtils.checkOwnership(exercise.getUnit().getBook());
 
         Optional<ExerciseDTO> result = exerciseService.partialUpdate(exerciseDTO);
 
@@ -341,7 +327,7 @@ public class ExerciseResource {
         Exercise exercise = exerciseRepository
             .findById(id)
             .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        checkOwnership(exercise.getUnit().getBook());
+        SecurityUtils.checkOwnership(exercise.getUnit().getBook());
 
         exerciseService.delete(id);
         return ResponseEntity.noContent()

@@ -1,39 +1,49 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Translate } from 'react-jhipster';
-import { AVAILABLE_GAMES, DifficultyFilter, GameCard } from './game-hub.constants';
+import { AVAILABLE_GAMES, DifficultyFilter, GameCard } from './constants/game-hub.constants';
 import { useGameFilters } from './hooks/useGameFilters';
 import { GameCardComponent } from './components/GameCardComponent';
 import { DifficultyFilterSection } from './components/DifficultyFilterSection';
-import { GameStats } from './components/GameStats';
+import { DataSourceSelector } from './components/DataSourceSelector';
 import { LoadingSpinner, ErrorDisplay } from 'app/shared/components';
-import '../student.scss';
+import { VocabularyMatch } from './vocabulary-match';
+import { WordScramble } from './word-scramble';
+import { SpeedQuiz } from './speed-quiz';
+import { BridgeGame } from './BridgeGameRunner';
+import './game-hub.scss';
+
+type ActiveGame = 'vocabulary-match' | 'word-scramble' | 'speed-quiz' | 'bridge-game' | null;
 
 /**
- * GameHub Component - Engaging game selection interface
+ * GameHub Component - Engaging game selection interface with integrated mini-games
  *
  * Features:
  * - Vibrant game cards with gradient backgrounds
  * - Difficulty filtering
- * - Game statistics display
  * - Responsive grid layout
+ * - 4 Active mini-games: Vocabulary Match, Word Scramble, Speed Quiz, Bridge Game
+ * - Coming soon placeholders
  */
 export const GameHub = () => {
   const [games, setGames] = useState(AVAILABLE_GAMES);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [gameStats, setGameStats] = useState({
-    gamesPlayed: 0,
-    totalScore: 0,
-    achievements: 0,
-  });
+  const [activeGame, setActiveGame] = useState<ActiveGame>(null);
+  const [pendingGame, setPendingGame] = useState<ActiveGame>(null);
+  const [showDataSourceSelector, setShowDataSourceSelector] = useState(false);
+  const [selectedUnitIds, setSelectedUnitIds] = useState<number[]>([]);
+
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const unitId = useMemo(() => (searchParams.get('unitId') ? parseInt(searchParams.get('unitId'), 10) : undefined), [searchParams]);
 
   // Use custom hook for filtering with memoization
-  const { filteredGames } = useGameFilters({ games, selectedDifficulty });
+  const { filteredGames } = useGameFilters({ games, selectedDifficulty, searchQuery });
 
   const loadGames = useCallback(() => {
     setGames(AVAILABLE_GAMES);
@@ -43,22 +53,76 @@ export const GameHub = () => {
     loadGames();
   }, [loadGames]);
 
+  // If unitId is present in URL, we can skip the selector if user clicks a game
+  // But for now, let's keep it simple. If unitId is there, we use it.
+  useEffect(() => {
+    if (unitId) {
+      setSelectedUnitIds([unitId]);
+    }
+  }, [unitId]);
+
   const handleGameClick = useCallback(
     (game: GameCard) => {
       if (game.status === 'available') {
-        navigate(`/student/games/${game.id}`);
+        const gameId = game.id as ActiveGame;
+
+        // If we already have a unit selected (from URL), start immediately
+        if (unitId) {
+          setActiveGame(gameId);
+          return;
+        }
+
+        // Otherwise, show the data source selector
+        setPendingGame(gameId);
+        setShowDataSourceSelector(true);
       }
     },
-    [navigate],
+    [unitId],
   );
+
+  const handleStartGame = useCallback(
+    (unitIds: number[]) => {
+      setSelectedUnitIds(unitIds);
+      setActiveGame(pendingGame);
+      setPendingGame(null);
+    },
+    [pendingGame],
+  );
+
+  const handleBackToMenu = useCallback(() => {
+    setActiveGame(null);
+    // If we came from a specific unit, maybe we want to go back to that unit?
+    // For now, just stay in GameHub
+  }, []);
 
   const handleDifficultyChange = useCallback((difficulty: DifficultyFilter) => {
     setSelectedDifficulty(difficulty);
   }, []);
 
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
   const handleBack = useCallback(() => {
     navigate('/student/dashboard');
   }, [navigate]);
+
+  // Render active game
+  if (activeGame === 'vocabulary-match') {
+    return <VocabularyMatch unitIds={selectedUnitIds} onBack={handleBackToMenu} />;
+  }
+
+  if (activeGame === 'word-scramble') {
+    return <WordScramble unitIds={selectedUnitIds} onBack={handleBackToMenu} />;
+  }
+
+  if (activeGame === 'speed-quiz') {
+    return <SpeedQuiz unitIds={selectedUnitIds} onBack={handleBackToMenu} />;
+  }
+
+  if (activeGame === 'bridge-game') {
+    return <BridgeGame unitIds={selectedUnitIds} onBack={handleBackToMenu} />;
+  }
 
   // Error state
   if (error) {
@@ -73,13 +137,13 @@ export const GameHub = () => {
   if (loading) {
     return (
       <Container fluid className="student-page-container">
-        <LoadingSpinner message="Loading games..." />
+        <LoadingSpinner message="langleague.student.games.loading" isI18nKey />
       </Container>
     );
   }
 
   return (
-    <Container fluid className="student-page-container">
+    <Container fluid className="student-page-container game-hub-container">
       {/* Header */}
       <div className="student-header mb-4">
         <div className="header-content">
@@ -97,11 +161,13 @@ export const GameHub = () => {
         </div>
       </div>
 
-      {/* Game Statistics */}
-      <GameStats gamesPlayed={gameStats.gamesPlayed} totalScore={gameStats.totalScore} achievements={gameStats.achievements} />
-
       {/* Difficulty Filter */}
-      <DifficultyFilterSection selectedDifficulty={selectedDifficulty} onDifficultyChange={handleDifficultyChange} />
+      <DifficultyFilterSection
+        selectedDifficulty={selectedDifficulty}
+        onDifficultyChange={handleDifficultyChange}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+      />
 
       {/* Games Grid */}
       <Row className="mt-4">
@@ -127,6 +193,12 @@ export const GameHub = () => {
           ))
         )}
       </Row>
+
+      <DataSourceSelector
+        isOpen={showDataSourceSelector}
+        toggle={() => setShowDataSourceSelector(!showDataSourceSelector)}
+        onStartGame={handleStartGame}
+      />
     </Container>
   );
 };

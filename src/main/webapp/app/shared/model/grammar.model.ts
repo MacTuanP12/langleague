@@ -1,5 +1,3 @@
-import { IUnit } from 'app/shared/model/unit.model';
-
 export interface IGrammarExample {
   en: string;
   ko: string;
@@ -11,7 +9,8 @@ export interface IGrammar {
   contentMarkdown?: string;
   exampleUsage?: string | null; // JSON string of IGrammarExample[]
   orderIndex?: number;
-  unit?: IUnit;
+  unitId?: number;
+  unitTitle?: string;
 }
 
 export const defaultGrammarValue: Readonly<IGrammar> = {
@@ -20,7 +19,8 @@ export const defaultGrammarValue: Readonly<IGrammar> = {
   contentMarkdown: '',
   exampleUsage: '',
   orderIndex: 0,
-  unit: undefined,
+  unitId: undefined,
+  unitTitle: '',
 };
 
 export const defaultValue = defaultGrammarValue;

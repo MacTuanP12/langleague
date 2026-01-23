@@ -8,35 +8,35 @@
 // CSS Variables for Admin Theme
 // ----------------------------------------
 :root {
-  // Primary colors - Professional, authoritative
-  --admin-primary: #1e40af; // Deep blue
-  --admin-primary-hover: #1e3a8a;
-  --admin-secondary: #4b5563; // Gray
-  --admin-accent: #059669; // Green
+  // Primary colors - Use global theme variables
+  --admin-primary: var(--primary-color, #1e40af);
+  --admin-primary-hover: var(--primary-color-alt, #1e3a8a);
+  --admin-secondary: var(--secondary-color, #4b5563);
+  --admin-accent: var(--success-color, #059669);
 
   // Status colors
-  --admin-success: #10b981;
-  --admin-warning: #f59e0b;
-  --admin-danger: #ef4444;
-  --admin-info: #3b82f6;
+  --admin-success: var(--success-color, #10b981);
+  --admin-warning: var(--warning-color, #f59e0b);
+  --admin-danger: var(--error-color, #ef4444);
+  --admin-info: var(--info-color, #3b82f6);
 
   // Backgrounds
-  --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #f9fafb;
-  --admin-bg-tertiary: #f3f4f6;
+  --admin-bg-primary: var(--bg-primary, #ffffff);
+  --admin-bg-secondary: var(--bg-secondary, #f9fafb);
+  --admin-bg-tertiary: var(--bg-tertiary, #f3f4f6);
   --admin-bg-dark: #1f2937;
 
   // Text
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-text-muted: #9ca3af;
+  --admin-text-primary: var(--text-primary, #111827);
+  --admin-text-secondary: var(--text-secondary, #6b7280);
+  --admin-text-muted: var(--text-tertiary, #9ca3af);
   --admin-text-light: #d1d5db;
 
   // Borders & Shadows
-  --admin-border: #e5e7eb;
+  --admin-border: var(--border-color, #e5e7eb);
   --admin-border-dark: #d1d5db;
-  --admin-shadow: rgba(0, 0, 0, 0.08);
-  --admin-shadow-lg: rgba(0, 0, 0, 0.15);
+  --admin-shadow: var(--shadow, rgba(0, 0, 0, 0.08));
+  --admin-shadow-lg: var(--shadow-medium, rgba(0, 0, 0, 0.15));
   --admin-shadow-xl: rgba(0, 0, 0, 0.25);
 
   // Charts

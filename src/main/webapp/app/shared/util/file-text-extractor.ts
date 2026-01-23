@@ -3,10 +3,25 @@ import mammoth from 'mammoth';
 import * as XLSX from 'xlsx';
 import { createWorker } from 'tesseract.js';
 
-// Type definition for PDF text content items
-interface PDFTextItem {
+// Import types from pdfjs-dist (defined in typings.d.ts)
+type TextItem = {
   str: string;
-  [key: string]: unknown;
+  dir: string;
+  width: number;
+  height: number;
+  transform: number[];
+  fontName: string;
+  hasEOL?: boolean;
+};
+
+type TextMarkedContent = {
+  type: 'beginMarkedContent' | 'beginMarkedContentProps' | 'endMarkedContent';
+  id?: string;
+};
+
+// Type guard to check if item is TextItem
+function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
+  return 'str' in item;
 }
 
 // Configure PDF.js worker
@@ -35,11 +50,9 @@ async function extractTextFromPDF(file: File): Promise<string> {
 
       // Extract text items and join them
       const pageText = textContent.items
-        .map((item: PDFTextItem | Record<string, unknown>) => {
-          // TextItem has a 'str' property containing the text
-          // TextMarkedContent doesn't have 'str', so we need to check
-          const textItem = item as PDFTextItem;
-          return 'str' in textItem ? textItem.str : '';
+        .map(item => {
+          // Use type guard to check if item is TextItem
+          return isTextItem(item) ? item.str : '';
         })
         .join(' ');
 

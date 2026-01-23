@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchBookById } from 'app/shared/reducers/book.reducer';
+import { getEntity } from 'app/entities/book/book.reducer';
 import { fetchUnitsByBookId } from 'app/shared/reducers/unit.reducer';
 import { LoadingSpinner } from 'app/shared/components';
 import { Translate } from 'react-jhipster';
@@ -12,7 +12,7 @@ export const BookLearn = () => {
   const { id } = useParams<{ id: string }>();
 
   // Redux state
-  const { selectedBook, loading: bookLoading } = useAppSelector(state => state.book);
+  const { entity: selectedBook, loading: bookLoading } = useAppSelector(state => state.book);
   const { units, loading: unitsLoading } = useAppSelector(state => state.unit);
 
   // Local UI state
@@ -20,7 +20,7 @@ export const BookLearn = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchBookById(Number(id)));
+      dispatch(getEntity(id));
       dispatch(fetchUnitsByBookId(Number(id)));
     }
   }, [dispatch, id]);

@@ -8,6 +8,7 @@ interface ExerciseState {
   exerciseOptions: { [exerciseId: number]: IExerciseOption[] };
   loading: boolean;
   updating: boolean;
+  updateSuccess: boolean;
   errorMessage: string | null;
 }
 
@@ -16,6 +17,7 @@ const initialState: ExerciseState = {
   exerciseOptions: {},
   loading: false,
   updating: false,
+  updateSuccess: false,
   errorMessage: null,
 };
 
@@ -144,7 +146,20 @@ const exerciseSlice = createSlice({
   name: 'exercise',
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset(state) {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
+    resetAll(state) {
+      state.exercises = [];
+      state.exerciseOptions = {};
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -194,53 +209,70 @@ const exerciseSlice = createSlice({
       // createExercise
       .addCase(createExercise.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(createExercise.fulfilled, (state, action: PayloadAction<IExercise>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.exercises.push(action.payload);
+        if (action.payload.id && action.payload.options) {
+          state.exerciseOptions[action.payload.id] = action.payload.options;
+        }
       })
       .addCase(createExercise.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to create exercise';
       })
       // updateExercise
       .addCase(updateExercise.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(updateExercise.fulfilled, (state, action: PayloadAction<IExercise>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const index = state.exercises.findIndex(ex => ex.id === action.payload.id);
         if (index !== -1) {
           state.exercises[index] = action.payload;
         }
+        if (action.payload.id && action.payload.options) {
+          state.exerciseOptions[action.payload.id] = action.payload.options;
+        }
       })
       .addCase(updateExercise.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to update exercise';
       })
       // deleteExercise
       .addCase(deleteExercise.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(deleteExercise.fulfilled, (state, action: PayloadAction<number>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.exercises = state.exercises.filter(ex => ex.id !== action.payload);
         delete state.exerciseOptions[action.payload];
       })
       .addCase(deleteExercise.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to delete exercise';
       })
       // createExerciseOption
       .addCase(createExerciseOption.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(createExerciseOption.fulfilled, (state, action: PayloadAction<IExerciseOption>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const exerciseId = action.payload.exerciseId;
         if (exerciseId) {
           if (!state.exerciseOptions[exerciseId]) {
@@ -251,15 +283,18 @@ const exerciseSlice = createSlice({
       })
       .addCase(createExerciseOption.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to create exercise option';
       })
       // updateExerciseOption
       .addCase(updateExerciseOption.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(updateExerciseOption.fulfilled, (state, action: PayloadAction<IExerciseOption>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const exerciseId = action.payload.exerciseId;
         if (exerciseId && state.exerciseOptions[exerciseId]) {
           const index = state.exerciseOptions[exerciseId].findIndex(opt => opt.id === action.payload.id);
@@ -270,15 +305,18 @@ const exerciseSlice = createSlice({
       })
       .addCase(updateExerciseOption.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to update exercise option';
       })
       // deleteExerciseOption
       .addCase(deleteExerciseOption.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(deleteExerciseOption.fulfilled, (state, action: PayloadAction<{ exerciseId: number; optionId: number }>) => {
         state.updating = false;
+        state.updateSuccess = true;
         const { exerciseId, optionId } = action.payload;
         if (state.exerciseOptions[exerciseId]) {
           state.exerciseOptions[exerciseId] = state.exerciseOptions[exerciseId].filter(opt => opt.id !== optionId);
@@ -286,37 +324,44 @@ const exerciseSlice = createSlice({
       })
       .addCase(deleteExerciseOption.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to delete exercise option';
       })
       // bulkCreateExercises
       .addCase(bulkCreateExercises.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkCreateExercises.fulfilled, (state, action: PayloadAction<IExercise[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.exercises = [...state.exercises, ...action.payload];
       })
       .addCase(bulkCreateExercises.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk create exercises';
       })
       // bulkUpdateExercises
       .addCase(bulkUpdateExercises.pending, state => {
         state.updating = true;
+        state.updateSuccess = false;
         state.errorMessage = null;
       })
       .addCase(bulkUpdateExercises.fulfilled, (state, action: PayloadAction<IExercise[]>) => {
         state.updating = false;
+        state.updateSuccess = true;
         state.exercises = action.payload;
       })
       .addCase(bulkUpdateExercises.rejected, (state, action) => {
         state.updating = false;
+        state.updateSuccess = false;
         state.errorMessage = action.error.message || 'Failed to bulk update exercises';
       });
   },
 });
 
-export const { reset } = exerciseSlice.actions;
+export const { reset, resetAll } = exerciseSlice.actions;
 
 export default exerciseSlice.reducer;

@@ -2,6 +2,7 @@ package com.langleague.app.web.rest;
 
 import com.langleague.app.repository.BookRepository;
 import com.langleague.app.security.AuthoritiesConstants;
+import com.langleague.app.security.SecurityUtils;
 import com.langleague.app.service.BookService;
 import com.langleague.app.service.UnitService;
 import com.langleague.app.service.dto.BookDTO;
@@ -229,6 +230,19 @@ public class BookResource {
     }
 
     /**
+     * {@code GET  /books/count} : count all books.
+     * Only admins can view this statistic.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<Long> countAllBooks() {
+        LOG.debug("REST request to count all Books");
+        return ResponseEntity.ok(bookRepository.count());
+    }
+
+    /**
      * {@code GET  /books/:id} : get the "id" book.
      * Students and Teachers can view books.
      *
@@ -236,6 +250,7 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bookDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<BookDTO> getBook(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Book : {}", id);
         Optional<BookDTO> bookDTO = bookService.findOne(id);

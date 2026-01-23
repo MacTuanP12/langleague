@@ -40,6 +40,20 @@ export const getAccount = createAsyncThunk('authentication/get_account', async (
   serializeError: serializeAxiosError,
 });
 
+export const updateAvatar = createAsyncThunk(
+  'authentication/update_avatar',
+  async (imageUrl: string) => {
+    // Axios automatically serializes string to JSON format: "value"
+    // Spring Boot @RequestBody String will parse it correctly
+    return await axios.post<IUser>('api/account/avatar', imageUrl, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  },
+  {
+    serializeError: serializeAxiosError,
+  },
+);
+
 interface IAuthParams {
   username: string;
   password: string;
@@ -161,6 +175,17 @@ export const AuthenticationSlice = createSlice({
       })
       .addCase(getAccount.pending, state => {
         state.loading = true;
+      })
+      .addCase(updateAvatar.pending, state => {
+        state.loading = true;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.loading = false;
+        state.account = action.payload.data;
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.error.message;
       });
   },
 });

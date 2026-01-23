@@ -6,6 +6,9 @@ import { IBook, defaultBookValue } from 'app/shared/model/book.model';
 import TeacherLayout from 'app/modules/teacher/teacher-layout';
 import './book-update.scss';
 import { translate, Translate } from 'react-jhipster';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { processImageUrl } from 'app/shared/util/image-utils';
 
 export const BookUpdate = () => {
   const { selectedBook, loadBook, addBook, editBook } = useBooks();
@@ -14,12 +17,14 @@ export const BookUpdate = () => {
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<IBook>({
     defaultValues: defaultBookValue,
     mode: 'onBlur',
   });
 
+  const coverImageUrl = watch('coverImageUrl');
   const [coverPreview, setCoverPreview] = useState<string>('');
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -42,16 +47,36 @@ export const BookUpdate = () => {
     }
   }, [selectedBook, id, setValue]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (coverImageUrl) {
+      setCoverPreview(processImageUrl(coverImageUrl));
+    } else {
+      setCoverPreview('');
+    }
+  }, [coverImageUrl]);
+
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post('/api/upload/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const imageUrl = response.data.fileUrl;
+      setValue('coverImageUrl', imageUrl, { shouldDirty: true });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      toast.error(translate('langleague.teacher.books.form.messages.uploadFailed'));
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-        setCoverPreview(imageUrl);
-        setValue('coverImageUrl', imageUrl, { shouldDirty: true });
-      };
-      reader.readAsDataURL(file);
+      await uploadFile(file);
     }
   };
 
@@ -72,20 +97,14 @@ export const BookUpdate = () => {
     e.stopPropagation();
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
 
     const file = e.dataTransfer.files?.[0];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-        setCoverPreview(imageUrl);
-        setValue('coverImageUrl', imageUrl, { shouldDirty: true });
-      };
-      reader.readAsDataURL(file);
+      await uploadFile(file);
     }
   };
 
@@ -95,6 +114,7 @@ export const BookUpdate = () => {
       // Ensure isPublic is always a boolean (required by backend validation)
       const bookData = {
         ...formData,
+        coverImageUrl: processImageUrl(formData.coverImageUrl || ''),
         isPublic: formData.isPublic ?? false,
       };
       if (id) {
@@ -166,6 +186,19 @@ export const BookUpdate = () => {
                     )}
                     <input type="file" accept="image/*" onChange={handleImageUpload} />
                   </div>
+                  <Controller
+                    name="coverImageUrl"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        type="text"
+                        placeholder={translate('global.form.image.url.placeholder')}
+                        className="url-input mt-2"
+                        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                      />
+                    )}
+                  />
                 </div>
 
                 <div className="form-group">

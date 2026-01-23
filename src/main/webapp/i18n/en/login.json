@@ -16,8 +16,13 @@
       }
     },
     "messages": {
+      "success": "<strong>Sign in success!</strong> Welcome back.",
       "error": {
         "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again.",
+        "badcredentials": "<strong>Failed to sign in!</strong> Bad credentials.",
+        "usernotfound": "<strong>Failed to sign in!</strong> User not found.",
+        "accountlocked": "<strong>Failed to sign in!</strong> Account is locked.",
+        "accountdisabled": "<strong>Failed to sign in!</strong> Account is disabled.",
         "captcha": "Invalid captcha. Please try again."
       },
       "validate": {

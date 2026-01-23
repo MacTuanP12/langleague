@@ -15,6 +15,18 @@ interface FormErrors {
   submit?: string;
 }
 
+interface FieldError {
+  field: string;
+  message: string;
+}
+
+interface ErrorResponse {
+  fieldErrors?: FieldError[];
+  message?: string;
+  detail?: string;
+  title?: string;
+}
+
 export const UserManagementCreate = () => {
   const { createUser } = useUserManagement();
   const [formData, setFormData] = useState({
@@ -43,8 +55,13 @@ export const UserManagementCreate = () => {
   const validateForm = () => {
     const newErrors: FormErrors = {};
 
+    // Username validation with regex pattern matching backend (Constants.LOGIN_REGEX)
+    const loginRegex = /^[_.@A-Za-z0-9-]+$/;
+
     if (!formData.username) {
       newErrors.username = translate('userManagement.create.validation.loginRequired');
+    } else if (!loginRegex.test(formData.username)) {
+      newErrors.username = translate('userManagement.create.validation.loginPattern');
     }
 
     if (!formData.email) {
@@ -99,8 +116,44 @@ export const UserManagementCreate = () => {
       await createUser(userData);
       toast.success(translate('langleague.admin.userManagement.messages.createSuccess'));
       navigate('/admin/user-management');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error creating user:', error);
+
+      // Handle backend validation errors
+      const axiosError = error as { response?: { data?: ErrorResponse } };
+      if (axiosError?.response?.data) {
+        const responseData = axiosError.response.data;
+
+        // Handle field errors from backend
+        if (responseData.fieldErrors) {
+          const backendErrors: FormErrors = {};
+          responseData.fieldErrors.forEach((fieldError: FieldError) => {
+            if (fieldError.field === 'login') {
+              backendErrors.username = fieldError.message || translate('userManagement.create.validation.loginPattern');
+            } else if (fieldError.field === 'email') {
+              backendErrors.email = fieldError.message || translate('userManagement.create.validation.emailInvalid');
+            }
+          });
+          setErrors(backendErrors);
+          return;
+        }
+
+        // Handle specific error messages
+        const errorMsg = responseData.message || responseData.detail || responseData.title;
+        if (errorMsg) {
+          if (errorMsg.toLowerCase().includes('login')) {
+            setErrors({ username: translate('userManagement.create.validation.loginPattern') });
+            toast.error(translate('userManagement.create.validation.loginPattern'));
+          } else if (errorMsg.toLowerCase().includes('email')) {
+            setErrors({ email: translate('userManagement.create.validation.emailInvalid') });
+            toast.error(translate('userManagement.create.validation.emailInvalid'));
+          } else {
+            toast.error(errorMsg);
+          }
+          return;
+        }
+      }
+
       toast.error(translate('langleague.admin.userManagement.messages.createError'));
       setErrors({ submit: translate('userManagement.create.validation.submitError') });
     }

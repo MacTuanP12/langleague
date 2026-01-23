@@ -20,6 +20,11 @@ public interface ExerciseOptionMapper extends EntityMapper<ExerciseOptionDTO, Ex
     ExerciseDTO toDtoExerciseId(Exercise exercise);
 
     @Override
-    @Mapping(target = "exercise", source = "exercise")
+    @Mapping(target = "exercise", source = "exercise", qualifiedByName = "exerciseIdToEntity")
     ExerciseOption toEntity(ExerciseOptionDTO exerciseOptionDTO);
+
+    @Named("exerciseIdToEntity")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    Exercise toEntityExerciseId(ExerciseDTO exerciseDTO);
 }

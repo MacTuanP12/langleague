@@ -2,24 +2,27 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { fetchUnitById, updateUnit, createUnit } from 'app/shared/reducers/unit.reducer';
+import { fetchUnitById, updateUnit, createUnit, clearSelectedUnit } from 'app/shared/reducers/unit.reducer';
 import {
   fetchVocabulariesByUnitId,
-  createVocabulary,
   updateVocabulary as updateVocabAction,
   deleteVocabulary as deleteVocabAction,
+  resetAll as resetAllVocabulary,
+  bulkCreateVocabularies,
 } from 'app/shared/reducers/vocabulary.reducer';
 import {
   fetchGrammarsByUnitId,
-  createGrammar,
   updateGrammar as updateGrammarAction,
   deleteGrammar as deleteGrammarAction,
+  resetAll as resetAllGrammar,
+  bulkCreateGrammars,
 } from 'app/shared/reducers/grammar.reducer';
 import {
   fetchExercisesWithOptions,
-  createExercise,
   updateExercise as updateExerciseAction,
   deleteExercise as deleteExerciseAction,
+  resetAll as resetAllExercise,
+  bulkCreateExercises,
 } from 'app/shared/reducers/exercise.reducer';
 import { IUnit, defaultUnitValue as defaultUnit } from 'app/shared/model/unit.model';
 import { IVocabulary, defaultVocabularyValue as defaultVocab } from 'app/shared/model/vocabulary.model';
@@ -34,6 +37,25 @@ import { GrammarItemCard } from 'app/modules/teacher/unit-management/GrammarItem
 import { ZoomControls } from 'app/modules/teacher/unit-management/ZoomControls';
 import { AddContentMenu } from 'app/modules/teacher/unit-management/AddContentMenu';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowLeft,
+  faSave,
+  faTrash,
+  faPlus,
+  faGripVertical,
+  faCommentDots,
+  faBook,
+  faQuestionCircle,
+  faChevronDown,
+  faChevronUp,
+  faCopy,
+  faCheckSquare,
+  faDotCircle,
+  faSquare,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import { MediaUploadField } from 'app/shared/components/form/MediaUploadField';
 
 type FocusedSection = number | string | null;
 
@@ -46,12 +68,7 @@ export const UnitUpdateV2 = () => {
     errorMessage: vocabError,
   } = useAppSelector(state => state.vocabulary);
   const { grammars: reduxGrammars = [], loading: grammarLoading, errorMessage: grammarError } = useAppSelector(state => state.grammar);
-  const {
-    exercises: reduxExercises = [],
-    exerciseOptions: reduxExerciseOptions = {},
-    loading: exerciseLoading,
-    errorMessage: exerciseError,
-  } = useAppSelector(state => state.exercise);
+  const { exercises: reduxExercises = [], loading: exerciseLoading, errorMessage: exerciseError } = useAppSelector(state => state.exercise);
 
   // React Hook Form setup
   const {
@@ -61,21 +78,24 @@ export const UnitUpdateV2 = () => {
     formState: { errors, isSubmitting },
   } = useForm<IUnit>({
     defaultValues: defaultUnit,
-    mode: 'onBlur', // Only validate on blur to prevent re-renders on every keystroke
+    mode: 'onBlur',
   });
 
   const [vocabularies, setVocabularies] = useState<IVocabulary[]>([]);
   const [grammars, setGrammars] = useState<IGrammar[]>([]);
   const [exercises, setExercises] = useState<IExercise[]>([]);
-  const [exerciseOptions, setExerciseOptions] = useState<{ [exerciseId: number]: IExerciseOption[] }>({});
   const [focusedSection, setFocusedSection] = useState<number | string | null>(null);
   const [draggedVocabIndex, setDraggedVocabIndex] = useState<number | null>(null);
   const [draggedGrammarIndex, setDraggedGrammarIndex] = useState<number | null>(null);
   const [draggedExerciseIndex, setDraggedExerciseIndex] = useState<number | null>(null);
   const [expandedGrammarItems, setExpandedGrammarItems] = useState<Set<number>>(new Set());
+  const [expandedVocabItems, setExpandedVocabItems] = useState<Set<number>>(new Set());
+  const [expandedExerciseItems, setExpandedExerciseItems] = useState<Set<number>>(new Set());
   const [zoomLevel, setZoomLevel] = useState<number>(1);
 
-  const { bookId, unitId } = useParams<{ bookId: string; unitId: string }>();
+  const { bookId, id } = useParams<{ bookId: string; id: string }>();
+  const unitId = id;
+
   const navigate = useNavigate();
 
   // Zoom control handlers
@@ -118,16 +138,26 @@ export const UnitUpdateV2 = () => {
       dispatch(fetchVocabulariesByUnitId(unitId));
       dispatch(fetchGrammarsByUnitId(unitId));
       dispatch(fetchExercisesWithOptions(unitId));
+    } else {
+      // Reset state for new unit
+      dispatch(clearSelectedUnit());
+      dispatch(resetAllVocabulary());
+      dispatch(resetAllGrammar());
+      dispatch(resetAllExercise());
+      // Also clear local state
+      setVocabularies([]);
+      setGrammars([]);
+      setExercises([]);
     }
   }, [dispatch, unitId]);
 
   useEffect(() => {
     if (selectedUnit && unitId) {
-      // Populate form with existing unit data
       setValue('id', selectedUnit.id);
-      setValue('title', selectedUnit.title);
-      setValue('summary', selectedUnit.summary);
-      setValue('orderIndex', selectedUnit.orderIndex);
+      setValue('title', selectedUnit.title || '');
+      setValue('summary', selectedUnit.summary || '');
+      setValue('orderIndex', selectedUnit.orderIndex || 0);
+      setValue('bookId', selectedUnit.bookId);
     }
   }, [selectedUnit, unitId, setValue]);
 
@@ -147,33 +177,67 @@ export const UnitUpdateV2 = () => {
     if (reduxExercises) {
       setExercises(reduxExercises);
     }
-    if (reduxExerciseOptions) {
-      setExerciseOptions(reduxExerciseOptions);
-    }
-  }, [reduxExercises, reduxExerciseOptions]);
+  }, [reduxExercises]);
 
   const onSubmit = useCallback(
     async (formData: IUnit) => {
       try {
+        let currentUnitId = unitId;
+
+        // 1. Save Unit Info
         if (unitId) {
           await dispatch(updateUnit(formData)).unwrap();
-          toast.success('Unit updated successfully');
         } else {
-          const newUnit = await dispatch(createUnit({ ...formData, book: { id: Number(bookId) } })).unwrap();
-          toast.success('Unit created successfully');
-          navigate(`/teacher/units/${newUnit.id}/edit`);
+          const newUnit = await dispatch(createUnit({ ...formData, bookId: Number(bookId) })).unwrap();
+          currentUnitId = String(newUnit.id);
+        }
+
+        // 2. Save Content (Bulk)
+        if (currentUnitId) {
+          const unitIdNum = Number(currentUnitId);
+
+          // Prepare data with correct unitId
+          const vocabulariesToSave = vocabularies.map(v => ({ ...v, unitId: unitIdNum }));
+          const grammarsToSave = grammars.map(g => ({ ...g, unitId: unitIdNum }));
+          const exercisesToSave = exercises.map(e => ({ ...e, unitId: unitIdNum }));
+
+          // Dispatch bulk actions
+          const promises = [];
+          if (vocabulariesToSave.length > 0) {
+            promises.push(dispatch(bulkCreateVocabularies(vocabulariesToSave)).unwrap());
+          }
+          if (grammarsToSave.length > 0) {
+            promises.push(dispatch(bulkCreateGrammars(grammarsToSave)).unwrap());
+          }
+          if (exercisesToSave.length > 0) {
+            promises.push(dispatch(bulkCreateExercises({ unitId: unitIdNum, exercises: exercisesToSave })).unwrap());
+          }
+
+          await Promise.all(promises);
+
+          toast.success(translate('langleague.teacher.units.form.messages.unitUpdated'));
+
+          if (!unitId) {
+            // If created new, navigate to edit page
+            navigate(`/teacher/units/${currentUnitId}/edit`);
+          } else {
+            // Refresh data to get updated IDs
+            dispatch(fetchVocabulariesByUnitId(currentUnitId));
+            dispatch(fetchGrammarsByUnitId(currentUnitId));
+            dispatch(fetchExercisesWithOptions(currentUnitId));
+          }
         }
       } catch (error) {
         console.error('Error saving unit:', error);
-        toast.error('Failed to save unit');
+        toast.error(translate('langleague.teacher.units.form.messages.loadFailed'));
       }
     },
-    [dispatch, unitId, bookId, navigate],
+    [dispatch, unitId, bookId, navigate, vocabularies, grammars, exercises],
   );
 
   // Vocabulary functions
   const addVocabulary = useCallback(() => {
-    setVocabularies(prev => [...prev, { ...defaultVocab, unit: { id: Number(unitId) } }]);
+    setVocabularies(prev => [...prev, { ...defaultVocab, unitId: Number(unitId) }]);
   }, [unitId]);
 
   const updateVocabulary = useCallback(<K extends keyof IVocabulary>(index: number, field: K, value: IVocabulary[K]) => {
@@ -184,30 +248,16 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const saveVocabulary = async (index: number) => {
-    const vocab = vocabularies[index];
-    try {
-      if (vocab.id) {
-        await dispatch(updateVocabAction(vocab)).unwrap();
-      } else {
-        await dispatch(createVocabulary({ ...vocab, unit: { id: Number(unitId) } })).unwrap();
-      }
-      toast.success('Vocabulary saved');
-    } catch (error) {
-      toast.error('Failed to save vocabulary');
-    }
-  };
-
   const deleteVocabulary = useCallback(
     async (index: number) => {
       const vocab = vocabularies[index];
       if (vocab.id) {
-        if (window.confirm('Delete this vocabulary?')) {
+        if (window.confirm(translate('langleague.teacher.common.deleteConfirm'))) {
           try {
             await dispatch(deleteVocabAction(vocab.id)).unwrap();
-            toast.success('Vocabulary deleted');
+            toast.success(translate('langleague.teacher.units.form.messages.vocabDeleted'));
           } catch (error) {
-            toast.error('Failed to delete vocabulary');
+            toast.error(translate('langleague.teacher.units.form.messages.vocabDeleteFailed'));
             return;
           }
         } else {
@@ -219,7 +269,27 @@ export const UnitUpdateV2 = () => {
     [vocabularies, dispatch],
   );
 
-  // ... (Drag and drop handlers remain same) ...
+  const toggleVocabItem = useCallback((index: number) => {
+    setExpandedVocabItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const expandAllVocab = useCallback(() => {
+    setExpandedVocabItems(new Set(vocabularies.map((_, idx) => idx)));
+  }, [vocabularies]);
+
+  const collapseAllVocab = useCallback(() => {
+    setExpandedVocabItems(new Set());
+  }, []);
+
+  // ... (Drag and drop handlers) ...
   const handleVocabDragStart = useCallback((index: number) => {
     setDraggedVocabIndex(index);
   }, []);
@@ -256,7 +326,7 @@ export const UnitUpdateV2 = () => {
 
   // Grammar functions
   const addGrammar = useCallback(() => {
-    setGrammars(prev => [...prev, { ...defaultGrammar, unit: { id: Number(unitId) } }]);
+    setGrammars(prev => [...prev, { ...defaultGrammar, unitId: Number(unitId) }]);
   }, [unitId]);
 
   const updateGrammar = useCallback(<K extends keyof IGrammar>(index: number, field: K, value: IGrammar[K]) => {
@@ -267,30 +337,16 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const saveGrammar = async (index: number) => {
-    const grammar = grammars[index];
-    try {
-      if (grammar.id) {
-        await dispatch(updateGrammarAction(grammar)).unwrap();
-      } else {
-        await dispatch(createGrammar({ ...grammar, unit: { id: Number(unitId) } })).unwrap();
-      }
-      toast.success('Grammar saved');
-    } catch (error) {
-      toast.error('Failed to save grammar');
-    }
-  };
-
   const deleteGrammar = useCallback(
     async (index: number) => {
       const grammar = grammars[index];
       if (grammar.id) {
-        if (window.confirm('Delete this grammar?')) {
+        if (window.confirm(translate('langleague.teacher.common.deleteConfirm'))) {
           try {
             await dispatch(deleteGrammarAction(grammar.id)).unwrap();
-            toast.success('Grammar deleted');
+            toast.success(translate('langleague.teacher.units.form.messages.grammarDeleted'));
           } catch (error) {
-            toast.error('Failed to delete grammar');
+            toast.error(translate('langleague.teacher.units.form.messages.grammarDeleteFailed'));
             return;
           }
         } else {
@@ -302,7 +358,6 @@ export const UnitUpdateV2 = () => {
     [grammars, dispatch],
   );
 
-  // ... (Grammar drag/drop and expand handlers remain same) ...
   const toggleGrammarItem = useCallback((index: number) => {
     setExpandedGrammarItems(prev => {
       const newSet = new Set(prev);
@@ -360,7 +415,7 @@ export const UnitUpdateV2 = () => {
   // Exercise functions
   const addExercise = useCallback(
     (type: ExerciseType = ExerciseType.SINGLE_CHOICE) => {
-      setExercises(prev => [...prev, { ...defaultExercise, exerciseType: type, unit: { id: Number(unitId) } }]);
+      setExercises(prev => [...prev, { ...defaultExercise, exerciseType: type, unitId: Number(unitId), options: [] }]);
     },
     [unitId],
   );
@@ -373,30 +428,16 @@ export const UnitUpdateV2 = () => {
     });
   }, []);
 
-  const saveExercise = async (index: number) => {
-    const exercise = exercises[index];
-    try {
-      if (exercise.id) {
-        await dispatch(updateExerciseAction(exercise)).unwrap();
-      } else {
-        await dispatch(createExercise({ ...exercise, unit: { id: Number(unitId) } })).unwrap();
-      }
-      toast.success('Exercise saved');
-    } catch (error) {
-      toast.error('Failed to save exercise');
-    }
-  };
-
   const deleteExercise = useCallback(
     async (index: number) => {
       const exercise = exercises[index];
       if (exercise.id) {
-        if (window.confirm('Delete this exercise?')) {
+        if (window.confirm(translate('langleague.teacher.common.deleteConfirm'))) {
           try {
             await dispatch(deleteExerciseAction(exercise.id)).unwrap();
-            toast.success('Exercise deleted');
+            toast.success(translate('langleague.teacher.units.form.messages.exerciseDeleted'));
           } catch (error) {
-            toast.error('Failed to delete exercise');
+            toast.error(translate('langleague.teacher.units.form.messages.exerciseDeleteFailed'));
             return;
           }
         } else {
@@ -408,7 +449,26 @@ export const UnitUpdateV2 = () => {
     [exercises, dispatch],
   );
 
-  // ... (Exercise drag/drop and duplicate handlers remain same) ...
+  const toggleExerciseItem = useCallback((index: number) => {
+    setExpandedExerciseItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const expandAllExercises = useCallback(() => {
+    setExpandedExerciseItems(new Set(exercises.map((_, idx) => idx)));
+  }, [exercises]);
+
+  const collapseAllExercises = useCallback(() => {
+    setExpandedExerciseItems(new Set());
+  }, []);
+
   const duplicateExercise = useCallback((index: number) => {
     setExercises(prev => {
       const exercise = { ...prev[index], id: undefined };
@@ -443,61 +503,75 @@ export const UnitUpdateV2 = () => {
     setDraggedExerciseIndex(null);
   }, []);
 
-  // Exercise options functions (Simplified for brevity, assuming similar logic)
-  // ... (addOption, updateOption, deleteOption) ...
-  const addOption = useCallback(
-    (exerciseIndex: number) => {
-      const exercise = exercises[exerciseIndex];
-      if (!exercise.id) return;
-
-      setExerciseOptions(prev => {
-        const currentOptions = prev[exercise.id] || [];
-        return {
-          ...prev,
-          [exercise.id]: [...currentOptions, { ...defaultOption, exerciseId: exercise.id }],
-        };
-      });
-    },
-    [exercises],
-  );
+  // Exercise options functions
+  const addOption = useCallback((exerciseIndex: number) => {
+    setExercises(prev => {
+      const updatedExercises = [...prev];
+      const exercise = { ...updatedExercises[exerciseIndex] };
+      exercise.options = [...(exercise.options || []), { ...defaultOption, orderIndex: exercise.options?.length || 0 }];
+      updatedExercises[exerciseIndex] = exercise;
+      return updatedExercises;
+    });
+  }, []);
 
   const updateOption = useCallback(
-    <K extends keyof IExerciseOption>(exerciseId: number, optionIndex: number, field: K, value: IExerciseOption[K]) => {
-      setExerciseOptions(prev => {
-        const options = [...(prev[exerciseId] || [])];
+    <K extends keyof IExerciseOption>(exerciseIndex: number, optionIndex: number, field: K, value: IExerciseOption[K]) => {
+      setExercises(prev => {
+        const updatedExercises = [...prev];
+        const exercise = { ...updatedExercises[exerciseIndex] };
+        const options = [...(exercise.options || [])];
         options[optionIndex] = { ...options[optionIndex], [field]: value };
-        return {
-          ...prev,
-          [exerciseId]: options,
-        };
+        exercise.options = options;
+        updatedExercises[exerciseIndex] = exercise;
+        return updatedExercises;
       });
     },
     [],
   );
 
-  const deleteOption = useCallback((exerciseId: number, optionIndex: number) => {
-    setExerciseOptions(prev => {
-      const options = (prev[exerciseId] || []).filter((_, i) => i !== optionIndex);
-      return {
-        ...prev,
-        [exerciseId]: options,
-      };
+  const handleCorrectOptionChange = useCallback((exerciseIndex: number, optionIndex: number, isChecked: boolean) => {
+    setExercises(prev => {
+      const updatedExercises = [...prev];
+      const exercise = { ...updatedExercises[exerciseIndex] };
+      const options = [...(exercise.options || [])];
+
+      if (exercise.exerciseType === ExerciseType.SINGLE_CHOICE) {
+        options.forEach((opt, i) => {
+          options[i] = { ...opt, isCorrect: i === optionIndex };
+        });
+      } else {
+        options[optionIndex] = { ...options[optionIndex], isCorrect: isChecked };
+      }
+      exercise.options = options;
+      updatedExercises[exerciseIndex] = exercise;
+      return updatedExercises;
     });
   }, []);
 
-  // Check if any data is loading
+  const deleteOption = useCallback((exerciseIndex: number, optionIndex: number) => {
+    setExercises(prev => {
+      const updatedExercises = [...prev];
+      const exercise = { ...updatedExercises[exerciseIndex] };
+      const options = (exercise.options || []).filter((_, i) => i !== optionIndex);
+      options.forEach((opt, i) => (opt.orderIndex = i)); // Re-index
+      exercise.options = options;
+      updatedExercises[exerciseIndex] = exercise;
+      return updatedExercises;
+    });
+  }, []);
+
   const isLoading = unitLoading || vocabLoading || grammarLoading || exerciseLoading;
   const hasError = unitError || vocabError || grammarError || exerciseError;
 
   if (isLoading && unitId) {
-    return <LoadingSpinner message="Loading unit data..." fullScreen />;
+    return <LoadingSpinner message="langleague.teacher.units.form.messages.loading" isI18nKey fullScreen />;
   }
 
   if (hasError) {
     const errorMsg = unitError || vocabError || grammarError || exerciseError;
     return (
       <ErrorDisplay
-        message={errorMsg || 'Failed to load unit data'}
+        message={errorMsg || translate('langleague.teacher.units.form.messages.loadFailed')}
         onRetry={() => {
           if (unitId) {
             dispatch(fetchUnitById(unitId));
@@ -526,26 +600,27 @@ export const UnitUpdateV2 = () => {
       {/* Header */}
       <div className="form-header">
         <button onClick={() => navigate(`/teacher/books/${bookId}/edit`)} className="back-btn" type="button">
-          <i className="bi bi-arrow-left"></i>
+          <FontAwesomeIcon icon={faArrowLeft} />
         </button>
         <div className="header-content">
           <Controller
             name="title"
             control={control}
             rules={{
-              required: translate('langleague.teacher.units.form.validation.titleRequired', 'Unit title is required'),
+              required: translate('langleague.teacher.units.form.validation.titleRequired'),
               minLength: {
                 value: 3,
-                message: translate('langleague.teacher.units.form.validation.titleMinLength', 'Title must be at least 3 characters'),
+                message: translate('langleague.teacher.units.form.validation.titleMinLength'),
               },
             }}
             render={({ field }) => (
               <div>
                 <input
                   {...field}
+                  value={field.value || ''}
                   type="text"
                   className={`chapter-title-input ${errors.title ? 'error' : ''}`}
-                  placeholder={translate('langleague.teacher.units.form.fields.titlePlaceholder', 'Unit Title')}
+                  placeholder={translate('langleague.teacher.units.form.fields.titlePlaceholder')}
                 />
                 {errors.title && <span className="error-message">{errors.title.message}</span>}
               </div>
@@ -557,18 +632,19 @@ export const UnitUpdateV2 = () => {
             render={({ field }) => (
               <textarea
                 {...field}
+                value={field.value || ''}
                 className="chapter-description-input"
-                placeholder={translate('langleague.teacher.units.form.fields.summaryPlaceholder', 'Unit Description')}
+                placeholder={translate('langleague.teacher.units.form.fields.summaryPlaceholder')}
                 rows={2}
               />
             )}
           />
         </div>
         <button onClick={handleSubmit(onSubmit)} className="send-btn" type="button" disabled={isSubmitting}>
-          <i className="bi bi-send"></i>{' '}
+          <FontAwesomeIcon icon={faSave} />{' '}
           {isSubmitting
-            ? translate('langleague.teacher.units.form.buttons.saving', 'Saving...')
-            : translate('langleague.teacher.units.form.buttons.submit', 'Submit')}
+            ? translate('langleague.teacher.units.form.buttons.saving')
+            : translate('langleague.teacher.units.form.buttons.submit')}
         </button>
       </div>
 
@@ -588,35 +664,66 @@ export const UnitUpdateV2 = () => {
         <div className="section-divider">
           <div className="divider-line"></div>
           <h3 className="section-title">
-            <i className="bi bi-chat-square-text"></i> Vocabulary
+            <FontAwesomeIcon icon={faCommentDots} /> <Translate contentKey="langleague.teacher.units.menu.vocabulary">Vocabulary</Translate>
           </h3>
           <div className="divider-line"></div>
         </div>
 
+        {vocabularies.length > 0 && (
+          <div className="global-controls">
+            <button className="control-btn" onClick={expandAllVocab} type="button">
+              <FontAwesomeIcon icon={faChevronDown} />{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.expandAll">Expand All</Translate>
+            </button>
+            <button className="control-btn" onClick={collapseAllVocab} type="button">
+              <FontAwesomeIcon icon={faChevronUp} />{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.collapseAll">Collapse All</Translate>
+            </button>
+          </div>
+        )}
+
         {vocabularies.map((vocab, index) => (
           <div
             key={index}
-            className={`form-card ${focusedSection === index ? 'focused' : ''} ${draggedVocabIndex === index ? 'dragging' : ''}`}
-            onClick={() => setFocusedSection(index)}
+            className={`collapsible-card ${expandedVocabItems.has(index) ? 'expanded' : 'collapsed'} ${draggedVocabIndex === index ? 'dragging' : ''}`}
             draggable
             onDragStart={() => handleVocabDragStart(index)}
             onDragOver={e => handleVocabDragOver(e, index)}
             onDragEnd={handleVocabDragEnd}
           >
-            <div className="card-header">
-              <i className="bi bi-grip-vertical drag-handle"></i>
-              <span className="card-number">{index + 1}</span>
-              <i className="bi bi-chat-square-text card-icon"></i>
+            <div className="collapsible-card-header" onClick={() => toggleVocabItem(index)}>
+              <div className="header-left">
+                <FontAwesomeIcon icon={faGripVertical} className="drag-handle" />
+                <span className="card-number">{index + 1}</span>
+                <FontAwesomeIcon icon={faCommentDots} className="card-icon" />
+                <span className="card-summary">{vocab.word || translate('langleague.teacher.units.labels.newVocabulary')}</span>
+              </div>
+              <div className="header-right">
+                <button
+                  className="action-btn delete"
+                  onClick={e => {
+                    e.stopPropagation();
+                    deleteVocabulary(index);
+                  }}
+                  title={translate('entity.action.delete')}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+                <button className="toggle-btn">
+                  <FontAwesomeIcon icon={expandedVocabItems.has(index) ? faChevronUp : faChevronDown} />
+                </button>
+              </div>
             </div>
 
-            <div className="card-body">
+            <div className="collapsible-card-body" style={{ display: expandedVocabItems.has(index) ? 'block' : 'none' }}>
               <div className="form-field">
                 <input
                   type="text"
-                  value={vocab.word}
+                  value={vocab.word || ''}
                   onChange={e => updateVocabulary(index, 'word', e.target.value)}
-                  placeholder="Word (e.g., Hello)"
+                  placeholder={translate('langleague.teacher.units.vocabulary.placeholders.word')}
                   className="field-input"
+                  onClick={e => e.stopPropagation()}
                 />
                 <div className="field-underline"></div>
               </div>
@@ -624,10 +731,11 @@ export const UnitUpdateV2 = () => {
               <div className="form-field">
                 <input
                   type="text"
-                  value={vocab.phonetic}
+                  value={vocab.phonetic || ''}
                   onChange={e => updateVocabulary(index, 'phonetic', e.target.value)}
-                  placeholder="Phonetic (e.g., /həˈloʊ/)"
+                  placeholder={translate('langleague.teacher.units.vocabulary.placeholders.phonetic')}
                   className="field-input"
+                  onClick={e => e.stopPropagation()}
                 />
                 <div className="field-underline"></div>
               </div>
@@ -635,86 +743,72 @@ export const UnitUpdateV2 = () => {
               <div className="form-field">
                 <input
                   type="text"
-                  value={vocab.meaning}
+                  value={vocab.meaning || ''}
                   onChange={e => updateVocabulary(index, 'meaning', e.target.value)}
-                  placeholder="Meaning"
+                  placeholder={translate('langleague.teacher.units.vocabulary.placeholders.meaning')}
                   className="field-input"
+                  onClick={e => e.stopPropagation()}
                 />
                 <div className="field-underline"></div>
               </div>
 
               <div className="form-field">
                 <textarea
-                  value={vocab.example}
+                  value={vocab.example || ''}
                   onChange={e => updateVocabulary(index, 'example', e.target.value)}
-                  placeholder="Example sentence"
+                  placeholder={translate('langleague.teacher.units.vocabulary.placeholders.example')}
                   className="field-textarea"
                   rows={2}
+                  onClick={e => e.stopPropagation()}
                 />
                 <div className="field-underline"></div>
               </div>
 
-              <div className="form-row-2">
-                <div className="form-field">
-                  <input
-                    type="text"
-                    value={vocab.imageUrl}
-                    onChange={e => updateVocabulary(index, 'imageUrl', e.target.value)}
-                    placeholder="Image URL"
-                    className="field-input small"
-                  />
-                  <div className="field-underline"></div>
-                </div>
-                <div className="form-field">
-                  <input
-                    type="number"
-                    value={vocab.orderIndex}
-                    onChange={e => updateVocabulary(index, 'orderIndex', parseInt(e.target.value, 10))}
-                    placeholder="Order"
-                    className="field-input small"
-                  />
-                  <div className="field-underline"></div>
-                </div>
-              </div>
-            </div>
+              <MediaUploadField
+                type="image"
+                label={translate('langleague.teacher.units.vocabulary.placeholders.imageUrl')}
+                value={vocab.imageUrl}
+                onChange={url => updateVocabulary(index, 'imageUrl', url)}
+                placeholder={translate('global.form.image.url.placeholder')}
+              />
 
-            <div className="card-footer">
-              <button className="action-btn" onClick={() => saveVocabulary(index)} title="Save">
-                <i className="bi bi-save"></i>
-              </button>
-              <button className="action-btn" onClick={() => duplicateVocabulary(index)} title="Duplicate">
-                <i className="bi bi-files"></i>
-              </button>
-              <button className="action-btn delete" onClick={() => deleteVocabulary(index)} title="Delete">
-                <i className="bi bi-trash"></i>
-              </button>
+              <div className="card-footer">
+                <button
+                  className="action-btn"
+                  onClick={e => {
+                    e.stopPropagation();
+                    duplicateVocabulary(index);
+                  }}
+                  title={translate('langleague.teacher.units.form.actions.duplicate')}
+                >
+                  <FontAwesomeIcon icon={faCopy} /> {translate('langleague.teacher.units.form.actions.duplicate')}
+                </button>
+              </div>
             </div>
           </div>
         ))}
 
         <button className="add-section-btn" onClick={addVocabulary}>
-          <i className="bi bi-plus-circle"></i>{' '}
+          <FontAwesomeIcon icon={faPlus} />{' '}
           <Translate contentKey="langleague.teacher.units.form.buttons.addVocabulary">Add Vocabulary</Translate>
         </button>
 
-        {/* Grammar Section */}
         <div className="section-divider">
           <div className="divider-line"></div>
           <h3 className="section-title">
-            <i className="bi bi-book"></i> Grammar
+            <FontAwesomeIcon icon={faBook} /> <Translate contentKey="langleague.teacher.units.menu.grammar">Grammar</Translate>
           </h3>
           <div className="divider-line"></div>
         </div>
 
-        {/* Global Controls */}
         {grammars.length > 0 && (
           <div className="global-controls">
             <button className="control-btn" onClick={expandAllGrammar} type="button">
-              <i className="bi bi-chevron-down"></i>{' '}
+              <FontAwesomeIcon icon={faChevronDown} />{' '}
               <Translate contentKey="langleague.teacher.units.form.buttons.expandAll">Expand All</Translate>
             </button>
             <button className="control-btn" onClick={collapseAllGrammar} type="button">
-              <i className="bi bi-chevron-up"></i>{' '}
+              <FontAwesomeIcon icon={faChevronUp} />{' '}
               <Translate contentKey="langleague.teacher.units.form.buttons.collapseAll">Collapse All</Translate>
             </button>
           </div>
@@ -735,88 +829,150 @@ export const UnitUpdateV2 = () => {
               onDragOver={e => handleGrammarDragOver(e, index)}
               onDragEnd={handleGrammarDragEnd}
             />
-            <div className="card-footer" style={{ justifyContent: 'flex-end', padding: '0 1rem 1rem' }}>
-              <button className="action-btn" onClick={() => saveGrammar(index)} title="Save">
-                <i className="bi bi-save"></i>
-              </button>
-            </div>
           </div>
         ))}
 
         <button className="add-section-btn" onClick={addGrammar}>
-          <i className="bi bi-plus-circle"></i> <Translate contentKey="langleague.teacher.units.form.addGrammar">Add Grammar</Translate>
+          <FontAwesomeIcon icon={faPlus} /> <Translate contentKey="langleague.teacher.units.form.addGrammar">Add Grammar</Translate>
         </button>
 
-        {/* Exercise Section */}
         <div className="section-divider">
           <div className="divider-line"></div>
           <h3 className="section-title">
-            <i className="bi bi-question-circle"></i> Exercises
+            <FontAwesomeIcon icon={faQuestionCircle} /> <Translate contentKey="langleague.teacher.units.menu.exercise">Exercises</Translate>
           </h3>
           <div className="divider-line"></div>
         </div>
 
+        {exercises.length > 0 && (
+          <div className="global-controls">
+            <button className="control-btn" onClick={expandAllExercises} type="button">
+              <FontAwesomeIcon icon={faChevronDown} />{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.expandAll">Expand All</Translate>
+            </button>
+            <button className="control-btn" onClick={collapseAllExercises} type="button">
+              <FontAwesomeIcon icon={faChevronUp} />{' '}
+              <Translate contentKey="langleague.teacher.units.form.buttons.collapseAll">Collapse All</Translate>
+            </button>
+          </div>
+        )}
+
         {exercises.map((exercise, index) => (
           <div
             key={index}
-            className={`form-card ${focusedSection === `exercise-${index}` ? 'focused' : ''} ${draggedExerciseIndex === index ? 'dragging' : ''}`}
-            onClick={() => setFocusedSection(`exercise-${index}` as FocusedSection)}
+            className={`collapsible-card ${expandedExerciseItems.has(index) ? 'expanded' : 'collapsed'} ${draggedExerciseIndex === index ? 'dragging' : ''}`}
             draggable
             onDragStart={() => handleExerciseDragStart(index)}
             onDragOver={e => handleExerciseDragOver(e, index)}
             onDragEnd={handleExerciseDragEnd}
           >
-            <div className="card-header">
-              <span className="card-number">{index + 1}</span>
-              <i className="bi bi-question-circle card-icon"></i>
-              <i className="bi bi-grip-vertical drag-handle"></i>
-              <select
-                value={exercise.exerciseType}
-                onChange={e => updateExercise(index, 'exerciseType', e.target.value as ExerciseType)}
-                className="question-type-select"
-              >
-                <option value={ExerciseType.SINGLE_CHOICE}>Single Choice</option>
-                <option value={ExerciseType.MULTI_CHOICE}>Multiple Choice</option>
-                <option value={ExerciseType.FILL_IN_BLANK}>Fill in Blank</option>
-              </select>
+            <div className="collapsible-card-header" onClick={() => toggleExerciseItem(index)}>
+              <div className="header-left">
+                <span className="card-number">{index + 1}</span>
+                <FontAwesomeIcon icon={faQuestionCircle} className="card-icon" />
+                <FontAwesomeIcon icon={faGripVertical} className="drag-handle" />
+                <span className="card-summary">
+                  {exercise.exerciseText || translate('langleague.teacher.units.labels.newExercise')}
+                  <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem', color: 'var(--teacher-text-tertiary)' }}>
+                    (
+                    {translate(
+                      `langleague.teacher.units.exercises.types.${exercise.exerciseType === ExerciseType.SINGLE_CHOICE ? 'singleChoice' : exercise.exerciseType === ExerciseType.MULTI_CHOICE ? 'multiChoice' : 'fillInBlank'}`,
+                    )}
+                    )
+                  </span>
+                </span>
+              </div>
+              <div className="header-right">
+                <button
+                  className="action-btn delete"
+                  onClick={e => {
+                    e.stopPropagation();
+                    deleteExercise(index);
+                  }}
+                  title={translate('entity.action.delete')}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+                <button className="toggle-btn">
+                  <FontAwesomeIcon icon={expandedExerciseItems.has(index) ? faChevronUp : faChevronDown} />
+                </button>
+              </div>
             </div>
 
-            <div className="card-body">
+            <div className="collapsible-card-body" style={{ display: expandedExerciseItems.has(index) ? 'block' : 'none' }}>
+              <div className="form-field" style={{ marginBottom: '1rem' }}>
+                <select
+                  value={exercise.exerciseType}
+                  onChange={e => updateExercise(index, 'exerciseType', e.target.value as ExerciseType)}
+                  className="question-type-select"
+                  onClick={e => e.stopPropagation()}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    borderRadius: '4px',
+                    border: '1px solid var(--teacher-border)',
+                    background: 'transparent',
+                    color: 'var(--teacher-text-primary)',
+                  }}
+                >
+                  <option value={ExerciseType.SINGLE_CHOICE}>{translate('langleague.teacher.units.exercises.types.singleChoice')}</option>
+                  <option value={ExerciseType.MULTI_CHOICE}>{translate('langleague.teacher.units.exercises.types.multiChoice')}</option>
+                  <option value={ExerciseType.FILL_IN_BLANK}>{translate('langleague.teacher.units.exercises.types.fillInBlank')}</option>
+                </select>
+              </div>
+
               <div className="form-field">
                 <textarea
-                  value={exercise.exerciseText}
+                  value={exercise.exerciseText || ''}
                   onChange={e => updateExercise(index, 'exerciseText', e.target.value)}
-                  placeholder="Exercise text"
+                  placeholder={translate('langleague.teacher.units.exercises.placeholders.text')}
                   className="field-textarea"
                   rows={3}
+                  onClick={e => e.stopPropagation()}
                 />
                 <div className="field-underline"></div>
               </div>
 
-              {exercise.exerciseType !== ExerciseType.FILL_IN_BLANK && exercise.id && (
+              {exercise.exerciseType !== ExerciseType.FILL_IN_BLANK && (
                 <div className="options-section">
-                  {(exerciseOptions[exercise.id] || []).map((option, optIndex) => (
+                  {(exercise.options || []).map((option, optIndex) => (
                     <div key={optIndex} className="option-item">
                       <input
                         type={exercise.exerciseType === ExerciseType.SINGLE_CHOICE ? 'radio' : 'checkbox'}
-                        checked={option.isCorrect}
-                        onChange={e => updateOption(exercise.id, optIndex, 'isCorrect', e.target.checked)}
+                        name={`exercise-${index}-option-${optIndex}`}
+                        checked={option.isCorrect || false}
+                        onChange={e => handleCorrectOptionChange(index, optIndex, e.target.checked)}
                         className="option-radio"
+                        onClick={e => e.stopPropagation()}
                       />
                       <input
                         type="text"
-                        value={option.optionText}
-                        onChange={e => updateOption(exercise.id, optIndex, 'optionText', e.target.value)}
-                        placeholder={`Option ${optIndex + 1}`}
+                        value={option.optionText || ''}
+                        onChange={e => updateOption(index, optIndex, 'optionText', e.target.value)}
+                        placeholder={`${translate('langleague.teacher.units.exercises.placeholders.option')} ${optIndex + 1}`}
                         className="option-input"
+                        onClick={e => e.stopPropagation()}
                       />
-                      <button className="option-delete" onClick={() => deleteOption(exercise.id, optIndex)}>
-                        <i className="bi bi-x"></i>
+                      <button
+                        className="option-delete"
+                        onClick={e => {
+                          e.stopPropagation();
+                          deleteOption(index, optIndex);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTimes} />
                       </button>
                     </div>
                   ))}
-                  <button className="add-option-btn" onClick={() => addOption(index)}>
-                    <i className="bi bi-plus"></i> Add option
+                  <button
+                    className="add-option-btn"
+                    onClick={e => {
+                      e.stopPropagation();
+                      addOption(index);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />{' '}
+                    <Translate contentKey="langleague.teacher.units.exercises.buttons.addOption">Add option</Translate>
                   </button>
                 </div>
               )}
@@ -824,69 +980,65 @@ export const UnitUpdateV2 = () => {
               {exercise.exerciseType === ExerciseType.FILL_IN_BLANK && (
                 <div className="form-field">
                   <input
-                    placeholder="Enter correct answer..."
-                    value={exercise.correctAnswerRaw}
+                    placeholder={translate('langleague.teacher.units.exercises.placeholders.correctAnswer')}
+                    value={exercise.correctAnswerRaw || ''}
                     onChange={e => updateExercise(index, 'correctAnswerRaw', e.target.value)}
                     className="field-input"
+                    onClick={e => e.stopPropagation()}
                   />
                   <div className="field-underline"></div>
                 </div>
               )}
 
               <div className="form-row-2">
-                <div className="form-field">
-                  <input
-                    type="text"
-                    value={exercise.imageUrl}
-                    onChange={e => updateExercise(index, 'imageUrl', e.target.value)}
-                    placeholder="Image URL (optional)"
-                    className="field-input small"
-                  />
-                  <div className="field-underline"></div>
-                </div>
-                <div className="form-field">
-                  <input
-                    type="text"
-                    value={exercise.audioUrl}
-                    onChange={e => updateExercise(index, 'audioUrl', e.target.value)}
-                    placeholder="Audio URL (optional)"
-                    className="field-input small"
-                  />
-                  <div className="field-underline"></div>
-                </div>
+                <MediaUploadField
+                  type="image"
+                  label={translate('langleague.teacher.units.exercises.placeholders.imageUrl')}
+                  value={exercise.imageUrl}
+                  onChange={url => updateExercise(index, 'imageUrl', url)}
+                  placeholder={translate('global.form.image.url.placeholder')}
+                />
+                <MediaUploadField
+                  type="audio"
+                  label={translate('langleague.teacher.units.exercises.placeholders.audioUrl')}
+                  value={exercise.audioUrl}
+                  onChange={url => updateExercise(index, 'audioUrl', url)}
+                  placeholder={translate('global.form.audio.url.placeholder')}
+                />
               </div>
-            </div>
 
-            <div className="card-footer">
-              <button className="action-btn" onClick={() => saveExercise(index)} title="Save">
-                <i className="bi bi-save"></i>
-              </button>
-              <button className="action-btn" onClick={() => duplicateExercise(index)} title="Duplicate">
-                <i className="bi bi-files"></i>
-              </button>
-              <button className="action-btn delete" onClick={() => deleteExercise(index)} title="Delete">
-                <i className="bi bi-trash"></i>
-              </button>
+              <div className="card-footer">
+                <button
+                  className="action-btn"
+                  onClick={e => {
+                    e.stopPropagation();
+                    duplicateExercise(index);
+                  }}
+                  title={translate('langleague.teacher.units.form.actions.duplicate')}
+                >
+                  <FontAwesomeIcon icon={faCopy} /> {translate('langleague.teacher.units.form.actions.duplicate')}
+                </button>
+              </div>
             </div>
           </div>
         ))}
 
         <div className="add-question-menu">
           <button className="add-section-btn" onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)}>
-            <i className="bi bi-plus-circle"></i>{' '}
+            <FontAwesomeIcon icon={faPlus} />{' '}
             <Translate contentKey="langleague.teacher.units.exercises.menu.addExercise">Add Exercise</Translate>
           </button>
           <div className="question-type-buttons">
             <button onClick={() => addExercise(ExerciseType.SINGLE_CHOICE)} className="type-btn">
-              <i className="bi bi-record-circle"></i>{' '}
+              <FontAwesomeIcon icon={faDotCircle} />{' '}
               <Translate contentKey="langleague.teacher.units.exercises.menu.singleChoice">Single Choice</Translate>
             </button>
             <button onClick={() => addExercise(ExerciseType.MULTI_CHOICE)} className="type-btn">
-              <i className="bi bi-check-square"></i>{' '}
+              <FontAwesomeIcon icon={faCheckSquare} />{' '}
               <Translate contentKey="langleague.teacher.units.exercises.menu.multiChoice">Multi Choice</Translate>
             </button>
             <button onClick={() => addExercise(ExerciseType.FILL_IN_BLANK)} className="type-btn">
-              <i className="bi bi-dash-square"></i>{' '}
+              <FontAwesomeIcon icon={faSquare} />{' '}
               <Translate contentKey="langleague.teacher.units.exercises.menu.fillInBlank">Fill in Blank</Translate>
             </button>
           </div>

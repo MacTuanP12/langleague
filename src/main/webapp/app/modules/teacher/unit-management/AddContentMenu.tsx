@@ -1,6 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPlusCircle,
+  faChevronUp,
+  faChevronDown,
+  faBook,
+  faBookOpen,
+  faQuestionCircle,
+  faChevronRight,
+  faCircle,
+  faCheckSquare,
+  faPen,
+} from '@fortawesome/free-solid-svg-icons';
 import './AddContentMenu.scss';
 
 interface AddContentMenuProps {
@@ -63,9 +75,9 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
   return (
     <div className="add-content-menu" ref={menuRef}>
       <button className="add-content-btn" onClick={handleToggle} type="button">
-        <FontAwesomeIcon icon="plus-circle" className="me-2" />
+        <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
         <Translate contentKey="langleague.teacher.units.menu.addContent">Add Content</Translate>
-        <FontAwesomeIcon icon={isOpen ? 'chevron-up' : 'chevron-down'} className="ms-2" />
+        <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} className="ms-2" />
       </button>
 
       {isOpen && (
@@ -73,7 +85,7 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
           {onAddVocabulary && (
             <button className="menu-item" onClick={handleAddVocabulary} type="button">
               <div className="menu-item-icon vocabulary">
-                <FontAwesomeIcon icon="book" />
+                <FontAwesomeIcon icon={faBook} />
               </div>
               <div className="menu-item-content">
                 <div className="menu-item-title">
@@ -89,7 +101,7 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
           {onAddGrammar && (
             <button className="menu-item" onClick={handleAddGrammar} type="button">
               <div className="menu-item-icon grammar">
-                <FontAwesomeIcon icon="book-open" />
+                <FontAwesomeIcon icon={faBookOpen} />
               </div>
               <div className="menu-item-content">
                 <div className="menu-item-title">
@@ -110,7 +122,7 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
                 type="button"
               >
                 <div className="menu-item-icon exercise">
-                  <FontAwesomeIcon icon="question-circle" />
+                  <FontAwesomeIcon icon={faQuestionCircle} />
                 </div>
                 <div className="menu-item-content">
                   <div className="menu-item-title">
@@ -120,21 +132,21 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
                     <Translate contentKey="langleague.teacher.units.menu.exerciseDesc">Create practice questions</Translate>
                   </div>
                 </div>
-                {showExerciseTypes && <FontAwesomeIcon icon="chevron-right" className="submenu-arrow" />}
+                {showExerciseTypes && <FontAwesomeIcon icon={faChevronRight} className="submenu-arrow" />}
               </button>
 
               {showExerciseTypes && showExerciseSubmenu && (
                 <div className="submenu-dropdown">
                   <button className="submenu-item" onClick={() => handleAddExercise('SINGLE_CHOICE')} type="button">
-                    <FontAwesomeIcon icon="circle" className="me-2" />
+                    <FontAwesomeIcon icon={faCircle} className="me-2" />
                     <Translate contentKey="langleague.teacher.units.menu.singleChoice">Single Choice</Translate>
                   </button>
                   <button className="submenu-item" onClick={() => handleAddExercise('MULTI_CHOICE')} type="button">
-                    <FontAwesomeIcon icon="check-square" className="me-2" />
+                    <FontAwesomeIcon icon={faCheckSquare} className="me-2" />
                     <Translate contentKey="langleague.teacher.units.menu.multiChoice">Multiple Choice</Translate>
                   </button>
                   <button className="submenu-item" onClick={() => handleAddExercise('FILL_IN_BLANK')} type="button">
-                    <FontAwesomeIcon icon="pen" className="me-2" />
+                    <FontAwesomeIcon icon={faPen} className="me-2" />
                     <Translate contentKey="langleague.teacher.units.menu.fillInBlank">Fill in the Blank</Translate>
                   </button>
                 </div>

@@ -25,8 +25,15 @@ public class UnitDTO implements Serializable {
     @Lob
     private String summary;
 
-    @NotNull
-    private BookDTO book;
+    private Long bookId;
+
+    private String bookTitle;
+
+    private Long vocabularyCount;
+
+    private Long grammarCount;
+
+    private Long exerciseCount;
 
     public Long getId() {
         return id;
@@ -60,12 +67,44 @@ public class UnitDTO implements Serializable {
         this.summary = summary;
     }
 
-    public BookDTO getBook() {
-        return book;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setBook(BookDTO book) {
-        this.book = book;
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public Long getVocabularyCount() {
+        return vocabularyCount;
+    }
+
+    public void setVocabularyCount(Long vocabularyCount) {
+        this.vocabularyCount = vocabularyCount;
+    }
+
+    public Long getGrammarCount() {
+        return grammarCount;
+    }
+
+    public void setGrammarCount(Long grammarCount) {
+        this.grammarCount = grammarCount;
+    }
+
+    public Long getExerciseCount() {
+        return exerciseCount;
+    }
+
+    public void setExerciseCount(Long exerciseCount) {
+        this.exerciseCount = exerciseCount;
     }
 
     @Override
@@ -97,7 +136,11 @@ public class UnitDTO implements Serializable {
             ", title='" + getTitle() + "'" +
             ", orderIndex=" + getOrderIndex() +
             ", summary='" + getSummary() + "'" +
-            ", book=" + getBook() +
+            ", bookId=" + getBookId() +
+            ", bookTitle='" + getBookTitle() + "'" +
+            ", vocabularyCount=" + getVocabularyCount() +
+            ", grammarCount=" + getGrammarCount() +
+            ", exerciseCount=" + getExerciseCount() +
             "}";
     }
 }

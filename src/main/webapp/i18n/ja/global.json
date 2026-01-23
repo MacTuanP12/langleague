@@ -177,5 +177,14 @@
       "not.image": "ファイルはイメージ形式である必要がありますが、\"{{ fileType }}\" 形式がアップロードされました。"
     }
   },
-  "footer": "フッターです"
+  "footer": "フッターです",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "APIキーはブラウザ内でのみ使用されます",
+        "noStorage": "キーは保存されません",
+        "noShare": "キーを他人と共有しないでください"
+      }
+    }
+  }
 }

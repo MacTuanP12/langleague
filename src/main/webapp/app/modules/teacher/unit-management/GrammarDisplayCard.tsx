@@ -2,11 +2,14 @@ import React from 'react';
 import { Card, CardBody, Button } from 'reactstrap';
 import { IGrammar } from 'app/shared/model/grammar.model';
 import ReactMarkdown from 'react-markdown';
+import { Translate } from 'react-jhipster';
+
 interface GrammarDisplayCardProps {
   grammar: IGrammar;
   onDelete: () => void;
   onEdit: () => void;
 }
+
 export const GrammarDisplayCard: React.FC<GrammarDisplayCardProps> = ({ grammar, onDelete, onEdit }) => {
   return (
     <Card className="h-100">
@@ -29,7 +32,9 @@ export const GrammarDisplayCard: React.FC<GrammarDisplayCardProps> = ({ grammar,
         )}
         {grammar.exampleUsage && (
           <div className="grammar-example small text-muted">
-            <strong>Example:</strong>
+            <strong>
+              <Translate contentKey="langleague.teacher.units.grammar.fields.example">Example</Translate>:
+            </strong>
             <ReactMarkdown>{grammar.exampleUsage.substring(0, 150) + '...'}</ReactMarkdown>
           </div>
         )}

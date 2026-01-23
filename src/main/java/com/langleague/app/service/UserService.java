@@ -296,8 +296,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
+    public Page<AdminUserDTO> getAllManagedUsers(String login, String role, Boolean activated, Pageable pageable) {
+        return userRepository.findAllWithFilters(login, role, activated, pageable).map(AdminUserDTO::new);
     }
 
     @Transactional(readOnly = true)

@@ -151,3 +151,8 @@ Desktop.ini
 ######################
 coverage/
 .nyc_output/
+
+######################
+# Application Storage
+######################
+storage/

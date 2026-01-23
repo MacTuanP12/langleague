@@ -2,6 +2,7 @@ package com.langleague.app.service;
 
 import com.langleague.app.domain.Vocabulary;
 import com.langleague.app.repository.VocabularyRepository;
+import com.langleague.app.service.dto.GameVocabularyDTO;
 import com.langleague.app.service.dto.VocabularyDTO;
 import com.langleague.app.service.mapper.VocabularyMapper;
 import java.util.ArrayList;
@@ -146,5 +147,31 @@ public class VocabularyService {
     public void delete(Long id) {
         LOG.debug("Request to delete Vocabulary : {}", id);
         vocabularyRepository.deleteById(id);
+    }
+
+    /**
+     * Get lightweight game vocabularies by unit ID.
+     * This method fetches only essential fields for game play, avoiding heavy entity relationships.
+     *
+     * @param unitId the unit ID
+     * @return list of GameVocabularyDTO
+     */
+    @Transactional(readOnly = true)
+    public List<GameVocabularyDTO> getGameVocabularies(Long unitId) {
+        LOG.debug("Request to get game vocabularies for unit : {}", unitId);
+        return vocabularyRepository.findGameVocabulariesByUnitId(unitId);
+    }
+
+    /**
+     * Get lightweight game vocabularies by a list of unit IDs.
+     * This method fetches only essential fields for game play, avoiding heavy entity relationships.
+     *
+     * @param unitIds the list of unit IDs
+     * @return list of GameVocabularyDTO
+     */
+    @Transactional(readOnly = true)
+    public List<GameVocabularyDTO> getGameVocabulariesByUnits(List<Long> unitIds) {
+        LOG.debug("Request to get game vocabularies for units : {}", unitIds);
+        return vocabularyRepository.findGameVocabulariesByUnitIds(unitIds);
     }
 }

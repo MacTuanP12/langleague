@@ -35,7 +35,9 @@
         "bookManager": "Quản lý sách",
         "studentAnalytics": "Phân tích học viên"
       },
-      "language": "Ngôn ngữ"
+      "language": "Ngôn ngữ",
+      "theme": "Chủ đề",
+      "skipToContent": "Chuyển đến nội dung chính"
     },
     "sidebar": {
       "hide": "ẨN",
@@ -72,7 +74,17 @@
       "confirmpassword.label": "Xác nhận mật khẩu mới",
       "confirmpassword.placeholder": "Nhập lại mật khẩu mới",
       "email.label": "Email",
-      "email.placeholder": "Nhập email của bạn"
+      "email.placeholder": "Nhập email của bạn",
+      "image": {
+        "url": {
+          "placeholder": "Dán URL hình ảnh..."
+        }
+      },
+      "audio": {
+        "url": {
+          "placeholder": "Dán URL âm thanh..."
+        }
+      }
     },
     "messages": {
       "info": {
@@ -88,6 +100,15 @@
       },
       "error": {
         "dontmatch": "Xác nhận mật khẩu không khớp!"
+      },
+      "validate": {
+        "newpassword": {
+          "strength": "Độ mạnh mật khẩu",
+          "minlength": "Ít nhất 4 ký tự",
+          "uppercase": "Ít nhất 1 chữ hoa",
+          "number": "Ít nhất 1 số",
+          "special": "Ít nhất 1 ký tự đặc biệt"
+        }
       }
     },
     "validate": {
@@ -119,6 +140,16 @@
     "loading": "Đang tải...",
     "selectSection": "Chọn một phần từ thanh bên để bắt đầu học.",
     "progressSaved": "Tiến trình của bạn sẽ được lưu tự động.",
+    "media": {
+      "invalidAudioType": "Định dạng tệp âm thanh không hợp lệ",
+      "imageUploaded": "Tải ảnh lên thành công",
+      "audioUploaded": "Tải âm thanh lên thành công",
+      "remove": "Xóa",
+      "uploadFromComputer": "Tải lên từ máy tính",
+      "upload": "Tải lên",
+      "imageSupport": "Hỗ trợ: JPG, PNG, GIF, liên kết Google Drive.",
+      "audioSupport": "Hỗ trợ: MP3, WAV, liên kết Google Drive."
+    },
     "footer": {
       "slogan": "Trao quyền cho người học ngôn ngữ trên toàn thế giới với trải nghiệm học tập hiện đại, tương tác.",
       "copyright": "Bảo lưu mọi quyền",
@@ -157,6 +188,7 @@
     "action": {
       "back": "Quay lại",
       "cancel": "Hủy",
+      "close": "Đóng",
       "delete": "Xóa",
       "edit": "Sửa",
       "open": "Mở",
@@ -194,5 +226,14 @@
     "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại",
     "idnull": "Invalid ID"
   },
-  "footer": "Đây là chân trang của bạn"
+  "footer": "Đây là chân trang của bạn",
+  "langleague": {
+    "apiKey": {
+      "security": {
+        "browserOnly": "API key của bạn chỉ được sử dụng trong trình duyệt",
+        "noStorage": "Chúng tôi KHÔNG lưu key",
+        "noShare": "Không chia sẻ key với người khác"
+      }
+    }
+  }
 }

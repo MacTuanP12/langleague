@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Form, Input, message, Checkbox } from 'antd';
 import { FaFacebookF, FaGoogle, FaGithub } from 'react-icons/fa';
-import { ReloadOutlined } from '@ant-design/icons';
-import { translate } from 'react-jhipster';
+import { ReloadOutlined, HomeOutlined } from '@ant-design/icons';
+import { translate, Translate } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { login } from 'app/shared/reducers/authentication';
 import { handleRegister } from 'app/modules/account/register/register.reducer';
@@ -77,8 +77,23 @@ const AuthSlider = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const loginSuccess = useAppSelector(state => state.authentication.loginSuccess);
+
+  useEffect(() => {
+    if (loginSuccess) {
+      message.success(translate('login.messages.success'));
+    }
+  }, [loginSuccess]);
+
   useEffect(() => {
     if (isAuthenticated && account && account.authorities) {
+      // Check if there's a redirect location in state
+      const state = location.state as { from?: Location };
+      if (state && state.from) {
+        navigate(state.from.pathname + state.from.search);
+        return;
+      }
+
       const authorities = account.authorities;
       let targetRoute = '/';
 
@@ -94,7 +109,7 @@ const AuthSlider = () => {
         navigate(targetRoute, { replace: true });
       }
     }
-  }, [isAuthenticated, account, navigate, location.pathname]);
+  }, [isAuthenticated, account, navigate, location.pathname, location.state]);
 
   const handleLoginSubmit = (values: LoginFormValues) => {
     setLoginLoading(true);
@@ -111,24 +126,24 @@ const AuthSlider = () => {
   const errorMessage = useAppSelector(state => state.authentication.errorMessage);
 
   useEffect(() => {
-    if (loginError) {
-      let msg = translate('login.messages.error.authentication');
-      if (errorMessage) {
-        const lowerMsg = errorMessage.toLowerCase();
-        if (lowerMsg.includes('captcha')) {
-          msg = translate('login.messages.error.captcha');
-        } else if (lowerMsg.includes('bad credentials') || lowerMsg.includes('unauthorized')) {
-          msg = translate('login.messages.error.badcredentials');
-        } else if (lowerMsg.includes('user not found') || lowerMsg.includes('not found')) {
-          msg = translate('login.messages.error.usernotfound');
-        } else if (lowerMsg.includes('locked')) {
-          msg = translate('login.messages.error.accountlocked');
-        } else if (lowerMsg.includes('disabled') || lowerMsg.includes('not activated')) {
-          msg = translate('login.messages.error.accountdisabled');
-        } else {
-          msg = translate('login.messages.error.authentication');
-        }
+    if (loginError && errorMessage) {
+      let msg = '';
+      const lowerMsg = errorMessage.toLowerCase();
+
+      if (lowerMsg.includes('captcha')) {
+        msg = translate('login.messages.error.captcha');
+      } else if (lowerMsg.includes('bad credentials') || lowerMsg.includes('unauthorized')) {
+        msg = translate('login.messages.error.badcredentials');
+      } else if (lowerMsg.includes('user not found') || lowerMsg.includes('not found')) {
+        msg = translate('login.messages.error.usernotfound');
+      } else if (lowerMsg.includes('locked')) {
+        msg = translate('login.messages.error.accountlocked');
+      } else if (lowerMsg.includes('disabled') || lowerMsg.includes('not activated')) {
+        msg = translate('login.messages.error.accountdisabled');
+      } else {
+        msg = translate('login.messages.error.authentication');
       }
+
       message.error(msg);
       loadCaptcha();
     }
@@ -177,6 +192,12 @@ const AuthSlider = () => {
 
   return (
     <div className="auth-body">
+      <Link to="/" className="back-to-home-btn">
+        <HomeOutlined />
+        <span>
+          <Translate contentKey="global.menu.home">Home</Translate>
+        </span>
+      </Link>
       <div className={`auth-container ${isSignUp ? 'right-panel-active' : ''}`} id="container">
         {/* SIGN UP FORM */}
         <div className="form-container sign-up-container">

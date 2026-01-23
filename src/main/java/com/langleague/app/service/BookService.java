@@ -89,6 +89,11 @@ public class BookService {
         // Preserve the original teacher (prevent ownership change)
         book.setTeacherProfile(existingBook.getTeacherProfile());
 
+        // Preserve createdAt if missing
+        if (book.getCreatedAt() == null) {
+            book.setCreatedAt(existingBook.getCreatedAt());
+        }
+
         book = bookRepository.save(book);
         return bookMapper.toDto(book);
     }

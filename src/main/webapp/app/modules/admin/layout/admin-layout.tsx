@@ -54,15 +54,6 @@ export const AdminLayout = () => {
               </span>
             )}
           </Link>
-
-          <Link to="/admin/docs" className={`nav-item ${isActive('/admin/docs') ? 'active' : ''}`}>
-            <i className="bi bi-file-earmark-text"></i>
-            {isSidebarOpen && (
-              <span>
-                <Translate contentKey="global.menu.admin.apidocs">API Docs</Translate>
-              </span>
-            )}
-          </Link>
         </nav>
 
         <div className="sidebar-footer">

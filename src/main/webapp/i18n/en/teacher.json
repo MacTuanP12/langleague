@@ -7,7 +7,7 @@
       "dashboard": {
         "title": "Teacher Dashboard",
         "loading": "Loading dashboard...",
-        "welcome": "Welcome back, {name}!",
+        "welcome": "Welcome back, {{name}}!",
         "stats": {
           "myBooks": "My Books",
           "totalStudents": "Total Students",
@@ -45,7 +45,7 @@
         },
         "actions": {
           "filter": "Filter",
-          "addNew": "+ Add New Book",
+          "addNew": " Add New Book",
           "edit": "Edit",
           "view": "View Details",
           "delete": "Delete",
@@ -148,25 +148,63 @@
           "grammar": "Grammar",
           "exercises": "Exercises"
         },
+        "ai": {
+          "settings": "AI Settings",
+          "apiKey": "API Key (Gemini/OpenAI)",
+          "saveKey": "Save",
+          "getKey": "Get key from",
+          "model": "Model",
+          "targetLang": "Target Lang",
+          "nativeLang": "Native Lang",
+          "autoFill": "Auto-fill details with AI",
+          "keySaved": "API Key saved locally.",
+          "configureKey": "Please configure your API Key.",
+          "generated": "Content generated successfully!"
+        },
         "vocabulary": {
           "title": "Vocabulary List",
           "addWord": "Add Word",
           "aiGenerate": "✨ AI Generate",
           "empty": "No vocabulary added yet.",
-          "emptyHint": "Use the AI Assistant to generate words from a topic!"
+          "emptyHint": "Use the AI Assistant to generate words from a topic!",
+          "error": {
+            "enterWord": "Please enter a word first."
+          }
         },
         "grammar": {
           "title": "Grammar Rules",
           "addRule": "Add Rule",
           "aiGenerate": "✨ AI Generate",
-          "empty": "No grammar rules added yet."
+          "empty": "No grammar rules added yet.",
+          "error": {
+            "enterTitle": "Please enter a grammar title first."
+          }
         },
         "exercises": {
           "title": "Exercises",
           "addQuestion": "Add Question",
           "aiGenerate": "✨ AI Generate",
           "empty": "No exercises added yet.",
-          "question": "Question"
+          "question": "Question",
+          "ocr": {
+            "button": "Extract text from image (OCR)",
+            "success": "Text extracted from image successfully!",
+            "error": "Failed to extract text from image.",
+            "invalidImage": "Please select a valid image file."
+          },
+          "validation": {
+            "minOptions": "Please add at least 2 options.",
+            "selectCorrect": "Please select at least one correct answer.",
+            "emptyOption": "Option text cannot be empty."
+          },
+          "form": {
+            "options": "Options",
+            "correct": "Correct",
+            "optionText": "Option Text",
+            "optionPlaceholder": "Option {{index}}",
+            "addOption": "Add Option",
+            "correctAnswerPlaceholder": "Enter the correct answer text here"
+          }
         },
         "confirmDelete": {
           "vocabulary": "Are you sure you want to delete this vocabulary?",
@@ -190,7 +228,11 @@
           "enrolledDate": "Enrolled Date",
           "status": "Status"
         },
-        "empty": "No students found enrolled in your books."
+        "empty": "No students found enrolled in your books.",
+        "messages": {
+          "loading": "Loading students...",
+          "noStudents": "No students found enrolled in your books."
+        }
       },
       "units": {
         "labels": {
@@ -198,14 +240,13 @@
           "newGrammar": "New Grammar Topic"
         },
         "form": {
-          "backButton": "Back",
-          "titlePlaceholder": "Unit Title",
-          "summaryPlaceholder": "Unit Description",
-          "submit": "Submit",
-          "saving": "Saving...",
-          "expandAll": "Expand All",
-          "collapseAll": "Collapse All",
-          "addVocabulary": "Add Vocabulary",
+          "buttons": {
+            "saving": "Saving...",
+            "submit": "Submit",
+            "expandAll": "Expand All",
+            "collapseAll": "Collapse All",
+            "addVocabulary": "Add Vocabulary"
+          },
           "addGrammar": "Add Grammar",
           "validation": {
             "titleRequired": "Unit title is required",
@@ -219,6 +260,28 @@
           "controls": {
             "expandAll": "Expand",
             "collapseAll": "Collapse"
+          },
+          "fields": {
+            "titlePlaceholder": "Unit Title",
+            "summaryPlaceholder": "Unit Description"
+          },
+          "messages": {
+            "unitUpdated": "Unit updated successfully",
+            "unitCreated": "Unit created successfully",
+            "vocabSaved": "Vocabulary saved",
+            "vocabSaveFailed": "Failed to save vocabulary",
+            "vocabDeleted": "Vocabulary deleted",
+            "vocabDeleteFailed": "Failed to delete vocabulary",
+            "grammarSaved": "Grammar saved",
+            "grammarSaveFailed": "Failed to save grammar",
+            "grammarDeleted": "Grammar deleted",
+            "grammarDeleteFailed": "Failed to delete grammar",
+            "exerciseSaved": "Exercise saved",
+            "exerciseSaveFailed": "Failed to save exercise",
+            "exerciseDeleted": "Exercise deleted",
+            "exerciseDeleteFailed": "Failed to delete exercise",
+            "loading": "Loading unit data...",
+            "loadFailed": "Failed to load unit data"
           }
         },
         "vocabulary": {
@@ -275,13 +338,14 @@
             "option": "Option {number}"
           },
           "placeholders": {
-            "question": "Exercise text",
+            "text": "Exercise text",
             "correctAnswer": "Enter correct answer...",
             "imageUrl": "Image URL (optional)",
-            "audioUrl": "Audio URL (optional)"
+            "audioUrl": "Audio URL (optional)",
+            "option": "Option"
           },
-          "options": {
-            "addButton": "Add option"
+          "buttons": {
+            "addOption": "Add option"
           },
           "menu": {
             "addExercise": "Add Exercise",
@@ -303,9 +367,9 @@
           "fillInBlank": "Fill in the Blank"
         },
         "zoom": {
-          "in": "Zoom In",
-          "out": "Zoom Out",
-          "reset": "Reset Zoom",
+          "in": "Zoom In (Ctrl + +)",
+          "out": "Zoom Out (Ctrl + -)",
+          "reset": "Reset Zoom (Ctrl + 0)",
           "shortcuts": {
             "in": "Ctrl + +",
             "out": "Ctrl + -",
@@ -326,7 +390,8 @@
         "loading": "Loading...",
         "search": "Search",
         "filter": "Filter",
-        "actions": "Actions"
+        "actions": "Actions",
+        "deleteConfirm": "Are you sure you want to delete this item?"
       }
     }
   }

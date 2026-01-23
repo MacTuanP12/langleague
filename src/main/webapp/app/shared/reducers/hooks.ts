@@ -9,7 +9,14 @@ import { IExerciseOption } from 'app/shared/model/exercise-option.model';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { IProgress } from 'app/shared/model/progress.model';
 import { ThemeMode } from 'app/shared/model/enumerations/enums.model';
-import { fetchBooks, fetchBookById, createBook, updateBook, deleteBook, clearSelectedBook } from 'app/shared/reducers/book.reducer';
+import {
+  getEntities as fetchBooks,
+  getEntity as fetchBookById,
+  createEntity as createBook,
+  updateEntity as updateBook,
+  deleteEntity as deleteBook,
+  reset as clearSelectedBook,
+} from 'app/entities/book/book.reducer';
 import { fetchUnitById, fetchUnitsByBookId, createUnit, updateUnit, deleteUnit, clearSelectedUnit } from 'app/shared/reducers/unit.reducer';
 import {
   fetchVocabulariesByUnitId,
@@ -48,10 +55,10 @@ import {
 import {
   fetchMyEnrollments,
   fetchEnrollmentByBookId,
-  createEnrollment,
-  deleteEnrollment,
-  clearSelectedEnrollment,
-} from 'app/shared/reducers/enrollment.reducer';
+  enrollInBook as enrollInBookAction,
+  deleteEntity as deleteEnrollment,
+  reset as clearSelectedEnrollment,
+} from 'app/entities/enrollment/enrollment.reducer';
 import {
   fetchCurrentUserProfile,
   fetchUserProfileById,
@@ -108,7 +115,7 @@ export const useBooks = () => {
   const selectedBook = useAppSelector(selectSelectedBook);
   const loading = useAppSelector(selectBookLoading);
 
-  const loadBooks = useCallback(() => dispatch(fetchBooks()), [dispatch]);
+  const loadBooks = useCallback(() => dispatch(fetchBooks({})), [dispatch]);
   const loadBook = useCallback((id: number) => dispatch(fetchBookById(id)), [dispatch]);
   const addBook = useCallback((book: IBook) => dispatch(createBook(book)), [dispatch]);
   const editBook = useCallback((book: IBook) => dispatch(updateBook(book)), [dispatch]);
@@ -277,7 +284,7 @@ export const useEnrollments = () => {
 
   const loadMyEnrollments = useCallback(() => dispatch(fetchMyEnrollments()), [dispatch]);
   const loadEnrollmentByBook = useCallback((bookId: number | string) => dispatch(fetchEnrollmentByBookId(bookId)), [dispatch]);
-  const enrollInBook = useCallback((data: { bookId: number; userId?: number }) => dispatch(createEnrollment(data)), [dispatch]);
+  const enrollInBook = useCallback((data: { bookId: number; userId?: number }) => dispatch(enrollInBookAction(data.bookId)), [dispatch]);
   const unenroll = useCallback((id: number) => dispatch(deleteEnrollment(id)), [dispatch]);
   const clearEnrollment = useCallback(() => dispatch(clearSelectedEnrollment()), [dispatch]);
 

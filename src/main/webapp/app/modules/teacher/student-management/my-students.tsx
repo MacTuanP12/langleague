@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Translate, TextFormat, translate } from 'react-jhipster';
 import { Container, Input, Card, CardBody, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,65 +20,78 @@ export const MyStudents = () => {
     dispatch(fetchMyStudents());
   }, [dispatch]);
 
-  const filteredStudents = (students || []).filter(
-    student =>
-      student.login.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredStudents = useMemo(
+    () =>
+      (students || []).filter(
+        student =>
+          student.login.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          student.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          student.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          student.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
+    [students, searchTerm],
   );
 
-  const columns: Column<StudentDTO>[] = [
-    {
-      key: 'student',
-      header: translate('langleague.teacher.students.table.student'),
-      render: student => (
-        <div className="d-flex align-items-center">
-          <FontAwesomeIcon icon="user-circle" size="2x" className="text-muted me-3" />
-          <div>
-            <div className="fw-bold">
-              {student.firstName} {student.lastName}
+  const columns: Column<StudentDTO>[] = useMemo(
+    () => [
+      {
+        key: 'student',
+        header: translate('langleague.teacher.students.table.student'),
+        render: student => (
+          <div className="d-flex align-items-center">
+            <div className="user-avatar-small me-3">
+              {student.imageUrl ? (
+                <img src={student.imageUrl} alt={student.login} />
+              ) : (
+                <div className="avatar-placeholder">{student.firstName?.charAt(0) || student.login?.charAt(0) || '?'}</div>
+              )}
             </div>
-            <small className="text-muted">@{student.login}</small>
+            <div>
+              <div className="fw-bold">
+                {student.firstName} {student.lastName}
+              </div>
+              <small className="text-muted">@{student.login}</small>
+            </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      key: 'book',
-      header: translate('langleague.teacher.students.table.enrolledBook'),
-      render: student => (
-        <div className="d-flex align-items-center">
-          <FontAwesomeIcon icon="book" className="text-primary me-2" />
-          <span>{student.bookTitle}</span>
-        </div>
-      ),
-    },
-    {
-      key: 'date',
-      header: translate('langleague.teacher.students.table.enrolledDate'),
-      render: student =>
-        student.enrollmentDate ? <TextFormat value={student.enrollmentDate} type="date" format={APP_DATE_FORMAT} /> : 'N/A',
-    },
-    {
-      key: 'status',
-      header: translate('langleague.teacher.students.table.status'),
-      render: student => (
-        <Badge
-          color={
-            student.status.toLowerCase() === 'active' ? 'success' : student.status.toLowerCase() === 'pending' ? 'warning' : 'secondary'
-          }
-        >
-          {student.status}
-        </Badge>
-      ),
-    },
-  ];
+        ),
+      },
+      {
+        key: 'book',
+        header: translate('langleague.teacher.students.table.enrolledBook'),
+        render: student => (
+          <div className="d-flex align-items-center">
+            <FontAwesomeIcon icon="book" className="text-primary me-2" />
+            <span>{student.bookTitle}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'date',
+        header: translate('langleague.teacher.students.table.enrolledDate'),
+        render: student =>
+          student.enrollmentDate ? <TextFormat value={student.enrollmentDate} type="date" format={APP_DATE_FORMAT} /> : 'N/A',
+      },
+      {
+        key: 'status',
+        header: translate('langleague.teacher.students.table.status'),
+        render: student => (
+          <Badge
+            color={
+              student.status.toLowerCase() === 'active' ? 'success' : student.status.toLowerCase() === 'pending' ? 'warning' : 'secondary'
+            }
+          >
+            {student.status}
+          </Badge>
+        ),
+      },
+    ],
+    [],
+  );
 
   if (loading && students.length === 0) {
     return (
       <TeacherLayout>
-        <LoadingSpinner message="Loading students..." />
+        <LoadingSpinner message="langleague.teacher.students.messages.loading" isI18nKey />
       </TeacherLayout>
     );
   }
@@ -101,7 +114,12 @@ export const MyStudents = () => {
         {/* Search Bar */}
         <div className="search-filter-bar mb-4">
           <div className="search-box">
-            <Input type="text" placeholder="Search by name or book..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+            <Input
+              type="text"
+              placeholder={translate('langleague.teacher.students.search')}
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
           </div>
           <div className="d-flex align-items-center">
             <Badge color="primary" pill className="px-3 py-2">
@@ -118,7 +136,7 @@ export const MyStudents = () => {
               data={filteredStudents}
               columns={columns}
               keyExtractor={s => `${s.id}-${s.bookTitle}`}
-              emptyMessage="No students found enrolled in your books."
+              emptyMessage={translate('langleague.teacher.students.messages.noStudents')}
               className="teacher-table"
             />
           </CardBody>

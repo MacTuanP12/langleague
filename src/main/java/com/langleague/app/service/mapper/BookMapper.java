@@ -9,7 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Book} and its DTO {@link BookDTO}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { UserMapper.class })
 public interface BookMapper extends EntityMapper<BookDTO, Book> {
     @Mapping(target = "teacherProfile", source = "teacherProfile", qualifiedByName = "userProfileId")
     BookDTO toDto(Book s);
@@ -17,6 +17,7 @@ public interface BookMapper extends EntityMapper<BookDTO, Book> {
     @Named("userProfileId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "user", source = "user")
     UserProfileDTO toDtoUserProfileId(UserProfile userProfile);
 
     @Named("bookBasic")

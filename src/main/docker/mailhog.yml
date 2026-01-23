@@ -1,0 +1,8 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: langleague
+services:
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025

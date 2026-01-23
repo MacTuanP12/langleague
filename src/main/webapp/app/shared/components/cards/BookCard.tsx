@@ -2,15 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { Badge, Button } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IBook } from 'app/shared/model/book.model';
+import SafeIcon from 'app/shared/components/SafeIcon';
 import './BookCard.scss';
 
 type BookCardMode = 'teacher' | 'student';
 
 interface BookCardAction {
   label: string;
-  icon: string;
+  icon: IconProp;
   onClick?: () => void;
   to?: string;
   color?: string;
@@ -21,51 +22,16 @@ interface BookCardAction {
 interface BookCardProps {
   book: IBook;
   mode: BookCardMode;
-
-  // Optional props for customization
   progress?: number;
   status?: string;
   actions?: BookCardAction[];
-
-  // Teacher-specific
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
-
-  // Student-specific
   onEnroll?: (id: number) => void;
   enrolledAt?: Date | string | null;
 }
 
-/**
- * Unified BookCard component for both Teacher and Student modules
- *
- * @example Teacher Mode:
- * <BookCard
- *   mode="teacher"
- *   book={book}
- *   onEdit={handleEdit}
- *   onDelete={handleDelete}
- * />
- *
- * @example Student Mode:
- * <BookCard
- *   mode="student"
- *   book={book}
- *   progress={75}
- *   status="ACTIVE"
- * />
- */
-export const BookCard: React.FC<BookCardProps> = ({
-  book,
-  mode,
-  progress = 0,
-  status,
-  actions,
-  onEdit,
-  onDelete,
-  // onEnroll and enrolledAt are optional and not used in current implementation
-}) => {
-  // Default actions based on mode
+export const BookCard: React.FC<BookCardProps> = ({ book, mode, progress = 0, status, actions, onEdit, onDelete }) => {
   const getDefaultActions = (): BookCardAction[] => {
     if (mode === 'teacher') {
       return [
@@ -95,12 +61,22 @@ export const BookCard: React.FC<BookCardProps> = ({
       ];
     }
 
-    // Student mode
+    if (status === 'NOT_ENROLLED') {
+      return [
+        {
+          label: 'langleague.student.books.viewDetails',
+          icon: 'info-circle',
+          to: `/student/books/${book.id}`,
+          color: 'info',
+        },
+      ];
+    }
+
     return [
       {
         label: status === 'COMPLETED' ? 'langleague.student.dashboard.book.continue' : 'langleague.student.dashboard.book.start',
         icon: status === 'COMPLETED' ? 'redo' : 'play-circle',
-        to: `/student/books/${book.id}/learn`,
+        to: `/student/learn/book/${book.id}`,
         color: 'primary',
       },
     ];
@@ -110,7 +86,6 @@ export const BookCard: React.FC<BookCardProps> = ({
 
   return (
     <div className={`book-card book-card-${mode}`}>
-      {/* Book Cover */}
       <div className="book-card-image">
         <img
           src={book.coverImageUrl || '/content/images/default-book.png'}
@@ -118,23 +93,20 @@ export const BookCard: React.FC<BookCardProps> = ({
           onError={e => (e.currentTarget.src = '/content/images/default-book.png')}
         />
 
-        {/* Status Badge (Student) */}
         {mode === 'student' && status && (
           <Badge className={`book-badge ${status.toLowerCase()}`}>
-            <FontAwesomeIcon icon={status === 'COMPLETED' ? 'check-circle' : 'plus-circle'} className="me-1" />
+            <SafeIcon icon={status === 'COMPLETED' ? 'check-circle' : 'plus-circle'} className="me-1" />
             <Translate contentKey={`langleague.student.dashboard.book.${status.toLowerCase()}`}>{status}</Translate>
           </Badge>
         )}
 
-        {/* Public Badge (Teacher) */}
         {mode === 'teacher' && book.isPublic && (
           <Badge className="book-badge public">
-            <FontAwesomeIcon icon="globe" className="me-1" />
+            <SafeIcon icon="globe" className="me-1" />
             <Translate contentKey="langleague.teacher.books.form.fields.publicStatus">Public</Translate>
           </Badge>
         )}
 
-        {/* Progress Overlay (Student) */}
         {mode === 'student' && progress > 0 && (
           <div className="progress-overlay">
             <div className="progress-bar-wrapper">
@@ -145,22 +117,19 @@ export const BookCard: React.FC<BookCardProps> = ({
         )}
       </div>
 
-      {/* Book Content */}
       <div className="book-card-content">
         <h3 className="book-card-title">{book.title}</h3>
         <p className="book-card-description">{book.description}</p>
 
-        {/* Book Stats */}
         {mode === 'student' && (
           <div className="book-stats">
             <span className="stat-item">
-              <FontAwesomeIcon icon="book-open" />
+              <SafeIcon icon="book-open" />
               <Translate contentKey="langleague.student.dashboard.book.units">Units</Translate>
             </span>
           </div>
         )}
 
-        {/* Teacher Status */}
         {mode === 'teacher' && (
           <div className="book-meta">
             <span className={`book-status ${book.isPublic ? 'public' : 'private'}`}>
@@ -174,7 +143,6 @@ export const BookCard: React.FC<BookCardProps> = ({
         )}
       </div>
 
-      {/* Actions */}
       <div className="book-card-actions">
         {displayActions.map((action, index) => (
           <Button
@@ -187,8 +155,7 @@ export const BookCard: React.FC<BookCardProps> = ({
             className={action.size === 'sm' ? 'btn-icon' : ''}
             title={action.label}
           >
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <FontAwesomeIcon icon={action.icon as any} className={action.size !== 'sm' ? 'me-2' : ''} />
+            <SafeIcon icon={action.icon} className={action.size !== 'sm' ? 'me-2' : ''} />
             {action.size !== 'sm' && <Translate contentKey={action.label}>{action.label}</Translate>}
           </Button>
         ))}

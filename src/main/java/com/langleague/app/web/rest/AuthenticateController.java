@@ -64,10 +64,10 @@ public class AuthenticateController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-        // Verify Captcha - TEMPORARILY DISABLED FOR DEBUGGING
-        // if (!captchaService.verifyCaptcha(loginVM.getCaptchaId(), loginVM.getCaptchaAnswer())) {
-        //     throw new BadCredentialsException("Invalid Captcha");
-        // }
+        // Verify Captcha
+        if (!captchaService.verifyCaptcha(loginVM.getCaptchaId(), loginVM.getCaptchaAnswer())) {
+            throw new BadCredentialsException("Invalid Captcha");
+        }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),

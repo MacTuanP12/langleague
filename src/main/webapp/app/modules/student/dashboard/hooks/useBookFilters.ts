@@ -14,14 +14,16 @@ interface UseBookFiltersProps {
 export const useBookFilters = ({ books, searchQuery, filterTab }: UseBookFiltersProps) => {
   const filteredBooks = useMemo(() => {
     return books.filter(book => {
-      const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const matchesSearch =
+        book.title.toLowerCase().includes(lowerCaseQuery) || (book.description && book.description.toLowerCase().includes(lowerCaseQuery));
 
       if (filterTab === 'enrolled') {
         return matchesSearch && (book.status === 'ACTIVE' || book.status === 'COMPLETED');
       }
 
       if (filterTab === 'notEnroll') {
-        return matchesSearch && book.status === 'ENROLLED';
+        return matchesSearch && book.status === 'NOT_ENROLLED';
       }
 
       return matchesSearch;
