@@ -2,38 +2,38 @@
   "langleague": {
     "teacher": {
       "sidebar": {
-        "title": "教師管理系統"
+        "title": "教師CMS"
       },
       "dashboard": {
         "title": "教師儀表板",
-        "loading": "載入儀表板中...",
-        "welcome": "歡迎回來，{name}！",
+        "loading": "正在加載儀表板...",
+        "welcome": "歡迎回來，{{name}}！",
         "stats": {
           "myBooks": "我的書籍",
           "totalStudents": "學生總數",
-          "pendingAssignments": "待處理任務",
+          "pendingAssignments": "待處理作業",
           "averageRating": "平均評分"
         },
         "quickActions": {
           "title": "快速操作",
           "manageBooks": "管理書籍",
-          "createBook": "建立新書",
-          "viewStudents": "檢視學生",
+          "createBook": "創建新書",
+          "viewStudents": "查看學生",
           "manageContent": "管理內容"
         },
         "recentActivity": {
           "title": "最近活動",
-          "noData": "無最近活動"
+          "noData": "最近沒有活動"
         },
         "enrollments": "每本書的註冊數",
-        "noEnrollmentData": "尚無註冊數據。"
+        "noEnrollmentData": "暫無註冊數據。"
       },
       "books": {
         "management": {
           "title": "書籍管理",
-          "description": "管理您的圖書館庫存，追蹤已發行的書籍，並更新目錄詳情。",
-          "loading": "載入書籍中...",
-          "noBooks": "找不到書籍"
+          "description": "管理您的圖書館庫存，跟踪已發行的書籍，並更新目錄詳細信息。",
+          "loading": "正在加載書籍...",
+          "noBooks": "未找到書籍"
         },
         "stats": {
           "total": "書籍總數",
@@ -41,13 +41,13 @@
           "uploaded": "已上傳"
         },
         "search": {
-          "placeholder": "依標題、作者或ISBN搜尋..."
+          "placeholder": "按標題、作者或ISBN搜索..."
         },
         "actions": {
           "filter": "篩選",
-          "addNew": "+ 新增書籍",
+          "addNew": " 添加新書",
           "edit": "編輯",
-          "view": "檢視詳情",
+          "view": "查看詳情",
           "delete": "刪除",
           "deleteSuccess": "書籍刪除成功！",
           "deleteFailed": "刪除書籍失敗",
@@ -65,13 +65,13 @@
           "next": "下一頁"
         },
         "detail": {
-          "loading": "載入書籍詳情中...",
-          "backToBooks": "返回書籍",
+          "loading": "正在加載書籍詳情...",
+          "backToBooks": "返回書籍列表",
           "editBook": "編輯書籍",
-          "addUnit": "新增單元",
+          "addUnit": "添加單元",
           "meta": {
             "totalUnits": "單元總數：",
-            "created": "建立日期：",
+            "created": "創建時間：",
             "public": "公開：",
             "yes": "是",
             "no": "否"
@@ -80,9 +80,9 @@
             "title": "單元",
             "hint": "拖放以重新排序單元",
             "empty": {
-              "title": "尚無單元",
-              "description": "開始為這本書新增您的第一個單元",
-              "addFirst": "新增第一個單元"
+              "title": "暫無單元",
+              "description": "從為這本書添加第一個單元開始",
+              "addFirst": "添加第一個單元"
             },
             "stats": {
               "vocabulary": "詞彙：",
@@ -93,53 +93,54 @@
               "edit": "編輯",
               "delete": "刪除",
               "manageContent": "管理內容",
-              "confirmDelete": "您確定要刪除這個單元嗎？"
+              "confirmDelete": "您確定要刪除此單元嗎？"
             }
           },
           "syllabus": {
             "title": "書籍大綱",
-            "backToBooks": "返回書籍"
+            "backToBooks": "返回書籍列表"
           }
         },
         "form": {
           "header": {
-            "add": "新增書籍",
+            "add": "添加新書",
             "edit": "編輯書籍",
-            "descriptionAdd": "請輸入以下資訊以建立新資源。",
-            "descriptionEdit": "請輸入以下資訊以更新資源。"
+            "descriptionAdd": "在下方輸入詳細信息以編目新資源。",
+            "descriptionEdit": "在下方輸入詳細信息以更新資源。"
           },
           "fields": {
             "coverLabel": "書籍封面",
             "uploadPlaceholder": "上傳封面",
             "uploadHint": "拖放或點擊",
-            "fileInfo": "支援：JPG、PNG（最大2MB）",
+            "fileInfo": "支持：JPG, PNG (最大2MB)",
             "titleLabel": "書籍標題",
-            "titlePlaceholder": "例如：大亨小傳",
-            "titleRequired": "書籍標題是必填項",
-            "titleMinLength": "標題至少需要2個字元",
+            "titlePlaceholder": "例如：了不起的蓋茨比",
+            "titleRequired": "書籍標題為必填項",
+            "titleMinLength": "標題至少需要2個字符",
             "descriptionLabel": "描述",
-            "descriptionPlaceholder": "輸入書籍內容的簡短摘要...",
+            "descriptionPlaceholder": "輸入書籍內容的簡要摘要...",
             "isPublicLabel": "設為公開",
-            "isPublicHint": "公開書籍可被所有學生發現和註冊",
+            "isPublicHint": "公開書籍可以被所有學生發現並註冊",
             "publicStatus": "公開",
-            "privateStatus": "私人"
+            "privateStatus": "私有"
           },
           "footer": {
-            "infoText": "所有欄位會自動儲存在本機。",
+            "infoText": "所有字段都會自動保存在本地。",
             "cancel": "取消",
-            "save": "儲存書籍",
-            "saving": "儲存中..."
+            "save": "保存書籍",
+            "saving": "正在保存..."
           }
         },
         "unit": {
           "deleteSuccess": "單元刪除成功！",
           "deleteFailed": "刪除單元失敗",
           "confirmDeleteTitle": "刪除單元",
-          "confirmDelete": "您確定要刪除這個單元嗎？"
+          "confirmDelete": "您確定要刪除此單元嗎？"
         }
       },
       "editor": {
         "title": "單元內容編輯器",
+        "loading": "正在加載單元內容...",
         "backToSyllabus": "返回大綱",
         "backToBook": "返回書籍",
         "subtitle": "管理詞彙、語法和練習",
@@ -148,30 +149,68 @@
           "grammar": "語法",
           "exercises": "練習"
         },
+        "ai": {
+          "settings": "AI設置",
+          "apiKey": "API密鑰 (Gemini/OpenAI)",
+          "saveKey": "保存",
+          "getKey": "獲取密鑰",
+          "model": "模型",
+          "targetLang": "目標語言",
+          "nativeLang": "母語",
+          "autoFill": "AI自動填充",
+          "keySaved": "API密鑰已保存在本地。",
+          "configureKey": "請配置您的API密鑰。",
+          "generated": "內容生成成功！"
+        },
         "vocabulary": {
           "title": "詞彙列表",
-          "addWord": "新增單字",
+          "addWord": "添加單詞",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未新增詞彙。",
-          "emptyHint": "使用AI助手從主題生成單字！"
+          "empty": "暫無詞彙。",
+          "emptyHint": "使用AI助手從主題生成單詞！",
+          "error": {
+            "enterWord": "請先輸入單詞。"
+          }
         },
         "grammar": {
           "title": "語法規則",
-          "addRule": "新增規則",
+          "addRule": "添加規則",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未新增語法規則。"
+          "empty": "暫無語法規則。",
+          "error": {
+            "enterTitle": "請先輸入語法標題。"
+          }
         },
         "exercises": {
           "title": "練習",
-          "addQuestion": "新增問題",
+          "addQuestion": "添加問題",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未新增練習。",
-          "question": "問題"
+          "empty": "暫無練習。",
+          "question": "問題",
+          "ocr": {
+            "button": "從圖片提取文本 (OCR)",
+            "success": "從圖片提取文本成功！",
+            "error": "無法從圖片提取文本。",
+            "invalidImage": "請選擇有效的圖片文件。"
+          },
+          "validation": {
+            "minOptions": "請至少添加2個選項。",
+            "selectCorrect": "請至少選擇一個正確答案。",
+            "emptyOption": "選項文本不能為空。"
+          },
+          "form": {
+            "options": "選項",
+            "correct": "正確",
+            "optionText": "選項文本",
+            "optionPlaceholder": "選項 {{index}}",
+            "addOption": "添加選項",
+            "correctAnswerPlaceholder": "在此輸入正確答案文本"
+          }
         },
         "confirmDelete": {
-          "vocabulary": "您確定要刪除這個詞彙嗎？",
-          "grammar": "您確定要刪除這條語法規則嗎？",
-          "exercise": "您確定要刪除這個練習嗎？"
+          "vocabulary": "您確定要刪除此詞彙嗎？",
+          "grammar": "您確定要刪除此語法規則嗎？",
+          "exercise": "您確定要刪除此練習嗎？"
         },
         "success": {
           "vocabularyDeleted": "詞彙刪除成功",
@@ -181,8 +220,8 @@
       },
       "students": {
         "title": "我的學生",
-        "subtitle": "追蹤學生進度和註冊",
-        "search": "依姓名或書籍搜尋...",
+        "subtitle": "跟踪學生進度和註冊情況",
+        "search": "按姓名或書籍搜索...",
         "totalStudents": "學生總數：",
         "table": {
           "student": "學生",
@@ -190,7 +229,11 @@
           "enrolledDate": "註冊日期",
           "status": "狀態"
         },
-        "empty": "在您的書籍中找不到已註冊的學生。"
+        "empty": "未找到註冊您書籍的學生。",
+        "messages": {
+          "loading": "正在加載學生...",
+          "noStudents": "未找到註冊您書籍的學生。"
+        }
       },
       "units": {
         "labels": {
@@ -198,18 +241,17 @@
           "newGrammar": "新語法主題"
         },
         "form": {
-          "backButton": "返回",
-          "titlePlaceholder": "單元標題",
-          "summaryPlaceholder": "單元描述",
-          "submit": "提交",
-          "saving": "儲存中...",
-          "expandAll": "全部展開",
-          "collapseAll": "全部收合",
-          "addVocabulary": "新增詞彙",
-          "addGrammar": "新增語法",
+          "buttons": {
+            "saving": "正在保存...",
+            "submit": "提交",
+            "expandAll": "全部展開",
+            "collapseAll": "全部折疊",
+            "addVocabulary": "添加詞彙"
+          },
+          "addGrammar": "添加語法",
           "validation": {
-            "titleRequired": "單元標題是必填項",
-            "titleMinLength": "標題至少需要3個字元"
+            "titleRequired": "單元標題為必填項",
+            "titleMinLength": "標題至少需要3個字符"
           },
           "actions": {
             "removeTooltip": "移除項目",
@@ -218,94 +260,117 @@
           },
           "controls": {
             "expandAll": "展開",
-            "collapseAll": "收合"
+            "collapseAll": "折疊"
+          },
+          "fields": {
+            "titlePlaceholder": "單元標題",
+            "summaryPlaceholder": "單元描述"
+          },
+          "messages": {
+            "unitUpdated": "單元更新成功",
+            "unitCreated": "單元創建成功",
+            "vocabSaved": "詞彙已保存",
+            "vocabSaveFailed": "保存詞彙失敗",
+            "vocabDeleted": "詞彙已刪除",
+            "vocabDeleteFailed": "刪除詞彙失敗",
+            "grammarSaved": "語法已保存",
+            "grammarSaveFailed": "保存語法失敗",
+            "grammarDeleted": "語法已刪除",
+            "grammarDeleteFailed": "刪除語法失敗",
+            "exerciseSaved": "練習已保存",
+            "exerciseSaveFailed": "保存練習失敗",
+            "exerciseDeleted": "練習已刪除",
+            "exerciseDeleteFailed": "刪除練習失敗",
+            "loading": "正在加載單元數據...",
+            "loadFailed": "加載單元數據失敗"
           }
         },
         "vocabulary": {
           "sectionTitle": "詞彙",
-          "addButton": "新增詞彙",
+          "addButton": "添加詞彙",
           "fields": {
-            "word": "單字",
+            "word": "單詞",
             "phonetic": "音標",
-            "meaning": "意思",
+            "meaning": "含義",
             "example": "例句",
-            "imageUrl": "圖片網址",
+            "imageUrl": "圖片URL",
             "order": "順序"
           },
           "placeholders": {
-            "word": "單字（例如：Hello）",
-            "phonetic": "音標（例如：/həˈloʊ/）",
-            "meaning": "意思",
+            "word": "單詞 (例如: Hello)",
+            "phonetic": "音標 (例如: /həˈloʊ/)",
+            "meaning": "含義",
             "example": "例句",
-            "imageUrl": "圖片網址",
+            "imageUrl": "圖片URL",
             "order": "順序"
           }
         },
         "grammar": {
           "sectionTitle": "語法",
-          "addButton": "新增語法",
+          "addButton": "添加語法",
           "fields": {
             "title": "語法標題",
-            "content": "內容（支援Markdown）",
-            "contentHint": "支援Markdown：**粗體**、*斜體*、# 標題",
-            "example": "使用範例",
-            "exampleHint": "使用範例",
+            "content": "內容 (支持Markdown)",
+            "contentHint": "支持Markdown: **粗體**, *斜體*, # 標題",
+            "example": "用法示例",
+            "exampleHint": "用法示例",
             "order": "順序"
           },
           "placeholders": {
             "title": "語法標題",
-            "content": "內容（支援Markdown）",
-            "example": "使用範例",
+            "content": "內容 (支持Markdown)",
+            "example": "用法示例",
             "order": "順序"
           }
         },
         "exercises": {
           "sectionTitle": "練習",
-          "addButton": "新增練習",
+          "addButton": "添加練習",
           "types": {
-            "singleChoice": "單選",
-            "multiChoice": "多選",
-            "fillInBlank": "填空"
+            "singleChoice": "單選題",
+            "multiChoice": "多選題",
+            "fillInBlank": "填空題"
           },
           "fields": {
-            "question": "練習文字",
+            "question": "練習文本",
             "correctAnswer": "輸入正確答案...",
-            "imageUrl": "圖片網址（選填）",
-            "audioUrl": "音訊網址（選填）",
+            "imageUrl": "圖片URL (可選)",
+            "audioUrl": "音頻URL (可選)",
             "option": "選項 {number}"
           },
           "placeholders": {
-            "question": "練習文字",
+            "text": "練習文本",
             "correctAnswer": "輸入正確答案...",
-            "imageUrl": "圖片網址（選填）",
-            "audioUrl": "音訊網址（選填）"
+            "imageUrl": "圖片URL (可選)",
+            "audioUrl": "音頻URL (可選)",
+            "option": "選項"
           },
-          "options": {
-            "addButton": "新增選項"
+          "buttons": {
+            "addOption": "添加選項"
           },
           "menu": {
-            "addExercise": "新增練習",
-            "singleChoice": "單選",
-            "multiChoice": "多選",
-            "fillInBlank": "填空"
+            "addExercise": "添加練習",
+            "singleChoice": "單選題",
+            "multiChoice": "多選題",
+            "fillInBlank": "填空題"
           }
         },
         "menu": {
-          "addContent": "新增內容",
+          "addContent": "添加內容",
           "vocabulary": "詞彙",
-          "vocabularyDesc": "新增含意義和範例的單字",
+          "vocabularyDesc": "添加帶有含義和例句的單詞",
           "grammar": "語法",
-          "grammarDesc": "新增語法規則和解釋",
+          "grammarDesc": "添加語法規則和解釋",
           "exercise": "練習",
-          "exerciseDesc": "建立練習題",
-          "singleChoice": "單選",
-          "multiChoice": "多選",
-          "fillInBlank": "填空"
+          "exerciseDesc": "創建練習題",
+          "singleChoice": "單選題",
+          "multiChoice": "多選題",
+          "fillInBlank": "填空題"
         },
         "zoom": {
-          "in": "放大",
-          "out": "縮小",
-          "reset": "重設縮放",
+          "in": "放大 (Ctrl + +)",
+          "out": "縮小 (Ctrl + -)",
+          "reset": "重置縮放 (Ctrl + 0)",
           "shortcuts": {
             "in": "Ctrl + +",
             "out": "Ctrl + -",
@@ -314,19 +379,20 @@
         }
       },
       "common": {
-        "save": "儲存",
+        "save": "保存",
         "cancel": "取消",
         "delete": "刪除",
         "back": "返回",
         "edit": "編輯",
-        "view": "檢視",
-        "add": "新增",
-        "create": "建立",
+        "view": "查看",
+        "add": "添加",
+        "create": "創建",
         "update": "更新",
-        "loading": "載入中...",
-        "search": "搜尋",
+        "loading": "加載中...",
+        "search": "搜索",
         "filter": "篩選",
-        "actions": "操作"
+        "actions": "操作",
+        "deleteConfirm": "您確定要刪除此項目嗎？"
       }
     }
   }

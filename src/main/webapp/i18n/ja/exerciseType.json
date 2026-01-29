@@ -2,9 +2,9 @@
   "langleagueApp": {
     "ExerciseType": {
       "null": "",
-      "SINGLE_CHOICE": "SINGLE_CHOICE",
-      "MULTI_CHOICE": "MULTI_CHOICE",
-      "FILL_IN_BLANK": "FILL_IN_BLANK"
+      "SINGLE_CHOICE": "単一選択",
+      "MULTI_CHOICE": "複数選択",
+      "FILL_IN_BLANK": "穴埋め"
     }
   }
 }

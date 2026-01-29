@@ -2,30 +2,30 @@
   "langleagueApp": {
     "unit": {
       "home": {
-        "title": "Units",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Unit",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Unit",
-        "notFound": "No Units found"
+        "title": "Bài Học",
+        "refreshListLabel": "Làm mới danh sách",
+        "createLabel": "Thêm mới một Bài Học",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Bài Học",
+        "notFound": "Không tìm thấy Bài Học nào"
       },
-      "created": "Một Unit mới được tạo với định danh {{ param }}",
-      "updated": "Một Unit cập nhật với định danh {{ param }}",
-      "deleted": "Một Unit đã xóa với định danh {{ param }}",
+      "created": "Một Bài Học mới được tạo với định danh {{ param }}",
+      "updated": "Một Bài Học cập nhật với định danh {{ param }}",
+      "deleted": "Một Bài Học đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Unit {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa Bài Học {{ id }}?"
       },
       "detail": {
-        "title": "Unit"
+        "title": "Bài Học"
       },
       "id": "ID",
-      "title": "Title",
-      "orderIndex": "Order Index",
-      "summary": "Summary",
-      "vocabularies": "Vocabularies",
-      "grammars": "Grammars",
-      "exercises": "Exercises",
-      "progresses": "Progresses",
-      "book": "Book"
+      "title": "Tiêu Đề",
+      "orderIndex": "Thứ Tự",
+      "summary": "Tóm Tắt",
+      "vocabularies": "Từ Vựng",
+      "grammars": "Ngữ Pháp",
+      "exercises": "Bài Tập",
+      "progresses": "Tiến Độ",
+      "book": "Sách"
     }
   }
 }

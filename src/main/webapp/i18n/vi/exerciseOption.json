@@ -2,26 +2,26 @@
   "langleagueApp": {
     "exerciseOption": {
       "home": {
-        "title": "Exercise Options",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Exercise Option",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Exercise Option",
-        "notFound": "No Exercise Options found"
+        "title": "Lựa Chọn Bài Tập",
+        "refreshListLabel": "Làm mới danh sách",
+        "createLabel": "Thêm mới một Lựa Chọn",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Lựa Chọn",
+        "notFound": "Không tìm thấy Lựa Chọn nào"
       },
-      "created": "Một Exercise Option mới được tạo với định danh {{ param }}",
-      "updated": "Một Exercise Option cập nhật với định danh {{ param }}",
-      "deleted": "Một Exercise Option đã xóa với định danh {{ param }}",
+      "created": "Một Lựa Chọn mới được tạo với định danh {{ param }}",
+      "updated": "Một Lựa Chọn cập nhật với định danh {{ param }}",
+      "deleted": "Một Lựa Chọn đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Exercise Option {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa Lựa Chọn {{ id }}?"
       },
       "detail": {
-        "title": "Exercise Option"
+        "title": "Lựa Chọn Bài Tập"
       },
       "id": "ID",
-      "optionText": "Option Text",
-      "isCorrect": "Is Correct",
-      "orderIndex": "Order Index",
-      "exercise": "Exercise"
+      "optionText": "Nội Dung Lựa Chọn",
+      "isCorrect": "Là Đáp Án Đúng",
+      "orderIndex": "Thứ Tự",
+      "exercise": "Bài Tập"
     }
   }
 }

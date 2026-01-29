@@ -12,13 +12,18 @@ import {
   faCircle,
   faCheckSquare,
   faPen,
+  faRobot,
+  faMagic,
 } from '@fortawesome/free-solid-svg-icons';
 import './AddContentMenu.scss';
+
+export type AiImportContentType = 'EXERCISE' | 'VOCABULARY' | 'GRAMMAR';
 
 interface AddContentMenuProps {
   onAddVocabulary?: () => void;
   onAddGrammar?: () => void;
   onAddExercise?: (type: string) => void;
+  onAIImport?: (type: AiImportContentType) => void;
   showExerciseTypes?: boolean;
 }
 
@@ -26,10 +31,12 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
   onAddVocabulary,
   onAddGrammar,
   onAddExercise,
+  onAIImport,
   showExerciseTypes = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showExerciseSubmenu, setShowExerciseSubmenu] = useState(false);
+  const [showAISubmenu, setShowAISubmenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,6 +44,7 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         setShowExerciseSubmenu(false);
+        setShowAISubmenu(false);
       }
     };
 
@@ -53,6 +61,7 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
     setIsOpen(!isOpen);
     if (!isOpen) {
       setShowExerciseSubmenu(false);
+      setShowAISubmenu(false);
     }
   };
 
@@ -70,6 +79,12 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
     onAddExercise?.(type);
     setIsOpen(false);
     setShowExerciseSubmenu(false);
+  };
+
+  const handleAIImport = (type: AiImportContentType) => {
+    onAIImport?.(type);
+    setIsOpen(false);
+    setShowAISubmenu(false);
   };
 
   return (
@@ -152,6 +167,45 @@ export const AddContentMenu: React.FC<AddContentMenuProps> = ({
                 </div>
               )}
             </div>
+          )}
+
+          {onAIImport && (
+            <>
+              <div className="menu-divider"></div>
+              <div className="menu-item-wrapper">
+                <button
+                  className={`menu-item ${showAISubmenu ? 'active' : ''}`}
+                  onClick={() => setShowAISubmenu(!showAISubmenu)}
+                  type="button"
+                >
+                  <div className="menu-item-icon ai-import" style={{ backgroundColor: '#e3f2fd', color: '#0d47a1' }}>
+                    <FontAwesomeIcon icon={faRobot} />
+                  </div>
+                  <div className="menu-item-content">
+                    <div className="menu-item-title">AI Import Assistant</div>
+                    <div className="menu-item-description">Generate content from text/files</div>
+                  </div>
+                  <FontAwesomeIcon icon={faChevronRight} className="submenu-arrow" />
+                </button>
+
+                {showAISubmenu && (
+                  <div className="submenu-dropdown">
+                    <button className="submenu-item" onClick={() => handleAIImport('VOCABULARY')} type="button">
+                      <FontAwesomeIcon icon={faBook} className="me-2" />
+                      Vocabulary
+                    </button>
+                    <button className="submenu-item" onClick={() => handleAIImport('GRAMMAR')} type="button">
+                      <FontAwesomeIcon icon={faBookOpen} className="me-2" />
+                      Grammar
+                    </button>
+                    <button className="submenu-item" onClick={() => handleAIImport('EXERCISE')} type="button">
+                      <FontAwesomeIcon icon={faQuestionCircle} className="me-2" />
+                      Exercises
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
       )}

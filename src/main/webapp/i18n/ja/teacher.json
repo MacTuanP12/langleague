@@ -1,0 +1,399 @@
+{
+  "langleague": {
+    "teacher": {
+      "sidebar": {
+        "title": "教師CMS"
+      },
+      "dashboard": {
+        "title": "教師ダッシュボード",
+        "loading": "ダッシュボードを読み込んでいます...",
+        "welcome": "お帰りなさい、{{name}}さん！",
+        "stats": {
+          "myBooks": "私の本",
+          "totalStudents": "総学生数",
+          "pendingAssignments": "保留中の課題",
+          "averageRating": "平均評価"
+        },
+        "quickActions": {
+          "title": "クイックアクション",
+          "manageBooks": "本を管理",
+          "createBook": "新しい本を作成",
+          "viewStudents": "学生を表示",
+          "manageContent": "コンテンツを管理"
+        },
+        "recentActivity": {
+          "title": "最近のアクティビティ",
+          "noData": "最近のアクティビティはありません"
+        },
+        "enrollments": "本ごとの登録数",
+        "noEnrollmentData": "登録データはまだありません。"
+      },
+      "books": {
+        "management": {
+          "title": "本管理",
+          "description": "ライブラリの在庫を管理し、発行された本を追跡し、カタログの詳細を更新します。",
+          "loading": "本を読み込んでいます...",
+          "noBooks": "本が見つかりません"
+        },
+        "stats": {
+          "total": "総本数",
+          "available": "利用可能",
+          "uploaded": "アップロード済み"
+        },
+        "search": {
+          "placeholder": "タイトル、著者、またはISBNで検索..."
+        },
+        "actions": {
+          "filter": "フィルター",
+          "addNew": " 新しい本を追加",
+          "edit": "編集",
+          "view": "詳細を表示",
+          "delete": "削除",
+          "deleteSuccess": "本が正常に削除されました！",
+          "deleteFailed": "本の削除に失敗しました",
+          "confirmDeleteTitle": "本を削除",
+          "confirmDelete": "本当にこの本を削除しますか？"
+        },
+        "table": {
+          "cover": "表紙",
+          "details": "本の詳細",
+          "uploadedBy": "アップロード者",
+          "actions": "アクション"
+        },
+        "pagination": {
+          "previous": "前へ",
+          "next": "次へ"
+        },
+        "detail": {
+          "loading": "本の詳細を読み込んでいます...",
+          "backToBooks": "本に戻る",
+          "editBook": "本を編集",
+          "addUnit": "ユニットを追加",
+          "meta": {
+            "totalUnits": "総ユニット数:",
+            "created": "作成日:",
+            "public": "公開:",
+            "yes": "はい",
+            "no": "いいえ"
+          },
+          "units": {
+            "title": "ユニット",
+            "hint": "ドラッグアンドドロップでユニットを並べ替え",
+            "empty": {
+              "title": "ユニットはまだありません",
+              "description": "この本に最初のユニットを追加することから始めましょう",
+              "addFirst": "最初のユニットを追加"
+            },
+            "stats": {
+              "vocabulary": "語彙:",
+              "grammar": "文法:",
+              "exercises": "練習問題:"
+            },
+            "actions": {
+              "edit": "編集",
+              "delete": "削除",
+              "manageContent": "コンテンツを管理",
+              "confirmDelete": "本当にこのユニットを削除しますか？"
+            }
+          },
+          "syllabus": {
+            "title": "本のシラバス",
+            "backToBooks": "本に戻る"
+          }
+        },
+        "form": {
+          "header": {
+            "add": "新しい本を追加",
+            "edit": "本を編集",
+            "descriptionAdd": "新しいリソースをカタログ化するために以下の詳細を入力してください。",
+            "descriptionEdit": "リソースを更新するために以下の詳細を入力してください。"
+          },
+          "fields": {
+            "coverLabel": "本の表紙",
+            "uploadPlaceholder": "表紙をアップロード",
+            "uploadHint": "ドラッグアンドドロップまたはクリック",
+            "fileInfo": "サポート: JPG, PNG (最大2MB)",
+            "titleLabel": "本のタイトル",
+            "titlePlaceholder": "例: グレート・ギャツビー",
+            "titleRequired": "本のタイトルは必須です",
+            "titleMinLength": "タイトルは2文字以上である必要があります",
+            "descriptionLabel": "説明",
+            "descriptionPlaceholder": "本の内容の簡単な要約を入力してください...",
+            "isPublicLabel": "公開する",
+            "isPublicHint": "公開された本はすべての学生が発見して登録できます",
+            "publicStatus": "公開",
+            "privateStatus": "非公開"
+          },
+          "footer": {
+            "infoText": "すべてのフィールドはローカルに自動保存されます。",
+            "cancel": "キャンセル",
+            "save": "本を保存",
+            "saving": "保存中..."
+          }
+        },
+        "unit": {
+          "deleteSuccess": "ユニットが正常に削除されました！",
+          "deleteFailed": "ユニットの削除に失敗しました",
+          "confirmDeleteTitle": "ユニットを削除",
+          "confirmDelete": "本当にこのユニットを削除しますか？"
+        }
+      },
+      "editor": {
+        "title": "ユニットコンテンツエディタ",
+        "loading": "ユニットコンテンツを読み込んでいます...",
+        "backToSyllabus": "シラバスに戻る",
+        "backToBook": "本に戻る",
+        "subtitle": "語彙、文法、練習問題を管理",
+        "tabs": {
+          "vocabulary": "語彙",
+          "grammar": "文法",
+          "exercises": "練習問題"
+        },
+        "ai": {
+          "settings": "AI設定",
+          "apiKey": "APIキー (Gemini/OpenAI)",
+          "saveKey": "保存",
+          "getKey": "キーを取得",
+          "model": "モデル",
+          "targetLang": "ターゲット言語",
+          "nativeLang": "母国語",
+          "autoFill": "AIで自動入力",
+          "keySaved": "APIキーがローカルに保存されました。",
+          "configureKey": "APIキーを設定してください。",
+          "generated": "コンテンツが正常に生成されました！"
+        },
+        "vocabulary": {
+          "title": "語彙リスト",
+          "addWord": "単語を追加",
+          "aiGenerate": "✨ AI生成",
+          "empty": "語彙はまだ追加されていません。",
+          "emptyHint": "AIアシスタントを使用してトピックから単語を生成しましょう！",
+          "error": {
+            "enterWord": "最初に単語を入力してください。"
+          }
+        },
+        "grammar": {
+          "title": "文法ルール",
+          "addRule": "ルールを追加",
+          "aiGenerate": "✨ AI生成",
+          "empty": "文法ルールはまだ追加されていません。",
+          "error": {
+            "enterTitle": "最初に文法タイトルを入力してください。"
+          }
+        },
+        "exercises": {
+          "title": "練習問題",
+          "addQuestion": "質問を追加",
+          "aiGenerate": "✨ AI生成",
+          "empty": "練習問題はまだ追加されていません。",
+          "question": "質問",
+          "ocr": {
+            "button": "画像からテキストを抽出 (OCR)",
+            "success": "画像からテキストを正常に抽出しました！",
+            "error": "画像からテキストを抽出できませんでした。",
+            "invalidImage": "有効な画像ファイルを選択してください。"
+          },
+          "validation": {
+            "minOptions": "少なくとも2つのオプションを追加してください。",
+            "selectCorrect": "少なくとも1つの正解を選択してください。",
+            "emptyOption": "オプションのテキストを空にすることはできません。"
+          },
+          "form": {
+            "options": "オプション",
+            "correct": "正解",
+            "optionText": "オプションテキスト",
+            "optionPlaceholder": "オプション {{index}}",
+            "addOption": "オプションを追加",
+            "correctAnswerPlaceholder": "ここに正解のテキストを入力してください"
+          }
+        },
+        "confirmDelete": {
+          "vocabulary": "本当にこの語彙を削除しますか？",
+          "grammar": "本当にこの文法ルールを削除しますか？",
+          "exercise": "本当にこの練習問題を削除しますか？"
+        },
+        "success": {
+          "vocabularyDeleted": "語彙が正常に削除されました",
+          "grammarDeleted": "文法ルールが正常に削除されました",
+          "exerciseDeleted": "練習問題が正常に削除されました"
+        }
+      },
+      "students": {
+        "title": "私の学生",
+        "subtitle": "学生の進捗状況と登録を追跡",
+        "search": "名前または本で検索...",
+        "totalStudents": "総学生数:",
+        "table": {
+          "student": "学生",
+          "enrolledBook": "登録された本",
+          "enrolledDate": "登録日",
+          "status": "ステータス"
+        },
+        "empty": "あなたの本に登録している学生は見つかりませんでした。",
+        "messages": {
+          "loading": "学生を読み込んでいます...",
+          "noStudents": "あなたの本に登録している学生は見つかりませんでした。"
+        }
+      },
+      "units": {
+        "labels": {
+          "newVocabulary": "新しい語彙",
+          "newGrammar": "新しい文法トピック"
+        },
+        "form": {
+          "buttons": {
+            "saving": "保存中...",
+            "submit": "送信",
+            "expandAll": "すべて展開",
+            "collapseAll": "すべて折りたたむ",
+            "addVocabulary": "語彙を追加"
+          },
+          "addGrammar": "文法を追加",
+          "validation": {
+            "titleRequired": "ユニットタイトルは必須です",
+            "titleMinLength": "タイトルは3文字以上である必要があります"
+          },
+          "actions": {
+            "removeTooltip": "アイテムを削除",
+            "duplicateTooltip": "アイテムを複製",
+            "duplicate": "複製"
+          },
+          "controls": {
+            "expandAll": "展開",
+            "collapseAll": "折りたたむ"
+          },
+          "fields": {
+            "titlePlaceholder": "ユニットタイトル",
+            "summaryPlaceholder": "ユニットの説明"
+          },
+          "messages": {
+            "unitUpdated": "ユニットが正常に更新されました",
+            "unitCreated": "ユニットが正常に作成されました",
+            "vocabSaved": "語彙が保存されました",
+            "vocabSaveFailed": "語彙の保存に失敗しました",
+            "vocabDeleted": "語彙が削除されました",
+            "vocabDeleteFailed": "語彙の削除に失敗しました",
+            "grammarSaved": "文法が保存されました",
+            "grammarSaveFailed": "文法の保存に失敗しました",
+            "grammarDeleted": "文法が削除されました",
+            "grammarDeleteFailed": "文法の削除に失敗しました",
+            "exerciseSaved": "練習問題が保存されました",
+            "exerciseSaveFailed": "練習問題の保存に失敗しました",
+            "exerciseDeleted": "練習問題が削除されました",
+            "exerciseDeleteFailed": "練習問題の削除に失敗しました",
+            "loading": "ユニットデータを読み込んでいます...",
+            "loadFailed": "ユニットデータの読み込みに失敗しました"
+          }
+        },
+        "vocabulary": {
+          "sectionTitle": "語彙",
+          "addButton": "語彙を追加",
+          "fields": {
+            "word": "単語",
+            "phonetic": "発音記号",
+            "meaning": "意味",
+            "example": "例文",
+            "imageUrl": "画像URL",
+            "order": "順序"
+          },
+          "placeholders": {
+            "word": "単語 (例: Hello)",
+            "phonetic": "発音記号 (例: /həˈloʊ/)",
+            "meaning": "意味",
+            "example": "例文",
+            "imageUrl": "画像URL",
+            "order": "順序"
+          }
+        },
+        "grammar": {
+          "sectionTitle": "文法",
+          "addButton": "文法を追加",
+          "fields": {
+            "title": "文法タイトル",
+            "content": "内容 (Markdown対応)",
+            "contentHint": "Markdown対応: **太字**, *斜体*, # 見出し",
+            "example": "使用例",
+            "exampleHint": "使用例",
+            "order": "順序"
+          },
+          "placeholders": {
+            "title": "文法タイトル",
+            "content": "内容 (Markdown対応)",
+            "example": "使用例",
+            "order": "順序"
+          }
+        },
+        "exercises": {
+          "sectionTitle": "練習問題",
+          "addButton": "練習問題を追加",
+          "types": {
+            "singleChoice": "単一選択",
+            "multiChoice": "複数選択",
+            "fillInBlank": "穴埋め"
+          },
+          "fields": {
+            "question": "練習問題のテキスト",
+            "correctAnswer": "正解を入力...",
+            "imageUrl": "画像URL (オプション)",
+            "audioUrl": "音声URL (オプション)",
+            "option": "オプション {number}"
+          },
+          "placeholders": {
+            "text": "練習問題のテキスト",
+            "correctAnswer": "正解を入力...",
+            "imageUrl": "画像URL (オプション)",
+            "audioUrl": "音声URL (オプション)",
+            "option": "オプション"
+          },
+          "buttons": {
+            "addOption": "オプションを追加"
+          },
+          "menu": {
+            "addExercise": "練習問題を追加",
+            "singleChoice": "単一選択",
+            "multiChoice": "複数選択",
+            "fillInBlank": "穴埋め"
+          }
+        },
+        "menu": {
+          "addContent": "コンテンツを追加",
+          "vocabulary": "語彙",
+          "vocabularyDesc": "意味と例文付きの単語を追加",
+          "grammar": "文法",
+          "grammarDesc": "文法ルールと説明を追加",
+          "exercise": "練習問題",
+          "exerciseDesc": "練習問題を作成",
+          "singleChoice": "単一選択",
+          "multiChoice": "複数選択",
+          "fillInBlank": "穴埋め"
+        },
+        "zoom": {
+          "in": "ズームイン (Ctrl + +)",
+          "out": "ズームアウト (Ctrl + -)",
+          "reset": "ズームリセット (Ctrl + 0)",
+          "shortcuts": {
+            "in": "Ctrl + +",
+            "out": "Ctrl + -",
+            "reset": "Ctrl + 0"
+          }
+        }
+      },
+      "common": {
+        "save": "保存",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "back": "戻る",
+        "edit": "編集",
+        "view": "表示",
+        "add": "追加",
+        "create": "作成",
+        "update": "更新",
+        "loading": "読み込み中...",
+        "search": "検索",
+        "filter": "フィルター",
+        "actions": "アクション",
+        "deleteConfirm": "本当にこのアイテムを削除しますか？"
+      }
+    }
+  }
+}

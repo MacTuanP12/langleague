@@ -25,6 +25,7 @@ export const BookUpdate = () => {
   });
 
   const coverImageUrl = watch('coverImageUrl');
+  const isPublicValue = watch('isPublic');
   const [coverPreview, setCoverPreview] = useState<string>('');
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -247,26 +248,32 @@ export const BookUpdate = () => {
                     <Controller
                       name="isPublic"
                       control={control}
-                      render={({ field }) => (
-                        <div className="toggle-switch">
-                          <input
-                            type="checkbox"
-                            id="isPublic"
-                            checked={field.value ?? false}
-                            onChange={e => field.onChange(e.target.checked)}
-                          />
-                          <label htmlFor="isPublic" className="toggle-label">
-                            <span className="toggle-slider"></span>
-                          </label>
-                          <span className="toggle-text">
-                            {field.value ? (
-                              <Translate contentKey="langleague.teacher.books.form.fields.publicStatus">Public</Translate>
-                            ) : (
-                              <Translate contentKey="langleague.teacher.books.form.fields.privateStatus">Private</Translate>
-                            )}
-                          </span>
-                        </div>
-                      )}
+                      render={({ field }) => {
+                        const isChecked = field.value ?? false;
+                        return (
+                          <div className="toggle-switch">
+                            <input
+                              type="checkbox"
+                              id="isPublic"
+                              checked={isChecked}
+                              onChange={e => {
+                                const newValue = e.target.checked;
+                                field.onChange(newValue);
+                              }}
+                            />
+                            <label htmlFor="isPublic" className="toggle-label">
+                              <span className="toggle-slider"></span>
+                              <span className="toggle-text">
+                                {isChecked ? (
+                                  <Translate contentKey="langleague.teacher.books.form.fields.publicStatus">Public</Translate>
+                                ) : (
+                                  <Translate contentKey="langleague.teacher.books.form.fields.privateStatus">Private</Translate>
+                                )}
+                              </span>
+                            </label>
+                          </div>
+                        );
+                      }}
                     />
                     <p className="field-hint">
                       <Translate contentKey="langleague.teacher.books.form.fields.isPublicHint">

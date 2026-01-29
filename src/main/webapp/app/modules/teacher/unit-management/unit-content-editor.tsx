@@ -105,7 +105,7 @@ export const UnitContentEditor = () => {
   if (!unit && loading) {
     return (
       <TeacherLayout>
-        <LoadingSpinner message="Loading unit content..." />
+        <LoadingSpinner message="langleague.teacher.editor.loading" isI18nKey />
       </TeacherLayout>
     );
   }

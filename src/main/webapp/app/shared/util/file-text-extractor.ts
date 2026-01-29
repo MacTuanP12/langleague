@@ -215,14 +215,122 @@ export const getSupportedExtensions = (): string[] => {
 };
 
 /**
+ * Map system language names to Tesseract OCR language codes
+ * @param languages - Array of language names (e.g., ['English', 'Vietnamese'])
+ * @returns Tesseract OCR language code string (e.g., 'eng+vie')
+ */
+export const mapLanguagesToOcrCodes = (languages: string[]): string => {
+  const languageMap: Record<string, string> = {
+    English: 'eng',
+    Vietnamese: 'vie',
+    Japanese: 'jpn',
+    Korean: 'kor',
+    Chinese: 'chi_sim+chi_tra', // Simplified + Traditional Chinese
+    'Chinese (Simplified)': 'chi_sim',
+    'Chinese (Traditional)': 'chi_tra',
+    French: 'fra',
+    German: 'deu',
+    Spanish: 'spa',
+    Italian: 'ita',
+    Portuguese: 'por',
+    Russian: 'rus',
+    Arabic: 'ara',
+    Thai: 'tha',
+    Hindi: 'hin',
+    Indonesian: 'ind',
+    Malay: 'msa',
+    Dutch: 'nld',
+    Polish: 'pol',
+    Turkish: 'tur',
+    Greek: 'ell',
+    Hebrew: 'heb',
+    Czech: 'ces',
+    Swedish: 'swe',
+    Norwegian: 'nor',
+    Danish: 'dan',
+    Finnish: 'fin',
+    Romanian: 'ron',
+    Hungarian: 'hun',
+    Bulgarian: 'bul',
+    Croatian: 'hrv',
+    Serbian: 'srp',
+    Slovak: 'slk',
+    Slovenian: 'slv',
+    Ukrainian: 'ukr',
+  };
+
+  const codes = languages
+    .map(lang => {
+      // Handle Chinese variants
+      if (lang === 'Chinese') {
+        return 'chi_sim+chi_tra';
+      }
+      return languageMap[lang] || null;
+    })
+    .filter((code): code is string => code !== null);
+
+  // Remove duplicates and join with +
+  const uniqueCodes = [...new Set(codes.flatMap(code => code.split('+')))];
+  return uniqueCodes.length > 0 ? uniqueCodes.join('+') : 'eng'; // Default to English
+};
+
+/**
+ * Get all supported OCR languages for the system
+ * @returns Array of language names supported by the system
+ */
+export const getSupportedOcrLanguages = (): string[] => {
+  return [
+    'English',
+    'Vietnamese',
+    'Japanese',
+    'Korean',
+    'Chinese',
+    'Chinese (Simplified)',
+    'Chinese (Traditional)',
+    'French',
+    'German',
+    'Spanish',
+    'Italian',
+    'Portuguese',
+    'Russian',
+    'Arabic',
+    'Thai',
+    'Hindi',
+    'Indonesian',
+    'Malay',
+    'Dutch',
+    'Polish',
+    'Turkish',
+    'Greek',
+    'Hebrew',
+    'Czech',
+    'Swedish',
+    'Norwegian',
+    'Danish',
+    'Finnish',
+    'Romanian',
+    'Hungarian',
+    'Bulgarian',
+    'Croatian',
+    'Serbian',
+    'Slovak',
+    'Slovenian',
+    'Ukrainian',
+  ];
+};
+
+/**
  * Extract text from image files using OCR (Tesseract.js)
  * @param file - Image file to extract text from
  * @param lang - Language code for OCR (default: 'eng+vie' for English and Vietnamese)
+ *              Can also accept array of language names which will be mapped to OCR codes
  * @returns Promise resolving to extracted text content
  */
-export const extractTextFromImage = async (file: File, lang: string = 'eng+vie'): Promise<string> => {
+export const extractTextFromImage = async (file: File, lang: string | string[] = 'eng+vie'): Promise<string> => {
+  // If lang is an array, map it to OCR codes
+  const ocrLang = Array.isArray(lang) ? mapLanguagesToOcrCodes(lang) : lang;
   try {
-    const worker = await createWorker(lang, 1, {
+    const worker = await createWorker(ocrLang, 1, {
       logger(m) {
         // Log OCR progress for debugging (disabled to comply with no-console rule)
         // Use console.warn if needed for important debugging
@@ -238,6 +346,49 @@ export const extractTextFromImage = async (file: File, lang: string = 'eng+vie')
   } catch (error) {
     throw new Error(`Failed to extract text from image: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
+};
+
+/**
+ * Get image from clipboard and convert to File
+ * @returns Promise resolving to File object or null if no image in clipboard
+ */
+export const getImageFromClipboard = async (): Promise<File | null> => {
+  try {
+    const clipboardItems = await navigator.clipboard.read();
+
+    for (const clipboardItem of clipboardItems) {
+      // Check for image types
+      const imageTypes = clipboardItem.types.filter(type => type.startsWith('image/'));
+
+      if (imageTypes.length > 0) {
+        const imageType = imageTypes[0];
+        const blob = await clipboardItem.getType(imageType);
+
+        // Convert blob to File
+        const file = new File([blob], `clipboard-image.${imageType.split('/')[1]}`, { type: imageType });
+        return file;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    // Clipboard API might not be available or user denied permission
+    console.warn('Failed to read from clipboard:', error);
+    return null;
+  }
+};
+
+/**
+ * Extract text from image in clipboard using OCR
+ * @param lang - Language code for OCR (default: 'eng+vie')
+ * @returns Promise resolving to extracted text content
+ */
+export const extractTextFromClipboardImage = async (lang: string | string[] = 'eng+vie'): Promise<string> => {
+  const file = await getImageFromClipboard();
+  if (!file) {
+    throw new Error('No image found in clipboard. Please copy an image first (Ctrl+C or Cmd+C).');
+  }
+  return extractTextFromImage(file, lang);
 };
 
 /**

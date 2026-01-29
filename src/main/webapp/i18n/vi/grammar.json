@@ -2,27 +2,27 @@
   "langleagueApp": {
     "grammar": {
       "home": {
-        "title": "Grammars",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Grammar",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Grammar",
-        "notFound": "No Grammars found"
+        "title": "Ngữ Pháp",
+        "refreshListLabel": "Làm mới danh sách",
+        "createLabel": "Thêm mới một Ngữ Pháp",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Ngữ Pháp",
+        "notFound": "Không tìm thấy Ngữ Pháp nào"
       },
-      "created": "Một Grammar mới được tạo với định danh {{ param }}",
-      "updated": "Một Grammar cập nhật với định danh {{ param }}",
-      "deleted": "Một Grammar đã xóa với định danh {{ param }}",
+      "created": "Một Ngữ Pháp mới được tạo với định danh {{ param }}",
+      "updated": "Một Ngữ Pháp cập nhật với định danh {{ param }}",
+      "deleted": "Một Ngữ Pháp đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Grammar {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa Ngữ Pháp {{ id }}?"
       },
       "detail": {
-        "title": "Grammar"
+        "title": "Ngữ Pháp"
       },
       "id": "ID",
-      "title": "Title",
-      "contentMarkdown": "Content Markdown",
-      "exampleUsage": "Example Usage",
-      "orderIndex": "Order Index",
-      "unit": "Unit"
+      "title": "Tiêu Đề",
+      "contentMarkdown": "Nội Dung (Markdown)",
+      "exampleUsage": "Ví Dụ Sử Dụng",
+      "orderIndex": "Thứ Tự",
+      "unit": "Bài Học"
     }
   }
 }

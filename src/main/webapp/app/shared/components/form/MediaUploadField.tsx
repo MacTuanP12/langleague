@@ -37,6 +37,17 @@ export const MediaUploadField: React.FC<MediaUploadFieldProps> = ({ type, label,
       return;
     }
 
+    // Warn about unsupported audio formats
+    if (type === 'audio') {
+      const fileExtension = file.name.toLowerCase().split('.').pop();
+      const unsupportedFormats = ['wma', 'wav', 'aac', 'flac', 'ogg'];
+      if (fileExtension && unsupportedFormats.includes(fileExtension)) {
+        toast.warning(`Format .${fileExtension} may not be supported by all browsers. For best compatibility, please use MP3 format.`, {
+          autoClose: 5000,
+        });
+      }
+    }
+
     // Validate size (max 10MB for audio, 5MB for image)
     const maxSize = type === 'audio' ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
     if (file.size > maxSize) {
@@ -99,7 +110,24 @@ export const MediaUploadField: React.FC<MediaUploadFieldProps> = ({ type, label,
               </div>
             ) : (
               <div className="d-flex align-items-center justify-content-center p-2">
-                <audio controls src={processedUrl} style={{ width: '100%' }}>
+                <audio
+                  controls
+                  src={processedUrl}
+                  style={{ width: '100%' }}
+                  onError={e => {
+                    console.error('Audio loading error:', e);
+                    const audioEl = e.target as HTMLAudioElement;
+                    if (audioEl.error) {
+                      console.error('Audio error code:', audioEl.error.code, 'Message:', audioEl.error.message);
+                    }
+                  }}
+                  onLoadedMetadata={e => {
+                    const audioEl = e.target as HTMLAudioElement;
+                    if (!audioEl.duration || !isFinite(audioEl.duration)) {
+                      console.warn('Audio duration is not available or invalid');
+                    }
+                  }}
+                >
                   Your browser does not support the audio element.
                 </audio>
               </div>
@@ -161,6 +189,11 @@ export const MediaUploadField: React.FC<MediaUploadFieldProps> = ({ type, label,
 
         <small className="text-muted fst-italic" style={{ fontSize: '0.75rem' }}>
           {translate(type === 'image' ? 'media.imageSupport' : 'media.audioSupport')}
+          {type === 'audio' && (
+            <span className="d-block mt-1" style={{ color: '#856404' }}>
+              ⚠️ For best browser compatibility, use MP3 format. Formats like WMA, WAV may not work in all browsers.
+            </span>
+          )}
         </small>
       </div>
     </FormGroup>

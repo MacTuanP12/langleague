@@ -2,29 +2,29 @@
   "langleagueApp": {
     "vocabulary": {
       "home": {
-        "title": "Vocabularies",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Vocabulary",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Vocabulary",
-        "notFound": "No Vocabularies found"
+        "title": "Từ Vựng",
+        "refreshListLabel": "Làm mới danh sách",
+        "createLabel": "Thêm mới một Từ Vựng",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Từ Vựng",
+        "notFound": "Không tìm thấy Từ Vựng nào"
       },
-      "created": "Một Vocabulary mới được tạo với định danh {{ param }}",
-      "updated": "Một Vocabulary cập nhật với định danh {{ param }}",
-      "deleted": "Một Vocabulary đã xóa với định danh {{ param }}",
+      "created": "Một Từ Vựng mới được tạo với định danh {{ param }}",
+      "updated": "Một Từ Vựng cập nhật với định danh {{ param }}",
+      "deleted": "Một Từ Vựng đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Vocabulary {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa Từ Vựng {{ id }}?"
       },
       "detail": {
-        "title": "Vocabulary"
+        "title": "Từ Vựng"
       },
       "id": "ID",
-      "word": "Word",
-      "phonetic": "Phonetic",
-      "meaning": "Meaning",
-      "example": "Example",
-      "imageUrl": "Image Url",
-      "orderIndex": "Order Index",
-      "unit": "Unit"
+      "word": "Từ",
+      "phonetic": "Phiên Âm",
+      "meaning": "Nghĩa",
+      "example": "Ví Dụ",
+      "imageUrl": "URL Hình Ảnh",
+      "orderIndex": "Thứ Tự",
+      "unit": "Bài Học"
     }
   }
 }

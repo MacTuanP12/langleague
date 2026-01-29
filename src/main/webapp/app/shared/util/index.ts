@@ -37,4 +37,13 @@ export {
 export { capitalize, capitalizeWords, normalizeSearch, truncate, slugify, pluralize, getInitials, formatFullName } from './text-utils';
 
 // File text extraction utilities
-export { extractTextFromFile, isFileTypeSupported, getSupportedExtensions, getAcceptAttribute } from './file-text-extractor';
+export {
+  extractTextFromFile,
+  extractTextFromImage,
+  extractTextFromClipboardImage,
+  getImageFromClipboard,
+  isFileTypeSupported,
+  getSupportedExtensions,
+  getAcceptAttribute,
+  isImageFile,
+} from './file-text-extractor';

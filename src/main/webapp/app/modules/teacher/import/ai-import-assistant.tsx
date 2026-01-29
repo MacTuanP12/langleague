@@ -33,103 +33,71 @@ import {
   faKey,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { extractTextFromFile, getAcceptAttributeWithImages, extractTextFromImage, isImageFile } from 'app/shared/util/file-text-extractor';
-import { ExerciseType } from 'app/shared/model/enumerations/exercise-type.model';
-import type { IExercise } from 'app/shared/model';
+import {
+  extractTextFromFile,
+  getAcceptAttributeWithImages,
+  extractTextFromImage,
+  isImageFile,
+  mapLanguagesToOcrCodes,
+  getSupportedOcrLanguages,
+} from 'app/shared/util/file-text-extractor';
 import { toast } from 'react-toastify';
 import classnames from 'classnames';
-import { useAppDispatch } from 'app/config/store';
-import { bulkCreateExercises } from 'app/shared/reducers/exercise.reducer';
-import { bulkCreateVocabularies } from 'app/shared/reducers/vocabulary.reducer';
-import { bulkCreateGrammars } from 'app/shared/reducers/grammar.reducer';
-import { USER_GEMINI_KEY_STORAGE } from 'app/shared/util/ai-utils';
+import { generateUnitContent } from 'app/shared/util/ai-tutor.service';
+import { SimpleMarkdownEditor } from 'app/shared/components/markdown-editor/simple-markdown-editor';
 import './ai-import-assistant.scss';
 
-interface AIImportAssistantProps {
-  unitId: string;
-  onSuccess?: () => void;
-  initialContentType?: ContentType;
-  isOpen?: boolean;
-  onToggle?: () => void;
-  showFloatingButton?: boolean;
-}
-
-interface ExerciseOption {
+// Export types for use in parent components
+export interface AiImportExerciseOption {
   optionText: string;
   isCorrect: boolean;
 }
 
-interface Exercise {
+export interface AiImportExercise {
   exerciseText: string;
-  options: ExerciseOption[];
+  options: AiImportExerciseOption[];
 }
 
-interface Vocabulary {
+export interface AiImportVocabulary {
   word: string;
   definition: string;
   example: string;
 }
 
-interface Grammar {
+export interface AiImportGrammar {
   title: string;
   description: string;
   example: string;
 }
 
-// DTO Interfaces for Backend Mapping
-interface IVocabularyDTO {
-  word: string;
-  meaning: string;
-  example: string;
-  orderIndex: number;
-  unit: { id: number };
-}
+export type AiImportContentType = 'EXERCISE' | 'VOCABULARY' | 'GRAMMAR';
 
-interface IGrammarDTO {
-  title: string;
-  contentMarkdown: string;
-  exampleUsage: string;
-  orderIndex: number;
-  unit: { id: number };
+interface AIImportAssistantProps {
+  unitId?: string;
+  onSuccess?: () => void;
+  onDataReceived?: (type: AiImportContentType, data: AiImportExercise[] | AiImportVocabulary[] | AiImportGrammar[]) => void;
+  initialContentType?: AiImportContentType;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  showFloatingButton?: boolean;
 }
-
-interface IExerciseDTO {
-  exerciseText: string;
-  exerciseType: string;
-  orderIndex: number;
-  unit: { id: number };
-  options: {
-    optionText: string;
-    isCorrect: boolean;
-    orderIndex: number;
-  }[];
-}
-
-type ContentType = 'EXERCISE' | 'VOCABULARY' | 'GRAMMAR';
 
 const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
   unitId,
   onSuccess,
+  onDataReceived,
   initialContentType = 'EXERCISE',
   isOpen: externalIsOpen,
   onToggle: externalOnToggle,
   showFloatingButton = true,
 }) => {
-  const dispatch = useAppDispatch();
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
 
-  // Use external control if provided, otherwise use internal state
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
-  // BYOK State Management
-  const [userApiKey, setUserApiKey] = useState('');
-  const [isKeyVerified, setIsKeyVerified] = useState(false);
-  const [rememberKey, setRememberKey] = useState(false);
-  const [keyInputValue, setKeyInputValue] = useState('');
-
-  const [selectedModel, setSelectedModel] = useState('gemini-1.5-flash');
-  const [contentType, setContentType] = useState<ContentType>(initialContentType);
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
+  const [contentType, setContentType] = useState<AiImportContentType>(initialContentType);
   const [inputText, setInputText] = useState('');
   const [isExtracting, setIsExtracting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -139,30 +107,12 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     native: 'Vietnamese',
   });
 
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [vocabularies, setVocabularies] = useState<Vocabulary[]>([]);
-  const [grammars, setGrammars] = useState<Grammar[]>([]);
+  const [exercises, setExercises] = useState<AiImportExercise[]>([]);
+  const [vocabularies, setVocabularies] = useState<AiImportVocabulary[]>([]);
+  const [grammars, setGrammars] = useState<AiImportGrammar[]>([]);
 
   const [step, setStep] = useState(1); // 1: Input, 2: Processing, 3: Review
-  const [isSaving, setIsSaving] = useState(false);
 
-  // Check for existing API key on component mount
-  useEffect(() => {
-    const localKey = localStorage.getItem(USER_GEMINI_KEY_STORAGE);
-    const sessionKey = sessionStorage.getItem(USER_GEMINI_KEY_STORAGE);
-
-    if (localKey) {
-      setUserApiKey(localKey);
-      setIsKeyVerified(true);
-      setRememberKey(true);
-    } else if (sessionKey) {
-      setUserApiKey(sessionKey);
-      setIsKeyVerified(true);
-      setRememberKey(false);
-    }
-  }, []);
-
-  // Update contentType when initialContentType changes
   useEffect(() => {
     if (isOpen && initialContentType) {
       setContentType(initialContentType);
@@ -177,41 +127,6 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     }
   };
 
-  // Handle API Key Verification
-  const handleStartSession = () => {
-    const trimmedKey = keyInputValue.trim();
-    if (!trimmedKey) {
-      toast.error('Please enter your API key.');
-      return;
-    }
-
-    // Save to appropriate storage
-    if (rememberKey) {
-      localStorage.setItem(USER_GEMINI_KEY_STORAGE, trimmedKey);
-      sessionStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-    } else {
-      sessionStorage.setItem(USER_GEMINI_KEY_STORAGE, trimmedKey);
-      localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-    }
-
-    setUserApiKey(trimmedKey);
-    setIsKeyVerified(true);
-    setKeyInputValue('');
-    toast.success('API key configured successfully!');
-  };
-
-  // Handle Logout / Remove Key
-  const handleRemoveKey = () => {
-    localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-    sessionStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-    setUserApiKey('');
-    setIsKeyVerified(false);
-    setRememberKey(false);
-    setKeyInputValue('');
-    setStep(1);
-    toast.info('API key removed. You will need to configure it again.');
-  };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
@@ -220,13 +135,13 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
       try {
         let text = '';
 
-        // Check if file is an image and use OCR
         if (isImageFile(selectedFile.name)) {
           toast.info('Processing image with OCR... This may take a moment.');
-          text = await extractTextFromImage(selectedFile, languageSettings.target === 'English' ? 'eng' : 'eng+vie');
+          // Use all system languages for OCR to support multilingual content
+          const ocrLanguages = [languageSettings.native, languageSettings.target].filter(Boolean);
+          text = await extractTextFromImage(selectedFile, ocrLanguages);
           toast.success('Image text extracted successfully using OCR!');
         } else {
-          // Use regular text extraction for documents
           text = await extractTextFromFile(selectedFile);
           toast.success('File text extracted successfully!');
         }
@@ -241,84 +156,126 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     }
   };
 
-  const getSystemPrompt = (type: ContentType, rawText: string, targetLang: string, nativeLang: string): string => {
+  const getSystemPrompt = (type: AiImportContentType, rawText: string, targetLang: string, nativeLang: string): string => {
     if (type === 'VOCABULARY') {
-      return `
-        Role: You are a dictionary editor. Extract vocabulary from the text.
-        Rules:
-        - 'word': MUST be in **${targetLang}**.
-        - 'definition': MUST be in **${nativeLang}** (translate if necessary).
-        - 'example': A sentence in **${targetLang}**.
-        Output: Valid JSON Array ONLY.
-        Format:
-        [
-          {
-            "word": "...",
-            "definition": "...",
-            "example": "..."
-          }
-        ]
-        TEXT TO ANALYZE:
-        ${rawText}
-      `;
-    } else if (type === 'GRAMMAR') {
-      return `
-        Role: You are a grammar teacher. Extract grammar points.
-        Rules:
-        - 'title': The name of the structure (can be in **${targetLang}** or **${nativeLang}**).
-        - 'description': Explanation of usage, MUST be in **${nativeLang}** for student understanding.
-        - 'example': Example sentences in **${targetLang}**.
-        Output: Valid JSON Array ONLY.
-        Format:
-        [
-          {
-            "title": "...",
-            "description": "...",
-            "example": "..."
-          }
-        ]
-        TEXT TO ANALYZE:
-        ${rawText}
-      `;
-    } else {
-      // EXERCISE
-      return `
-        Role: Quiz creator.
-        Rules:
-        - 'exerciseText': The question (usually in **${targetLang}**).
-        - 'options': Answer choices.
-        Output: Valid JSON Array ONLY.
-        Format:
-        [
-          {
-            "exerciseText": "Question content",
-            "options": [
-              { "optionText": "Option A", "isCorrect": false },
-              { "optionText": "Option B", "isCorrect": true }
-            ]
-          }
-        ]
-        TEXT TO ANALYZE:
-        ${rawText}
-      `;
-    }
-  };
+      return `Role: You are a dictionary editor. Extract vocabulary from the text.
 
-  const cleanAiResponse = (raw: string): string => {
-    return raw
-      .replace(/```json/g, '')
-      .replace(/```/g, '')
-      .trim();
+Rules:
+- 'word': MUST be in ${targetLang}.
+- 'definition': MUST be in ${nativeLang} (translate if necessary).
+- 'example': A sentence in ${targetLang} using the word.
+
+Output: Valid JSON Array ONLY. Do not include any markdown formatting, code blocks, or explanations. Return ONLY the JSON array.
+
+Format:
+[
+  {
+    "word": "...",
+    "definition": "...",
+    "example": "..."
+  }
+]
+
+TEXT TO ANALYZE:
+${rawText}`;
+    } else if (type === 'GRAMMAR') {
+      return `Role: You are a world-class Markdown designer and professional grammar content formatter. You specialize in transforming messy, unformatted OCR text from grammar books into beautifully structured, visually appealing Markdown documentation.
+
+Language Context:
+- Source Language (Ngôn ngữ gốc): ${nativeLang} - This is the original language of the input text (from OCR or manual copy).
+- Target Language (Ngôn ngữ đích): ${targetLang} - This is the target language for learning.
+
+Your Mission:
+The input text below was extracted from a grammar book (via OCR or manual copy). It may be:
+- Messy and unformatted
+- Contain OCR errors or typos
+- Lack proper structure or organization
+- Missing visual hierarchy
+
+Your job is to:
+1. **Clean & Correct**: Fix OCR errors, typos, and formatting issues
+2. **Organize**: Structure content into clear, logical sections with proper hierarchy
+3. **Design**: Format using beautiful Markdown with professional typography
+4. **Preserve**: Keep ALL original information - only improve presentation
+5. **Extract**: Identify and format grammar points professionally
+6. **Enhance**: Add visual structure (headings, lists, emphasis) to improve readability
+
+Markdown Design Mastery - Your Toolkit:
+- **Headings**: Use # for main titles, ## for major sections, ### for subsections, #### for sub-subsections
+- **Emphasis**: Use **bold** for key terms, grammar rules, and important concepts. Use *italic* for subtle emphasis
+- **Lists**: Use - or * for unordered lists, 1. 2. 3. for ordered/sequential lists
+- **Code**: Use \`backticks\` for grammar patterns, structures, or technical terms
+- **Blockquotes**: Use > for important notes, tips, warnings, or special information
+- **Separators**: Use --- for visual section breaks
+- **Structure**: Create clear hierarchy - main concept → explanation → examples → notes
+- **Spacing**: Add proper line breaks and spacing for readability
+- **Organization**: Group related information together logically
+
+Output Rules:
+- 'title': Extract or create a clear, concise title for the grammar point (can be in ${targetLang} or ${nativeLang})
+- 'description': Format the explanation in BEAUTIFUL, PROFESSIONAL Markdown. MUST be in ${nativeLang} (the source language for explanation). 
+  * Use proper Markdown formatting: headings, lists, bold, italic, code blocks
+  * Structure content hierarchically (main concept → details → examples)
+  * Make it visually appealing and easy to scan
+  * Think like a professional technical writer creating beautiful documentation
+  * The description should look like professionally designed educational content
+- 'example': Format example sentences in ${targetLang} (the target language for learning). Use Markdown formatting like lists, code blocks, or structured paragraphs if appropriate.
+
+CRITICAL: The 'description' field must be rich, well-formatted Markdown that looks like it was designed by a professional. It should be:
+- Visually organized with clear hierarchy
+- Easy to scan and read
+- Professionally formatted
+- Beautiful and engaging
+
+Think of yourself as a master Markdown designer creating the most beautiful, readable grammar documentation possible.
+
+Output: Valid JSON Array ONLY. Do not include any markdown formatting around the JSON, code blocks, or explanations. Return ONLY the JSON array.
+
+Format:
+[
+  {
+    "title": "Grammar Point Title",
+    "description": "# Main Grammar Concept\n\n## Overview\nBrief introduction...\n\n## Structure\n- **Key point 1**: Explanation\n- **Key point 2**: Explanation\n\n## Usage Rules\n1. First rule\n2. Second rule\n\n## Examples\n> **Note**: Important tip here\n\n### Common Patterns\n\`pattern\` - explanation",
+    "example": "Example sentence 1\nExample sentence 2\nExample sentence 3"
+  }
+]
+
+RAW TEXT FROM GRAMMAR BOOK (OCR or Manual Copy):
+${rawText}`;
+    } else {
+      return `Role: Quiz creator. Create multiple choice questions from the text.
+
+Language Context:
+- Source Language (Ngôn ngữ gốc): ${nativeLang} - This is the original language of the input text.
+- Target Language (Ngôn ngữ đích): ${targetLang} - This is the language for the output content.
+
+Rules:
+- 'exerciseText': The question text MUST be in ${targetLang} (the target language for learning).
+- 'options': Array of answer choices. Must have at least 2 options, and exactly ONE option must have "isCorrect": true.
+- Each option must have "optionText" (string in ${targetLang}) and "isCorrect" (boolean).
+
+Output: Valid JSON Array ONLY. Do not include any markdown formatting, code blocks, or explanations. Return ONLY the JSON array.
+
+Format:
+[
+  {
+    "exerciseText": "Question content",
+    "options": [
+      { "optionText": "Option A", "isCorrect": false },
+      { "optionText": "Option B", "isCorrect": true },
+      { "optionText": "Option C", "isCorrect": false }
+    ]
+  }
+]
+
+TEXT TO ANALYZE:
+${rawText}`;
+    }
   };
 
   const analyzeTextWithAI = async (targetLang: string, nativeLang: string) => {
     if (!inputText.trim()) {
       toast.error('Please provide some text to analyze.');
-      return;
-    }
-    const apiKey = userApiKey.trim();
-    if (!apiKey) {
-      toast.error('Please enter your AI API Key.');
       return;
     }
 
@@ -328,151 +285,75 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     const prompt = getSystemPrompt(contentType, inputText, targetLang, nativeLang);
 
     try {
-      let responseText = '';
-
-      if (selectedModel.includes('gemini')) {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              contents: [
-                {
-                  parts: [{ text: prompt }],
-                },
-              ],
-            }),
-          },
-        );
-
-        // Handle API key errors
-        if (response.status === 400 || response.status === 401 || response.status === 403) {
-          const errorData = await response.json().catch(() => ({ error: { message: 'Invalid API key' } }));
-          const errorMessage = errorData.error?.message || 'Please check your Gemini API key and try again.';
-
-          if (errorMessage.includes('leaked')) {
-            toast.error('Your API key was reported as leaked by Google. Please generate a NEW key.');
-          } else {
-            toast.error(`Invalid API Key: ${errorMessage}`);
-          }
-
-          // Clear the invalid key
-          localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-          sessionStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-          setUserApiKey('');
-          setIsKeyVerified(false);
+      if (contentType === 'EXERCISE') {
+        const parsedData = await generateUnitContent<AiImportExercise>('', prompt, selectedModel);
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
+          toast.warning('No exercises were generated. Please try again with different text.');
           setStep(1);
-          setIsProcessing(false);
           return;
         }
-
-        if (!response.ok) {
-          throw new Error(`AI API Error: ${response.statusText}`);
+        setExercises(parsedData);
+        setStep(3);
+        toast.success(`Successfully generated ${parsedData.length} exercise item(s)!`);
+      } else if (contentType === 'VOCABULARY') {
+        const parsedData = await generateUnitContent<AiImportVocabulary>('', prompt, selectedModel);
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
+          toast.warning('No vocabulary items were generated. Please try again with different text.');
+          setStep(1);
+          return;
         }
-
-        const data = await response.json();
-        if (
-          data.candidates &&
-          data.candidates.length > 0 &&
-          data.candidates[0].content &&
-          data.candidates[0].content.parts &&
-          data.candidates[0].content.parts.length > 0
-        ) {
-          responseText = data.candidates[0].content.parts[0].text;
-        } else {
-          throw new Error('Invalid response format from Gemini API');
+        setVocabularies(parsedData);
+        setStep(3);
+        toast.success(`Successfully generated ${parsedData.length} vocabulary item(s)!`);
+      } else if (contentType === 'GRAMMAR') {
+        const parsedData = await generateUnitContent<AiImportGrammar>('', prompt, selectedModel);
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
+          toast.warning('No grammar topics were generated. Please try again with different text.');
+          setStep(1);
+          return;
         }
+        setGrammars(parsedData);
+        setStep(3);
+        toast.success(`Successfully formatted ${parsedData.length} grammar topic(s) with beautiful Markdown!`);
       } else {
-        // OpenAI (GPT-4o-mini or similar)
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model: selectedModel,
-            messages: [
-              { role: 'system', content: 'You are a helpful assistant that extracts educational content from text.' },
-              { role: 'user', content: prompt },
-            ],
-            temperature: 0.7,
-          }),
-        });
-
-        // Handle API key errors for OpenAI
-        if (response.status === 401 || response.status === 403) {
-          toast.error('Invalid OpenAI API Key. Please check your key and try again.');
-          localStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-          sessionStorage.removeItem(USER_GEMINI_KEY_STORAGE);
-          setUserApiKey('');
-          setIsKeyVerified(false);
-          setStep(1);
-          setIsProcessing(false);
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(`AI API Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-          responseText = data.choices[0].message.content;
-        } else {
-          throw new Error('Invalid response format from OpenAI API');
-        }
-      }
-
-      const jsonString = cleanAiResponse(responseText);
-
-      try {
-        const parsedData = JSON.parse(jsonString);
-
-        if (Array.isArray(parsedData)) {
-          if (contentType === 'EXERCISE') {
-            setExercises(parsedData);
-          } else if (contentType === 'VOCABULARY') {
-            setVocabularies(parsedData);
-          } else if (contentType === 'GRAMMAR') {
-            setGrammars(parsedData);
-          }
-          setStep(3);
-        } else {
-          throw new Error('AI did not return a valid JSON array.');
-        }
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        // Log for debugging during development
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('Raw AI Response:', responseText);
-        }
-        toast.error('AI response format error. Please try again.');
-        setStep(1);
+        throw new Error('Invalid content type');
       }
     } catch (error) {
       console.error('AI Analysis Error:', error);
-      toast.error(`AI Analysis Failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      setStep(1); // Go back to input
+      let errorMessage = 'Unknown error occurred';
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        // Provide more user-friendly error messages
+        if (errorMessage.includes('JSON') || errorMessage.includes('parse')) {
+          errorMessage = 'Failed to parse AI response. The AI may have returned invalid data. Please try again.';
+        } else if (errorMessage.includes('API') || errorMessage.includes('network')) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else if (errorMessage.includes('Rate limit') || errorMessage.includes('429')) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+        } else if (errorMessage.includes('API Key') || errorMessage.includes('unauthorized')) {
+          errorMessage = 'API authentication failed. Please contact administrator.';
+        }
+      }
+
+      toast.error(`AI Analysis Failed: ${errorMessage}`);
+      setStep(1);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // --- Exercise Handlers ---
-  const handleExerciseChange = (index: number, field: keyof Exercise, value: string | ExerciseOption[]) => {
+  // --- Handlers (Exercise, Vocabulary, Grammar) ---
+  const handleExerciseChange = (index: number, field: keyof AiImportExercise, value: string | AiImportExerciseOption[]) => {
     const updatedExercises = [...exercises];
-    updatedExercises[index] = { ...updatedExercises[index], [field]: value } as Exercise;
+    updatedExercises[index] = { ...updatedExercises[index], [field]: value } as AiImportExercise;
     setExercises(updatedExercises);
   };
 
-  const handleOptionChange = (exerciseIndex: number, optionIndex: number, field: keyof ExerciseOption, value: string | boolean) => {
+  const handleOptionChange = (exerciseIndex: number, optionIndex: number, field: keyof AiImportExerciseOption, value: string | boolean) => {
     const updatedExercises = [...exercises];
     const updatedOptions = [...updatedExercises[exerciseIndex].options];
-    updatedOptions[optionIndex] = { ...updatedOptions[optionIndex], [field]: value } as ExerciseOption;
+    updatedOptions[optionIndex] = { ...updatedOptions[optionIndex], [field]: value } as AiImportExerciseOption;
 
     if (field === 'isCorrect' && value === true) {
       updatedOptions.forEach((opt, idx) => {
@@ -502,8 +383,7 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     setExercises(updatedExercises);
   };
 
-  // --- Vocabulary Handlers ---
-  const handleVocabularyChange = (index: number, field: keyof Vocabulary, value: string) => {
+  const handleVocabularyChange = (index: number, field: keyof AiImportVocabulary, value: string) => {
     const updatedVocabularies = [...vocabularies];
     updatedVocabularies[index] = { ...updatedVocabularies[index], [field]: value };
     setVocabularies(updatedVocabularies);
@@ -515,10 +395,9 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     setVocabularies(updatedVocabularies);
   };
 
-  // --- Grammar Handlers ---
-  const handleGrammarChange = (index: number, field: keyof Grammar, value: string) => {
+  const handleGrammarChange = (index: number, field: keyof AiImportGrammar, value: string) => {
     const updatedGrammars = [...grammars];
-    updatedGrammars[index] = { ...updatedGrammars[index], [field]: value } as Grammar;
+    updatedGrammars[index] = { ...updatedGrammars[index], [field]: value } as AiImportGrammar;
     setGrammars(updatedGrammars);
   };
 
@@ -528,86 +407,52 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
     setGrammars(updatedGrammars);
   };
 
-  const saveToUnit = async () => {
-    setIsSaving(true);
-    try {
-      if (contentType === 'EXERCISE') {
-        if (exercises.length === 0) {
-          toast.warning('No exercises to save.');
-          setIsSaving(false);
-          return;
-        }
-        const payload: IExerciseDTO[] = exercises.map((ex, index) => ({
-          exerciseText: ex.exerciseText,
-          exerciseType: ExerciseType.MULTI_CHOICE,
-          orderIndex: index,
-          unit: { id: Number(unitId) },
-          options: ex.options.map((opt, optIndex) => ({
-            optionText: opt.optionText,
-            isCorrect: opt.isCorrect,
-            orderIndex: optIndex,
-          })),
-        }));
-        await dispatch(bulkCreateExercises({ unitId, exercises: payload as unknown as IExercise[] })).unwrap();
-        toast.success('Exercises saved successfully!');
-      } else if (contentType === 'VOCABULARY') {
-        if (vocabularies.length === 0) {
-          toast.warning('No vocabularies to save.');
-          setIsSaving(false);
-          return;
-        }
-        const payload: IVocabularyDTO[] = vocabularies.map((vocab, index) => ({
-          word: vocab.word,
-          meaning: vocab.definition,
-          example: vocab.example,
-          orderIndex: index,
-          unit: { id: Number(unitId) },
-        }));
-        await dispatch(bulkCreateVocabularies(payload)).unwrap();
-        toast.success('Vocabularies saved successfully!');
-      } else if (contentType === 'GRAMMAR') {
-        if (grammars.length === 0) {
-          toast.warning('No grammar topics to save.');
-          setIsSaving(false);
-          return;
-        }
-        const payload: IGrammarDTO[] = grammars.map((grammar, index) => ({
-          title: grammar.title,
-          contentMarkdown: grammar.description,
-          exampleUsage: grammar.example,
-          orderIndex: index,
-          unit: { id: Number(unitId) },
-        }));
-        await dispatch(bulkCreateGrammars(payload)).unwrap();
-        toast.success('Grammar topics saved successfully!');
-      }
-
-      if (onSuccess) onSuccess();
-      toggle();
-      // Reset state
-      setStep(1);
-      setExercises([]);
-      setVocabularies([]);
-      setGrammars([]);
-      setInputText('');
-    } catch (error) {
-      console.error('Save Error:', error);
-      toast.error('Failed to save content to backend.');
-    } finally {
-      setIsSaving(false);
+  const handleImport = () => {
+    if (!onDataReceived) {
+      toast.error('Import function is not connected properly.');
+      return;
     }
+
+    if (contentType === 'EXERCISE') {
+      if (exercises.length === 0) {
+        toast.warning('No exercises to import.');
+        return;
+      }
+      onDataReceived('EXERCISE', exercises);
+      toast.success(`${exercises.length} exercises imported to editor!`);
+    } else if (contentType === 'VOCABULARY') {
+      if (vocabularies.length === 0) {
+        toast.warning('No vocabularies to import.');
+        return;
+      }
+      onDataReceived('VOCABULARY', vocabularies);
+      toast.success(`${vocabularies.length} vocabularies imported to editor!`);
+    } else if (contentType === 'GRAMMAR') {
+      if (grammars.length === 0) {
+        toast.warning('No grammar topics to import.');
+        return;
+      }
+      onDataReceived('GRAMMAR', grammars);
+      toast.success(`${grammars.length} grammar topics imported to editor!`);
+    }
+
+    if (onSuccess) onSuccess();
+    toggle();
+    setStep(1);
+    setExercises([]);
+    setVocabularies([]);
+    setGrammars([]);
+    setInputText('');
   };
 
   return (
     <>
-      {/* Floating Button */}
       {showFloatingButton && (
         <div className="ai-floating-btn" onClick={toggle}>
           <FontAwesomeIcon icon={faRobot} size="lg" />
         </div>
       )}
 
-      {/* Draggable Modal */}
       {isOpen && (
         <Draggable handle=".modal-header">
           <div
@@ -627,396 +472,332 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
                   <FontAwesomeIcon icon={faMagic} className="me-2 text-primary" />
                   AI Import Assistant
                 </div>
-                {isKeyVerified && (
-                  <Button size="sm" color="danger" outline onClick={handleRemoveKey} className="ms-auto me-2">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="me-1" />
-                    Remove Key
-                  </Button>
-                )}
               </ModalHeader>
               <ModalBody style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-                {/* BYOK Key Input Section */}
-                {!isKeyVerified && (
-                  <Card className="border-primary">
-                    <CardBody>
-                      <h5 className="mb-3">
-                        <FontAwesomeIcon icon={faKey} className="me-2 text-primary" />
-                        Configure AI Assistant
-                      </h5>
-                      <Alert color="info">
-                        <strong>Bring Your Own Key (BYOK)</strong>
-                        <p className="mb-2">
-                          To use AI features, you need your own API Key (Google Gemini or OpenAI). Both are free to get.
-                        </p>
-                        <div className="d-flex flex-column gap-2">
-                          <a
-                            href="https://aistudio.google.com/app/apikey"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-between"
-                          >
-                            <span>
-                              <i className="bi bi-google me-2"></i>
-                              Get Google Gemini API Key
-                            </span>
-                            <i className="bi bi-box-arrow-up-right"></i>
-                          </a>
-                          <a
-                            href="https://platform.openai.com/api-keys"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline-success d-flex align-items-center justify-content-between"
-                          >
-                            <span>
-                              <i className="bi bi-chat-dots me-2"></i>
-                              Get OpenAI / ChatGPT API Key
-                            </span>
-                            <i className="bi bi-box-arrow-up-right"></i>
-                          </a>
-                        </div>
-                      </Alert>
-
-                      <FormGroup>
-                        <Label for="geminiKey">Your API Key (Gemini or OpenAI)</Label>
-                        <Input
-                          type="password"
-                          id="geminiKey"
-                          value={keyInputValue}
-                          onChange={e => setKeyInputValue(e.target.value)}
-                          placeholder="AIza... (Gemini) or sk-... (OpenAI)"
-                          onKeyDown={e => {
-                            if (e.key === 'Enter') {
-                              handleStartSession();
-                            }
-                          }}
-                        />
-                        <div className="form-text">
-                          <i className="bi bi-info-circle me-1"></i>
-                          Supported: Google Gemini (AIza...) or OpenAI (sk-...)
-                        </div>
-                      </FormGroup>
-
-                      <FormGroup check className="mb-3">
-                        <Label check>
-                          <Input type="checkbox" checked={rememberKey} onChange={e => setRememberKey(e.target.checked)} /> Remember on this
-                          device
-                          <div className="form-text text-danger small">⚠️ Don&apos;t check this on public computers</div>
-                        </Label>
-                      </FormGroup>
-
-                      <Button color="primary" block onClick={handleStartSession} disabled={!keyInputValue.trim()}>
-                        <FontAwesomeIcon icon={faKey} className="me-2" />
-                        Start Session
-                      </Button>
-                    </CardBody>
-                  </Card>
-                )}
-
-                {/* Main Content - Only show if key is verified */}
-                {isKeyVerified && (
+                {step === 1 && (
                   <>
-                    {step === 1 && (
-                      <>
-                        <Row className="mb-3">
-                          <Col md={4}>
-                            <FormGroup>
-                              <Label for="contentType">Content Type</Label>
-                              <Input
-                                type="select"
-                                id="contentType"
-                                value={contentType}
-                                onChange={e => setContentType(e.target.value as ContentType)}
-                              >
-                                <option value="EXERCISE">Exercises (Multiple Choice)</option>
-                                <option value="VOCABULARY">Vocabulary</option>
-                                <option value="GRAMMAR">Grammar</option>
-                              </Input>
-                            </FormGroup>
-                          </Col>
-                          <Col md={4}>
-                            <FormGroup>
-                              <Label for="targetLang">Target Language</Label>
-                              <Input
-                                type="select"
-                                id="targetLang"
-                                value={languageSettings.target}
-                                onChange={e => setLanguageSettings({ ...languageSettings, target: e.target.value })}
-                              >
-                                <option value="English">English</option>
-                                <option value="Japanese">Japanese</option>
-                                <option value="Korean">Korean</option>
-                                <option value="Chinese">Chinese</option>
-                                <option value="French">French</option>
-                              </Input>
-                            </FormGroup>
-                          </Col>
-                          <Col md={4}>
-                            <FormGroup>
-                              <Label for="nativeLang">Native Language</Label>
-                              <Input
-                                type="select"
-                                id="nativeLang"
-                                value={languageSettings.native}
-                                onChange={e => setLanguageSettings({ ...languageSettings, native: e.target.value })}
-                              >
-                                <option value="Vietnamese">Vietnamese</option>
-                                <option value="English">English</option>
-                              </Input>
-                            </FormGroup>
-                          </Col>
-                        </Row>
+                    <Row className="mb-3">
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="contentType">Content Type</Label>
+                          <Input
+                            type="select"
+                            id="contentType"
+                            value={contentType}
+                            onChange={e => setContentType(e.target.value as AiImportContentType)}
+                          >
+                            <option value="EXERCISE">Exercises (Multiple Choice)</option>
+                            <option value="VOCABULARY">Vocabulary</option>
+                            <option value="GRAMMAR">Grammar</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="nativeLang">Native Language (Ngôn ngữ gốc)</Label>
+                          <Input
+                            type="select"
+                            id="nativeLang"
+                            value={languageSettings.native}
+                            onChange={e => setLanguageSettings({ ...languageSettings, native: e.target.value })}
+                          >
+                            <option value="Vietnamese">Vietnamese</option>
+                            <option value="English">English</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Spanish">Spanish</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="targetLang">Target Language (Ngôn ngữ đích)</Label>
+                          <Input
+                            type="select"
+                            id="targetLang"
+                            value={languageSettings.target}
+                            onChange={e => setLanguageSettings({ ...languageSettings, target: e.target.value })}
+                          >
+                            <option value="English">English</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="Vietnamese">Vietnamese</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    </Row>
 
-                        <Row className="mb-3">
-                          <Col md={12}>
-                            <FormGroup>
-                              <Label for="aiModel">AI Model</Label>
-                              <Input type="select" id="aiModel" value={selectedModel} onChange={e => setSelectedModel(e.target.value)}>
-                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended - Fast & Free)</option>
-                                <option value="gemini-1.5-pro">Gemini 1.5 Pro (More Accurate)</option>
-                                <option value="gpt-4o-mini">GPT-4o-mini (Requires OpenAI Key)</option>
-                              </Input>
-                              <div className="form-text">
-                                {selectedModel.includes('gemini') ? (
-                                  <span className="text-success">✓ Using your Gemini API Key</span>
-                                ) : (
-                                  <span className="text-warning">⚠️ This requires an OpenAI API Key (different from Gemini)</span>
-                                )}
+                    <Row className="mb-3">
+                      <Col md={12}>
+                        <FormGroup>
+                          <Label for="aiModel">AI Model</Label>
+                          <Input type="select" id="aiModel" value={selectedModel} onChange={e => setSelectedModel(e.target.value)}>
+                            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recommended - Free Tier)</option>
+                            <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                            <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+
+                    <Nav tabs className="mb-3">
+                      <NavItem>
+                        <NavLink
+                          className={classnames({ active: activeTab === '1' })}
+                          onClick={() => setActiveTab('1')}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <FontAwesomeIcon icon={faFileUpload} className="me-2" />
+                          Upload File
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          className={classnames({ active: activeTab === '2' })}
+                          onClick={() => setActiveTab('2')}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <FontAwesomeIcon icon={faPaste} className="me-2" />
+                          Raw Text
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+
+                    <TabContent activeTab={activeTab}>
+                      <TabPane tabId="1">
+                        <FormGroup>
+                          <Label for="fileUpload">
+                            Select File{' '}
+                            {contentType === 'GRAMMAR' && (
+                              <span className="text-primary">(Recommended: Upload image from grammar book for OCR)</span>
+                            )}
+                          </Label>
+                          <Input type="file" id="fileUpload" accept={getAcceptAttributeWithImages()} onChange={handleFileChange} />
+                          <div className="form-text mt-2">
+                            <strong>Supported formats:</strong>
+                            <ul className="mb-0 mt-1">
+                              <li>Documents: PDF, DOCX, XLSX, TXT</li>
+                              <li>Images (OCR): JPG, PNG, BMP, GIF, TIFF, WEBP</li>
+                            </ul>
+                            {contentType === 'GRAMMAR' && (
+                              <div className="alert alert-info mt-2 mb-0" style={{ fontSize: '0.875rem' }}>
+                                <strong>💡 Tip for Grammar:</strong> Upload an image of a grammar page from your book. The AI will extract
+                                the text using OCR and then format it into beautiful, well-structured Markdown automatically!
                               </div>
-                            </FormGroup>
-                          </Col>
-                        </Row>
-
-                        <Nav tabs className="mb-3">
-                          <NavItem>
-                            <NavLink
-                              className={classnames({ active: activeTab === '1' })}
-                              onClick={() => setActiveTab('1')}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <FontAwesomeIcon icon={faFileUpload} className="me-2" />
-                              Upload File
-                            </NavLink>
-                          </NavItem>
-                          <NavItem>
-                            <NavLink
-                              className={classnames({ active: activeTab === '2' })}
-                              onClick={() => setActiveTab('2')}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <FontAwesomeIcon icon={faPaste} className="me-2" />
-                              Raw Text
-                            </NavLink>
-                          </NavItem>
-                        </Nav>
-
-                        <TabContent activeTab={activeTab}>
-                          <TabPane tabId="1">
-                            <FormGroup>
-                              <Label for="fileUpload">Select File (PDF, DOCX, TXT, or Image for OCR)</Label>
-                              <Input type="file" id="fileUpload" accept={getAcceptAttributeWithImages()} onChange={handleFileChange} />
-                              <div className="form-text mt-2">
-                                <strong>Supported formats:</strong>
-                                <ul className="mb-0 mt-1">
-                                  <li>Documents: PDF, DOCX, XLSX, TXT</li>
-                                  <li>Images (OCR): JPG, PNG, BMP, GIF, TIFF, WEBP</li>
-                                </ul>
+                            )}
+                          </div>
+                          {isExtracting && (
+                            <div className="mt-2">
+                              <Spinner size="sm" color="primary" /> Extracting text...
+                            </div>
+                          )}
+                        </FormGroup>
+                      </TabPane>
+                      <TabPane tabId="2">
+                        <FormGroup>
+                          <Label for="rawText">
+                            Paste Text Here{' '}
+                            {contentType === 'GRAMMAR' && <span className="text-primary">(OCR text from grammar book)</span>}
+                          </Label>
+                          <SimpleMarkdownEditor
+                            id="rawText"
+                            value={inputText}
+                            onChange={setInputText}
+                            placeholder={
+                              contentType === 'GRAMMAR'
+                                ? 'Paste raw OCR text from grammar book. AI will format it into beautiful Markdown...'
+                                : `Paste the content you want to convert into ${contentType.toLowerCase()}...`
+                            }
+                            minHeight={300}
+                            disableFullscreen={true}
+                          />
+                          {contentType === 'GRAMMAR' && (
+                            <div className="form-text mt-2">
+                              <div className="alert alert-info mb-0" style={{ fontSize: '0.875rem' }}>
+                                <strong>💡 Tip:</strong> Paste raw text extracted from grammar book (via OCR or manual copy). The AI will
+                                clean OCR errors, organize content, and format it into beautiful, professional Markdown automatically!
                               </div>
-                              {isExtracting && (
-                                <div className="mt-2">
-                                  <Spinner size="sm" color="primary" /> Extracting text...
-                                </div>
-                              )}
-                            </FormGroup>
-                          </TabPane>
-                          <TabPane tabId="2">
-                            <FormGroup>
-                              <Label for="rawText">Paste Text Here</Label>
-                              <Input
-                                type="textarea"
-                                id="rawText"
-                                rows={10}
-                                value={inputText}
-                                onChange={e => setInputText(e.target.value)}
-                                placeholder={`Paste the content you want to convert into ${contentType.toLowerCase()}...`}
-                              />
-                            </FormGroup>
-                          </TabPane>
-                        </TabContent>
+                            </div>
+                          )}
+                        </FormGroup>
+                      </TabPane>
+                    </TabContent>
 
-                        {activeTab === '1' && inputText && !isExtracting && (
-                          <FormGroup className="mt-3">
-                            <Label>Extracted Text Preview:</Label>
-                            <Input type="textarea" rows={5} value={inputText} readOnly className="bg-light" />
-                          </FormGroup>
-                        )}
-                      </>
-                    )}
-
-                    {step === 2 && isKeyVerified && (
-                      <div className="text-center py-5">
-                        <Spinner color="primary" style={{ width: '3rem', height: '3rem' }} />
-                        <h5 className="mt-3">AI is analyzing your content...</h5>
-                        <p className="text-muted">This might take a few seconds.</p>
-                      </div>
-                    )}
-
-                    {step === 3 && isKeyVerified && (
-                      <div>
-                        <Alert color="info">Review and edit the generated content before saving.</Alert>
-
-                        {/* EXERCISES REVIEW */}
-                        {contentType === 'EXERCISE' &&
-                          exercises.map((exercise, exIndex) => (
-                            <Card key={exIndex} className="mb-3 border">
-                              <CardBody>
-                                <div className="d-flex justify-content-between align-items-start mb-2">
-                                  <h6 className="fw-bold">Question {exIndex + 1}</h6>
-                                  <Button size="sm" color="danger" outline onClick={() => removeExercise(exIndex)}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </Button>
-                                </div>
-                                <FormGroup>
-                                  <Input
-                                    type="textarea"
-                                    value={exercise.exerciseText}
-                                    onChange={e => handleExerciseChange(exIndex, 'exerciseText', e.target.value)}
-                                  />
-                                </FormGroup>
-
-                                <Label className="fw-bold text-muted small">Options</Label>
-                                {exercise.options.map((option, optIndex) => (
-                                  <div key={optIndex} className="d-flex align-items-center mb-2">
-                                    <div className="me-2">
-                                      <Input
-                                        type="radio"
-                                        name={`correct-${exIndex}`}
-                                        checked={option.isCorrect}
-                                        onChange={() => handleOptionChange(exIndex, optIndex, 'isCorrect', true)}
-                                      />
-                                    </div>
-                                    <Input
-                                      type="text"
-                                      value={option.optionText}
-                                      onChange={e => handleOptionChange(exIndex, optIndex, 'optionText', e.target.value)}
-                                      className={option.isCorrect ? 'border-success' : ''}
-                                    />
-                                    <Button
-                                      size="sm"
-                                      color="link"
-                                      className="text-danger ms-1"
-                                      onClick={() => removeOption(exIndex, optIndex)}
-                                    >
-                                      <FontAwesomeIcon icon={faTimes} />
-                                    </Button>
-                                  </div>
-                                ))}
-                                <Button size="sm" color="light" className="mt-1" onClick={() => addOption(exIndex)}>
-                                  <FontAwesomeIcon icon={faPlus} className="me-1" /> Add Option
-                                </Button>
-                              </CardBody>
-                            </Card>
-                          ))}
-
-                        {/* VOCABULARY REVIEW */}
-                        {contentType === 'VOCABULARY' &&
-                          vocabularies.map((vocab, vIndex) => (
-                            <Card key={vIndex} className="mb-3 border">
-                              <CardBody>
-                                <div className="d-flex justify-content-between align-items-start mb-2">
-                                  <h6 className="fw-bold">Word {vIndex + 1}</h6>
-                                  <Button size="sm" color="danger" outline onClick={() => removeVocabulary(vIndex)}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </Button>
-                                </div>
-                                <Row>
-                                  <Col md={4}>
-                                    <FormGroup>
-                                      <Label>Word</Label>
-                                      <Input
-                                        type="text"
-                                        value={vocab.word}
-                                        onChange={e => handleVocabularyChange(vIndex, 'word', e.target.value)}
-                                      />
-                                    </FormGroup>
-                                  </Col>
-                                  <Col md={8}>
-                                    <FormGroup>
-                                      <Label>Definition</Label>
-                                      <Input
-                                        type="textarea"
-                                        rows={2}
-                                        value={vocab.definition}
-                                        onChange={e => handleVocabularyChange(vIndex, 'definition', e.target.value)}
-                                      />
-                                    </FormGroup>
-                                  </Col>
-                                </Row>
-                                <FormGroup>
-                                  <Label>Example Sentence</Label>
-                                  <Input
-                                    type="textarea"
-                                    rows={2}
-                                    value={vocab.example}
-                                    onChange={e => handleVocabularyChange(vIndex, 'example', e.target.value)}
-                                  />
-                                </FormGroup>
-                              </CardBody>
-                            </Card>
-                          ))}
-
-                        {/* GRAMMAR REVIEW */}
-                        {contentType === 'GRAMMAR' &&
-                          grammars.map((grammar, gIndex) => (
-                            <Card key={gIndex} className="mb-3 border">
-                              <CardBody>
-                                <div className="d-flex justify-content-between align-items-start mb-2">
-                                  <h6 className="fw-bold">Grammar Point {gIndex + 1}</h6>
-                                  <Button size="sm" color="danger" outline onClick={() => removeGrammar(gIndex)}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </Button>
-                                </div>
-                                <FormGroup>
-                                  <Label>Title</Label>
-                                  <Input
-                                    type="text"
-                                    value={grammar.title}
-                                    onChange={e => handleGrammarChange(gIndex, 'title', e.target.value)}
-                                  />
-                                </FormGroup>
-                                <FormGroup>
-                                  <Label>Description / Rule</Label>
-                                  <Input
-                                    type="textarea"
-                                    rows={4}
-                                    value={grammar.description}
-                                    onChange={e => handleGrammarChange(gIndex, 'description', e.target.value)}
-                                  />
-                                </FormGroup>
-                                <FormGroup>
-                                  <Label>Example Usage</Label>
-                                  <Input
-                                    type="textarea"
-                                    rows={3}
-                                    value={grammar.example}
-                                    onChange={e => handleGrammarChange(gIndex, 'example', e.target.value)}
-                                  />
-                                </FormGroup>
-                              </CardBody>
-                            </Card>
-                          ))}
-
-                        <div className="text-center mt-3">
-                          <Button color="secondary" outline onClick={() => setStep(1)} className="me-2">
-                            Back to Input
-                          </Button>
-                        </div>
-                      </div>
+                    {activeTab === '1' && inputText && !isExtracting && (
+                      <FormGroup className="mt-3">
+                        <Label>Extracted Text Preview:</Label>
+                        <Input type="textarea" rows={5} value={inputText} readOnly className="bg-light" />
+                      </FormGroup>
                     )}
                   </>
                 )}
+
+                {step === 2 && (
+                  <div className="text-center py-5">
+                    <Spinner color="primary" style={{ width: '3rem', height: '3rem' }} />
+                    <h5 className="mt-3">AI is analyzing your content...</h5>
+                    <p className="text-muted">This might take a few seconds.</p>
+                  </div>
+                )}
+
+                {step === 3 && (
+                  <div>
+                    <Alert color="info">Review and edit the generated content before importing.</Alert>
+
+                    {contentType === 'EXERCISE' &&
+                      exercises.map((exercise, exIndex) => (
+                        <Card key={exIndex} className="mb-3 border">
+                          <CardBody>
+                            <div className="d-flex justify-content-between align-items-start mb-2">
+                              <h6 className="fw-bold">Question {exIndex + 1}</h6>
+                              <Button size="sm" color="danger" outline onClick={() => removeExercise(exIndex)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                            </div>
+                            <FormGroup>
+                              <Input
+                                type="textarea"
+                                value={exercise.exerciseText}
+                                onChange={e => handleExerciseChange(exIndex, 'exerciseText', e.target.value)}
+                              />
+                            </FormGroup>
+
+                            <Label className="fw-bold text-muted small">Options</Label>
+                            {exercise.options.map((option, optIndex) => (
+                              <div key={optIndex} className="d-flex align-items-center mb-2">
+                                <div className="me-2">
+                                  <Input
+                                    type="radio"
+                                    name={`correct-${exIndex}`}
+                                    checked={option.isCorrect}
+                                    onChange={() => handleOptionChange(exIndex, optIndex, 'isCorrect', true)}
+                                  />
+                                </div>
+                                <Input
+                                  type="text"
+                                  value={option.optionText}
+                                  onChange={e => handleOptionChange(exIndex, optIndex, 'optionText', e.target.value)}
+                                  className={option.isCorrect ? 'border-success' : ''}
+                                />
+                                <Button size="sm" color="link" className="text-danger ms-1" onClick={() => removeOption(exIndex, optIndex)}>
+                                  <FontAwesomeIcon icon={faTimes} />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button size="sm" color="light" className="mt-1" onClick={() => addOption(exIndex)}>
+                              <FontAwesomeIcon icon={faPlus} className="me-1" /> Add Option
+                            </Button>
+                          </CardBody>
+                        </Card>
+                      ))}
+
+                    {contentType === 'VOCABULARY' &&
+                      vocabularies.map((vocab, vIndex) => (
+                        <Card key={vIndex} className="mb-3 border">
+                          <CardBody>
+                            <div className="d-flex justify-content-between align-items-start mb-2">
+                              <h6 className="fw-bold">Word {vIndex + 1}</h6>
+                              <Button size="sm" color="danger" outline onClick={() => removeVocabulary(vIndex)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                            </div>
+                            <Row>
+                              <Col md={4}>
+                                <FormGroup>
+                                  <Label>Word</Label>
+                                  <Input
+                                    type="text"
+                                    value={vocab.word}
+                                    onChange={e => handleVocabularyChange(vIndex, 'word', e.target.value)}
+                                  />
+                                </FormGroup>
+                              </Col>
+                              <Col md={8}>
+                                <FormGroup>
+                                  <Label>Definition</Label>
+                                  <Input
+                                    type="textarea"
+                                    rows={2}
+                                    value={vocab.definition}
+                                    onChange={e => handleVocabularyChange(vIndex, 'definition', e.target.value)}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <FormGroup>
+                              <Label>Example Sentence</Label>
+                              <SimpleMarkdownEditor
+                                value={vocab.example}
+                                onChange={value => handleVocabularyChange(vIndex, 'example', value)}
+                                placeholder="Example sentence (Markdown supported)"
+                                minHeight={120}
+                                disableFullscreen={true}
+                              />
+                            </FormGroup>
+                          </CardBody>
+                        </Card>
+                      ))}
+
+                    {contentType === 'GRAMMAR' &&
+                      grammars.map((grammar, gIndex) => (
+                        <Card key={gIndex} className="mb-3 border">
+                          <CardBody>
+                            <div className="d-flex justify-content-between align-items-start mb-2">
+                              <h6 className="fw-bold">Grammar Point {gIndex + 1}</h6>
+                              <Button size="sm" color="danger" outline onClick={() => removeGrammar(gIndex)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                            </div>
+                            <FormGroup>
+                              <Label>Title</Label>
+                              <Input
+                                type="text"
+                                value={grammar.title}
+                                onChange={e => handleGrammarChange(gIndex, 'title', e.target.value)}
+                              />
+                            </FormGroup>
+                            <FormGroup>
+                              <Label>Description / Rule</Label>
+                              <SimpleMarkdownEditor
+                                value={grammar.description}
+                                onChange={value => handleGrammarChange(gIndex, 'description', value)}
+                                placeholder="Grammar description (Markdown supported)"
+                                minHeight={200}
+                                disableFullscreen={true}
+                              />
+                            </FormGroup>
+                            <FormGroup>
+                              <Label>Example Usage</Label>
+                              <SimpleMarkdownEditor
+                                value={grammar.example}
+                                onChange={value => handleGrammarChange(gIndex, 'example', value)}
+                                placeholder="Example usage (Markdown supported)"
+                                disableFullscreen={true}
+                                minHeight={150}
+                              />
+                            </FormGroup>
+                          </CardBody>
+                        </Card>
+                      ))}
+
+                    <div className="text-center mt-3">
+                      <Button color="secondary" outline onClick={() => setStep(1)} className="me-2">
+                        Back to Input
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </ModalBody>
               <ModalFooter>
-                {step === 1 && isKeyVerified && (
+                {step === 1 && (
                   <Button
                     color="primary"
                     onClick={() => analyzeTextWithAI(languageSettings.target, languageSettings.native)}
@@ -1025,10 +806,10 @@ const AIImportAssistant: React.FC<AIImportAssistantProps> = ({
                     Analyze with AI
                   </Button>
                 )}
-                {step === 3 && isKeyVerified && (
-                  <Button color="success" onClick={saveToUnit} disabled={isSaving}>
-                    {isSaving ? <Spinner size="sm" /> : <FontAwesomeIcon icon={faSave} className="me-1" />}
-                    Save to Unit
+                {step === 3 && (
+                  <Button color="success" onClick={handleImport}>
+                    <FontAwesomeIcon icon={faSave} className="me-1" />
+                    Import to Editor
                   </Button>
                 )}
                 <Button color="secondary" onClick={toggle}>

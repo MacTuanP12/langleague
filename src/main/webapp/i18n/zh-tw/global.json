@@ -101,26 +101,27 @@
         }
       },
       "error": {
-        "dontmatch": "您輸入的兩次密碼不一致!"
-      }
-    },
-    "validate": {
-      "newpassword": {
-        "required": "您的密碼是必填欄位。",
-        "minlength": "您的密碼長度至少要有 4 個字元。",
-        "maxlength": "您的密碼長度不能超過 50 個字元。",
-        "strength": "密碼強度:"
+        "dontmatch": "您輸入的兩次密碼不一致!",
+        "missingUnitId": "缺少單元ID！"
       },
-      "confirmpassword": {
-        "required": "您的確認密碼是必填欄位。",
-        "minlength": "您的確認密碼長度至少要有 4 個字元。",
-        "maxlength": "您的確認密碼長度不能超過 50 個字元。"
-      },
-      "email": {
-        "required": "您的電子郵件是必填欄位。",
-        "invalid": "您的電子郵件地址格式錯誤。",
-        "minlength": "您的電子郵件地址長度至少要有 5 個字元。",
-        "maxlength": "您的電子郵件地址長度不能超過 50 個字元。"
+      "validate": {
+        "newpassword": {
+          "required": "您的密碼是必填欄位。",
+          "minlength": "您的密碼長度至少要有 4 個字元。",
+          "maxlength": "您的密碼長度不能超過 50 個字元。",
+          "strength": "密碼強度:"
+        },
+        "confirmpassword": {
+          "required": "您的確認密碼是必填欄位。",
+          "minlength": "您的確認密碼長度至少要有 4 個字元。",
+          "maxlength": "您的確認密碼長度不能超過 50 個字元。"
+        },
+        "email": {
+          "required": "您的電子郵件是必填欄位。",
+          "invalid": "您的電子郵件地址格式錯誤。",
+          "minlength": "您的電子郵件地址長度至少要有 5 個字元。",
+          "maxlength": "您的電子郵件地址長度不能超過 50 個字元。"
+        }
       }
     },
     "field": {
@@ -133,6 +134,16 @@
     "loading": "載入中...",
     "selectSection": "從側邊欄選擇一個部分開始學習。",
     "progressSaved": "您的進度將自動儲存。",
+    "media": {
+      "invalidAudioType": "無效的音訊檔案類型",
+      "imageUploaded": "圖片上傳成功",
+      "audioUploaded": "音訊上傳成功",
+      "remove": "移除",
+      "uploadFromComputer": "從電腦上傳",
+      "upload": "上傳",
+      "imageSupport": "支援：JPG, PNG, GIF, Google Drive 連結",
+      "audioSupport": "支援：MP3, WAV, Google Drive 連結"
+    },
     "footer": {
       "slogan": "透過現代化、互動式的學習體驗，為全球語言學習者賦能。",
       "copyright": "版權所有",

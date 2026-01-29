@@ -99,7 +99,8 @@
         }
       },
       "error": {
-        "dontmatch": "Xác nhận mật khẩu không khớp!"
+        "dontmatch": "Xác nhận mật khẩu không khớp!",
+        "missingUnitId": "Thiếu ID bài học!"
       },
       "validate": {
         "newpassword": {
@@ -184,6 +185,16 @@
       "status": "Trạng thái"
     }
   },
+  "media": {
+    "invalidAudioType": "Định dạng tệp âm thanh không hợp lệ",
+    "imageUploaded": "Tải ảnh lên thành công",
+    "audioUploaded": "Tải âm thanh lên thành công",
+    "remove": "Xóa",
+    "uploadFromComputer": "Tải lên từ máy tính",
+    "upload": "Tải lên",
+    "imageSupport": "Hỗ trợ: JPG, PNG, GIF, liên kết Google Drive.",
+    "audioSupport": "Hỗ trợ: MP3, WAV, liên kết Google Drive."
+  },
   "entity": {
     "action": {
       "back": "Quay lại",
@@ -193,7 +204,8 @@
       "edit": "Sửa",
       "open": "Mở",
       "save": "Lưu",
-      "view": "Xem"
+      "view": "Xem",
+      "upload": "Tải lên"
     },
     "detail": {
       "field": "Trường",

@@ -2,16 +2,16 @@
   "langleague": {
     "teacher": {
       "sidebar": {
-        "title": "教师管理系统"
+        "title": "教师CMS"
       },
       "dashboard": {
         "title": "教师仪表板",
-        "loading": "加载仪表板中...",
-        "welcome": "欢迎回来，{name}！",
+        "loading": "正在加载仪表板...",
+        "welcome": "欢迎回来，{{name}}！",
         "stats": {
           "myBooks": "我的书籍",
-          "totalStudents": "总学生数",
-          "pendingAssignments": "待处理任务",
+          "totalStudents": "学生总数",
+          "pendingAssignments": "待处理作业",
           "averageRating": "平均评分"
         },
         "quickActions": {
@@ -23,20 +23,20 @@
         },
         "recentActivity": {
           "title": "最近活动",
-          "noData": "无最近活动"
+          "noData": "最近没有活动"
         },
         "enrollments": "每本书的注册数",
-        "noEnrollmentData": "尚无注册数据。"
+        "noEnrollmentData": "暂无注册数据。"
       },
       "books": {
         "management": {
           "title": "书籍管理",
-          "description": "管理您的图书馆库存，跟踪已发行的书籍，并更新目录详情。",
-          "loading": "加载书籍中...",
+          "description": "管理您的图书馆库存，跟踪已发行的书籍，并更新目录详细信息。",
+          "loading": "正在加载书籍...",
           "noBooks": "未找到书籍"
         },
         "stats": {
-          "total": "总书籍数",
+          "total": "书籍总数",
           "available": "可用",
           "uploaded": "已上传"
         },
@@ -45,7 +45,7 @@
         },
         "actions": {
           "filter": "筛选",
-          "addNew": "+ 添加新书",
+          "addNew": " 添加新书",
           "edit": "编辑",
           "view": "查看详情",
           "delete": "删除",
@@ -65,12 +65,12 @@
           "next": "下一页"
         },
         "detail": {
-          "loading": "加载书籍详情中...",
-          "backToBooks": "返回书籍",
+          "loading": "正在加载书籍详情...",
+          "backToBooks": "返回书籍列表",
           "editBook": "编辑书籍",
           "addUnit": "添加单元",
           "meta": {
-            "totalUnits": "总单元数：",
+            "totalUnits": "单元总数：",
             "created": "创建时间：",
             "public": "公开：",
             "yes": "是",
@@ -80,8 +80,8 @@
             "title": "单元",
             "hint": "拖放以重新排序单元",
             "empty": {
-              "title": "尚无单元",
-              "description": "首先为这本书添加您的第一个单元",
+              "title": "暂无单元",
+              "description": "从为这本书添加第一个单元开始",
               "addFirst": "添加第一个单元"
             },
             "stats": {
@@ -98,7 +98,7 @@
           },
           "syllabus": {
             "title": "书籍大纲",
-            "backToBooks": "返回书籍"
+            "backToBooks": "返回书籍列表"
           }
         },
         "form": {
@@ -112,23 +112,23 @@
             "coverLabel": "书籍封面",
             "uploadPlaceholder": "上传封面",
             "uploadHint": "拖放或点击",
-            "fileInfo": "支持：JPG、PNG（最大2MB）",
+            "fileInfo": "支持：JPG, PNG (最大2MB)",
             "titleLabel": "书籍标题",
             "titlePlaceholder": "例如：了不起的盖茨比",
-            "titleRequired": "书籍标题是必需的",
-            "titleMinLength": "标题必须至少2个字符",
+            "titleRequired": "书籍标题为必填项",
+            "titleMinLength": "标题至少需要2个字符",
             "descriptionLabel": "描述",
             "descriptionPlaceholder": "输入书籍内容的简要摘要...",
-            "isPublicLabel": "公开",
-            "isPublicHint": "公开书籍可被所有学生发现和注册",
+            "isPublicLabel": "设为公开",
+            "isPublicHint": "公开书籍可以被所有学生发现并注册",
             "publicStatus": "公开",
             "privateStatus": "私有"
           },
           "footer": {
-            "infoText": "所有字段都自动保存在本地。",
+            "infoText": "所有字段都会自动保存在本地。",
             "cancel": "取消",
             "save": "保存书籍",
-            "saving": "保存中..."
+            "saving": "正在保存..."
           }
         },
         "unit": {
@@ -140,6 +140,7 @@
       },
       "editor": {
         "title": "单元内容编辑器",
+        "loading": "正在加载单元内容...",
         "backToSyllabus": "返回大纲",
         "backToBook": "返回书籍",
         "subtitle": "管理词汇、语法和练习",
@@ -148,25 +149,63 @@
           "grammar": "语法",
           "exercises": "练习"
         },
+        "ai": {
+          "settings": "AI设置",
+          "apiKey": "API密钥 (Gemini/OpenAI)",
+          "saveKey": "保存",
+          "getKey": "获取密钥",
+          "model": "模型",
+          "targetLang": "目标语言",
+          "nativeLang": "母语",
+          "autoFill": "AI自动填充",
+          "keySaved": "API密钥已保存在本地。",
+          "configureKey": "请配置您的API密钥。",
+          "generated": "内容生成成功！"
+        },
         "vocabulary": {
           "title": "词汇列表",
           "addWord": "添加单词",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未添加词汇。",
-          "emptyHint": "使用AI助手从主题生成单词！"
+          "empty": "暂无词汇。",
+          "emptyHint": "使用AI助手从主题生成单词！",
+          "error": {
+            "enterWord": "请先输入单词。"
+          }
         },
         "grammar": {
           "title": "语法规则",
           "addRule": "添加规则",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未添加语法规则。"
+          "empty": "暂无语法规则。",
+          "error": {
+            "enterTitle": "请先输入语法标题。"
+          }
         },
         "exercises": {
           "title": "练习",
           "addQuestion": "添加问题",
           "aiGenerate": "✨ AI生成",
-          "empty": "尚未添加练习。",
-          "question": "问题"
+          "empty": "暂无练习。",
+          "question": "问题",
+          "ocr": {
+            "button": "从图片提取文本 (OCR)",
+            "success": "从图片提取文本成功！",
+            "error": "无法从图片提取文本。",
+            "invalidImage": "请选择有效的图片文件。"
+          },
+          "validation": {
+            "minOptions": "请至少添加2个选项。",
+            "selectCorrect": "请至少选择一个正确答案。",
+            "emptyOption": "选项文本不能为空。"
+          },
+          "form": {
+            "options": "选项",
+            "correct": "正确",
+            "optionText": "选项文本",
+            "optionPlaceholder": "选项 {{index}}",
+            "addOption": "添加选项",
+            "correctAnswerPlaceholder": "在此输入正确答案文本"
+          }
         },
         "confirmDelete": {
           "vocabulary": "您确定要删除此词汇吗？",
@@ -183,14 +222,18 @@
         "title": "我的学生",
         "subtitle": "跟踪学生进度和注册情况",
         "search": "按姓名或书籍搜索...",
-        "totalStudents": "总学生数：",
+        "totalStudents": "学生总数：",
         "table": {
           "student": "学生",
           "enrolledBook": "注册书籍",
           "enrolledDate": "注册日期",
           "status": "状态"
         },
-        "empty": "未找到注册您书籍的学生。"
+        "empty": "未找到注册您书籍的学生。",
+        "messages": {
+          "loading": "正在加载学生...",
+          "noStudents": "未找到注册您书籍的学生。"
+        }
       },
       "units": {
         "labels": {
@@ -198,27 +241,48 @@
           "newGrammar": "新语法主题"
         },
         "form": {
-          "backButton": "返回",
-          "titlePlaceholder": "单元标题",
-          "summaryPlaceholder": "单元描述",
-          "submit": "提交",
-          "saving": "保存中...",
-          "expandAll": "全部展开",
-          "collapseAll": "全部折叠",
-          "addVocabulary": "添加词汇",
+          "buttons": {
+            "saving": "正在保存...",
+            "submit": "提交",
+            "expandAll": "全部展开",
+            "collapseAll": "全部折叠",
+            "addVocabulary": "添加词汇"
+          },
           "addGrammar": "添加语法",
           "validation": {
-            "titleRequired": "单元标题是必需的",
-            "titleMinLength": "标题必须至少3个字符"
+            "titleRequired": "单元标题为必填项",
+            "titleMinLength": "标题至少需要3个字符"
           },
           "actions": {
-            "removeTooltip": "删除项目",
+            "removeTooltip": "移除项目",
             "duplicateTooltip": "复制项目",
             "duplicate": "复制"
           },
           "controls": {
             "expandAll": "展开",
             "collapseAll": "折叠"
+          },
+          "fields": {
+            "titlePlaceholder": "单元标题",
+            "summaryPlaceholder": "单元描述"
+          },
+          "messages": {
+            "unitUpdated": "单元更新成功",
+            "unitCreated": "单元创建成功",
+            "vocabSaved": "词汇已保存",
+            "vocabSaveFailed": "保存词汇失败",
+            "vocabDeleted": "词汇已删除",
+            "vocabDeleteFailed": "删除词汇失败",
+            "grammarSaved": "语法已保存",
+            "grammarSaveFailed": "保存语法失败",
+            "grammarDeleted": "语法已删除",
+            "grammarDeleteFailed": "删除语法失败",
+            "exerciseSaved": "练习已保存",
+            "exerciseSaveFailed": "保存练习失败",
+            "exerciseDeleted": "练习已删除",
+            "exerciseDeleteFailed": "删除练习失败",
+            "loading": "正在加载单元数据...",
+            "loadFailed": "加载单元数据失败"
           }
         },
         "vocabulary": {
@@ -233,8 +297,8 @@
             "order": "顺序"
           },
           "placeholders": {
-            "word": "单词（例如，Hello）",
-            "phonetic": "音标（例如，/həˈloʊ/）",
+            "word": "单词 (例如: Hello)",
+            "phonetic": "音标 (例如: /həˈloʊ/)",
             "meaning": "含义",
             "example": "例句",
             "imageUrl": "图片URL",
@@ -246,15 +310,15 @@
           "addButton": "添加语法",
           "fields": {
             "title": "语法标题",
-            "content": "内容（支持Markdown）",
-            "contentHint": "支持Markdown：**粗体**，*斜体*，# 标题",
+            "content": "内容 (支持Markdown)",
+            "contentHint": "支持Markdown: **粗体**, *斜体*, # 标题",
             "example": "用法示例",
             "exampleHint": "用法示例",
             "order": "顺序"
           },
           "placeholders": {
             "title": "语法标题",
-            "content": "内容（支持Markdown）",
+            "content": "内容 (支持Markdown)",
             "example": "用法示例",
             "order": "顺序"
           }
@@ -263,49 +327,50 @@
           "sectionTitle": "练习",
           "addButton": "添加练习",
           "types": {
-            "singleChoice": "单选",
-            "multiChoice": "多选",
-            "fillInBlank": "填空"
+            "singleChoice": "单选题",
+            "multiChoice": "多选题",
+            "fillInBlank": "填空题"
           },
           "fields": {
             "question": "练习文本",
             "correctAnswer": "输入正确答案...",
-            "imageUrl": "图片URL（可选）",
-            "audioUrl": "音频URL（可选）",
-            "option": "选项{number}"
+            "imageUrl": "图片URL (可选)",
+            "audioUrl": "音频URL (可选)",
+            "option": "选项 {number}"
           },
           "placeholders": {
-            "question": "练习文本",
+            "text": "练习文本",
             "correctAnswer": "输入正确答案...",
-            "imageUrl": "图片URL（可选）",
-            "audioUrl": "音频URL（可选）"
+            "imageUrl": "图片URL (可选)",
+            "audioUrl": "音频URL (可选)",
+            "option": "选项"
           },
-          "options": {
-            "addButton": "添加选项"
+          "buttons": {
+            "addOption": "添加选项"
           },
           "menu": {
             "addExercise": "添加练习",
-            "singleChoice": "单选",
-            "multiChoice": "多选",
-            "fillInBlank": "填空"
+            "singleChoice": "单选题",
+            "multiChoice": "多选题",
+            "fillInBlank": "填空题"
           }
         },
         "menu": {
           "addContent": "添加内容",
           "vocabulary": "词汇",
-          "vocabularyDesc": "添加词汇及其含义和例句",
+          "vocabularyDesc": "添加带有含义和例句的单词",
           "grammar": "语法",
           "grammarDesc": "添加语法规则和解释",
           "exercise": "练习",
           "exerciseDesc": "创建练习题",
-          "singleChoice": "单选",
-          "multiChoice": "多选",
-          "fillInBlank": "填空"
+          "singleChoice": "单选题",
+          "multiChoice": "多选题",
+          "fillInBlank": "填空题"
         },
         "zoom": {
-          "in": "放大",
-          "out": "缩小",
-          "reset": "重置缩放",
+          "in": "放大 (Ctrl + +)",
+          "out": "缩小 (Ctrl + -)",
+          "reset": "重置缩放 (Ctrl + 0)",
           "shortcuts": {
             "in": "Ctrl + +",
             "out": "Ctrl + -",
@@ -326,7 +391,8 @@
         "loading": "加载中...",
         "search": "搜索",
         "filter": "筛选",
-        "actions": "操作"
+        "actions": "操作",
+        "deleteConfirm": "您确定要删除此项目吗？"
       }
     }
   }

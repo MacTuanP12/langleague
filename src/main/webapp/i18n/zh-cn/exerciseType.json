@@ -2,9 +2,9 @@
   "langleagueApp": {
     "ExerciseType": {
       "null": "",
-      "SINGLE_CHOICE": "SINGLE_CHOICE",
-      "MULTI_CHOICE": "MULTI_CHOICE",
-      "FILL_IN_BLANK": "FILL_IN_BLANK"
+      "SINGLE_CHOICE": "单选题",
+      "MULTI_CHOICE": "多选题",
+      "FILL_IN_BLANK": "填空题"
     }
   }
 }

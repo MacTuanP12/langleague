@@ -9,7 +9,7 @@ public class PasswordValidator {
 
     private static final int MIN_LENGTH = 8;
     private static final int MAX_LENGTH = 100;
-    // Password pattern: 1 uppercase, 1 number, 1 special char, min 8 chars
+    // Password pattern: 1 uppercase, 1 number, 1 special char, min 8 chars.
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
         "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!\"#$%&''()*+,-./:;<=>?@\\[\\]^_`{|}~]).{8,}$"
     );

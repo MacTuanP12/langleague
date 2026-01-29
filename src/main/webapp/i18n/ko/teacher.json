@@ -1,36 +1,43 @@
 {
   "langleague": {
     "teacher": {
+      "sidebar": {
+        "title": "교사 CMS"
+      },
       "dashboard": {
         "title": "교사 대시보드",
-        "welcome": "{name}님, 환영합니다!",
+        "loading": "대시보드 로딩 중...",
+        "welcome": "환영합니다, {{name}}님!",
         "stats": {
-          "myBooks": "내 교재",
+          "myBooks": "내 도서",
           "totalStudents": "총 학생 수",
           "pendingAssignments": "대기 중인 과제",
           "averageRating": "평균 평점"
         },
         "quickActions": {
           "title": "빠른 작업",
-          "manageBooks": "교재 관리",
-          "createBook": "새 교재 만들기",
-          "viewStudents": "학생 보기"
+          "manageBooks": "도서 관리",
+          "createBook": "새 도서 만들기",
+          "viewStudents": "학생 보기",
+          "manageContent": "콘텐츠 관리"
         },
         "recentActivity": {
           "title": "최근 활동",
           "noData": "최근 활동 없음"
-        }
+        },
+        "enrollments": "도서별 등록 수",
+        "noEnrollmentData": "등록 데이터가 아직 없습니다."
       },
       "books": {
         "management": {
-          "title": "교재 관리",
-          "description": "라이브러리 재고를 관리하고, 발급된 도서를 추적하며, 카탈로그 정보를 업데이트합니다.",
-          "loading": "로딩 중...",
-          "noBooks": "교재를 찾을 수 없습니다"
+          "title": "도서 관리",
+          "description": "도서관 재고를 관리하고, 발행된 도서를 추적하고, 카탈로그 세부 정보를 업데이트합니다.",
+          "loading": "도서 로딩 중...",
+          "noBooks": "도서를 찾을 수 없습니다"
         },
         "stats": {
-          "total": "총 교재",
-          "available": "대여 가능",
+          "total": "총 도서",
+          "available": "사용 가능",
           "uploaded": "업로드됨"
         },
         "search": {
@@ -38,15 +45,18 @@
         },
         "actions": {
           "filter": "필터",
-          "addNew": "+ 새 교재 추가",
-          "edit": "수정",
-          "view": "상세 보기",
+          "addNew": " 새 도서 추가",
+          "edit": "편집",
+          "view": "세부 정보 보기",
           "delete": "삭제",
-          "confirmDelete": "이 교재를 삭제하시겠습니까?"
+          "deleteSuccess": "도서가 성공적으로 삭제되었습니다!",
+          "deleteFailed": "도서 삭제 실패",
+          "confirmDeleteTitle": "도서 삭제",
+          "confirmDelete": "이 도서를 삭제하시겠습니까?"
         },
         "table": {
           "cover": "표지",
-          "details": "교재 상세",
+          "details": "도서 세부 정보",
           "uploadedBy": "업로더",
           "actions": "작업"
         },
@@ -55,83 +65,241 @@
           "next": "다음"
         },
         "detail": {
-          "loading": "로딩 중...",
-          "backToBooks": "목록으로",
-          "editBook": "교재 수정",
-          "addUnit": "단원 추가",
+          "loading": "도서 세부 정보 로딩 중...",
+          "backToBooks": "도서 목록으로 돌아가기",
+          "editBook": "도서 편집",
+          "addUnit": "유닛 추가",
           "meta": {
-            "totalUnits": "총 단원:",
+            "totalUnits": "총 유닛:",
             "created": "생성일:",
             "public": "공개:",
             "yes": "예",
             "no": "아니요"
           },
           "units": {
-            "title": "단원",
-            "hint": "드래그 앤 드롭으로 단원 순서를 변경하세요"
+            "title": "유닛",
+            "hint": "드래그 앤 드롭으로 유닛 순서 변경",
+            "empty": {
+              "title": "유닛이 아직 없습니다",
+              "description": "이 도서에 첫 번째 유닛을 추가하여 시작하세요",
+              "addFirst": "첫 번째 유닛 추가"
+            },
+            "stats": {
+              "vocabulary": "어휘:",
+              "grammar": "문법:",
+              "exercises": "연습 문제:"
+            },
+            "actions": {
+              "edit": "편집",
+              "delete": "삭제",
+              "manageContent": "콘텐츠 관리",
+              "confirmDelete": "이 유닛을 삭제하시겠습니까?"
+            }
           },
-          "empty": {
-            "title": "단원이 없습니다",
-            "description": "이 교재에 첫 번째 단원을 추가해보세요",
-            "addFirst": "첫 단원 추가"
-          },
-          "stats": {
-            "vocabulary": "어휘:",
-            "grammar": "문법:",
-            "exercises": "연습 문제:"
-          },
-          "actions": {
-            "edit": "수정",
-            "delete": "삭제",
-            "confirmDelete": "이 단원을 삭제하시겠습니까?"
+          "syllabus": {
+            "title": "도서 강의 계획서",
+            "backToBooks": "도서 목록으로 돌아가기"
           }
         },
         "form": {
-          "title": {
-            "create": "새 교재 추가",
-            "edit": "교재 수정"
-          },
-          "description": {
-            "create": "새 자료를 분류하기 위해 아래 정보를 입력하세요.",
-            "edit": "자료를 업데이트하려면 아래 정보를 입력하세요."
+          "header": {
+            "add": "새 도서 추가",
+            "edit": "도서 편집",
+            "descriptionAdd": "새 리소스를 카탈로그화하려면 아래 세부 정보를 입력하세요.",
+            "descriptionEdit": "리소스를 업데이트하려면 아래 세부 정보를 입력하세요."
           },
           "fields": {
-            "coverLabel": "교재 표지",
+            "coverLabel": "도서 표지",
             "uploadPlaceholder": "표지 업로드",
             "uploadHint": "드래그 앤 드롭 또는 클릭",
-            "fileInfo": "지원 형식: JPG, PNG (최대 2MB)",
-            "titleLabel": "교재 제목",
+            "fileInfo": "지원: JPG, PNG (최대 2MB)",
+            "titleLabel": "도서 제목",
             "titlePlaceholder": "예: 위대한 개츠비",
-            "titleRequired": "교재 제목은 필수입니다",
-            "titleMinLength": "제목은 최소 2자 이상이어야 합니다",
+            "titleRequired": "도서 제목은 필수입니다",
+            "titleMinLength": "제목은 2자 이상이어야 합니다",
             "descriptionLabel": "설명",
-            "descriptionPlaceholder": "교재 내용에 대한 간단한 요약을 입력하세요..."
+            "descriptionPlaceholder": "도서 내용에 대한 간략한 요약을 입력하세요...",
+            "isPublicLabel": "공개 설정",
+            "isPublicHint": "공개 도서는 모든 학생이 검색하고 등록할 수 있습니다",
+            "publicStatus": "공개",
+            "privateStatus": "비공개"
           },
           "footer": {
             "infoText": "모든 필드는 로컬에 자동 저장됩니다.",
             "cancel": "취소",
-            "save": "교재 저장",
+            "save": "도서 저장",
             "saving": "저장 중..."
           }
+        },
+        "unit": {
+          "deleteSuccess": "유닛이 성공적으로 삭제되었습니다!",
+          "deleteFailed": "유닛 삭제 실패",
+          "confirmDeleteTitle": "유닛 삭제",
+          "confirmDelete": "이 유닛을 삭제하시겠습니까?"
+        }
+      },
+      "editor": {
+        "title": "유닛 콘텐츠 편집기",
+        "loading": "유닛 콘텐츠 로딩 중...",
+        "backToSyllabus": "강의 계획서로 돌아가기",
+        "backToBook": "도서로 돌아가기",
+        "subtitle": "어휘, 문법 및 연습 문제 관리",
+        "tabs": {
+          "vocabulary": "어휘",
+          "grammar": "문법",
+          "exercises": "연습 문제"
+        },
+        "ai": {
+          "settings": "AI 설정",
+          "apiKey": "API 키 (Gemini/OpenAI)",
+          "saveKey": "저장",
+          "getKey": "키 가져오기",
+          "model": "모델",
+          "targetLang": "대상 언어",
+          "nativeLang": "모국어",
+          "autoFill": "AI로 자동 채우기",
+          "keySaved": "API 키가 로컬에 저장되었습니다.",
+          "configureKey": "API 키를 구성하세요.",
+          "generated": "콘텐츠가 성공적으로 생성되었습니다!"
+        },
+        "vocabulary": {
+          "title": "어휘 목록",
+          "addWord": "단어 추가",
+          "aiGenerate": "✨ AI 생성",
+          "empty": "아직 추가된 어휘가 없습니다.",
+          "emptyHint": "AI 도우미를 사용하여 주제에서 단어를 생성하세요!",
+          "error": {
+            "enterWord": "먼저 단어를 입력하세요."
+          }
+        },
+        "grammar": {
+          "title": "문법 규칙",
+          "addRule": "규칙 추가",
+          "aiGenerate": "✨ AI 생성",
+          "empty": "아직 추가된 문법 규칙이 없습니다.",
+          "error": {
+            "enterTitle": "먼저 문법 제목을 입력하세요."
+          }
+        },
+        "exercises": {
+          "title": "연습 문제",
+          "addQuestion": "질문 추가",
+          "aiGenerate": "✨ AI 생성",
+          "empty": "아직 추가된 연습 문제가 없습니다.",
+          "question": "질문",
+          "ocr": {
+            "button": "이미지에서 텍스트 추출 (OCR)",
+            "success": "이미지에서 텍스트를 성공적으로 추출했습니다!",
+            "error": "이미지에서 텍스트를 추출하지 못했습니다.",
+            "invalidImage": "유효한 이미지 파일을 선택하세요."
+          },
+          "validation": {
+            "minOptions": "최소 2개의 옵션을 추가하세요.",
+            "selectCorrect": "최소 하나의 정답을 선택하세요.",
+            "emptyOption": "옵션 텍스트는 비워둘 수 없습니다."
+          },
+          "form": {
+            "options": "옵션",
+            "correct": "정답",
+            "optionText": "옵션 텍스트",
+            "optionPlaceholder": "옵션 {{index}}",
+            "addOption": "옵션 추가",
+            "correctAnswerPlaceholder": "여기에 정답 텍스트를 입력하세요"
+          }
+        },
+        "confirmDelete": {
+          "vocabulary": "이 어휘를 삭제하시겠습니까?",
+          "grammar": "이 문법 규칙을 삭제하시겠습니까?",
+          "exercise": "이 연습 문제를 삭제하시겠습니까?"
+        },
+        "success": {
+          "vocabularyDeleted": "어휘가 성공적으로 삭제되었습니다",
+          "grammarDeleted": "문법 규칙이 성공적으로 삭제되었습니다",
+          "exerciseDeleted": "연습 문제가 성공적으로 삭제되었습니다"
+        }
+      },
+      "students": {
+        "title": "내 학생",
+        "subtitle": "학생 진도 및 등록 추적",
+        "search": "이름 또는 도서로 검색...",
+        "totalStudents": "총 학생 수:",
+        "table": {
+          "student": "학생",
+          "enrolledBook": "등록된 도서",
+          "enrolledDate": "등록일",
+          "status": "상태"
+        },
+        "empty": "내 도서에 등록된 학생을 찾을 수 없습니다.",
+        "messages": {
+          "loading": "학생 로딩 중...",
+          "noStudents": "내 도서에 등록된 학생을 찾을 수 없습니다."
         }
       },
       "units": {
+        "labels": {
+          "newVocabulary": "새 어휘",
+          "newGrammar": "새 문법 주제"
+        },
         "form": {
-          "backButton": "뒤로",
-          "titlePlaceholder": "단원 제목",
-          "titleRequired": "단원 제목은 필수입니다",
-          "titleMinLength": "제목은 최소 3자 이상이어야 합니다",
-          "descriptionPlaceholder": "단원 설명",
-          "submitButton": "제출",
-          "saving": "저장 중..."
+          "buttons": {
+            "saving": "저장 중...",
+            "submit": "제출",
+            "expandAll": "모두 펼치기",
+            "collapseAll": "모두 접기",
+            "addVocabulary": "어휘 추가"
+          },
+          "addGrammar": "문법 추가",
+          "validation": {
+            "titleRequired": "유닛 제목은 필수입니다",
+            "titleMinLength": "제목은 3자 이상이어야 합니다"
+          },
+          "actions": {
+            "removeTooltip": "항목 제거",
+            "duplicateTooltip": "항목 복제",
+            "duplicate": "복제"
+          },
+          "controls": {
+            "expandAll": "펼치기",
+            "collapseAll": "접기"
+          },
+          "fields": {
+            "titlePlaceholder": "유닛 제목",
+            "summaryPlaceholder": "유닛 설명"
+          },
+          "messages": {
+            "unitUpdated": "유닛이 성공적으로 업데이트되었습니다",
+            "unitCreated": "유닛이 성공적으로 생성되었습니다",
+            "vocabSaved": "어휘 저장됨",
+            "vocabSaveFailed": "어휘 저장 실패",
+            "vocabDeleted": "어휘 삭제됨",
+            "vocabDeleteFailed": "어휘 삭제 실패",
+            "grammarSaved": "문법 저장됨",
+            "grammarSaveFailed": "문법 저장 실패",
+            "grammarDeleted": "문법 삭제됨",
+            "grammarDeleteFailed": "문법 삭제 실패",
+            "exerciseSaved": "연습 문제 저장됨",
+            "exerciseSaveFailed": "연습 문제 저장 실패",
+            "exerciseDeleted": "연습 문제 삭제됨",
+            "exerciseDeleteFailed": "연습 문제 삭제 실패",
+            "loading": "유닛 데이터 로딩 중...",
+            "loadFailed": "유닛 데이터 로드 실패"
+          }
         },
         "vocabulary": {
           "sectionTitle": "어휘",
           "addButton": "어휘 추가",
           "fields": {
+            "word": "단어",
+            "phonetic": "발음 기호",
+            "meaning": "의미",
+            "example": "예문",
+            "imageUrl": "이미지 URL",
+            "order": "순서"
+          },
+          "placeholders": {
             "word": "단어 (예: Hello)",
-            "phonetic": "발음기호 (예: /həˈloʊ/)",
-            "meaning": "뜻",
+            "phonetic": "발음 기호 (예: /həˈloʊ/)",
+            "meaning": "의미",
             "example": "예문",
             "imageUrl": "이미지 URL",
             "order": "순서"
@@ -144,31 +312,44 @@
             "title": "문법 제목",
             "content": "내용 (마크다운 지원)",
             "contentHint": "마크다운 지원: **굵게**, *기울임*, # 제목",
-            "example": "사용 예시",
-            "exampleHint": "예문 작성",
+            "example": "사용 예",
+            "exampleHint": "사용 예",
+            "order": "순서"
+          },
+          "placeholders": {
+            "title": "문법 제목",
+            "content": "내용 (마크다운 지원)",
+            "example": "사용 예",
             "order": "순서"
           }
         },
         "exercises": {
           "sectionTitle": "연습 문제",
-          "addButton": "문제 추가",
+          "addButton": "연습 문제 추가",
           "types": {
             "singleChoice": "단일 선택",
             "multiChoice": "다중 선택",
             "fillInBlank": "빈칸 채우기"
           },
           "fields": {
-            "question": "문제 지문",
+            "question": "연습 문제 텍스트",
             "correctAnswer": "정답 입력...",
             "imageUrl": "이미지 URL (선택 사항)",
             "audioUrl": "오디오 URL (선택 사항)",
-            "option": "보기 {number}"
+            "option": "옵션 {number}"
           },
-          "options": {
-            "addButton": "보기 추가"
+          "placeholders": {
+            "text": "연습 문제 텍스트",
+            "correctAnswer": "정답 입력...",
+            "imageUrl": "이미지 URL (선택 사항)",
+            "audioUrl": "오디오 URL (선택 사항)",
+            "option": "옵션"
+          },
+          "buttons": {
+            "addOption": "옵션 추가"
           },
           "menu": {
-            "addExercise": "문제 추가",
+            "addExercise": "연습 문제 추가",
             "singleChoice": "단일 선택",
             "multiChoice": "다중 선택",
             "fillInBlank": "빈칸 채우기"
@@ -177,9 +358,9 @@
         "menu": {
           "addContent": "콘텐츠 추가",
           "vocabulary": "어휘",
-          "vocabularyDesc": "단어와 의미, 예문 추가",
+          "vocabularyDesc": "의미와 예문이 있는 단어 추가",
           "grammar": "문법",
-          "grammarDesc": "문법 규칙과 설명 추가",
+          "grammarDesc": "문법 규칙 및 설명 추가",
           "exercise": "연습 문제",
           "exerciseDesc": "연습 문제 만들기",
           "singleChoice": "단일 선택",
@@ -187,9 +368,9 @@
           "fillInBlank": "빈칸 채우기"
         },
         "zoom": {
-          "in": "확대",
-          "out": "축소",
-          "reset": "확대/축소 재설정",
+          "in": "확대 (Ctrl + +)",
+          "out": "축소 (Ctrl + -)",
+          "reset": "확대/축소 초기화 (Ctrl + 0)",
           "shortcuts": {
             "in": "Ctrl + +",
             "out": "Ctrl + -",
@@ -202,15 +383,16 @@
         "cancel": "취소",
         "delete": "삭제",
         "back": "뒤로",
-        "edit": "수정",
+        "edit": "편집",
         "view": "보기",
         "add": "추가",
-        "create": "만들기",
+        "create": "생성",
         "update": "업데이트",
         "loading": "로딩 중...",
         "search": "검색",
         "filter": "필터",
-        "actions": "작업"
+        "actions": "작업",
+        "deleteConfirm": "이 항목을 삭제하시겠습니까?"
       }
     }
   }

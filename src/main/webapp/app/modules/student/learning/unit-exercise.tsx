@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity } from 'app/entities/unit/unit.reducer';
@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AiTutorButton from './components/AiTutorButton';
 import { IExercise } from 'app/shared/model/exercise.model';
 import { LoadingSpinner } from 'app/shared/components';
+import { AudioPlayer } from 'app/shared/components/audio-player/audio-player';
 import './unit-exercise.scss'; // Pure widget styling
 
 interface UnitExerciseProps {
@@ -35,26 +36,6 @@ export const UnitExercise: React.FC<UnitExerciseProps> = ({ data, onFinish }) =>
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: number | string | number[] }>({});
   const [results, setResults] = useState<{ [key: number]: boolean | null }>({});
   const [showFeedback, setShowFeedback] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Cleanup audio on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Fixed: Proper audio cleanup to prevent memory leaks
-  const playAudio = (audioUrl: string | null | undefined) => {
-    if (!audioUrl) return;
-    if (audioRef.current) audioRef.current.pause();
-    audioRef.current = new Audio(audioUrl);
-    audioRef.current.play().catch(e => console.error('Error playing audio:', e));
-  };
 
   const handleSingleChoiceSelect = (exerciseId: number, optionId: number) => {
     setUserAnswers({ ...userAnswers, [exerciseId]: optionId });
@@ -195,165 +176,194 @@ export const UnitExercise: React.FC<UnitExerciseProps> = ({ data, onFinish }) =>
   }
 
   return (
-    <div className="exercise-list">
-      {/* Render ONLY the current exercise */}
-      {currentExercise && (
-        <div key={currentExercise.id} className="exercise-card">
-          <div className="exercise-header">
-            <span className="exercise-number">
-              <Translate contentKey="langleague.student.learning.exercise.defaultTitle">Exercise</Translate> {currentExerciseIndex + 1}{' '}
-              <Translate contentKey="langleague.student.learning.exercise.of">of</Translate> {exercises.length}
-            </span>
-            <span className="exercise-type">{currentExercise.exerciseType}</span>
-          </div>
+    <div className="exercise-widget">
+      {/* Exercise List Sidebar */}
+      <div className="exercise-sidebar">
+        {exercises.map((exercise: IExercise, index: number) => {
+          const exerciseId = exercise.id;
+          const isSelected = currentExercise?.id === exerciseId;
+          const isAnswered = exerciseId !== undefined && results[exerciseId] !== null && results[exerciseId] !== undefined;
+          const isCorrect = exerciseId !== undefined && results[exerciseId] === true;
 
-          <div className="exercise-question">
-            <h4>{currentExercise.exerciseText}</h4>
-
-            {currentExercise.audioUrl && (
-              <button className="audio-btn" onClick={() => playAudio(currentExercise.audioUrl)}>
-                <FontAwesomeIcon icon="volume-up" className="me-2" />
-                <Translate contentKey="langleague.student.learning.exercise.playAudio">Play Audio</Translate>
-              </button>
-            )}
-
-            {currentExercise.imageUrl && (
-              <div className="exercise-image">
-                <img src={currentExercise.imageUrl} alt="Exercise" />
-              </div>
-            )}
-          </div>
-
-          {/* Feedback Alert */}
-          {showFeedback && (
-            <Alert
-              color={isCorrectResult ? 'success' : 'danger'}
-              className="mt-3"
-              transition={{ timeout: 0, appear: false, enter: false, exit: false }}
+          return (
+            <div
+              key={exercise.id}
+              className={`exercise-item ${isSelected ? 'active' : ''} ${isAnswered ? (isCorrect ? 'correct' : 'incorrect') : ''}`}
+              onClick={() => setCurrentExerciseIndex(index)}
             >
-              <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <div>
-                  <h5 className="alert-heading mb-1">
-                    {isCorrectResult ? (
-                      <>
-                        <FontAwesomeIcon icon="check-circle" className="me-2" />
-                        <Translate contentKey="langleague.student.learning.exercise.correctAnswer">Correct!</Translate>
-                      </>
-                    ) : (
-                      <>
-                        <FontAwesomeIcon icon="times-circle" className="me-2" />
-                        <Translate contentKey="langleague.student.learning.exercise.incorrectAnswer">Incorrect</Translate>
-                      </>
+              <span className="exercise-number">{index + 1}</span>
+              <span className="exercise-item-title">
+                {exercise.exerciseText
+                  ? exercise.exerciseText.length > 50
+                    ? exercise.exerciseText.substring(0, 50) + '...'
+                    : exercise.exerciseText
+                  : `Exercise ${index + 1}`}
+              </span>
+              {isAnswered && <span className="exercise-status-icon">{isCorrect ? '✓' : '✗'}</span>}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Exercise Content */}
+      {currentExercise && (
+        <div className="exercise-content-area">
+          <div key={currentExercise.id} className="exercise-card">
+            <div className="exercise-header">
+              <span className="exercise-number">
+                <Translate contentKey="langleague.student.learning.exercise.defaultTitle">Exercise</Translate> {currentExerciseIndex + 1}{' '}
+                <Translate contentKey="langleague.student.learning.exercise.of">of</Translate> {exercises.length}
+              </span>
+              <span className="exercise-type">{currentExercise.exerciseType}</span>
+            </div>
+
+            <div className="exercise-question">
+              <h4>{currentExercise.exerciseText}</h4>
+
+              {currentExercise.audioUrl && (
+                <div className="exercise-audio">
+                  <AudioPlayer src={currentExercise.audioUrl} />
+                </div>
+              )}
+
+              {currentExercise.imageUrl && (
+                <div className="exercise-image">
+                  <img src={currentExercise.imageUrl} alt="Exercise" />
+                </div>
+              )}
+            </div>
+
+            {/* Feedback Alert */}
+            {showFeedback && (
+              <Alert
+                color={isCorrectResult ? 'success' : 'danger'}
+                className="mt-3"
+                transition={{ timeout: 0, appear: false, enter: false, exit: false }}
+              >
+                <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <div>
+                    <h5 className="alert-heading mb-1">
+                      {isCorrectResult ? (
+                        <>
+                          <FontAwesomeIcon icon="check-circle" className="me-2" />
+                          <Translate contentKey="langleague.student.learning.exercise.correctAnswer">Correct!</Translate>
+                        </>
+                      ) : (
+                        <>
+                          <FontAwesomeIcon icon="times-circle" className="me-2" />
+                          <Translate contentKey="langleague.student.learning.exercise.incorrectAnswer">Incorrect</Translate>
+                        </>
+                      )}
+                    </h5>
+                    {!isCorrectResult && (
+                      <p className="mb-0">
+                        <Translate contentKey="langleague.student.learning.exercise.correctAnswerIs">The correct answer is:</Translate>{' '}
+                        <strong>{getCorrectAnswerText()}</strong>
+                      </p>
                     )}
-                  </h5>
+                  </div>
                   {!isCorrectResult && (
-                    <p className="mb-0">
-                      <Translate contentKey="langleague.student.learning.exercise.correctAnswerIs">The correct answer is:</Translate>{' '}
-                      <strong>{getCorrectAnswerText()}</strong>
-                    </p>
+                    <AiTutorButton
+                      questionText={currentExercise.exerciseText || ''}
+                      correctAnswer={getCorrectAnswerText()}
+                      userContext={getUserAnswerText()}
+                    />
                   )}
                 </div>
-                {!isCorrectResult && (
-                  <AiTutorButton
-                    questionText={currentExercise.exerciseText || ''}
-                    correctAnswer={getCorrectAnswerText()}
-                    userContext={getUserAnswerText()}
-                  />
+              </Alert>
+            )}
+
+            {/* Options */}
+            {currentExercise.exerciseType === ExerciseType.SINGLE_CHOICE && (
+              <div className="exercise-options">
+                {(currentExercise.options || []).map(option => {
+                  const isSelected = currentExercise.id && userAnswers[currentExercise.id] === option.id;
+                  let optionClass = 'exercise-option';
+                  if (isSelected) optionClass += ' selected';
+                  if (showFeedback) {
+                    if (isSelected && isCorrectResult) optionClass += ' correct';
+                    else if (isSelected && !isCorrectResult) optionClass += ' incorrect';
+                    else if (option.isCorrect) optionClass += ' correct-hint';
+                  }
+
+                  return (
+                    <div
+                      key={option.id}
+                      className={optionClass}
+                      onClick={() => currentExercise.id && option.id && handleSingleChoiceSelect(currentExercise.id, option.id)}
+                    >
+                      <span className="option-label">{String.fromCharCode(65 + (currentExercise.options?.indexOf(option) || 0))}</span>
+                      <span className="option-text">{option.optionText}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {currentExercise.exerciseType === ExerciseType.MULTI_CHOICE && (
+              <div className="exercise-options">
+                {(currentExercise.options || []).map(option => {
+                  const selectedIds = (currentExercise.id && (userAnswers[currentExercise.id] as number[])) || [];
+                  const isSelected = option.id && selectedIds.includes(option.id);
+                  let optionClass = 'exercise-option';
+                  if (isSelected) optionClass += ' selected';
+
+                  return (
+                    <div
+                      key={option.id}
+                      className={optionClass}
+                      onClick={() => currentExercise.id && option.id && handleMultiChoiceSelect(currentExercise.id, option.id)}
+                    >
+                      <input type="checkbox" checked={isSelected || false} readOnly />
+                      <span className="option-text">{option.optionText}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {currentExercise.exerciseType === ExerciseType.FILL_IN_BLANK && (
+              <div className="fill-blank-input">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder={translate('langleague.student.learning.exercise.typeAnswer')}
+                  value={(currentExercise.id && (userAnswers[currentExercise.id] as string)) || ''}
+                  onChange={e => currentExercise.id && handleTextChange(currentExercise.id, e.target.value)}
+                />
+              </div>
+            )}
+
+            {/* Check Answer Button */}
+            {!showFeedback && (
+              <div className="exercise-actions">
+                <button className="check-btn" onClick={handleCheckAnswer}>
+                  <Translate contentKey="langleague.student.learning.exercise.checkAnswer">Check Answer</Translate>
+                </button>
+              </div>
+            )}
+
+            {/* Navigation */}
+            {exercises.length > 0 && (
+              <div className="exercise-navigation">
+                <button className="nav-btn" onClick={handlePrevious} disabled={currentExerciseIndex === 0}>
+                  <FontAwesomeIcon icon="arrow-left" className="me-2" />
+                  <Translate contentKey="langleague.student.learning.exercise.previous">Previous</Translate>
+                </button>
+
+                {showFeedback && (
+                  <button className="nav-btn" onClick={handleNext}>
+                    {currentExerciseIndex === exercises.length - 1 ? (
+                      <Translate contentKey="langleague.student.learning.exercise.finish">Finish</Translate>
+                    ) : (
+                      <Translate contentKey="langleague.student.learning.exercise.nextQuestion">Next</Translate>
+                    )}
+                    <FontAwesomeIcon icon="arrow-right" className="ms-2" />
+                  </button>
                 )}
               </div>
-            </Alert>
-          )}
-
-          {/* Options */}
-          {currentExercise.exerciseType === ExerciseType.SINGLE_CHOICE && (
-            <div className="exercise-options">
-              {(currentExercise.options || []).map(option => {
-                const isSelected = currentExercise.id && userAnswers[currentExercise.id] === option.id;
-                let optionClass = 'exercise-option';
-                if (isSelected) optionClass += ' selected';
-                if (showFeedback) {
-                  if (isSelected && isCorrectResult) optionClass += ' correct';
-                  else if (isSelected && !isCorrectResult) optionClass += ' incorrect';
-                  else if (option.isCorrect) optionClass += ' correct-hint';
-                }
-
-                return (
-                  <div
-                    key={option.id}
-                    className={optionClass}
-                    onClick={() => currentExercise.id && option.id && handleSingleChoiceSelect(currentExercise.id, option.id)}
-                  >
-                    <span className="option-label">{String.fromCharCode(65 + (currentExercise.options?.indexOf(option) || 0))}</span>
-                    <span className="option-text">{option.optionText}</span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {currentExercise.exerciseType === ExerciseType.MULTI_CHOICE && (
-            <div className="exercise-options">
-              {(currentExercise.options || []).map(option => {
-                const selectedIds = (currentExercise.id && (userAnswers[currentExercise.id] as number[])) || [];
-                const isSelected = option.id && selectedIds.includes(option.id);
-                let optionClass = 'exercise-option';
-                if (isSelected) optionClass += ' selected';
-
-                return (
-                  <div
-                    key={option.id}
-                    className={optionClass}
-                    onClick={() => currentExercise.id && option.id && handleMultiChoiceSelect(currentExercise.id, option.id)}
-                  >
-                    <input type="checkbox" checked={isSelected || false} readOnly />
-                    <span className="option-text">{option.optionText}</span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {currentExercise.exerciseType === ExerciseType.FILL_IN_BLANK && (
-            <div className="fill-blank-input">
-              <input
-                type="text"
-                className="form-control"
-                placeholder={translate('langleague.student.learning.exercise.typeAnswer')}
-                value={(currentExercise.id && (userAnswers[currentExercise.id] as string)) || ''}
-                onChange={e => currentExercise.id && handleTextChange(currentExercise.id, e.target.value)}
-              />
-            </div>
-          )}
-
-          {/* Check Answer Button */}
-          {!showFeedback && (
-            <div className="exercise-actions">
-              <button className="check-btn" onClick={handleCheckAnswer}>
-                <Translate contentKey="langleague.student.learning.exercise.checkAnswer">Check Answer</Translate>
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Navigation */}
-      {exercises.length > 0 && (
-        <div className="exercise-navigation">
-          <button className="nav-btn" onClick={handlePrevious} disabled={currentExerciseIndex === 0}>
-            <FontAwesomeIcon icon="arrow-left" className="me-2" />
-            <Translate contentKey="langleague.student.learning.exercise.previous">Previous</Translate>
-          </button>
-
-          {showFeedback && (
-            <button className="nav-btn" onClick={handleNext}>
-              {currentExerciseIndex === exercises.length - 1 ? (
-                <Translate contentKey="langleague.student.learning.exercise.finish">Finish</Translate>
-              ) : (
-                <Translate contentKey="langleague.student.learning.exercise.nextQuestion">Next</Translate>
-              )}
-              <FontAwesomeIcon icon="arrow-right" className="ms-2" />
-            </button>
-          )}
+            )}
+          </div>
         </div>
       )}
     </div>

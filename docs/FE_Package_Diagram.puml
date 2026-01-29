@@ -1,0 +1,58 @@
+@startuml
+package "webapp" {
+  package "app" {
+    [app.tsx]
+    [routes.tsx]
+    [index.tsx]
+
+    package "config" {
+    }
+
+    package "shared" {
+      package "auth"
+      package "components"
+      package "constants"
+      package "context"
+      package "error"
+      package "hooks"
+      package "jhipster"
+      package "layout"
+      package "model"
+      package "reducers"
+      package "types"
+      package "util"
+    }
+
+    package "modules" {
+      package "account"
+      package "admin"
+      package "home"
+      package "student"
+      package "teacher"
+    }
+
+    package "entities" {
+      package "book"
+      package "enrollment"
+      package "exercise"
+      package "exercise-option"
+      package "grammar"
+      package "progress"
+      package "unit"
+      package "user-profile"
+      package "vocabulary"
+    }
+  }
+
+  package "i18n"
+  package "content"
+}
+
+"app.tsx" ..> "config"
+"app.tsx" ..> "shared"
+"app.tsx" ..> "modules"
+"app.tsx" ..> "entities"
+"routes.tsx" ..> "modules"
+"routes.tsx" ..> "entities"
+
+@enduml

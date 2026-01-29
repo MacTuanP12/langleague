@@ -21,8 +21,10 @@ import { createGrammar, updateGrammar, reset } from 'app/shared/reducers/grammar
 import { toast } from 'react-toastify';
 import { IGrammar } from 'app/shared/model/grammar.model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRobot, faChevronDown, faChevronUp, faMagic } from '@fortawesome/free-solid-svg-icons';
-import { USER_GEMINI_KEY_STORAGE, generateGrammarContent, DEFAULT_GEMINI_MODEL } from 'app/shared/util/ai-utils';
+import { faRobot, faChevronDown, faChevronUp, faMagic, faImage } from '@fortawesome/free-solid-svg-icons';
+import { generateGrammarContent, DEFAULT_GEMINI_MODEL } from 'app/shared/util/ai-utils';
+import { SimpleMarkdownEditor } from 'app/shared/components/markdown-editor/simple-markdown-editor';
+import { extractTextFromImage, isImageFile, getAcceptAttributeWithImages } from 'app/shared/util/file-text-extractor';
 
 interface GrammarModalProps {
   isOpen: boolean;
@@ -50,17 +52,11 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
 
   // AI State
   const [aiConfigOpen, setAiConfigOpen] = useState(false);
-  const [apiKey, setApiKey] = useState('');
   const [aiModel, setAiModel] = useState(DEFAULT_GEMINI_MODEL);
   const [targetLang, setTargetLang] = useState('English');
   const [nativeLang, setNativeLang] = useState('Vietnamese');
   const [isGenerating, setIsGenerating] = useState(false);
   const isGeneratingRef = useRef(false);
-
-  useEffect(() => {
-    const storedKey = localStorage.getItem(USER_GEMINI_KEY_STORAGE) || sessionStorage.getItem(USER_GEMINI_KEY_STORAGE);
-    if (storedKey) setApiKey(storedKey);
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -100,16 +96,79 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
     }
   };
 
+  const handleMarkdownChange = (fieldName: string) => (value: string) => {
+    setFormData(prev => ({ ...prev, [fieldName]: value }));
+    if (errors[fieldName]) {
+      setErrors(prev => ({ ...prev, [fieldName]: false }));
+    }
+  };
+
+  const handleOcrUpload = async (fieldName: 'contentMarkdown' | 'exampleUsage', file: File) => {
+    if (!isImageFile(file.name)) {
+      toast.error('Please upload an image file for OCR');
+      return;
+    }
+
+    try {
+      toast.info('Processing image with OCR... This may take a moment.');
+      const ocrLanguages = [nativeLang, targetLang].filter(Boolean);
+      const extractedText = await extractTextFromImage(file, ocrLanguages);
+
+      setFormData(prev => ({
+        ...prev,
+        [fieldName]: prev[fieldName] ? prev[fieldName] + '\n\n' + extractedText : extractedText,
+      }));
+      toast.success('Text extracted successfully using OCR!');
+    } catch (error) {
+      toast.error(`Failed to extract text: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error(error);
+    }
+  };
+
+  // Handle paste event (Ctrl+V or Cmd+V) for OCR
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePaste = async (e: ClipboardEvent) => {
+      // Check if clipboard contains image
+      const items = e.clipboardData?.items;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type.startsWith('image/')) {
+            e.preventDefault();
+            try {
+              const file = items[i].getAsFile();
+              if (file && isImageFile(file.name || 'image.png')) {
+                toast.info('Processing image with OCR... This may take a moment.');
+                const ocrLanguages = [nativeLang, targetLang].filter(Boolean);
+                const extractedText = await extractTextFromImage(file, ocrLanguages);
+                setFormData(prev => ({
+                  ...prev,
+                  contentMarkdown: prev.contentMarkdown ? prev.contentMarkdown + '\n\n' + extractedText : extractedText,
+                }));
+                toast.success('Text extracted successfully using OCR!');
+              }
+            } catch (error) {
+              console.error('OCR Error:', error);
+              toast.error(`Failed to extract text: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            }
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => {
+      window.removeEventListener('paste', handlePaste);
+    };
+  }, [isOpen, nativeLang, targetLang]);
+
   const handleGenerateAI = async () => {
     if (isGeneratingRef.current) return;
 
     if (!formData.title.trim()) {
       toast.error(translate('langleague.teacher.editor.grammar.error.enterTitle'));
-      return;
-    }
-    if (!apiKey) {
-      setAiConfigOpen(true);
-      toast.info(translate('langleague.teacher.editor.ai.configureKey'));
       return;
     }
 
@@ -118,7 +177,7 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
 
     try {
       const result = await generateGrammarContent(formData.title, {
-        apiKey,
+        apiKey: '', // Not needed
         model: aiModel,
         targetLang,
         nativeLang,
@@ -131,16 +190,31 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
           exampleUsage: result.example || prev.exampleUsage,
         }));
         toast.success(translate('langleague.teacher.editor.ai.generated'));
+      } else {
+        toast.warning(translate('langleague.teacher.editor.ai.noResult') || 'No content was generated. Please try again.');
       }
+    } catch (error) {
+      console.error('AI Generation Error:', error);
+      let errorMessage = translate('langleague.teacher.editor.ai.error') || 'Failed to generate content';
+
+      if (error instanceof Error) {
+        const msg = error.message;
+        if (msg.includes('Rate limit') || msg.includes('429')) {
+          errorMessage = translate('langleague.teacher.editor.ai.rateLimit') || 'Rate limit exceeded. Please wait a moment and try again.';
+        } else if (msg.includes('API Key') || msg.includes('unauthorized')) {
+          errorMessage = translate('langleague.teacher.editor.ai.authError') || 'API authentication failed. Please contact administrator.';
+        } else if (msg.includes('network') || msg.includes('Network')) {
+          errorMessage = translate('langleague.teacher.editor.ai.networkError') || 'Network error. Please check your connection.';
+        } else {
+          errorMessage = msg;
+        }
+      }
+
+      toast.error(errorMessage);
     } finally {
       setIsGenerating(false);
       isGeneratingRef.current = false;
     }
-  };
-
-  const saveApiKey = () => {
-    localStorage.setItem(USER_GEMINI_KEY_STORAGE, apiKey);
-    toast.success(translate('langleague.teacher.editor.ai.keySaved'));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -197,42 +271,8 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
             </div>
             <Collapse isOpen={aiConfigOpen}>
               <div className="mt-3">
-                <FormGroup>
-                  <Label>
-                    <Translate contentKey="langleague.teacher.editor.ai.apiKey">API Key (Gemini/OpenAI)</Translate>
-                  </Label>
-                  <div className="d-flex gap-2">
-                    <Input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} placeholder="Enter API Key" />
-                    <Button color="secondary" outline onClick={saveApiKey} size="sm">
-                      <Translate contentKey="langleague.teacher.editor.ai.saveKey">Save</Translate>
-                    </Button>
-                  </div>
-                  <small className="text-muted">
-                    <Translate contentKey="langleague.teacher.editor.ai.getKey">Get key from</Translate>{' '}
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer">
-                      Google AI Studio
-                    </a>
-                  </small>
-                </FormGroup>
                 <Row>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label>
-                        <Translate contentKey="langleague.teacher.editor.ai.model">Model</Translate>
-                      </Label>
-                      <Input type="select" value={aiModel} onChange={e => setAiModel(e.target.value)}>
-                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                        <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Latest)</option>
-                        <option value="gemini-1.5-flash-001">Gemini 1.5 Flash-001</option>
-                        <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8b</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                        <option value="gemini-pro">Gemini 1.0 Pro</option>
-                        <option value="gpt-4o-mini">GPT-4o-mini</option>
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
+                  <Col md={6}>
                     <FormGroup>
                       <Label>
                         <Translate contentKey="langleague.teacher.editor.ai.targetLang">Target Lang</Translate>
@@ -242,10 +282,14 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
                         <option value="Japanese">Japanese</option>
                         <option value="Korean">Korean</option>
                         <option value="Chinese">Chinese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="Vietnamese">Vietnamese</option>
                       </Input>
                     </FormGroup>
                   </Col>
-                  <Col md={4}>
+                  <Col md={6}>
                     <FormGroup>
                       <Label>
                         <Translate contentKey="langleague.teacher.editor.ai.nativeLang">Native Lang</Translate>
@@ -253,6 +297,12 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
                       <Input type="select" value={nativeLang} onChange={e => setNativeLang(e.target.value)}>
                         <option value="Vietnamese">Vietnamese</option>
                         <option value="English">English</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Spanish">Spanish</option>
                       </Input>
                     </FormGroup>
                   </Col>
@@ -282,30 +332,53 @@ export const GrammarModal = ({ isOpen, toggle, unitId, onSuccess, grammarEntity 
           </FormGroup>
 
           <FormGroup>
-            <Label for="grammar-contentMarkdown">
-              {translate('langleagueApp.grammar.contentMarkdown')} <span className="text-danger">*</span>
-            </Label>
-            <Input
-              type="textarea"
-              name="contentMarkdown"
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <Label for="grammar-contentMarkdown" className="mb-0">
+                {translate('langleagueApp.grammar.contentMarkdown')} <span className="text-danger">*</span>
+              </Label>
+              <Input
+                type="file"
+                accept={getAcceptAttributeWithImages()}
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file) handleOcrUpload('contentMarkdown', file);
+                  e.target.value = '';
+                }}
+                style={{ display: 'none' }}
+                id="ocr-contentMarkdown"
+              />
+              <Button
+                type="button"
+                color="info"
+                size="sm"
+                outline
+                onClick={() => document.getElementById('ocr-contentMarkdown')?.click()}
+                title="Upload image for OCR (or press Ctrl+V to paste from clipboard)"
+              >
+                <FontAwesomeIcon icon="image" className="me-1" />
+                OCR
+              </Button>
+            </div>
+            <SimpleMarkdownEditor
               id="grammar-contentMarkdown"
-              rows="6"
               value={formData.contentMarkdown}
-              onChange={handleChange}
-              invalid={errors.contentMarkdown}
+              onChange={handleMarkdownChange('contentMarkdown')}
+              placeholder="Grammar description (Markdown supported). Tip: Paste image with Ctrl+V for OCR"
+              minHeight={250}
+              disableFullscreen={true}
             />
-            <FormFeedback>{translate('entity.validation.required')}</FormFeedback>
+            {errors.contentMarkdown && <div className="invalid-feedback d-block">{translate('entity.validation.required')}</div>}
           </FormGroup>
 
           <FormGroup>
             <Label for="grammar-exampleUsage">{translate('langleagueApp.grammar.exampleUsage')}</Label>
-            <Input
-              type="textarea"
-              name="exampleUsage"
+            <SimpleMarkdownEditor
               id="grammar-exampleUsage"
-              rows="3"
               value={formData.exampleUsage}
-              onChange={handleChange}
+              onChange={handleMarkdownChange('exampleUsage')}
+              placeholder="Example usage (Markdown supported)"
+              minHeight={150}
+              disableFullscreen={true}
             />
           </FormGroup>
         </ModalBody>

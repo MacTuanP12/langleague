@@ -101,26 +101,27 @@
         }
       },
       "error": {
-        "dontmatch": "您输入的密码和确认密码不匹配!"
-      }
-    },
-    "validate": {
-      "newpassword": {
-        "required": "您的密码是必填项.",
-        "minlength": "您的密码长度至少要有4个字符",
-        "maxlength": "您的密码长度不能超过50个字符",
-        "strength": "密码强度:"
+        "dontmatch": "您输入的密码和确认密码不匹配!",
+        "missingUnitId": "缺少单元ID！"
       },
-      "confirmpassword": {
-        "required": "您的确认密码是必填项.",
-        "minlength": "您的确认密码长度至少要有4个字符",
-        "maxlength": "您的确认密码长度不能超过50个字符"
-      },
-      "email": {
-        "required": "您的电子邮件是必填项.",
-        "invalid": "您的电子邮件格式格式不正确.",
-        "minlength": "您的电子邮件长度至少要有5个字符",
-        "maxlength": "您的电子邮件长度不能超过50个字符"
+      "validate": {
+        "newpassword": {
+          "required": "您的密码是必填项.",
+          "minlength": "您的密码长度至少要有4个字符",
+          "maxlength": "您的密码长度不能超过50个字符",
+          "strength": "密码强度:"
+        },
+        "confirmpassword": {
+          "required": "您的确认密码是必填项.",
+          "minlength": "您的确认密码长度至少要有4个字符",
+          "maxlength": "您的确认密码长度不能超过50个字符"
+        },
+        "email": {
+          "required": "您的电子邮件是必填项.",
+          "invalid": "您的电子邮件格式格式不正确.",
+          "minlength": "您的电子邮件长度至少要有5个字符",
+          "maxlength": "您的电子邮件长度不能超过50个字符"
+        }
       }
     },
     "field": {
@@ -133,6 +134,16 @@
     "loading": "加载中...",
     "selectSection": "从侧边栏选择一个部分开始学习。",
     "progressSaved": "您的进度将自动保存。",
+    "media": {
+      "invalidAudioType": "无效的音频文件类型",
+      "imageUploaded": "图片上传成功",
+      "audioUploaded": "音频上传成功",
+      "remove": "移除",
+      "uploadFromComputer": "从电脑上传",
+      "upload": "上传",
+      "imageSupport": "支持：JPG, PNG, GIF, Google Drive 链接",
+      "audioSupport": "支持：MP3, WAV, Google Drive 链接"
+    },
     "footer": {
       "slogan": "通过现代化、互动式的学习体验，为全球语言学习者赋能。",
       "copyright": "版权所有",

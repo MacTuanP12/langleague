@@ -166,6 +166,11 @@ spring:
   output:
     ansi:
       console-available: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 server:
   servlet:
@@ -216,14 +221,6 @@ jhipster:
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
 
 # jhipster-needle-add-application-yaml-document
----
-# ===================================================================
-# Application specific properties
-# Add your own application properties here, see the ApplicationProperties class
-# to have type-safe configuration, like in the JHipsterProperties above
-#
-# More documentation is available at:
-# https://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
-# application:
+application:
+  ai:
+    google-key: 'AIzaSyBym6XDWZzSWXpy5zlk_fw5sYFf4OsxTA4'

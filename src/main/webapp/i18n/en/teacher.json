@@ -45,7 +45,7 @@
         },
         "actions": {
           "filter": "Filter",
-          "addNew": " Add New Book",
+          "addNew": "Add New Book",
           "edit": "Edit",
           "view": "View Details",
           "delete": "Delete",
@@ -140,6 +140,7 @@
       },
       "editor": {
         "title": "Unit Content Editor",
+        "loading": "Loading unit content...",
         "backToSyllabus": "Back to Syllabus",
         "backToBook": "Back to Book",
         "subtitle": "Manage vocabulary, grammar, and exercises",
@@ -376,6 +377,16 @@
             "reset": "Ctrl + 0"
           }
         }
+      },
+      "media": {
+        "upload": "Upload",
+        "uploadFromComputer": "Upload from computer",
+        "remove": "Remove",
+        "imageSupport": "Supports: JPG, PNG, GIF, Google Drive links.",
+        "audioSupport": "Supports: MP3, WAV, Google Drive links.",
+        "invalidAudioType": "Invalid audio file type",
+        "imageUploaded": "Image uploaded successfully",
+        "audioUploaded": "Audio uploaded successfully"
       },
       "common": {
         "save": "Save",

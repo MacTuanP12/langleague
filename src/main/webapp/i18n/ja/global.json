@@ -41,6 +41,12 @@
         "database": "データベース",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
+      "teacher": {
+        "main": "教師",
+        "dashboard": "ダッシュボード",
+        "bookManager": "本管理",
+        "studentAnalytics": "学生分析"
+      },
       "language": "言語"
     },
     "sidebar": {
@@ -92,7 +98,8 @@
         }
       },
       "error": {
-        "dontmatch": "パスワードが一致しません!"
+        "dontmatch": "パスワードが一致しません!",
+        "missingUnitId": "ユニットIDがありません！"
       },
       "validate": {
         "newpassword": {
@@ -120,70 +127,80 @@
     "ribbon": {
       "dev": "Development"
     },
-    "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。"
-  },
-  "entity": {
-    "action": {
-      "addblob": "Blobの追加",
-      "addimage": "イメージの追加",
-      "back": "戻る",
-      "cancel": "キャンセル",
-      "delete": "削除",
-      "edit": "編集",
-      "open": "開く",
-      "save": "保存",
-      "view": "表示",
-      "show": "表示 {{otherEntity}}"
+    "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。",
+    "media": {
+      "invalidAudioType": "無効なオーディオファイル形式",
+      "imageUploaded": "画像が正常にアップロードされました",
+      "audioUploaded": "オーディオが正常にアップロードされました",
+      "remove": "削除",
+      "uploadFromComputer": "コンピュータからアップロード",
+      "upload": "アップロード",
+      "imageSupport": "サポート: JPG, PNG, GIF, Google Driveリンク",
+      "audioSupport": "サポート: MP3, WAV, Google Driveリンク"
     },
-    "detail": {
-      "field": "フィールド",
-      "value": "値"
+    "entity": {
+      "action": {
+        "addblob": "Blobの追加",
+        "addimage": "イメージの追加",
+        "back": "戻る",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "edit": "編集",
+        "open": "開く",
+        "save": "保存",
+        "view": "表示",
+        "show": "表示 {{otherEntity}}"
+      },
+      "detail": {
+        "field": "フィールド",
+        "value": "値"
+      },
+      "delete": {
+        "title": "削除の確認"
+      },
+      "validation": {
+        "required": "このフィールドを入力してください。",
+        "minlength": "このフィールドは{{min}}文字以上で入力してください。",
+        "maxlength": "このフィールドは{{max}}文字以下で入力してください。",
+        "min": "このフィールドは{{min}}以上で入力してください。",
+        "max": "このフィールドは{{max}}以下で入力してください。",
+        "minbytes": "このフィールドは{{min}}バイト以上で入力してください。",
+        "maxbytes": "このフィールドは{{max}}バイト以下で入力してください。",
+        "pattern": "このフィールドはパターン{{pattern}}に従い入力してください。",
+        "number": "このフィールドは数値を入力してください。",
+        "datetimelocal": "このフィールドは日付と時刻を入力してください。"
+      },
+      "filters": {
+        "set": "次のフィルタが設定されています。",
+        "clear": "フィルタのクリア",
+        "clearAll": "すべてのフィルタのクリア"
+      }
     },
-    "delete": {
-      "title": "削除の確認"
+    "error": {
+      "internalServerError": "サーバ内部エラー",
+      "server.not.reachable": "サーバーに到達できません。",
+      "url.not.found": "見つかりません",
+      "NotNull": "フィールド{{fieldName}}を空にすることはできません。",
+      "Size": "フィールド{{fieldName}}が最小/最大サイズ要件を満たしていません。",
+      "userexists": "ログイン名はすでに使用されています!",
+      "emailexists": "電子メールは既に使用されています。",
+      "idexists": "新しい{{entityName}}にIDを設定することはできません。",
+      "idnull": "IDがありません。",
+      "idinvalid": "無効なIDです。",
+      "idnotfound": "IDが見つかりません。",
+      "file": {
+        "could.not.extract": "ファイルを抽出できませんでした。",
+        "not.image": "ファイルはイメージ形式である必要がありますが、\"{{ fileType }}\" 形式がアップロードされました。"
+      }
     },
-    "validation": {
-      "required": "このフィールドを入力してください。",
-      "minlength": "このフィールドは{{min}}文字以上で入力してください。",
-      "maxlength": "このフィールドは{{max}}文字以下で入力してください。",
-      "min": "このフィールドは{{min}}以上で入力してください。",
-      "max": "このフィールドは{{max}}以下で入力してください。",
-      "minbytes": "このフィールドは{{min}}バイト以上で入力してください。",
-      "maxbytes": "このフィールドは{{max}}バイト以下で入力してください。",
-      "pattern": "このフィールドはパターン{{pattern}}に従い入力してください。",
-      "number": "このフィールドは数値を入力してください。",
-      "datetimelocal": "このフィールドは日付と時刻を入力してください。"
-    },
-    "filters": {
-      "set": "次のフィルタが設定されています。",
-      "clear": "フィルタのクリア",
-      "clearAll": "すべてのフィルタのクリア"
-    }
-  },
-  "error": {
-    "internalServerError": "サーバ内部エラー",
-    "server.not.reachable": "サーバーに到達できません。",
-    "url.not.found": "見つかりません",
-    "NotNull": "フィールド{{fieldName}}を空にすることはできません。",
-    "Size": "フィールド{{fieldName}}が最小/最大サイズ要件を満たしていません。",
-    "userexists": "ログイン名はすでに使用されています!",
-    "emailexists": "電子メールは既に使用されています。",
-    "idexists": "新しい{{entityName}}にIDを設定することはできません。",
-    "idnull": "IDがありません。",
-    "idinvalid": "無効なIDです。",
-    "idnotfound": "IDが見つかりません。",
-    "file": {
-      "could.not.extract": "ファイルを抽出できませんでした。",
-      "not.image": "ファイルはイメージ形式である必要がありますが、\"{{ fileType }}\" 形式がアップロードされました。"
-    }
-  },
-  "footer": "フッターです",
-  "langleague": {
-    "apiKey": {
-      "security": {
-        "browserOnly": "APIキーはブラウザ内でのみ使用されます",
-        "noStorage": "キーは保存されません",
-        "noShare": "キーを他人と共有しないでください"
+    "footer": "フッターです",
+    "langleague": {
+      "apiKey": {
+        "security": {
+          "browserOnly": "APIキーはブラウザ内でのみ使用されます",
+          "noStorage": "キーは保存されません",
+          "noShare": "キーを他人と共有しないでください"
+        }
       }
     }
   }

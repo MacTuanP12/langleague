@@ -149,7 +149,7 @@ export const BookManagement = () => {
           </div>
           <Button tag={Link} to="/teacher/books/new" color="primary" className="action-btn btn-primary">
             <FontAwesomeIcon icon="plus" className="me-2" />
-            <Translate contentKey="langleague.teacher.books.actions.addNew"> Add New Book</Translate>
+            <Translate contentKey="langleague.teacher.books.actions.addNew">Add New Book</Translate>
           </Button>
         </div>
 

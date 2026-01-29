@@ -99,7 +99,8 @@
         }
       },
       "error": {
-        "dontmatch": "The password and its confirmation do not match!"
+        "dontmatch": "The password and its confirmation do not match!",
+        "missingUnitId": "Unit ID is missing!"
       }
     },
     "validate": {
@@ -178,6 +179,16 @@
       "status": "Status"
     }
   },
+  "media": {
+    "invalidAudioType": "Invalid audio file type",
+    "imageUploaded": "Image uploaded successfully",
+    "audioUploaded": "Audio uploaded successfully",
+    "remove": "Remove",
+    "uploadFromComputer": "Upload from computer",
+    "upload": "Upload",
+    "imageSupport": "Supports: JPG, PNG, GIF, Google Drive links.",
+    "audioSupport": "Supports: MP3, WAV, Google Drive links."
+  },
   "entity": {
     "action": {
       "back": "Back",
@@ -187,7 +198,8 @@
       "edit": "Edit",
       "open": "Open",
       "save": "Save",
-      "view": "View"
+      "view": "View",
+      "upload": "Upload"
     },
     "detail": {
       "field": "Field",

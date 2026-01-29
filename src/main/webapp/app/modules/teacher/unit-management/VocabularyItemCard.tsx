@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { translate } from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import ReactMarkdown from 'react-markdown';
+import { SimpleMarkdownEditor } from 'app/shared/components/markdown-editor/simple-markdown-editor';
 
 export interface VocabularyItemCardProps {
   index: number;
@@ -36,6 +40,7 @@ export interface VocabularyItemCardProps {
  */
 export const VocabularyItemCard: React.FC<VocabularyItemCardProps> = React.memo(
   ({ index, data, isExpanded, isDragging, onToggle, onChange, onRemove, onDuplicate, onDragStart, onDragOver, onDragEnd }) => {
+    const [showExamplePreview, setShowExamplePreview] = useState(false);
     const displayText = data.word || translate('langleague.teacher.units.labels.newVocabulary');
 
     return (
@@ -117,14 +122,47 @@ export const VocabularyItemCard: React.FC<VocabularyItemCardProps> = React.memo(
           </div>
 
           <div className="form-field">
-            <textarea
-              value={data.example}
-              onChange={e => onChange('example', e.target.value)}
-              placeholder={translate('langleague.teacher.units.vocabulary.placeholders.example')}
-              className="field-textarea"
-              rows={2}
-              onClick={e => e.stopPropagation()}
-            />
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <span className="field-hint small text-muted">
+                <FontAwesomeIcon icon="info-circle" className="me-1" />
+                Markdown supported
+              </span>
+              <button
+                type="button"
+                className="btn btn-link btn-sm p-0"
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowExamplePreview(!showExamplePreview);
+                }}
+              >
+                <FontAwesomeIcon icon={showExamplePreview ? faEyeSlash : faEye} className="me-1" />
+                {showExamplePreview ? 'Hide Preview' : 'Show Preview'}
+              </button>
+            </div>
+            {!showExamplePreview ? (
+              <div onClick={e => e.stopPropagation()}>
+                <SimpleMarkdownEditor
+                  value={data.example}
+                  onChange={value => onChange('example', value)}
+                  placeholder={translate('langleague.teacher.units.vocabulary.placeholders.example')}
+                  minHeight={100}
+                />
+              </div>
+            ) : (
+              <div
+                className="field-textarea markdown-preview"
+                style={{
+                  minHeight: '80px',
+                  padding: '0.75rem',
+                  border: '1px solid #ced4da',
+                  borderRadius: '0.25rem',
+                  backgroundColor: '#f8f9fa',
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <ReactMarkdown>{data.example || ''}</ReactMarkdown>
+              </div>
+            )}
             <div className="field-underline"></div>
           </div>
 

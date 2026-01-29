@@ -87,6 +87,9 @@ public class SecurityConfiguration {
                     // Allow public access to view units of a book
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/units/by-book/{bookId}")).permitAll()
 
+                    // 3.6 AI API - Requires authentication (user must be logged in)
+                    .requestMatchers(mvc.pattern("/api/ai/**")).authenticated()
+
                     // 4. Secured APIs - Role-based access
                     // Admin: chỉ quản lí người dùng
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)

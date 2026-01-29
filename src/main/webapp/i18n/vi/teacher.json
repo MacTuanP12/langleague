@@ -45,7 +45,7 @@
         },
         "actions": {
           "filter": "Lọc",
-          "addNew": "+ Thêm Sách Mới",
+          "addNew": "Thêm Sách Mới",
           "edit": "Chỉnh Sửa",
           "view": "Xem Chi Tiết",
           "delete": "Xóa",
@@ -140,6 +140,7 @@
       },
       "editor": {
         "title": "Trình Soạn Nội Dung Bài",
+        "loading": "Đang tải nội dung bài học...",
         "backToSyllabus": "Quay Lại Giáo Trình",
         "backToBook": "Quay Lại Sách",
         "subtitle": "Quản lý từ vựng, ngữ pháp và bài tập",
@@ -148,25 +149,63 @@
           "grammar": "Ngữ Pháp",
           "exercises": "Bài Tập"
         },
+        "ai": {
+          "settings": "Cài Đặt AI",
+          "apiKey": "Khóa API (Gemini/OpenAI)",
+          "saveKey": "Lưu",
+          "getKey": "Lấy khóa từ",
+          "model": "Mô hình",
+          "targetLang": "Ngôn ngữ đích",
+          "nativeLang": "Ngôn ngữ gốc",
+          "autoFill": "Tự động điền bằng AI",
+          "keySaved": "Đã lưu khóa API cục bộ.",
+          "configureKey": "Vui lòng cấu hình khóa API của bạn.",
+          "generated": "Nội dung đã được tạo thành công!"
+        },
         "vocabulary": {
           "title": "Danh Sách Từ Vựng",
           "addWord": "Thêm Từ",
           "aiGenerate": "✨ Tạo Bằng AI",
           "empty": "Chưa có từ vựng nào.",
-          "emptyHint": "Sử dụng Trợ Lý AI để tạo từ vựng từ chủ đề!"
+          "emptyHint": "Sử dụng Trợ Lý AI để tạo từ vựng từ chủ đề!",
+          "error": {
+            "enterWord": "Vui lòng nhập từ vựng trước."
+          }
         },
         "grammar": {
           "title": "Quy Tắc Ngữ Pháp",
           "addRule": "Thêm Quy Tắc",
           "aiGenerate": "✨ Tạo Bằng AI",
-          "empty": "Chưa có quy tắc ngữ pháp nào."
+          "empty": "Chưa có quy tắc ngữ pháp nào.",
+          "error": {
+            "enterTitle": "Vui lòng nhập tiêu đề ngữ pháp trước."
+          }
         },
         "exercises": {
           "title": "Bài Tập",
           "addQuestion": "Thêm Câu Hỏi",
           "aiGenerate": "✨ Tạo Bằng AI",
           "empty": "Chưa có bài tập nào.",
-          "question": "Câu Hỏi"
+          "question": "Câu Hỏi",
+          "ocr": {
+            "button": "Trích xuất văn bản từ ảnh (OCR)",
+            "success": "Trích xuất văn bản thành công!",
+            "error": "Không thể trích xuất văn bản từ ảnh.",
+            "invalidImage": "Vui lòng chọn tệp hình ảnh hợp lệ."
+          },
+          "validation": {
+            "minOptions": "Vui lòng thêm ít nhất 2 lựa chọn.",
+            "selectCorrect": "Vui lòng chọn ít nhất một đáp án đúng.",
+            "emptyOption": "Nội dung lựa chọn không được để trống."
+          },
+          "form": {
+            "options": "Các Lựa Chọn",
+            "correct": "Đúng",
+            "optionText": "Nội Dung Lựa Chọn",
+            "optionPlaceholder": "Lựa chọn {{index}}",
+            "addOption": "Thêm Lựa Chọn",
+            "correctAnswerPlaceholder": "Nhập câu trả lời đúng tại đây"
+          }
         },
         "confirmDelete": {
           "vocabulary": "Bạn có chắc chắn muốn xóa từ vựng này không?",
@@ -338,6 +377,16 @@
             "reset": "Ctrl + 0"
           }
         }
+      },
+      "media": {
+        "upload": "Tải lên",
+        "uploadFromComputer": "Tải lên từ máy tính",
+        "remove": "Xóa",
+        "imageSupport": "Hỗ trợ: JPG, PNG, GIF, liên kết Google Drive.",
+        "audioSupport": "Hỗ trợ: MP3, WAV, liên kết Google Drive.",
+        "invalidAudioType": "Định dạng tệp âm thanh không hợp lệ",
+        "imageUploaded": "Tải ảnh lên thành công",
+        "audioUploaded": "Tải âm thanh lên thành công"
       },
       "common": {
         "save": "Lưu",

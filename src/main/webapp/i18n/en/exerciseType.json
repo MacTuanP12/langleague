@@ -2,9 +2,9 @@
   "langleagueApp": {
     "ExerciseType": {
       "null": "",
-      "SINGLE_CHOICE": "SINGLE_CHOICE",
-      "MULTI_CHOICE": "MULTI_CHOICE",
-      "FILL_IN_BLANK": "FILL_IN_BLANK"
+      "SINGLE_CHOICE": "Single Choice",
+      "MULTI_CHOICE": "Multiple Choice",
+      "FILL_IN_BLANK": "Fill in the Blank"
     }
   }
 }

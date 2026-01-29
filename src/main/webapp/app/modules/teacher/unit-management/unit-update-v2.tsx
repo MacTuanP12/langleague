@@ -36,6 +36,12 @@ import { translate, Translate } from 'react-jhipster';
 import { GrammarItemCard } from 'app/modules/teacher/unit-management/GrammarItemCard';
 import { ZoomControls } from 'app/modules/teacher/unit-management/ZoomControls';
 import { AddContentMenu } from 'app/modules/teacher/unit-management/AddContentMenu';
+import AIImportAssistant, {
+  AiImportContentType,
+  AiImportExercise,
+  AiImportVocabulary,
+  AiImportGrammar,
+} from 'app/modules/teacher/import/ai-import-assistant';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -92,6 +98,10 @@ export const UnitUpdateV2 = () => {
   const [expandedVocabItems, setExpandedVocabItems] = useState<Set<number>>(new Set());
   const [expandedExerciseItems, setExpandedExerciseItems] = useState<Set<number>>(new Set());
   const [zoomLevel, setZoomLevel] = useState<number>(1);
+
+  // AI Modal State
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [aiContentType, setAiContentType] = useState<AiImportContentType>('EXERCISE');
 
   const { bookId, id } = useParams<{ bookId: string; id: string }>();
   const unitId = id;
@@ -234,6 +244,54 @@ export const UnitUpdateV2 = () => {
     },
     [dispatch, unitId, bookId, navigate, vocabularies, grammars, exercises],
   );
+
+  // AI Import Handler
+  const handleAIImport = useCallback(
+    (type: AiImportContentType, data: AiImportExercise[] | AiImportVocabulary[] | AiImportGrammar[]) => {
+      if (type === 'VOCABULARY') {
+        const vocabData = data as AiImportVocabulary[];
+        const newVocabs = vocabData.map(item => ({
+          ...defaultVocab,
+          word: item.word,
+          meaning: item.definition,
+          example: item.example,
+          unitId: Number(unitId || 0),
+        }));
+        setVocabularies(prev => [...prev, ...newVocabs]);
+      } else if (type === 'GRAMMAR') {
+        const grammarData = data as AiImportGrammar[];
+        const newGrammars = grammarData.map(item => ({
+          ...defaultGrammar,
+          title: item.title,
+          contentMarkdown: item.description,
+          exampleUsage: item.example,
+          unitId: Number(unitId || 0),
+        }));
+        setGrammars(prev => [...prev, ...newGrammars]);
+      } else if (type === 'EXERCISE') {
+        const exerciseData = data as AiImportExercise[];
+        const newExercises = exerciseData.map(item => ({
+          ...defaultExercise,
+          exerciseText: item.exerciseText,
+          exerciseType: ExerciseType.MULTI_CHOICE,
+          unitId: Number(unitId || 0),
+          options: item.options.map((opt, idx) => ({
+            ...defaultOption,
+            optionText: opt.optionText,
+            isCorrect: opt.isCorrect,
+            orderIndex: idx,
+          })),
+        }));
+        setExercises(prev => [...prev, ...newExercises]);
+      }
+    },
+    [unitId],
+  );
+
+  const openAIModal = (type: AiImportContentType) => {
+    setAiContentType(type);
+    setIsAIModalOpen(true);
+  };
 
   // Vocabulary functions
   const addVocabulary = useCallback(() => {
@@ -597,6 +655,15 @@ export const UnitUpdateV2 = () => {
         maxZoom={1.5}
       />
 
+      {/* AI Import Assistant Modal */}
+      <AIImportAssistant
+        isOpen={isAIModalOpen}
+        onToggle={() => setIsAIModalOpen(!isAIModalOpen)}
+        initialContentType={aiContentType}
+        onDataReceived={handleAIImport}
+        showFloatingButton={false}
+      />
+
       {/* Header */}
       <div className="form-header">
         <button onClick={() => navigate(`/teacher/books/${bookId}/edit`)} className="back-btn" type="button">
@@ -656,6 +723,7 @@ export const UnitUpdateV2 = () => {
             onAddVocabulary={addVocabulary}
             onAddGrammar={addGrammar}
             onAddExercise={type => addExercise(type as ExerciseType)}
+            onAIImport={openAIModal}
             showExerciseTypes={true}
           />
         </div>

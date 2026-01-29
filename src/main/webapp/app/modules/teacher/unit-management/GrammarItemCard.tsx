@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IGrammar } from 'app/shared/model/grammar.model';
 import { translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faBook, faTrash, faChevronUp, faChevronDown, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faBook, faTrash, faChevronUp, faChevronDown, faCopy, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import ReactMarkdown from 'react-markdown';
+import { SimpleMarkdownEditor } from 'app/shared/components/markdown-editor/simple-markdown-editor';
 
 export interface GrammarItemCardProps {
   index: number;
@@ -26,6 +28,8 @@ export interface GrammarItemCardProps {
  */
 export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
   ({ index, data, isExpanded, isDragging, onToggle, onChange, onRemove, onDuplicate, onDragStart, onDragOver, onDragEnd }) => {
+    const [showPreview, setShowPreview] = useState(false);
+    const [showExamplePreview, setShowExamplePreview] = useState(false);
     const displayText = data.title || translate('langleague.teacher.units.labels.newGrammar');
 
     return (
@@ -83,27 +87,93 @@ export const GrammarItemCard: React.FC<GrammarItemCardProps> = React.memo(
           </div>
 
           <div className="form-field">
-            <textarea
-              value={data.contentMarkdown || ''}
-              onChange={e => onChange('contentMarkdown', e.target.value)}
-              placeholder={translate('langleague.teacher.units.grammar.placeholders.content')}
-              className="field-textarea"
-              rows={6}
-              onClick={e => e.stopPropagation()}
-            />
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <span className="field-hint small text-muted">
+                <FontAwesomeIcon icon="info-circle" className="me-1" />
+                Markdown supported
+              </span>
+              <button
+                type="button"
+                className="btn btn-link btn-sm p-0"
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowPreview(!showPreview);
+                }}
+              >
+                <FontAwesomeIcon icon={showPreview ? faEyeSlash : faEye} className="me-1" />
+                {showPreview ? 'Hide Preview' : 'Show Preview'}
+              </button>
+            </div>
+            {!showPreview ? (
+              <textarea
+                value={data.contentMarkdown || ''}
+                onChange={e => onChange('contentMarkdown', e.target.value)}
+                placeholder={translate('langleague.teacher.units.grammar.placeholders.content')}
+                className="field-textarea"
+                rows={6}
+                onClick={e => e.stopPropagation()}
+              />
+            ) : (
+              <div
+                className="field-textarea markdown-preview"
+                style={{
+                  minHeight: '150px',
+                  padding: '0.75rem',
+                  border: '1px solid #ced4da',
+                  borderRadius: '0.25rem',
+                  backgroundColor: '#f8f9fa',
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <ReactMarkdown>{data.contentMarkdown || ''}</ReactMarkdown>
+              </div>
+            )}
             <div className="field-underline"></div>
             <span className="field-hint">{translate('langleague.teacher.units.grammar.fields.contentHint')}</span>
           </div>
 
           <div className="form-field">
-            <textarea
-              value={data.exampleUsage || ''}
-              onChange={e => onChange('exampleUsage', e.target.value)}
-              placeholder={translate('langleague.teacher.units.grammar.placeholders.example')}
-              className="field-textarea"
-              rows={4}
-              onClick={e => e.stopPropagation()}
-            />
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <span className="field-hint small text-muted">
+                <FontAwesomeIcon icon="info-circle" className="me-1" />
+                Markdown supported
+              </span>
+              <button
+                type="button"
+                className="btn btn-link btn-sm p-0"
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowExamplePreview(!showExamplePreview);
+                }}
+              >
+                <FontAwesomeIcon icon={showExamplePreview ? faEyeSlash : faEye} className="me-1" />
+                {showExamplePreview ? 'Hide Preview' : 'Show Preview'}
+              </button>
+            </div>
+            {!showExamplePreview ? (
+              <div onClick={e => e.stopPropagation()}>
+                <SimpleMarkdownEditor
+                  value={data.exampleUsage || ''}
+                  onChange={value => onChange('exampleUsage', value)}
+                  placeholder={translate('langleague.teacher.units.grammar.placeholders.example')}
+                  minHeight={120}
+                />
+              </div>
+            ) : (
+              <div
+                className="field-textarea markdown-preview"
+                style={{
+                  minHeight: '100px',
+                  padding: '0.75rem',
+                  border: '1px solid #ced4da',
+                  borderRadius: '0.25rem',
+                  backgroundColor: '#f8f9fa',
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <ReactMarkdown>{data.exampleUsage || ''}</ReactMarkdown>
+              </div>
+            )}
             <div className="field-underline"></div>
             <span className="field-hint">{translate('langleague.teacher.units.grammar.fields.exampleHint')}</span>
           </div>

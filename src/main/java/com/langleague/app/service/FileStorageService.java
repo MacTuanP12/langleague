@@ -62,10 +62,15 @@ public class FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(uniqueFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            // Log file info for debugging
+            long fileSize = Files.size(targetLocation);
+            LOG.debug("File stored successfully: {} ({} bytes)", uniqueFileName, fileSize);
+
             // Return the path to be saved in the database
             // This will be served statically later
             return "/content/uploads/" + uniqueFileName;
         } catch (IOException ex) {
+            LOG.error("Error storing file: {}", originalFileName, ex);
             throw new RuntimeException("Could not store file " + originalFileName + ". Please try again!", ex);
         }
     }

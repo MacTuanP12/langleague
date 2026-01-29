@@ -23,7 +23,7 @@ import { IExerciseOption } from 'app/shared/model/exercise-option.model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { MediaUploadField } from 'app/shared/components/form/MediaUploadField';
-import { extractTextFromImage, isImageFile, getAcceptAttributeWithImages } from 'app/shared/util/file-text-extractor';
+import { extractTextFromImage, extractTextFromClipboardImage, isImageFile } from 'app/shared/util/file-text-extractor';
 
 interface ExerciseModalProps {
   isOpen: boolean;
@@ -150,7 +150,7 @@ export const ExerciseModal = ({ isOpen, toggle, unitId, onSuccess, exerciseEntit
 
       setIsExtracting(true);
       try {
-        const text = await extractTextFromImage(file);
+        const text = await extractTextFromImage(file, 'eng+vie+kor+jpn+chi_sim+chi_tra');
         setFormData(prev => ({ ...prev, exerciseText: text }));
         toast.success(translate('langleague.teacher.editor.exercises.ocr.success'));
       } catch (error) {
@@ -165,6 +165,66 @@ export const ExerciseModal = ({ isOpen, toggle, unitId, onSuccess, exerciseEntit
       }
     }
   };
+
+  const handlePasteFromClipboard = async () => {
+    setIsExtracting(true);
+    try {
+      const text = await extractTextFromClipboardImage('eng+vie+kor+jpn+chi_sim+chi_tra');
+      setFormData(prev => ({ ...prev, exerciseText: text }));
+      toast.success(translate('langleague.teacher.editor.exercises.ocr.success'));
+    } catch (error) {
+      console.error('OCR Error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      if (errorMessage.includes('clipboard')) {
+        toast.error('No image found in clipboard. Please copy an image first (Ctrl+C or Cmd+C).');
+      } else {
+        toast.error(translate('langleague.teacher.editor.exercises.ocr.error'));
+      }
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
+  // Handle paste event (Ctrl+V or Cmd+V)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePaste = async (e: ClipboardEvent) => {
+      // Only handle if focus is on textarea or input
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+        // Check if clipboard contains image
+        const items = e.clipboardData?.items;
+        if (items) {
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].type.startsWith('image/')) {
+              e.preventDefault();
+              setIsExtracting(true);
+              try {
+                const file = items[i].getAsFile();
+                if (file && isImageFile(file.name || 'image.png')) {
+                  const text = await extractTextFromImage(file, 'eng+vie+kor+jpn+chi_sim+chi_tra');
+                  setFormData(prev => ({ ...prev, exerciseText: text }));
+                  toast.success(translate('langleague.teacher.editor.exercises.ocr.success'));
+                }
+              } catch (error) {
+                console.error('OCR Error:', error);
+                toast.error(translate('langleague.teacher.editor.exercises.ocr.error'));
+              } finally {
+                setIsExtracting(false);
+              }
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => {
+      window.removeEventListener('paste', handlePaste);
+    };
+  }, [isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -202,8 +262,13 @@ export const ExerciseModal = ({ isOpen, toggle, unitId, onSuccess, exerciseEntit
       }
     }
 
+    // Clear options if not choice type to avoid validation errors on backend
+    const finalOptions =
+      formData.exerciseType === ExerciseType.SINGLE_CHOICE || formData.exerciseType === ExerciseType.MULTI_CHOICE ? formData.options : [];
+
     const entity = {
       ...formData,
+      options: finalOptions,
       orderIndex: exerciseEntity ? exerciseEntity.orderIndex : 0,
       unitId: Number(unitId),
       id: exerciseEntity ? exerciseEntity.id : undefined,
@@ -240,12 +305,13 @@ export const ExerciseModal = ({ isOpen, toggle, unitId, onSuccess, exerciseEntit
                 onChange={handleChange}
                 invalid={errors.exerciseText}
                 style={{ minHeight: '100px' }}
+                placeholder="Enter question or topic... (Tip: Paste image with Ctrl+V for OCR)"
               />
-              <div className="d-flex flex-column justify-content-start">
+              <div className="d-flex flex-column justify-content-start gap-2">
                 <Button
                   color="info"
                   outline
-                  title={translate('langleague.teacher.editor.exercises.ocr.button')}
+                  title={translate('langleague.teacher.editor.exercises.ocr.button') + ' (or press Ctrl+V to paste from clipboard)'}
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isExtracting}
                   style={{ height: 'fit-content' }}
